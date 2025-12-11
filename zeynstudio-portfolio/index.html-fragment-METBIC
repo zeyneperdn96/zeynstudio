@@ -1,0 +1,69 @@
+        </section>
+
+        <!-- NEW: METBIC Project Section (Sims UI Style) -->
+        <section id="project-metbic" class="project-section">
+            <div class="project-inner sims-panel">
+                <!-- Visual Col -->
+                <div class="project-visual">
+                    <img src="assets/metbic-main.png" alt="METBIC Project" class="project-hero-img">
+                </div>
+                
+                <!-- Info Col -->
+                <div class="project-info">
+                    <span class="project-cat" data-i18n="projectMetbicCat">Industrial Design · Product</span>
+                    <h2 class="project-title" data-i18n="projectMetbicTitle">METBIC</h2>
+                    <p class="project-subtitle" data-i18n="projectMetbicSubtitle">Kompakt bisiklet tamir kiti.</p>
+
+                    <!-- Sims Skill Bars -->
+                    <div class="project-skills">
+                        <!-- Skill 1 -->
+                        <div class="project-skill-row">
+                            <span class="project-skill-label" data-i18n="projectMetbicBar1Label">Kompaktlık</span>
+                            <div class="project-skill-bar">
+                                <div class="project-skill-fill level-5"></div>
+                            </div>
+                        </div>
+                        <!-- Skill 2 -->
+                        <div class="project-skill-row">
+                            <span class="project-skill-label" data-i18n="projectMetbicBar2Label">Fonksiyonellik</span>
+                            <div class="project-skill-bar">
+                                <div class="project-skill-fill level-5"></div>
+                            </div>
+                        </div>
+                        <!-- Skill 3 -->
+                        <div class="project-skill-row">
+                            <span class="project-skill-label" data-i18n="projectMetbicBar3Label">Kullanıcı Odaklılık</span>
+                            <div class="project-skill-bar">
+                                <div class="project-skill-fill level-4"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Highlights -->
+                    <ul class="project-highlights">
+                        <li data-i18n="projectMetbicHighlight1">Cebine sığan tasarım</li>
+                        <li data-i18n="projectMetbicHighlight2">6 tornavida ucu</li>
+                        <li data-i18n="projectMetbicHighlight3">3 farklı renk</li>
+                    </ul>
+
+                    <!-- CTA & Meta -->
+                    <div class="project-bottom">
+                        <button class="btn-sims" data-i18n="projectMetbicCtaDetails">Proje Detaylarını Gör</button>
+                        <span class="project-meta" data-i18n="projectMetbicMeta">Lisans bitirme projesi · 2021</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mini Gallery -->
+            <div class="project-gallery">
+                <div class="project-gallery-item">
+                    <img src="assets/metbic-colors.png" alt="Colors">
+                </div>
+                <div class="project-gallery-item">
+                    <img src="assets/metbic-exploded.png" alt="Exploded View">
+                </div>
+                <div class="project-gallery-item">
+                    <img src="assets/metbic-bits.png" alt="Bits">
+                </div>
+            </div>
+        </section>

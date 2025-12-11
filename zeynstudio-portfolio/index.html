@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZeynStudio | Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="light-mode">
+    <div id="app-container">
+        <!-- Header / Navigation -->
+        <!-- Header / Navigation -->
+        <header class="main-header">
+            <div class="logo">ZeynStudio</div>
+
+            <nav class="main-nav">
+                <ul class="nav-list">
+                    <li><a href="#work" class="nav-link" data-i18n="navProjects">Projects</a></li>
+                    <li><a href="about.html" class="nav-link" data-i18n="navAbout">About (Game)</a></li>
+                    <li><a href="#contact" class="nav-link" data-i18n="navContact">Contact</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-controls">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <span class="icon">☀</span>
+                </button>
+                <div class="lang-switcher">
+                    <button data-lang="tr" class="lang-btn active">TR</button>
+                    <span class="sep">|</span>
+                    <button data-lang="en" class="lang-btn">EN</button>
+                    <span class="sep">|</span>
+                    <button data-lang="es" class="lang-btn">ES</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- 1) HERO SECTION - Sims CAS Style -->
+        <section class="hero-section">
+            <div class="hero-left">
+                <div class="sims-control-container">
+                    <div class="plumbob-container">
+                        <img src="assets/plumbob.png" alt="Plumbob" class="plumbob">
+                    </div>
+                    <div class="avatar-full-body">
+                        <img src="assets/zeynepfullbody.png" alt="Zeynep Full Body" id="hero-model">
+                    </div>
+
+                    <div class="rotation-controls">
+                        <button id="rotate-left" class="rotate-btn" aria-label="Rotate Left">⟲</button>
+                        <button id="rotate-right" class="rotate-btn" aria-label="Rotate Right">⟳</button>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-right">
+                <div class="sims-stats-card">
+                    <div class="stats-header">
+                        <div class="avatar-circle">
+                            <img src="assets/avatar.png" alt="Zeynep Avatar" class="avatar-img">
+                        </div>
+                        <div class="name-block">
+                            <h1 class="sims-name">Zeynep Erden</h1>
+                            <p class="sims-subtitle" data-i18n="heroSubtitle">UI/UX Tasarımcı · Endüstriyel Tasarım ·
+                                İstanbul</p>
+                        </div>
+                    </div>
+
+                    <div class="stats-body">
+                        <ul class="skill-list">
+                            <!-- Figma -->
+                            <li class="skill">
+                                <span class="skill-label" data-i18n="skillFigma">Figma</span>
+                                <div class="skill-bar">
+                                    <div class="skill-track" style="--level: 100%;">
+                                        <span class="skill-fill"></span>
+                                        <span class="skill-knob"></span>
+                                    </div>
+                                    <div class="skill-app-icon">
+                                        <img src="assets/figma.png" alt="Figma">
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- Photoshop -->
+                            <li class="skill">
+                                <span class="skill-label" data-i18n="skillPhotoshop">Photoshop</span>
+                                <div class="skill-bar">
+                                    <div class="skill-track" style="--level: 100%;">
+                                        <span class="skill-fill"></span>
+                                        <span class="skill-knob"></span>
+                                    </div>
+                                    <div class="skill-app-icon">
+                                        <img src="assets/photoshop.png" alt="Photoshop">
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- Illustrator -->
+                            <li class="skill">
+                                <span class="skill-label" data-i18n="skillIllustrator">Illustrator</span>
+                                <div class="skill-bar">
+                                    <div class="skill-track" style="--level: 80%;">
+                                        <span class="skill-fill"></span>
+                                        <span class="skill-knob"></span>
+                                    </div>
+                                    <div class="skill-app-icon">
+                                        <img src="assets/illustrator.png" alt="Illustrator">
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- After Effects -->
+                            <li class="skill">
+                                <span class="skill-label" data-i18n="skillAfterEffects">After Effects</span>
+                                <div class="skill-bar">
+                                    <div class="skill-track" style="--level: 70%;">
+                                        <span class="skill-fill"></span>
+                                        <span class="skill-knob"></span>
+                                    </div>
+                                    <div class="skill-app-icon">
+                                        <img src="assets/aftereffects.png" alt="After Effects">
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- Blender -->
+                            <li class="skill">
+                                <span class="skill-label" data-i18n="skillBlender">Blender</span>
+                                <div class="skill-bar">
+                                    <div class="skill-track" style="--level: 70%;">
+                                        <span class="skill-fill"></span>
+                                        <span class="skill-knob"></span>
+                                    </div>
+                                    <div class="skill-app-icon">
+                                        <img src="assets/blender.png" alt="Blender">
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- Rhino -->
+                            <li class="skill">
+                                <span class="skill-label" data-i18n="skillRhino">Rhino</span>
+                                <div class="skill-bar">
+                                    <div class="skill-track" style="--level: 70%;">
+                                        <span class="skill-fill"></span>
+                                        <span class="skill-knob"></span>
+                                    </div>
+                                    <div class="skill-app-icon">
+                                        <img src="assets/rhino.png" alt="Rhino">
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- 3ds Max -->
+                            <li class="skill">
+                                <span class="skill-label" data-i18n="skillMax">3ds Max</span>
+                                <div class="skill-bar">
+                                    <div class="skill-track" style="--level: 50%;">
+                                        <span class="skill-fill"></span>
+                                        <span class="skill-knob"></span>
+                                    </div>
+                                    <div class="skill-app-icon">
+                                        <img src="assets/max3ds.png" alt="3ds Max">
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <div class="traits-grid">
+                            <div class="traits-row">
+                                <!-- 1. Creative Thinker -->
+                                <div class="trait-card" title="Creative Thinker">
+                                    <DIV class="moodlet-icon-box">
+                                        <img src="assets/trait_creative.png" alt="Creative">
+                                    </DIV>
+                                    <span class="trait-label" data-i18n="traitCreative">Creative Thinker</span>
+                                </div>
+                                <!-- 2. Aesthetic Vision -->
+                                <div class="trait-card" title="Aesthetic Vision">
+                                    <DIV class="moodlet-icon-box">
+                                        <img src="assets/trait_aesthetic.png" alt="Aesthetic">
+                                    </DIV>
+                                    <span class="trait-label" data-i18n="traitAesthetic">Aesthetic Vision</span>
+                                </div>
+                                <!-- 3. Analog Photography -->
+                                <div class="trait-card" title="Analog Photography">
+                                    <DIV class="moodlet-icon-box">
+                                        <img src="assets/icon-camera.png" alt="Analog">
+                                    </DIV>
+                                    <span class="trait-label" data-i18n="traitPhoto">Analog Lover</span>
+                                </div>
+                                <!-- 4. Travel Storyteller -->
+                                <div class="trait-card" title="Travel">
+                                    <DIV class="moodlet-icon-box">
+                                        <img src="assets/icon-travel.png" alt="Travel">
+                                    </DIV>
+                                    <span class="trait-label" data-i18n="traitTravel">Travel Story</span>
+                                </div>
+                                <!-- 5. Deep Focus -->
+                                <div class="trait-card" title="Deep Focus">
+                                    <DIV class="moodlet-icon-box">
+                                        <img src="assets/icon-focus.png" alt="Focus">
+                                    </DIV>
+                                    <span class="trait-label" data-i18n="traitFocus">Deep Focus</span>
+                                </div>
+                                <!-- 6. Problem Solver -->
+                                <div class="trait-card" title="Problem Solver">
+                                    <DIV class="moodlet-icon-box">
+                                        <img src="assets/icon-puzzle.png" alt="Solver">
+                                    </DIV>
+                                    <span class="trait-label" data-i18n="traitSolver">Problem Solver</span>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+        </section>
+
+
+        <section class="work-section" id="work">
+
+            <!-- 1. FEATURED PROJECT (METBIC) -->
+            <div class="featured-project-section">
+                <div class="section-header text-center mb-4">
+                    <h2 class="section-title reduced-margin" data-i18n="featuredTitle">Öne Çıkan Projem</h2>
+                    <p class="section-subtitle">Endüstriyel tasarım / ürün tasarımı</p>
+                </div>
+
+                <!-- METBIC Featured Showcase -->
+                <div class="metbic-showcase-wrapper featured-glow">
+                    <div class="project-inner sims-panel featured-panel-bg">
+                        <!-- Visual Col -->
+                        <div class="project-visual">
+                            <img src="assets/metbic-gallery-2.jpg" alt="METBIC Project" class="project-hero-img">
+                        </div>
+
+                        <!-- Info Col -->
+                        <div class="project-info">
+                            <h2 class="project-title neon-text-highlight" data-i18n="projectMetbicTitle">METBIC</h2>
+                            <p class="project-subtitle" data-i18n="projectMetbicSubtitle">Kompakt bisiklet tamir kiti.
+                            </p>
+
+                            <!-- Highlights -->
+                            <p class="featured-desc">
+                                Dağ ve şehir bisikletçileri için tasarlanmış, cebine sığan, modüler ve fonksiyonel bir
+                                tamir aracı.
+                            </p>
+
+                            <!-- Sims Skill Bars -->
+                            <div class="project-skills">
+                                <!-- Skill 1 -->
+                                <div class="project-skill-row">
+                                    <span class="project-skill-label"
+                                        data-i18n="projectMetbicBar1Label">Kompaktlık</span>
+                                    <div class="project-skill-bar">
+                                        <div class="project-skill-fill level-5"></div>
+                                    </div>
+                                </div>
+                                <!-- Skill 2 -->
+                                <div class="project-skill-row">
+                                    <span class="project-skill-label"
+                                        data-i18n="projectMetbicBar2Label">Fonksiyonellik</span>
+                                    <div class="project-skill-bar">
+                                        <div class="project-skill-fill level-5"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- CTA -->
+                            <div class="project-bottom">
+                                <a href="metbic.html" class="btn-sims glowing-btn" data-i18n="projectMetbicCtaDetails"
+                                    style="text-decoration: none; display: inline-block;">Proje Detaylarını Gör</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. OTHER PROJECTS GRID -->
+            <div class="other-projects-section">
+                <h2 class="section-title small-title" data-i18n="otherProjectsTitle">Diğer Projelerim</h2>
+
+                <div class="work-grid">
+                    <!-- Card 1 -->
+                    <article class="work-card">
+                        <div class="card-img-placeholder small-h">
+                            <span>Project Image</span>
+                        </div>
+                        <div class="card-content dense">
+                            <h3 class="card-title">Custom Portraits</h3>
+                            <p class="card-desc oneline">Kişiye özel dijital illüstrasyonlar.</p>
+                            <div class="tags">
+                                <span class="tag">İllüstrasyon</span>
+                                <span class="tag">Etsy</span>
+                            </div>
+                            <button class="btn-secondary small-btn" data-i18n="btnView">Detayları Gör</button>
+                        </div>
+                    </article>
+                    <!-- Card 2 -->
+                    <article class="work-card">
+                        <div class="card-img-placeholder small-h">
+                            <span>Project Image</span>
+                        </div>
+                        <div class="card-content dense">
+                            <h3 class="card-title">Finance App UI</h3>
+                            <p class="card-desc oneline">Modern finans takip uygulaması.</p>
+                            <div class="tags">
+                                <span class="tag">UI Tasarım</span>
+                                <span class="tag">Mobile App</span>
+                            </div>
+                            <button class="btn-secondary small-btn" data-i18n="btnView">Detayları Gör</button>
+                        </div>
+                    </article>
+                    <!-- Card 3 -->
+                    <article class="work-card">
+                        <div class="card-img-placeholder small-h">
+                            <span>Project Image</span>
+                        </div>
+                        <div class="card-content dense">
+                            <h3 class="card-title">Wedding Suite</h3>
+                            <p class="card-desc oneline">Minimalist davetiye setleri.</p>
+                            <div class="tags">
+                                <span class="tag">Baskı Tasarımı</span>
+                            </div>
+                            <button class="btn-secondary small-btn" data-i18n="btnView">Detayları Gör</button>
+                        </div>
+                    </article>
+                </div>
+            </div>
+
+        </section>
+
+
+
+        <!-- 4) ABOUT & CONTACT -->
+        <section class="about-section" id="about">
+            <h2 class="section-title" data-i18n="aboutTitle">Zeynep Hakkında</h2>
+            <div class="about-content">
+                <p class="about-text" data-i18n="aboutText">
+                    Endüstriyel tasarım kökenli bir UI/UX tasarımcısıyım. Fizikselden dijitale geçiş sürecimde,
+                    kullanıcı deneyimini her zaman odağımda tuttum. İstanbul'da yaşıyorum; analog fotoğrafçılık, seyahat
+                    etmek ve yeni dijital araçlar (AI) keşfetmek en büyük tutkularım. Şu anda ZeynStudio altında hem
+                    freelance tasarım projeleri üretiyor hem de Etsy mağazamda dijital ürünler tasarlıyorum.
+                </p>
+                <div class="contact-block">
+                    <p class="email-placeholder">hello@zeynstudio.com</p>
+                    <div class="contact-actions">
+                        <a href="mailto:hello@zeynstudio.com" class="btn-primary" data-i18n="btnWorkTogether">Birlikte
+                            Çalışalım</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ZeynBot Chat Widget -->
+        <div class="chatbot-container">
+            <button id="chatbot-toggle" class="chatbot-toggle-btn" aria-label="Open Chat">
+                <span class="chat-icon">💬</span>
+            </button>
+            <div class="chatbot-window hidden" id="chatbot-window">
+                <!-- Header -->
+                <div class="chatbot-header">
+                    <div class="bot-avatar-circle">
+                        <img src="assets/chatbot_avatar.jpg" alt="Bot Avatar">
+                    </div>
+                    <div class="bot-info">
+                        <span class="bot-name">ZeynBot</span>
+                        <span class="bot-role" data-i18n="botRole">Portföy Rehberi</span>
+                    </div>
+                    <button id="chatbot-close" class="close-btn">✕</button>
+                </div>
+
+                <!-- Chat Area -->
+                <div class="chatbot-messages" id="chatbot-messages">
+                    <!-- Bot Greeting -->
+                    <div class="message bot">
+                        <div class="msg-bubble" id="bot-greeting">
+                            Merhaba! Ben ZeynBot! Nasıl yardımcı olabilirim? Aşağıdaki konulardan birini seçebilirsin.
+                            👇
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions (Sims Traits Style) -->
+                <div class="chatbot-actions" id="chatbot-actions">
+                    <!-- Pills injected by JS -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

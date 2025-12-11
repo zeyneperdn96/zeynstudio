@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zeynep Erden | About Game</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="about.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Outfit:wght@300;500;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="game-body">
+
+    <!-- Game HUD / Nav -->
+    <nav class="game-hud">
+        <a href="index.html" class="hud-back">
+            <span class="pixel-arrow">←</span> <span data-i18n="menuMain">MAIN MENU</span>
+        </a>
+        <div class="hud-stats">
+            <span class="hud-stat">XP: <span id="xp-counter">0</span></span>
+            <span class="hud-stat">LEVEL: <span id="level-indicator">1</span></span>
+        </div>
+    </nav>
+
+    <!-- Horizontal Scroll World -->
+    <div class="game-world">
+
+        <!-- Timeline Line (SVG or CSS) -->
+        <div class="timeline-track"></div>
+
+        <!-- LEVEL 1: PRESS START -->
+        <section class="game-level level-1" id="level-1">
+            <div class="level-marker"></div>
+            <div class="level-card pixel-card">
+                <div class="card-header">
+                    <span class="lvl-badge">LVL 1</span>
+                    <h3 data-i18n="lvl1Title">Press Start</h3>
+                </div>
+                <div class="card-visual paint-style">
+                    <!-- Paint drawing placeholder -->
+                    <div class="paint-canvas">
+                        <div class="paint-sun"></div>
+                        <div class="paint-house"></div>
+                        <div class="paint-house"></div>
+                    </div>
+                    <!-- Childhood photo -->
+                    <div class="photo-placeholder user-photo-real">
+                        <img src="assets/childhood_photo.png" alt="Childhood"
+                            style="width:100%; height:100%; object-fit: cover; transform: rotate(-5deg); box-shadow: 2px 2px 5px rgba(0,0,0,0.3);">
+                    </div>
+                </div>
+                <div class="card-content">
+                    <p class="game-text" data-i18n="lvl1Text">
+                        “Hayal gücüm Paint ile başladı. Renkler taşardı, çizgiler yamuktu ama merakım tamdı.”
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- LEVEL 5: CURIOSITY MODE -->
+        <section class="game-level level-5" id="level-5">
+            <div class="level-marker"></div>
+            <div class="level-card lego-card">
+                <div class="card-header">
+                    <span class="lvl-badge">LVL 5</span>
+                    <h3 data-i18n="lvl5Title">Curiosity Mode</h3>
+                </div>
+                <div class="card-visual lego-style">
+                    <div class="lego-brick red"></div>
+                    <div class="lego-brick blue"></div>
+                    <div class="comic-book-cover">POW!</div>
+                </div>
+                <div class="card-content">
+                    <p class="game-text" data-i18n="lvl5Text">
+                        “Her şeyi söküp taktığım dönem... Lego mühendisliği, karikatür merakı ve ilk tasarım
+                        kıvılcımları.”
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- LEVEL 12: INDUSTRIAL QUEST -->
+        <section class="game-level level-12" id="level-12">
+            <div class="level-marker"></div>
+            <div class="level-card sketch-card">
+                <div class="card-header">
+                    <span class="lvl-badge">LVL 12</span>
+                    <h3 data-i18n="lvl12Title">Industrial Quest</h3>
+                </div>
+                <div class="card-visual tablet-style">
+                    <div class="tablet-frame">
+                        <div class="stylus-pen"></div>
+                        <div class="vector-lines"></div>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <p class="game-text" data-i18n="lvl12Text">
+                        “Gerçek ürünler çizmeye başladım. Tasarım artık bir oyun değil, bir yolculuktu.”
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- LEVEL 18: UX SKILL TREE -->
+        <section class="game-level level-18" id="level-18">
+            <div class="level-marker"></div>
+            <div class="level-card wireframe-card">
+                <div class="card-header">
+                    <span class="lvl-badge">LVL 18</span>
+                    <h3 data-i18n="lvl18Title">UX Skill Tree</h3>
+                </div>
+                <div class="card-visual ux-style">
+                    <div class="wireframe-box"></div>
+                    <div class="figma-cursor"></div>
+                    <div class="ui-elements">
+                        <span class="ui-btn"></span>
+                        <span class="ui-input"></span>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <p class="game-text" data-i18n="lvl18Text">
+                        “Fiziksel ürünlerden dijitale geçiş… Kullanıcı odaklı düşünme tam bu Level’da açıldı.”
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- LEVEL 25-30: FINAL FORM -->
+        <section class="game-level level-final" id="level-final">
+            <div class="level-marker glow-marker"></div>
+            <div class="level-card pro-card">
+                <div class="card-header">
+                    <span class="lvl-badge max-lvl">LVL 30</span>
+                    <h3 data-i18n="lvl30Title">Final Form</h3>
+                </div>
+                <div class="card-visual pro-style">
+                    <div class="pro-photo-frame">
+                        <img src="assets/avatar.png" alt="Zeynep Erden" class="pro-photo">
+                    </div>
+                    <div class="badges">
+                        <span class="badge" data-i18n="badgeSolver">Problem Solver</span>
+                        <span class="badge" data-i18n="badgeExp">Exp. Designer</span>
+                        <span class="badge new-quest" data-i18n="badgeNew">New Quest Ready</span>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <p class="game-text highlight-text" data-i18n="lvl30Text">
+                        “Bugün hâlâ aynı heyecanla tasarlıyorum. Her proje yeni bir bölüm, her çözüm yeni bir seviye.
+                        Oyun devam ediyor.”
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <div class="end-game-spacer"></div>
+
+    </div>
+
+    <!-- Mouse Trail / Custom Cursor -->
+    <div id="game-cursor" class="custom-cursor"></div>
+
+    <script src="script.js"></script>
+    <script src="about.js"></script>
+</body>
+
+</html>

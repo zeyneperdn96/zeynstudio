@@ -1,0 +1,497 @@
+/* Game World Reset */
+body.game-body {
+    margin: 0;
+    padding: 0;
+    background-color: #13151a;
+    /* Dark Navy */
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    /* Lock vertical scroll */
+    height: 100vh;
+    cursor: none;
+    /* Hide default cursor for custom one */
+}
+
+/* Custom Cursor */
+.custom-cursor {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #00d2d3;
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease, width 0.2s, height 0.2s;
+    mix-blend-mode: exclusion;
+}
+
+.custom-cursor.active {
+    background-color: #00d2d3;
+    transform: translate(-50%, -50%) scale(1.5);
+}
+
+/* Nav HUD */
+.game-hud {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.8rem;
+    pointer-events: none;
+    /* Let clicks pass through */
+}
+
+.hud-back {
+    color: #ff9ff3;
+    text-decoration: none;
+    pointer-events: auto;
+    transition: transform 0.2s;
+}
+
+.hud-back:hover {
+    transform: scale(1.1);
+    text-shadow: 0 0 10px #ff9ff3;
+}
+
+.hud-stats {
+    display: flex;
+    gap: 2rem;
+    color: #00d2d3;
+}
+
+/* Horizontal Scroll World (Refined) */
+.game-world {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    /* Center cards vertically */
+    height: 100vh;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    gap: 48px;
+    /* Fixed gap */
+    padding: 40px 0;
+    /* Vertical padding */
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    /* Center container */
+    position: relative;
+    /* Ensure scroll starts with some padding on sides if needed, 
+       but user asked for padding: 40px 0 specifically. 
+       We might add a spacer for first/last item or use padding-inline if needed. 
+       Sticking to request. */
+}
+
+/* Timeline Track (Centered) */
+.timeline-track {
+    position: fixed;
+    top: 50%;
+    /* Center relative to viewport/container */
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: -1;
+    transform: translateY(-50%);
+}
+
+.timeline-track::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20%;
+    height: 100%;
+    background: linear-gradient(90deg, #ff9ff3, #00d2d3);
+    box-shadow: 0 0 15px #00d2d3;
+}
+
+/* Level Sections */
+.game-level {
+    scroll-snap-align: center;
+    flex: 0 0 auto;
+    position: relative;
+    display: flex;
+    /* Flex to center content */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    opacity: 0.5;
+    /* Fade out inactive */
+    transform: scale(0.9);
+    /* No manual margins, gap handles spacing */
+}
+
+.game-level:hover,
+.game-level:focus-within {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Level Marker (Dot on line) */
+.level-marker {
+    width: 20px;
+    height: 20px;
+    background: #2d3436;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    /* Align with timeline */
+    transform: translateY(-50%);
+    z-index: 10;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    left: -24px;
+    /* Position it relative to card? Or absolute? 
+                   If absolute inside .game-level, and .game-level is the wrapper...
+                   Standard practice: put it outside the card or absolute center. 
+                   User asked line to be consistent. 
+                   Let's safely assume it sites on the line. */
+}
+
+.game-level:hover .level-marker {
+    background: #00d2d3;
+    border-color: #00d2d3;
+    box-shadow: 0 0 20px #00d2d3;
+}
+
+/* Level Cards (Refined) */
+.level-card {
+    background: #1e272e;
+    width: 350px;
+    min-height: 420px;
+    /* Automated Height */
+    height: auto;
+    border-radius: 20px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    top: 0;
+    /* Remove offset, use flex alignment */
+}
+
+.game-level:hover .level-card {
+    transform: translateY(-20px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Header */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.5rem;
+}
+
+.lvl-badge {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.6rem;
+    background: #ff9ff3;
+    color: #000;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.max-lvl {
+    background: #00d2d3;
+    /* Cyan for max */
+}
+
+.card-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+
+/* Visuals Container (Refined) */
+.card-visual {
+    flex: 1;
+    /* Take available space */
+    background: #13151a;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+    /* Fix overflow issues */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 260px;
+    /* Constrain height */
+    width: 100%;
+}
+
+/* Responsive Image Fixes */
+.card-visual img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+}
+
+/* TEXT */
+.game-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #dfe6e9;
+    font-weight: 300;
+    margin-top: auto;
+    /* Push to bottom if space allows */
+}
+
+.highlight-text {
+    border-left: 3px solid #00d2d3;
+    padding-left: 10px;
+    font-style: italic;
+}
+
+/* --- Level Specific Styles --- */
+
+/* Level 1: Paint Style */
+.paint-style {
+    background: #fff;
+    /* Canvas white */
+    border: 2px solid #ccc;
+}
+
+.paint-canvas {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.paint-sun {
+    width: 30px;
+    height: 30px;
+    background: yellow;
+    /* Paint yellow */
+    border: 2px solid black;
+    /* Drawing outline */
+    border-radius: 50%;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.paint-house {
+    width: 40px;
+    height: 40px;
+    border: 2px solid black;
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+}
+
+.paint-house::after {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -2px;
+    border-left: 22px solid transparent;
+    border-right: 22px solid transparent;
+    border-bottom: 20px solid black;
+}
+
+.user-photo {
+    /* Legacy class for placeholder, kept just in case */
+    width: 50px;
+    height: 60px;
+    background: #b2bec3;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.user-photo-real {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Level 5: Lego Style */
+.lego-style {
+    background: #f1f2f6;
+}
+
+.lego-brick {
+    width: 40px;
+    height: 20px;
+    margin: 2px;
+    position: relative;
+}
+
+.lego-brick::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: 4px;
+    width: 8px;
+    height: 4px;
+    background: inherit;
+    box-shadow: 12px 0 0 inherit, 24px 0 0 inherit;
+}
+
+.lego-brick.red {
+    background: #ff4757;
+    transform: rotate(-10deg);
+}
+
+.lego-brick.blue {
+    background: #1e90ff;
+    transform: rotate(5deg);
+    top: -10px;
+}
+
+.comic-book-cover {
+    width: 50px;
+    height: 70px;
+    background: #feca57;
+    border: 2px solid #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 0.8rem;
+    transform: rotate(15deg);
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+/* Level 12: Tablet */
+.tablet-style {
+    background: #2d3436;
+}
+
+.tablet-frame {
+    width: 120px;
+    height: 160px;
+    background: #000;
+    border: 4px solid #b2bec3;
+    border-radius: 10px;
+    position: relative;
+    max-height: 100%;
+    /* Ensure it fits */
+}
+
+.stylus-pen {
+    width: 80px;
+    height: 6px;
+    background: #fff;
+    position: absolute;
+    bottom: 10px;
+    right: -20px;
+    transform: rotate(-45deg);
+}
+
+/* Level 18: UX */
+.ux-style {
+    background: #e0e0e0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 20px;
+}
+
+.wireframe-box {
+    border: 2px dashed #0984e3;
+    height: 100%;
+    grid-column: span 2;
+}
+
+.figma-cursor {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 20px solid #000;
+    position: absolute;
+    top: 40%;
+    left: 60%;
+    transform: rotate(-30deg);
+}
+
+/* Level Final: Pro */
+.pro-style {
+    background: linear-gradient(135deg, #2d3436, #000);
+}
+
+.pro-photo-frame {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid #00d2d3;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    box-shadow: 0 0 20px rgba(0, 210, 211, 0.4);
+}
+
+.pro-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+}
+
+.badge {
+    font-size: 0.6rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 4px 8px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.badge.new-quest {
+    background: #00d2d3;
+    color: #000;
+    font-weight: bold;
+    animation: pulse-badge 2s infinite;
+}
+
+@keyframes pulse-badge {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 10px #00d2d3;
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Spacer for scroll snap */
+.end-game-spacer {
+    width: 10vw;
+    flex-shrink: 0;
+}
