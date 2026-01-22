@@ -1,0 +1,43 @@
+:root {
+    /* Core Palette (Light) */
+    --bg: #F7F8FA;
+    --surface: #FFFFFF;
+    --surface-2: #F1F3F6;
+    --text: #0B1220;
+    --text-muted: #5B667A;
+    --border: #D9DEE7;
+
+    /* Accent & Status */
+    --accent: #2F6BFF;
+    --success: #16A34A;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --info: #0EA5E9;
+
+    /* Spacing */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+}
+
+[data-theme="dark"] {
+    /* Core Palette (Dark) */
+    --bg: #0B0F17;
+    --surface: #111827;
+    --surface-2: #0F172A;
+    --text: #EAF0FF;
+    --text-muted: #A7B2C7;
+    --border: #263041;
+}
+
+/* Typography Scale */
+:root {
+    --font-title: 20px;
+    --font-section: 18px;
+    --font-body: 16px;
+    --font-meta: 13px;
+}

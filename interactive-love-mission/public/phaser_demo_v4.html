@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct Play - Auto Start</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        /* Mobil Kontroller (Sadece Mobilde Görünür) */
+        #controls {
+            display: none;
+            position: absolute;
+            bottom: 30px;
+            width: 100%;
+            padding: 0 30px;
+            box-sizing: border-box;
+            justify-content: space-between;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .btn {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border: 2px solid white;
+            font-size: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            backdrop-filter: blur(5px);
+            pointer-events: auto;
+        }
+
+        .btn:active {
+            background: rgba(255, 255, 255, 0.6);
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="game-container"></div>
+
+    <div id="controls">
+        <div style="display:flex; gap:20px;">
+            <div class="btn" id="btnLeft">⬅️</div>
+            <div class="btn" id="btnRight">➡️</div>
+        </div>
+        <div class="btn" id="btnJump">⬆️</div>
+    </div>
+
+    <script>
+        // --- OTOMATİK BAŞLATMA AYARLARI ---
+        const config = {
+            type: Phaser.AUTO,
+            parent: 'game-container',
+            width: window.innerWidth,
+            height: window.innerHeight,
+            backgroundColor: '#87CEEB', // Gökyüzü Rengi
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    gravity: { y: 900 }, // Yerçekimi şiddeti
+                    debug: false
+                }
+            },
+            scene: {
+                preload: preload,
+                create: create,
+                update: update
+            }
+        };
+
+        // Oyunu hemen başlat
+        const game = new Phaser.Game(config);
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+        // --- 1. YÜKLEME AŞAMASI ---
+        function preload() {
+            // Dışarıdan resim yüklemiyoruz, her şeyi kodla çiziyoruz.
+        }
+
+        // --- 2. OLUŞTURMA AŞAMASI ---
+        function create() {
+            // Mobil kontrol görünürlüğü
+            if (isMobile) document.getElementById('controls').style.display = 'flex';
+
+            // -- GRAFİKLERİ OLUŞTUR (Assets) --
+            createGraphics(this);
+
+            // Zemin ve Platformlar
+            const h = this.scale.height;
+            this.platforms = this.physics.add.staticGroup();
+
+            // Ana Zemin (Sonsuz hissi için çok uzun)
+            createRect(this, this.platforms, 2500, h - 20, 5000, 100, 0x5D4037);
+
+            // Havada Platformlar
+            createRect(this, this.platforms, 500, h - 150, 200, 30, 0x5D4037);
+            createRect(this, this.platforms, 900, h - 280, 200, 30, 0x5D4037);
+            createRect(this, this.platforms, 1400, h - 150, 400, 30, 0x5D4037);
+
+            // Tuzaklar (Dikenler)
+            this.spikes = this.physics.add.staticGroup();
+            this.add.image(700, h - 85, 'spike').setScale(1); // Yerde
+            this.spikes.add(this.physics.add.staticImage(700, h - 85, 'spike'));
+
+            this.spikes.add(this.physics.add.staticImage(1200, h - 85, 'spike')); // Yerde 2
+            this.spikes.add(this.physics.add.staticImage(1500, h - 180, 'spike')); // Platform üstünde
+
+            // -- OYUNCU (PLAYER) --
+            this.player = this.add.container(100, h - 200);
+            this.player.setSize(40, 60);
+            this.physics.world.enable(this.player);
+            this.player.body.setCollideWorldBounds(true);
+            this.player.body.setBounce(0.1);
+
+            // Oyuncu Görseli
+            const pBody = this.add.rectangle(0, 20, 40, 40, 0x2196F3); // Mavi Gövde
+            const pHead = this.add.image(0, -20, 'face_hero'); // Kodla oluşturulan yüz
+            this.player.add([pBody, pHead]);
+
+            this.physics.add.collider(this.player, this.platforms);
+
+            // -- HEDEF (PARTNER) --
+            this.partner = this.add.container(2000, h - 150); // Bitiş çizgisi uzakta
+            this.partner.setSize(40, 60);
+            this.physics.world.enable(this.partner);
+            this.partner.body.setAllowGravity(false);
+            this.partner.body.setImmovable(true);
+
+            const tBody = this.add.rectangle(0, 20, 40, 40, 0xE91E63); // Pembe Gövde
+            const tHead = this.add.image(0, -20, 'face_love');
+            this.partner.add([tBody, tHead]);
+
+            this.physics.add.collider(this.partner, this.platforms);
+
+            // -- KAMERA TAKİBİ --
+            this.cameras.main.startFollow(this.player, true, 0.08, 0.08);
+            this.cameras.main.setBounds(0, 0, 5000, h);
+
+            // -- EFEKTLER (Particle) --
+            this.particles = this.add.particles(0, 0, 'heart', {
+                speed: 100, scale: { start: 0.5, end: 0 },
+                blendMode: 'ADD', lifespan: 500,
+                follow: this.player,
+                on: false
+            });
+
+            // -- KONTROLLER --
+            this.cursors = this.input.keyboard.createCursorKeys();
+            setupTouch(this);
+
+            // -- ÇARPIŞMA MANTIĞI --
+            // Dikenlere çarpınca:
+            this.physics.add.collider(this.player, this.spikes, () => {
+                this.cameras.main.shake(200);
+                this.time.delayedCall(300, () => this.scene.restart());
+            });
+
+            // Sevgiliye ulaşınca:
+            this.physics.add.overlap(this.player, this.partner, () => {
+                // Konfeti patlat
+                const winPart = this.add.particles(0, 0, 'heart', {
+                    x: this.partner.x, y: this.partner.y,
+                    speed: { min: 100, max: 400 },
+                    lifespan: 2000, quantity: 30, scale: { start: 1, end: 0 }
+                });
+                winPart.explode();
+
+                // Yazı
+                this.add.text(this.partner.x - 100, this.partner.y - 150, "AŞK KAZANDI! ❤️", {
+                    fontSize: '32px', backgroundColor: '#000', padding: 10
+                });
+
+                this.physics.pause();
+                // 3 Saniye sonra başa sar
+                this.time.delayedCall(3000, () => this.scene.restart());
+            });
+        }
+
+        // --- 3. OYUN DÖNGÜSÜ ---
+        function update() {
+            const speed = 300;
+            const jump = -600;
+            const body = this.player.body;
+
+            // Düşerse ölür
+            if (body.y > this.scale.height) this.scene.restart();
+
+            // Hareket
+            if (this.cursors.left.isDown || this.leftDown) {
+                body.setVelocityX(-speed);
+                this.particles.start();
+            } else if (this.cursors.right.isDown || this.rightDown) {
+                body.setVelocityX(speed);
+                this.particles.start();
+            } else {
+                body.setVelocityX(0);
+                this.particles.stop();
+            }
+
+            // Zıplama
+            if ((this.cursors.up.isDown || this.jumpDown) && body.touching.down) {
+                body.setVelocityY(jump);
+            }
+        }
+
+        // --- YARDIMCI FONKSİYONLAR (Varlık Üretici) ---
+
+        function createGraphics(scene) {
+            // 1. Diken Grafiği
+            const g = scene.make.graphics({ x: 0, y: 0, add: false });
+            g.fillStyle(0xff0000); g.fillTriangle(0, 30, 15, 0, 30, 30);
+            g.generateTexture('spike', 30, 30);
+
+            // 2. Kalp Grafiği
+            g.clear(); g.fillStyle(0xff69b4);
+            g.fillCircle(5, 5, 5); g.fillCircle(15, 5, 5); g.fillTriangle(0, 10, 20, 10, 10, 20); // Basit kalp şekli
+            g.generateTexture('heart', 20, 20);
+
+            // 3. Kahraman Yüzü (Canvas ile çiziyoruz)
+            const c1 = document.createElement('canvas'); c1.width = 60; c1.height = 60;
+            const x1 = c1.getContext('2d');
+            x1.fillStyle = '#FFCCBC'; x1.beginPath(); x1.arc(30, 30, 28, 0, 7); x1.fill(); // Ten
+            x1.fillStyle = '#000'; x1.beginPath(); x1.arc(20, 25, 3, 0, 7); x1.arc(40, 25, 3, 0, 7); x1.fill(); // Gözler
+            x1.lineWidth = 3; x1.beginPath(); x1.arc(30, 35, 10, 0, 3.14); x1.stroke(); // Gülümseme
+            scene.textures.addCanvas('face_hero', c1);
+
+            // 4. Sevgili Yüzü
+            const c2 = document.createElement('canvas'); c2.width = 60; c2.height = 60;
+            const x2 = c2.getContext('2d');
+            x2.fillStyle = '#F8BBD0'; x2.beginPath(); x2.arc(30, 30, 28, 0, 7); x2.fill();
+            x2.fillStyle = '#000'; x2.fillText("❤️", 20, 35); // Göz yerine kalp
+            scene.textures.addCanvas('face_love', c2);
+        }
+
+        function createRect(scene, group, x, y, w, h, color) {
+            const r = scene.add.rectangle(x + w / 2, y, w, h, color);
+            scene.physics.add.existing(r, true);
+            group.add(r);
+        }
+
+        function setupTouch(scene) {
+            scene.leftDown = false; scene.rightDown = false; scene.jumpDown = false;
+            const l = document.getElementById('btnLeft');
+            const r = document.getElementById('btnRight');
+            const j = document.getElementById('btnJump');
+
+            const bind = (el, prop) => {
+                el.addEventListener('touchstart', (e) => { e.preventDefault(); scene[prop] = true });
+                el.addEventListener('touchend', (e) => { e.preventDefault(); scene[prop] = false });
+                // Mouse desteği (test için)
+                el.addEventListener('mousedown', (e) => { e.preventDefault(); scene[prop] = true });
+                el.addEventListener('mouseup', (e) => { e.preventDefault(); scene[prop] = false });
+            };
+            bind(l, 'leftDown'); bind(r, 'rightDown'); bind(j, 'jumpDown');
+        }
+
+    </script>
+</body>
+
+</html>

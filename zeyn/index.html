@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zeyn XP - Industrial Designer</title>
+    <link rel="stylesheet" href="https://demo.themesberg.com/windows-95-ui-kit/css/windows-95.min.css">
+    <link rel="stylesheet" href="css/boot.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/boot-audio.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/icons.css">
+    <link rel="stylesheet" href="css/start-menu.css">
+    <link rel="stylesheet" href="css/icon-system.css">
+    <link rel="stylesheet" href="css/desktop-xp.css">
+</head>
+
+<body>
+
+    <!-- Startup Audio -->
+    <audio id="startup-audio" preload="auto">
+        <source src="assets/audio/startup-chime.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- BOOT SEQUENCE -->
+    <div id="boot-container" class="boot-container">
+
+        <!-- Full-screen click catcher -->
+        <div id="boot-click-catcher" class="boot-click-catcher"></div>
+
+        <div id="boot-bios" class="boot-stage active">
+            <video id="boot-video" class="boot-video" muted playsinline preload="auto">
+                <source src="assets/boot/zeynepxpboo.mp4" type="video/mp4">
+            </video>
+        </div>
+    </div>
+
+    <!-- LOGIN SCREEN - Image Based -->
+    <div id="login-container" class="login-container hidden">
+        <img src="assets/boot/login3.png" alt="Login" class="login-image">
+        <div id="login-hit-area" class="login-hit-area"></div>
+    </div>
+
+    <!-- DESKTOP ENVIRONMENT -->
+    <div id="desktop-container" class="desktop-container hidden">
+
+        <!-- Desktop Icons -->
+        <div class="desktop-icons">
+            <div class="desktop-icon" data-window="work">
+                <div class="icon-image">
+                    <img src="assets/icons/my project.png" alt="Work">
+                </div>
+                <span class="icon-label">My Work</span>
+            </div>
+            <div class="desktop-icon" data-window="about">
+                <div class="icon-image">
+                    <img src="assets/icons/about me.png" alt="About">
+                </div>
+                <span class="icon-label">About Me</span>
+            </div>
+            <div class="desktop-icon" data-window="contact">
+                <div class="icon-image">
+                    <img src="assets/icons/contact me.png" alt="Contact">
+                </div>
+                <span class="icon-label">Contact</span>
+            </div>
+            <div class="desktop-icon" data-window="illustration">
+                <div class="icon-image">
+                    <img src="assets/icons/My Gallery.png" alt="Gallery">
+                </div>
+                <span class="icon-label">Gallery</span>
+            </div>
+        </div>
+
+        <div class="windows-container" id="windows-container"></div>
+
+        <!-- Taskbar -->
+        <div class="taskbar">
+            <button class="start-button btn btn-primary" id="start-btn">
+                <span class="start-logo">🪟</span>
+                <span>Start</span>
+            </button>
+            <div class="taskbar-separator"></div>
+            <div class="taskbar-windows" id="taskbar-windows"></div>
+            <div class="system-tray">
+                <span class="tray-icon">🎨</span>
+                <span class="tray-clock" id="tray-clock">01:31</span>
+            </div>
+        </div>
+
+        <!-- XP-STYLE START MENU -->
+        <div class="start-menu hidden" id="start-menu">
+
+            <!-- HEADER -->
+            <div class="start-menu-header">
+                <div class="start-user-avatar">Z</div>
+                <div class="start-user-info">
+                    <div class="start-user-name">Zeyn XP</div>
+                    <div class="start-user-title">Industrial Designer</div>
+                </div>
+            </div>
+
+            <!-- TWO-COLUMN BODY -->
+            <div class="start-menu-body">
+
+                <!-- LEFT COLUMN: Programs -->
+                <div class="start-menu-left">
+                    <div class="start-menu-item" data-action="window" data-window="work">
+                        <img src="assets/icons/my project.png" class="menu-item-icon" alt="">
+                        <div class="menu-item-text">
+                            <div class="menu-item-title">My Projects</div>
+                            <div class="menu-item-desc">View my work</div>
+                        </div>
+                    </div>
+
+                    <div class="start-menu-item" data-action="window" data-window="contact">
+                        <img src="assets/icons/contact me.png" class="menu-item-icon" alt="">
+                        <div class="menu-item-text">
+                            <div class="menu-item-title">Contact Me</div>
+                            <div class="menu-item-desc">Send me a message</div>
+                        </div>
+                    </div>
+
+                    <div class="start-menu-item" data-action="window" data-window="about">
+                        <img src="assets/icons/about me.png" class="menu-item-icon" alt="">
+                        <div class="menu-item-text">
+                            <div class="menu-item-title">About Me</div>
+                            <div class="menu-item-desc">My story</div>
+                        </div>
+                    </div>
+
+                    <div class="start-menu-item" data-action="window" data-window="illustration">
+                        <img src="assets/icons/My Gallery.png" class="menu-item-icon" alt="">
+                        <div class="menu-item-text">
+                            <div class="menu-item-title">Illustration</div>
+                            <div class="menu-item-desc">Art portfolio</div>
+                        </div>
+                    </div>
+
+                    <div class="start-menu-item" data-action="window" data-window="showreel">
+                        <img src="assets/icons/media player.png" class="menu-item-icon" alt="">
+                        <div class="menu-item-text">
+                            <div class="menu-item-title">Media Player</div>
+                            <div class="menu-item-desc">Showreel</div>
+                        </div>
+                    </div>
+
+                    <div class="start-menu-divider"></div>
+
+                    <div class="start-menu-item all-programs">
+                        <img src="assets/icons/All Programs.png" class="menu-item-icon-small" alt="">
+                        <span style="flex: 1; font-size: 12px;">All Programs</span>
+                        <span class="arrow">►</span>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN: PIXEL ART ICONS -->
+                <div class="start-menu-right">
+                    <!-- Instagram - PIXEL ART -->
+                    <div class="start-menu-item" data-action="link" data-link="instagram">
+                        <div>
+                            <img src="assets/icons/instagram-xp.png" alt="Instagram">
+                        </div>
+                        <span class="social-label">Instagram</span>
+                    </div>
+
+                    <!-- GitHub - PIXEL ART -->
+                    <div class="start-menu-item" data-action="link" data-link="github">
+                        <div>
+                            <img src="assets/icons/github-xp.png" alt="GitHub">
+                        </div>
+                        <span class="social-label">Github</span>
+                    </div>
+
+                    <!-- LinkedIn - PIXEL ART -->
+                    <div class="start-menu-item" data-action="link" data-link="linkedin">
+                        <div>
+                            <img src="assets/icons/linkedin-xp.png" alt="LinkedIn">
+                        </div>
+                        <span class="social-label">LinkedIn</span>
+                    </div>
+
+                    <div class="start-menu-divider"></div>
+
+                    <!-- Image Viewer - PIXEL ART -->
+                    <div class="start-menu-item" data-action="window" data-window="imageviewer">
+                        <div>
+                            <img src="assets/icons/imageviewer-xp.png" alt="Image Viewer">
+                        </div>
+                        <span class="social-label">Image Viewer</span>
+                    </div>
+
+                    <!-- Command Prompt - PIXEL ART -->
+                    <div class="start-menu-item" data-action="window" data-window="terminal">
+                        <div>
+                            <img src="assets/icons/cmd-xp.png" alt="Terminal">
+                        </div>
+                        <span class="social-label">Command Prompt</span>
+                    </div>
+
+                    <!-- My Resume - PIXEL ART -->
+                    <div class="start-menu-item" data-action="link" data-link="resume">
+                        <div>
+                            <img src="assets/icons/resume-xp.png" alt="Resume">
+                        </div>
+                        <span class="social-label">My Resume</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="start-menu-footer">
+                <button class="btn btn-warning" id="logoff-btn">
+                    <img src="assets/icons/Stand By.png" alt="">
+                    Log Off
+                </button>
+                <button class="btn btn-danger" id="shutdown-btn">
+                    <img src="assets/icons/shut down.png" alt="">
+                    Shut Down
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Mobile View -->
+    <div id="mobile-view" class="mobile-view hidden">
+        <div class="mobile-header">
+            <h1>Zeyn</h1>
+            <p>Industrial Designer</p>
+            <div class="mobile-notice">💻 Best experienced on desktop</div>
+        </div>
+        <div class="mobile-content">
+            <section class="mobile-section">
+                <h2>About</h2>
+                <p id="mobile-bio">Industrial designer passionate about creating meaningful experiences.</p>
+            </section>
+            <section class="mobile-section">
+                <h2>Links</h2>
+                <div class="mobile-links">
+                    <a href="#" id="mobile-instagram" class="btn btn-primary" target="_blank">Instagram</a>
+                    <a href="#" id="mobile-github" class="btn btn-primary" target="_blank">GitHub</a>
+                    <a href="#" id="mobile-linkedin" class="btn btn-primary" target="_blank">LinkedIn</a>
+                    <a href="#" id="mobile-resume" class="btn btn-secondary">Resume (PDF)</a>
+                </div>
+            </section>
+            <section class="mobile-section">
+                <h2>Contact</h2>
+                <p>Get in touch for collaborations.</p>
+                <a href="mailto:hello@zeynstudio.com" class="btn btn-primary">Email Me</a>
+            </section>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/ProjectsData.js"></script>
+    <script src="js/WindowTemplates.js"></script>
+    <script src="js/BootSequence.js"></script>
+    <script src="js/WindowManager.js"></script>
+    <script src="js/StartMenu.js"></script>
+    <script src="js/Terminal.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

@@ -22,7 +22,6 @@
             <nav class="main-nav">
                 <ul class="nav-list">
                     <li><a href="#work" class="nav-link" data-i18n="navProjects">Projects</a></li>
-                    <li><a href="about.html" class="nav-link" data-i18n="navAbout">About (Game)</a></li>
                     <li><a href="#contact" class="nav-link" data-i18n="navContact">Contact</a></li>
                 </ul>
             </nav>
@@ -221,139 +220,108 @@
 
         <section class="work-section" id="work">
 
-            <!-- 1. FEATURED PROJECT (METBIC) -->
-            <div class="featured-project-section">
-                <div class="section-header text-center mb-4">
-                    <h2 class="section-title reduced-margin" data-i18n="featuredTitle">Öne Çıkan Projem</h2>
-                    <p class="section-subtitle">Endüstriyel tasarım / ürün tasarımı</p>
+            <!-- PROJECT SLIDER SECTION -->
+            <div class="project-slider-wrapper" id="project-slider">
+                <!-- Arrows -->
+                <button class="slider-arrow prev-arrow" id="slider-prev">&#10094;</button>
+                <button class="slider-arrow next-arrow" id="slider-next">&#10095;</button>
+
+                <!-- Track -->
+                <div class="slider-track" id="slider-track">
+
+                    <!-- SLIDE 1: MATBIC (Portrait Oriented - Using img-portrait class) -->
+                    <div class="slide-item">
+                        <article class="slide-inner">
+                            <!-- Visual Col (7 Cols) -->
+                            <div class="slide-image-wrapper">
+                                <!-- Using img-portrait class for contain behavior as requested -->
+                                <img src="assets/matbic_workshop.jpg" alt="MATBIC" class="slide-image img-landscape">
+                            </div>
+
+                            <!-- Content Col (5 Cols) -->
+                            <div class="slide-content-wrapper">
+                                <div>
+                                    <h2 class="slide-title" data-i18n="projectMetbicTitle">MATBIC</h2>
+                                    <span class="slide-subtitle" data-i18n="projectMetbicSubtitle">Kompakt Tamir
+                                        Kiti</span>
+                                </div>
+
+                                <p class="slide-desc" data-i18n="projectMetbicSliderDesc">
+                                    Dağ ve şehir bisikletçileri için tasarlanmış, cebine sığan, modüler ve fonksiyonel
+                                    bir tamir aracı.
+                                </p>
+
+                                <div class="slide-features">
+                                    <div class="feature-item" data-i18n="projectMetbicBar1Label">Kompakt Tasarım</div>
+                                    <div class="feature-item" data-i18n="projectMetbicBar2Label">Fonksiyonel Kullanım
+                                    </div>
+                                </div>
+
+                                <a href="metbic.html" class="slide-btn" data-i18n="projectMetbicCtaDetails">Proje
+                                    Detaylarını Gör</a>
+                            </div>
+                        </article>
+                    </div>
+
+                    <!-- SLIDE 2: FIRE BOX (Landscape Oriented - Using img-landscape class) -->
+                    <div class="slide-item">
+                        <article class="slide-inner">
+                            <!-- Visual Col (7 Cols) -->
+                            <div class="slide-image-wrapper">
+                                <!-- Using img-landscape class for cover behavior -->
+                                <img src="assets/firebox_camping.jpg" alt="FIRE BOX" class="slide-image img-landscape">
+                            </div>
+
+                            <!-- Content Col (5 Cols) -->
+                            <div class="slide-content-wrapper">
+                                <div>
+                                    <h2 class="slide-title" data-i18n="projectFireboxTitle">FIRE BOX</h2>
+                                    <span class="slide-subtitle" data-i18n="projectFireboxSubtitle">Kamp Pişirme
+                                        Ünitesi</span>
+                                </div>
+
+                                <p class="slide-desc" data-i18n="projectFireboxDesc">
+                                    Kompakt kamp pişirme ünitesi. Katlanabilir metal gövdesi, geniş pişirme yüzeyi ve
+                                    optimize hava akışı.
+                                </p>
+
+                                <div class="slide-features">
+                                    <div class="feature-item" data-i18n="projectFireboxFeat1">Katlanabilir Gövde</div>
+                                    <div class="feature-item" data-i18n="projectFireboxFeat2">Güçlü Hava Akışı</div>
+                                    <div class="feature-item" data-i18n="projectFireboxFeat3">Geniş Pişirme Yüzeyi</div>
+                                </div>
+
+                                <a href="firebox.html" class="slide-btn" data-i18n="projectMetbicCtaDetails">Proje
+                                    Detaylarını
+                                    Gör</a>
+                            </div>
+                        </article>
+                    </div>
+
                 </div>
 
-                <!-- METBIC Featured Showcase -->
-                <div class="metbic-showcase-wrapper featured-glow">
-                    <div class="project-inner sims-panel featured-panel-bg">
-                        <!-- Visual Col -->
-                        <div class="project-visual">
-                            <img src="assets/metbic-gallery-2.jpg" alt="METBIC Project" class="project-hero-img">
-                        </div>
-
-                        <!-- Info Col -->
-                        <div class="project-info">
-                            <h2 class="project-title neon-text-highlight" data-i18n="projectMetbicTitle">METBIC</h2>
-                            <p class="project-subtitle" data-i18n="projectMetbicSubtitle">Kompakt bisiklet tamir kiti.
-                            </p>
-
-                            <!-- Highlights -->
-                            <p class="featured-desc">
-                                Dağ ve şehir bisikletçileri için tasarlanmış, cebine sığan, modüler ve fonksiyonel bir
-                                tamir aracı.
-                            </p>
-
-                            <!-- Sims Skill Bars -->
-                            <div class="project-skills">
-                                <!-- Skill 1 -->
-                                <div class="project-skill-row">
-                                    <span class="project-skill-label"
-                                        data-i18n="projectMetbicBar1Label">Kompaktlık</span>
-                                    <div class="project-skill-bar">
-                                        <div class="project-skill-fill level-5"></div>
-                                    </div>
-                                </div>
-                                <!-- Skill 2 -->
-                                <div class="project-skill-row">
-                                    <span class="project-skill-label"
-                                        data-i18n="projectMetbicBar2Label">Fonksiyonellik</span>
-                                    <div class="project-skill-bar">
-                                        <div class="project-skill-fill level-5"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <!-- CTA -->
-                            <div class="project-bottom">
-                                <a href="metbic.html" class="btn-sims glowing-btn" data-i18n="projectMetbicCtaDetails"
-                                    style="text-decoration: none; display: inline-block;">Proje Detaylarını Gör</a>
-                            </div>
-                        </div>
+                <!-- Bottom Thumbnails -->
+                <div class="slider-thumbs-container">
+                    <!-- Thumb 1 -->
+                    <div class="thumb-card active" data-slide="0">
+                        <img src="assets/matbic_workshop.jpg" alt="MATBIC">
+                        <div class="thumb-label">MATBIC</div>
+                    </div>
+                    <!-- Thumb 2 -->
+                    <div class="thumb-card" data-slide="1">
+                        <img src="assets/firebox_camping.jpg" alt="FIRE BOX">
+                        <div class="thumb-label">FIRE BOX</div>
                     </div>
                 </div>
             </div>
 
-            <!-- 2. OTHER PROJECTS GRID -->
-            <div class="other-projects-section">
-                <h2 class="section-title small-title" data-i18n="otherProjectsTitle">Diğer Projelerim</h2>
 
-                <div class="work-grid">
-                    <!-- Card 1 -->
-                    <article class="work-card">
-                        <div class="card-img-placeholder small-h">
-                            <span>Project Image</span>
-                        </div>
-                        <div class="card-content dense">
-                            <h3 class="card-title">Custom Portraits</h3>
-                            <p class="card-desc oneline">Kişiye özel dijital illüstrasyonlar.</p>
-                            <div class="tags">
-                                <span class="tag">İllüstrasyon</span>
-                                <span class="tag">Etsy</span>
-                            </div>
-                            <button class="btn-secondary small-btn" data-i18n="btnView">Detayları Gör</button>
-                        </div>
-                    </article>
-                    <!-- Card 2 -->
-                    <article class="work-card">
-                        <div class="card-img-placeholder small-h">
-                            <span>Project Image</span>
-                        </div>
-                        <div class="card-content dense">
-                            <h3 class="card-title">Finance App UI</h3>
-                            <p class="card-desc oneline">Modern finans takip uygulaması.</p>
-                            <div class="tags">
-                                <span class="tag">UI Tasarım</span>
-                                <span class="tag">Mobile App</span>
-                            </div>
-                            <button class="btn-secondary small-btn" data-i18n="btnView">Detayları Gör</button>
-                        </div>
-                    </article>
-                    <!-- Card 3 -->
-                    <article class="work-card">
-                        <div class="card-img-placeholder small-h">
-                            <span>Project Image</span>
-                        </div>
-                        <div class="card-content dense">
-                            <h3 class="card-title">Wedding Suite</h3>
-                            <p class="card-desc oneline">Minimalist davetiye setleri.</p>
-                            <div class="tags">
-                                <span class="tag">Baskı Tasarımı</span>
-                            </div>
-                            <button class="btn-secondary small-btn" data-i18n="btnView">Detayları Gör</button>
-                        </div>
-                    </article>
-                </div>
-            </div>
 
         </section>
 
 
 
-        <!-- 4) ABOUT & CONTACT -->
-        <section class="about-section" id="about">
-            <h2 class="section-title" data-i18n="aboutTitle">Zeynep Hakkında</h2>
-            <div class="about-content">
-                <p class="about-text" data-i18n="aboutText">
-                    Endüstriyel tasarım kökenli bir UI/UX tasarımcısıyım. Fizikselden dijitale geçiş sürecimde,
-                    kullanıcı deneyimini her zaman odağımda tuttum. İstanbul'da yaşıyorum; analog fotoğrafçılık, seyahat
-                    etmek ve yeni dijital araçlar (AI) keşfetmek en büyük tutkularım. Şu anda ZeynStudio altında hem
-                    freelance tasarım projeleri üretiyor hem de Etsy mağazamda dijital ürünler tasarlıyorum.
-                </p>
-                <div class="contact-block">
-                    <p class="email-placeholder">hello@zeynstudio.com</p>
-                    <div class="contact-actions">
-                        <a href="mailto:hello@zeynstudio.com" class="btn-primary" data-i18n="btnWorkTogether">Birlikte
-                            Çalışalım</a>
-                    </div>
-                </div>
-            </div>
-        </section>
+
 
         <!-- ZeynBot Chat Widget -->
         <div class="chatbot-container">
@@ -367,7 +335,7 @@
                         <img src="assets/chatbot_avatar.jpg" alt="Bot Avatar">
                     </div>
                     <div class="bot-info">
-                        <span class="bot-name">ZeynBot</span>
+                        <span class="bot-name" data-i18n="botTitle">ZeynStudio Asistanı</span>
                         <span class="bot-role" data-i18n="botRole">Portföy Rehberi</span>
                     </div>
                     <button id="chatbot-close" class="close-btn">✕</button>
@@ -387,6 +355,13 @@
                 <!-- Quick Actions (Sims Traits Style) -->
                 <div class="chatbot-actions" id="chatbot-actions">
                     <!-- Pills injected by JS -->
+                </div>
+
+                <!-- Input Area -->
+                <div class="chatbot-input-area">
+                    <input type="text" id="chat-input" placeholder="Mesajını yaz..."
+                        data-i18n-placeholder="chatPlaceholder">
+                    <button id="chat-send" aria-label="Send">➤</button>
                 </div>
             </div>
         </div>

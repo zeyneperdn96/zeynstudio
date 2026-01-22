@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Süper Aşk Macerası</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #333;
+            font-family: sans-serif;
+            touch-action: none;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        /* GİRİŞ EKRANI */
+        #start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(#4facfe, #00f2fe);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 90%;
+            width: 400px;
+        }
+
+        h1 {
+            color: #ff0055;
+            margin: 0 0 10px 0;
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .upload-area {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .upload-box {
+            width: 80px;
+            height: 80px;
+            border: 3px dashed #ccc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+            background: #f9f9f9;
+        }
+
+        .upload-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .upload-box span {
+            font-size: 30px;
+        }
+
+        button {
+            background: #ff0055;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(255, 0, 85, 0.4);
+            transition: transform 0.1s;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* MOBİL KONTROLLER */
+        #controls {
+            display: none;
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
+            justify-content: space-between;
+            pointer-events: none;
+        }
+
+        .btn {
+            width: 70px;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.3);
+            border: 2px solid white;
+            border-radius: 50%;
+            font-size: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            pointer-events: auto;
+            user-select: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="start-screen">
+        <div class="card">
+            <h1>❤️ Aşkını Kurtar</h1>
+            <p style="color:#666; font-size:14px;">Fotoğrafları yükle ve maceraya başla!</p>
+
+            <div class="upload-area">
+                <div class="upload-box" onclick="document.getElementById('p1').click()">
+                    <img id="img1"> <span>🦸‍♂️</span>
+                    <input type="file" id="p1" hidden accept="image/*" onchange="loadImg(this, 'img1', 1)">
+                </div>
+                <div class="upload-box" onclick="document.getElementById('p2').click()">
+                    <img id="img2"> <span>👸</span>
+                    <input type="file" id="p2" hidden accept="image/*" onchange="loadImg(this, 'img2', 2)">
+                </div>
+            </div>
+
+            <button id="startBtn" onclick="startGame()" disabled>FOTOĞRAF BEKLENİYOR...</button>
+            <div onclick="startDemo()"
+                style="margin-top:15px; color:#007bff; cursor:pointer; font-size:12px; text-decoration:underline;">
+                Fotoğrafsız Hızlı Demo Başlat
+            </div>
+        </div>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <div id="controls">
+        <div style="display:flex; gap:15px;">
+            <div class="btn" id="btnLeft">⬅️</div>
+            <div class="btn" id="btnRight">➡️</div>
+        </div>
+        <div class="btn" id="btnJump">⬆️</div>
+    </div>
+
+    <script>
+        // --- OYUN MOTORU (SAF JAVASCRIPT) ---
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Değişkenler
+        let GAME_RUNNING = false;
+        let imgPlayer = null;
+        let imgPartner = null;
+        let keys = { ArrowRight: false, ArrowLeft: false, ArrowUp: false };
+
+        // Kamera ve Dünya
+        let cameraX = 0;
+        const GRAVITY = 0.6;
+
+        // Oyun Objeleri
+        let player = { x: 100, y: 100, w: 40, h: 60, vx: 0, vy: 0, speed: 5, jump: -14, grounded: false, dead: false };
+        let platforms = [];
+        let enemies = [];
+        let particles = [];
+        let partner = { x: 0, y: 0 };
+        let clouds = [];
+
+        // --- FOTOĞRAF YÜKLEME ---
+        function loadImg(input, imgId, type) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    document.getElementById(imgId).src = e.target.result;
+                    document.getElementById(imgId).style.display = 'block';
+                    const img = new Image();
+                    img.src = e.target.result;
+                    if (type === 1) imgPlayer = img;
+                    else imgPartner = img;
+                    checkReady();
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function checkReady() {
+            if (imgPlayer && imgPartner) {
+                const btn = document.getElementById('startBtn');
+                btn.disabled = false;
+                btn.innerText = "OYUNU BAŞLAT ▶";
+                btn.style.backgroundColor = "#28a745";
+            }
+        }
+
+        function startDemo() {
+            // Demo için yapay resimler oluştur
+            imgPlayer = createDummyImg('blue', '🦸');
+            imgPartner = createDummyImg('pink', '❤️');
+            startGame();
+        }
+
+        function createDummyImg(color, text) {
+            const c = document.createElement('canvas'); c.width = 64; c.height = 64;
+            const x = c.getContext('2d');
+            x.fillStyle = color; x.beginPath(); x.arc(32, 32, 32, 0, Math.PI * 2); x.fill();
+            x.font = "30px Arial"; x.textAlign = "center"; x.fillText(text, 32, 42);
+            const img = new Image(); img.src = c.toDataURL();
+            return img;
+        }
+
+        function startGame() {
+            document.getElementById('start-screen').style.display = 'none';
+            if ('ontouchstart' in window) document.getElementById('controls').style.display = 'flex';
+
+            // Canvas Boyutlandır
+            resize();
+            window.addEventListener('resize', resize);
+
+            initLevel();
+            GAME_RUNNING = true;
+            loop();
+        }
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        // --- LEVEL TASARIMI ---
+        function initLevel() {
+            const floorY = canvas.height - 50;
+            platforms = [];
+            enemies = [];
+
+            // Zemin
+            platforms.push({ x: -100, y: floorY, w: 5000, h: 200, type: 'ground' });
+
+            // Platformlar
+            platforms.push({ x: 500, y: floorY - 120, w: 200, h: 40, type: 'brick' });
+            platforms.push({ x: 800, y: floorY - 240, w: 150, h: 40, type: 'brick' });
+            platforms.push({ x: 1100, y: floorY - 150, w: 300, h: 40, type: 'brick' }); // Üstünde düşman var
+
+            // Yeşil Borular
+            platforms.push({ x: 1500, y: floorY - 100, w: 80, h: 100, type: 'pipe' });
+            platforms.push({ x: 1800, y: floorY - 160, w: 80, h: 160, type: 'pipe' });
+
+            // Düşmanlar (Goomba)
+            enemies.push({ x: 600, y: floorY - 40, w: 40, h: 40, vx: -2, dead: false });
+            enemies.push({ x: 1200, y: floorY - 190, w: 40, h: 40, vx: -2, dead: false }); // Platformda
+            enemies.push({ x: 2000, y: floorY - 40, w: 40, h: 40, vx: -2, dead: false });
+
+            // Hedef
+            partner = { x: 2800, y: floorY - 60, w: 50, h: 60 };
+            platforms.push({ x: 2700, y: floorY, w: 300, h: 200, type: 'ground' });
+
+            // Oyuncu Başlangıç
+            player.x = 100; player.y = floorY - 200; player.vx = 0; player.vy = 0; player.dead = false;
+
+            // Bulutlar
+            for (let i = 0; i < 20; i++) {
+                clouds.push({ x: Math.random() * 4000, y: Math.random() * 200, size: 30 + Math.random() * 50 });
+            }
+        }
+
+        // --- ANA OYUN DÖNGÜSÜ ---
+        function loop() {
+            if (!GAME_RUNNING) return;
+            requestAnimationFrame(loop);
+
+            update();
+            draw();
+        }
+
+        function update() {
+            if (player.dead) return;
+
+            // 1. Fizik ve Hareket
+            if (keys.ArrowRight) player.vx = player.speed;
+            else if (keys.ArrowLeft) player.vx = -player.speed;
+            else player.vx *= 0.8; // Sürtünme
+
+            player.vy += GRAVITY;
+            player.x += player.vx;
+            player.y += player.vy;
+
+            // Zıplama
+            if (keys.ArrowUp && player.grounded) {
+                player.vy = player.jump;
+                player.grounded = false;
+            }
+
+            player.grounded = false;
+
+            // 2. Platform Çarpışmaları (Basit AABB)
+            for (let p of platforms) {
+                if (checkCollide(player, p)) {
+                    // Üstten çarpma (Zemine basma)
+                    if (player.vy > 0 && player.y + player.h < p.y + player.vy + 10) {
+                        player.grounded = true;
+                        player.vy = 0;
+                        player.y = p.y - player.h;
+                    }
+                    // Yan ve alt çarpmalar basitlik için ihmal veya düzeltme
+                }
+            }
+
+            // 3. Düşman Mantığı
+            for (let e of enemies) {
+                if (e.dead) continue;
+                e.x += e.vx;
+                // Devriye
+                if (Math.random() < 0.01) e.vx *= -1;
+
+                // Oyuncu ile Çarpışma
+                if (checkCollide(player, e)) {
+                    // Mario mantığı: Üstüne basarsan düşman ölür
+                    if (player.vy > 0 && player.y + player.h < e.y + 20) {
+                        e.dead = true;
+                        player.vy = -8; // Geri sek
+                        spawnParticles(e.x, e.y, 'gray');
+                    } else {
+                        // Yandan çarparsan sen ölürsün
+                        gameOver();
+                    }
+                }
+            }
+
+            // 4. Partner ile Buluşma (KAZANMA)
+            if (checkCollide(player, partner)) {
+                winGame();
+            }
+
+            // 5. Düşme Kontrolü
+            if (player.y > canvas.height) gameOver();
+
+            // 6. Kamera Takibi
+            // Kamera oyuncuyu ortalamaya çalışır, ama sola gitmez
+            let targetCamX = player.x - canvas.width / 3;
+            if (targetCamX < 0) targetCamX = 0;
+            cameraX += (targetCamX - cameraX) * 0.1; // Yumuşak geçiş
+        }
+
+        function draw() {
+            // Arka Plan (Gökyüzü)
+            ctx.fillStyle = "#5C94FC";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.save();
+            ctx.translate(-cameraX, 0);
+
+            // Bulutlar
+            ctx.fillStyle = "rgba(255,255,255,0.7)";
+            for (let c of clouds) {
+                ctx.beginPath();
+                ctx.arc(c.x, c.y, c.size, 0, Math.PI * 2);
+                ctx.arc(c.x + c.size * 0.8, c.y + 10, c.size * 0.7, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Platformlar
+            for (let p of platforms) {
+                if (p.type === 'ground') {
+                    ctx.fillStyle = "#654321"; ctx.fillRect(p.x, p.y, p.w, p.h);
+                    ctx.fillStyle = "#4CAF50"; ctx.fillRect(p.x, p.y, p.w, 20); // Çim
+                } else if (p.type === 'pipe') {
+                    ctx.fillStyle = "#00aa00";
+                    ctx.fillRect(p.x, p.y, p.w, p.h); // Boru Gövde
+                    ctx.strokeStyle = "#004400"; ctx.lineWidth = 4; ctx.strokeRect(p.x, p.y, p.w, p.h);
+                    ctx.fillRect(p.x - 5, p.y, p.w + 10, 30); // Boru Ağzı
+                    ctx.strokeRect(p.x - 5, p.y, p.w + 10, 30);
+                } else { // Brick
+                    ctx.fillStyle = "#B22222"; ctx.fillRect(p.x, p.y, p.w, p.h);
+                    ctx.strokeStyle = "black"; ctx.lineWidth = 2; ctx.strokeRect(p.x, p.y, p.w, p.h);
+                }
+            }
+
+            // Düşmanlar
+            for (let e of enemies) {
+                if (e.dead) continue;
+                ctx.fillStyle = "#8B4513";
+                ctx.beginPath(); ctx.arc(e.x + e.w / 2, e.y + e.h / 2, e.w / 2, 0, Math.PI * 2); ctx.fill(); // Gövde
+                ctx.fillStyle = "white"; // Gözler
+                ctx.beginPath(); ctx.arc(e.x + 10, e.y + 15, 6, 0, Math.PI * 2);
+                ctx.arc(e.x + 30, e.y + 15, 6, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = "black"; // Göz bebekleri
+                ctx.beginPath(); ctx.arc(e.x + 10 + (e.vx > 0 ? 2 : -2), e.y + 15, 2, 0, Math.PI * 2);
+                ctx.arc(e.x + 30 + (e.vx > 0 ? 2 : -2), e.y + 15, 2, 0, Math.PI * 2); ctx.fill();
+            }
+
+            // HEDEF (Sevgili)
+            // Pembe Elbise
+            ctx.fillStyle = "#FF69B4";
+            ctx.beginPath(); ctx.moveTo(partner.x + partner.w / 2, partner.y);
+            ctx.lineTo(partner.x + partner.w, partner.y + partner.h);
+            ctx.lineTo(partner.x, partner.y + partner.h); ctx.fill();
+            // Kafa
+            drawCircleImg(ctx, imgPartner, partner.x + partner.w / 2, partner.y - 15, 30);
+
+            // OYUNCU (Kahraman)
+            if (!player.dead) {
+                // Vücut (Tulum)
+                ctx.fillStyle = "blue"; ctx.fillRect(player.x, player.y + 20, player.w, player.h - 20);
+                ctx.fillStyle = "red"; ctx.fillRect(player.x, player.y + 20, player.w, 20); // Gömlek
+                // Kafa
+                drawCircleImg(ctx, imgPlayer, player.x + player.w / 2, player.y + 10, 30);
+            }
+
+            // Parçacıklar
+            updateDrawParticles();
+
+            ctx.restore();
+        }
+
+        // --- YARDIMCI FONKSİYONLAR ---
+        function drawCircleImg(c, img, x, y, radius) {
+            c.save();
+            c.beginPath(); c.arc(x, y, radius, 0, Math.PI * 2); c.closePath();
+            c.clip();
+            c.drawImage(img, x - radius, y - radius, radius * 2, radius * 2);
+            c.restore();
+            c.beginPath(); c.arc(x, y, radius, 0, Math.PI * 2);
+            c.lineWidth = 3; c.strokeStyle = "white"; c.stroke();
+        }
+
+        function checkCollide(r1, r2) {
+            return (r1.x < r2.x + r2.w && r1.x + r1.w > r2.x &&
+                r1.y < r2.y + r2.h && r1.y + r1.h > r2.y);
+        }
+
+        function spawnParticles(x, y, color) {
+            for (let i = 0; i < 10; i++) {
+                particles.push({ x: x, y: y, vx: (Math.random() - 0.5) * 10, vy: (Math.random() - 0.5) * 10, life: 30, color: color });
+            }
+        }
+
+        function updateDrawParticles() {
+            for (let i = particles.length - 1; i >= 0; i--) {
+                let p = particles[i];
+                p.x += p.vx; p.y += p.vy; p.life--;
+                ctx.fillStyle = p.color; ctx.fillRect(p.x, p.y, 5, 5);
+                if (p.life <= 0) particles.splice(i, 1);
+            }
+        }
+
+        function gameOver() {
+            player.dead = true;
+            player.vy = -10; // Zıplayarak ölme efekti
+            setTimeout(() => {
+                alert("YANDINIZ! Tekrar Deneyin.");
+                initLevel();
+            }, 500);
+        }
+
+        function winGame() {
+            GAME_RUNNING = false;
+            ctx.fillStyle = "rgba(0,0,0,0.7)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = "white";
+            ctx.font = "40px Arial";
+            ctx.textAlign = "center";
+            ctx.fillText("❤️ AŞK KAZANDI! ❤️", canvas.width / 2, canvas.height / 2);
+            ctx.font = "20px Arial";
+            ctx.fillText("Yeniden başlamak için sayfayı yenileyin", canvas.width / 2, canvas.height / 2 + 50);
+        }
+
+        // --- TUŞ DİNLEYİCİLERİ ---
+        window.addEventListener('keydown', e => keys[e.code] = true);
+        window.addEventListener('keyup', e => keys[e.code] = false);
+
+        // Mobil Kontroller
+        const btnL = document.getElementById('btnLeft');
+        const btnR = document.getElementById('btnRight');
+        const btnJ = document.getElementById('btnJump');
+
+        const addTouch = (elem, code) => {
+            elem.addEventListener('touchstart', (e) => { e.preventDefault(); keys[code] = true; });
+            elem.addEventListener('touchend', (e) => { e.preventDefault(); keys[code] = false; });
+            elem.addEventListener('mousedown', (e) => { e.preventDefault(); keys[code] = true; });
+            elem.addEventListener('mouseup', (e) => { e.preventDefault(); keys[code] = false; });
+        };
+
+        addTouch(btnL, 'ArrowLeft');
+        addTouch(btnR, 'ArrowRight');
+        addTouch(btnJ, 'ArrowUp');
+
+    </script>
+</body>
+
+</html>

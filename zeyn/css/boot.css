@@ -1,0 +1,68 @@
+/* ========================================
+   ZEYN XP VIDEO BOOT SCREEN
+   Clickable boot with click-catcher
+   ======================================== */
+
+.boot-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000000;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.boot-container.hidden {
+    display: none;
+}
+
+/* Full-screen click catcher - captures all clicks */
+.boot-click-catcher {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10001;
+    cursor: pointer;
+    background: transparent;
+}
+
+.boot-click-catcher.hidden {
+    display: none;
+}
+
+.boot-stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    pointer-events: none;
+}
+
+.boot-stage.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.boot-stage.fade-out {
+    opacity: 0;
+}
+
+/* Video Boot Screen - CONTAIN to show full frame */
+.boot-video {
+    width: 100vw;
+    height: 100vh;
+    object-fit: contain;
+    object-position: center;
+    background: #000000;
+}

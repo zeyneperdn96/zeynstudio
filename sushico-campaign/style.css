@@ -1,0 +1,359 @@
+:root {
+    --primary-red: #C41230;
+    --primary-cream: #FDFBF7;
+    --gold: #D4AF37;
+    --gold-light: #F4D03F;
+    --text-dark: #2C0E0F;
+    --font-main: 'Montserrat', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--primary-cream);
+    color: var(--text-dark);
+    overflow: hidden;
+    /* Prevent scroll */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.campaign-container {
+    position: relative;
+    width: 100%;
+    max-width: 430px;
+    /* Mobile max width */
+    height: 100%;
+    background: radial-gradient(circle at center, #fffbf0 0%, #f5f0e1 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2rem 1rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Background Pattern (Seigaiha-ish) */
+.bg-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.1;
+    background-image:
+        radial-gradient(circle at 50% 100%, #b8a060 10%, transparent 10.5%),
+        radial-gradient(circle at 50% 100%, #b8a060 10%, transparent 10.5%);
+    background-size: 40px 20px;
+    background-position: 0 0, 20px 10px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Header */
+header {
+    z-index: 10;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+header h1 {
+    color: var(--primary-red);
+    font-weight: 800;
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    text-shadow: 2px 2px 0px var(--gold-light);
+}
+
+header p {
+    color: var(--gold);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+    margin-top: -5px;
+}
+
+/* Main Wheel Area */
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    z-index: 10;
+    gap: 2rem;
+}
+
+.wheel-wrapper {
+    position: relative;
+    width: 320px;
+    height: 320px;
+    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.2));
+}
+
+.wheel-outer-rim {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), #8a6e2f);
+    padding: 10px;
+}
+
+.wheel {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: var(--primary-cream);
+    position: relative;
+    overflow: hidden;
+    transition: transform 4s cubic-bezier(0.1, 0, 0.18, 1);
+    /* Initial transition setup */
+    border: 4px solid var(--primary-red);
+}
+
+.segment {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    transform-origin: 100% 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Calculated slice: 360 / 8 = 45deg */
+    /* Rotate based on index */
+    transform: rotate(calc(45deg * var(--i))) skewY(-45deg);
+    /* skew to make a slice?? No, wait. */
+    /* Alternative way for segments using conic gradient is easier for background, but divs for text */
+}
+
+/* Let's try Conic Gradient for background and absolute positioning for text */
+.wheel {
+    background: conic-gradient(var(--primary-red) 0deg 45deg,
+            var(--primary-cream) 45deg 90deg,
+            var(--primary-red) 90deg 135deg,
+            var(--primary-cream) 135deg 180deg,
+            var(--primary-red) 180deg 225deg,
+            var(--primary-cream) 225deg 270deg,
+            var(--primary-red) 270deg 315deg,
+            var(--primary-cream) 315deg 360deg);
+}
+
+.segment {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 50%;
+    transform-origin: 0% 100%;
+    transform: rotate(calc(45deg * var(--i) + 22.5deg));
+    /* Center the text in the slice */
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+
+    /* Reset skew */
+    /* Actually with this method, we just rotate container */
+}
+
+.segment span {
+    display: block;
+    transform: rotate(90deg);
+    /* align text outwards */
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: var(--text-dark);
+    width: 100px;
+    text-align: center;
+    margin-left: -50px;
+    /* Adjust centering */
+    margin-top: 40px;
+}
+
+/* Alternate colors for text */
+.segment:nth-child(odd) span {
+    color: var(--primary-cream);
+}
+
+.segment:nth-child(even) span {
+    color: var(--primary-red);
+}
+
+.wheel-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle at 30% 30%, var(--gold-light), var(--gold));
+    border-radius: 50%;
+    border: 4px solid #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+}
+
+.center-logo {
+    font-weight: 900;
+    color: var(--primary-red);
+    font-size: 1.2rem;
+}
+
+.wheel-pointer {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 50px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 384 512'%3E%3Cpath fill='%23D4AF37' d='M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 20;
+    filter: drop-shadow(0 4px 2px rgba(0, 0, 0, 0.3));
+}
+
+/* CTA */
+.spin-button {
+    background: linear-gradient(to bottom, #d62240, #a80f28);
+    color: white;
+    font-family: var(--font-main);
+    font-weight: 700;
+    font-size: 1.2rem;
+    padding: 1rem 3rem;
+    border: none;
+    border-radius: 50px;
+    box-shadow: 0 6px 0 #7a0b1d, 0 10px 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+}
+
+.spin-button:active {
+    transform: translateY(4px);
+    box-shadow: 0 2px 0 #7a0b1d, 0 4px 4px rgba(0, 0, 0, 0.2);
+}
+
+.spin-button::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(45deg) translate(-100%, -100%);
+    animation: shine 3s infinite;
+}
+
+@keyframes shine {
+    100% {
+        transform: rotate(45deg) translate(100%, 100%);
+    }
+}
+
+.terms-link {
+    text-align: center;
+    margin-top: 1rem;
+    color: #888;
+    text-decoration: underline;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(4px);
+}
+
+.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: var(--primary-cream);
+    padding: 2rem;
+    border-radius: 20px;
+    text-align: center;
+    width: 90%;
+    max-width: 320px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    border: 4px solid var(--primary-red);
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+    from {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal-content h2 {
+    color: var(--primary-red);
+    margin-bottom: 0.5rem;
+}
+
+.primary-btn {
+    background: var(--primary-red);
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 10px;
+    font-weight: 700;
+    margin-top: 1.5rem;
+    cursor: pointer;
+}
+
+/* Snow */
+.snowflake {
+    position: absolute;
+    color: #fff;
+    font-size: 1em;
+    font-family: Arial;
+    text-shadow: 0 0 1px #000;
+}
+
+/* Dynamic Snowflake CSS injection will be easier or just minimal CSS here */
+.snow-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+}

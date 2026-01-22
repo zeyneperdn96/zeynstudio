@@ -1,0 +1,55 @@
+/* ========================================
+   STRICT ICON SYSTEM FOR START MENU
+   All icons use identical 32x32px wrapper
+   ======================================== */
+
+/* Right Column Items - STRICT STRUCTURE */
+.start-menu-right .start-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border-radius: 4px;
+    margin: 2px 4px;
+}
+
+.start-menu-right .start-menu-item:hover {
+    background: linear-gradient(90deg, #FFE6A0 0%, #FFEEB0 100%);
+}
+
+/* UNIVERSAL ICON WRAPPER - 32x32px for ALL icons */
+.start-menu-right .start-menu-item>*:first-child {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* Images inside wrapper */
+.start-menu-right .start-menu-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+}
+
+/* Emoji icons */
+.start-menu-right .start-menu-item>div:first-child {
+    font-size: 28px;
+    line-height: 1;
+}
+
+/* Label - consistent positioning */
+.start-menu-right .social-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #000;
+    flex: 1;
+}

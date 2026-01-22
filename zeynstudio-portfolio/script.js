@@ -57,7 +57,7 @@ const translations = {
         botReply: "Bu bir demo asistandır. Gerçek projede bir API'ye bağlanabilir.",
         // METBIC Project
         projectMetbicCat: "Endüstriyel Tasarım · Ürün",
-        projectMetbicTitle: "METBIC",
+        projectMetbicTitle: "MATBIC",
         projectMetbicSubtitle: "Kompakt bisiklet çoklu tamir aracı.",
         projectMetbicBar1Label: "Kompaktlık",
         projectMetbicBar2Label: "Fonksiyonellik",
@@ -66,7 +66,67 @@ const translations = {
         projectMetbicHighlight2: "6 tornavida ucu, jant düzeltme",
         projectMetbicHighlight3: "3 farklı renk seçeneği",
         projectMetbicCtaDetails: "Proje Detaylarını Gör",
-        projectMetbicMeta: "Lisans bitirme projesi · 2021"
+        projectMetbicMeta: "Lisans bitirme projesi · 2021",
+        projectMetbicSliderDesc: "Dağ ve şehir bisikletçileri için tasarlanmış, cebine sığan, modüler ve fonksiyonel bir tamir aracı.",
+        // Extended Metbic Details (TR)
+        projectMetbicHeroSubtitle: "Kompakt Bisiklet Çoklu Tamir Aracı",
+        projectMetbicHeroDesc: "Dağ ve şehir bisikletçileri için tasarlanmış, cebine sığan, modüler ve fonksiyonel bir tamir aracı.",
+        projectMetbicProblemTitle: "📘 Problem Tanımı",
+        metbicProb1Title: "Zincir Sorunları",
+        metbicProb1Desc: "Zincir atması ve kopması en sık yaşanan mekanik sorunlardan biridir.",
+        metbicProb2Title: "Jant & Lastik",
+        metbicProb2Desc: "Jant eğrilmesi ve lastik patlaması sürüşü imkansız kılar.",
+        metbicProb3Title: "Hantal Aletler",
+        metbicProb3Desc: "Mevcut tamir setleri çok yer kaplar ve taşıması zordur.",
+        metbicProb4Title: "Sürdürülebilirlik",
+        metbicProb4Desc: "Tamire teşvik ederek planlı eskitmenin önüne geçmek.",
+        projectMetbicAdvTitle: "📦 Ürünün Öne Çıkan Avantajları",
+        metbicAdv1: "✅ Cebe sığan kompakt tasarım (6×9 cm)",
+        metbicAdv2: "✅ Acil durum tamirleri için tek üründe 6+ fonksiyon",
+        metbicAdv3: "✅ Dağ bisikletçileri için optimize edilen kullanım",
+        metbicAdv4: "✅ Modüler, dayanıklı gövde",
+        metbicAdv5: "✅ Standart parça uyumluluğu",
+        metbicAdv6: "✅ Hafif ve taşınabilir",
+        metbicGal1: "Fonksiyonel Duruş",
+        metbicGal2: "Modüler Parçalar",
+        metbicGal3: "Teknik Montaj",
+        metbicGal4: "Minimalist Tasarım",
+        metbicGal5: "Saha Kullanımı",
+        metbicGal6: "Taşınabilirlik",
+        metbicGal7: "Atölye & Ürün",
+        // FIRE BOX Project
+        projectFireboxTitle: "FIRE BOX",
+        projectFireboxSubtitle: "Endüstriyel Tasarım · Ürün",
+        projectFireboxDesc: "Kompakt kamp pişirme ünitesi. Katlanabilir metal gövdesi, geniş pişirme yüzeyi ve optimize hava akışı sayesinde açık havada hem ateş hem ızgara kullanımını tek üründe birleştirir.",
+        projectFireboxFeat1: "Katlanabilir gövde ile valiz formunda kolay taşıma",
+        projectFireboxFeat2: "Güçlü hava akışı ve verimli yanma sistemi",
+        projectFireboxFeat3: "Geniş paslanmaz çelik pişirme yüzeyi",
+        // Extended Firebox Details (TR)
+        projectFireboxHeroDesc: "Kompakt taşıma, çok modlu pişirme yüzeyleri, optimize hava akışı ve hızlı kurulum özellikleriyle kamp deneyimini kolaylaştıran, taşınabilir çok amaçlı bir outdoor pişirme sistemi.",
+        projectFireboxValueTitle: "⭐ Projenin Değer Önerisi",
+        projectFireboxValuePropHeading: "Çözüm Odaklı Tasarım",
+        projectFireboxValuePropText: "Fire Box, kampçıların en büyük sorunlarından biri olan kalabalık ekipman taşıma, hava kirliliği yaratan geniş mangallar, kurulum zorluğu ve taşınabilirlik problemlerine çözüm üretiyor. Tek ürün = Ateş + Izgara + Ocak + Güvenli kullanım alanı. Aynı anda hem kompakt hem güçlü olması ürünü outdoor pazarında farklılaştırıyor.",
+        projectFireboxFeaturesTitle: "🔥 Ürünün Öne Çıkan Özellikleri",
+        fireboxFeat1Title: "1. Çok Modlu Kullanım",
+        fireboxFeat1Desc: "Izgara, fırın ve açık ateş modlarına geçiş. Doğa ihtiyaçlarını tek üründe toplar.",
+        fireboxFeat2Title: "2. Katlanabilir ve Taşınabilir",
+        fireboxFeat2Desc: "Kompakt valiz formu. Tek elle taşınır, minimum yer kaplar.",
+        fireboxFeat3Title: "3. Hızlı Kurulum",
+        fireboxFeat3Desc: "Sürgülü çekmece ve modüler ızgaralar ile saniyeler içinde hazır.",
+        fireboxFeat4Title: "4. Optimize Hava Akışı",
+        fireboxFeat4Desc: "Delikli yan yüzeyler ve alt kül alanı verimli yanma sağlar.",
+        fireboxFeat5Title: "5. Geniş Pişirme Alanı",
+        fireboxFeat5Desc: "~400mm geniş yüzey. Hem bireysel hem grup kullanımı için ideal.",
+        fireboxFeat6Title: "6. Dayanıklı Malzeme",
+        fireboxFeat6Desc: "Isıya dayanıklı metal gövde ve güçlü kulplar.",
+        projectGalleryTitle: "📸 Görsel Galeri",
+        fireboxGallery1: "Kamp Modu",
+        fireboxGallery2: "Kolay Taşıma",
+        fireboxGallery3: "Açılma Aşamaları",
+        fireboxGallery4: "Patlatılmış Montaj",
+        fireboxGallery5: "Teknik Özellikler",
+        fireboxGallery6: "Detay İşçilik",
+        fireboxGallery7: "Sosyal Kamp Deneyimi"
     },
     en: {
         heroSubtitle: "UI/UX Designer · Industrial Design · Istanbul",
@@ -140,7 +200,7 @@ const translations = {
         botReply: "This is a demo assistant. In a real project it could be connected to an API.",
         // METBIC Project
         projectMetbicCat: "Industrial Design · Product",
-        projectMetbicTitle: "METBIC",
+        projectMetbicTitle: "MATBIC",
         projectMetbicSubtitle: "Compact bike multi-repair tool.",
         projectMetbicBar1Label: "Compactness",
         projectMetbicBar2Label: "Functionality",
@@ -149,11 +209,69 @@ const translations = {
         projectMetbicHighlight2: "6 screwdriver bits, spoke key",
         projectMetbicHighlight3: "3 color options",
         projectMetbicCtaDetails: "View Project Details",
-        projectMetbicMeta: "Bachelor graduation project · 2021"
+        projectMetbicMeta: "Bachelor graduation project · 2021",
+        projectMetbicSliderDesc: "A modular and functional repair tool designed for mountain and city cyclists that fits in your pocket.",
+        // Extended Metbic Details (EN)
+        projectMetbicHeroSubtitle: "Compact Bike Multi-repair Tool",
+        projectMetbicHeroDesc: "A modular and functional repair tool designed for mountain and city cyclists that fits in your pocket.",
+        projectMetbicProblemTitle: "📘 Problem Definition",
+        metbicProb1Title: "Chain Issues",
+        metbicProb1Desc: "Chain slipping and breaking is one of the most common mechanical problems.",
+        metbicProb2Title: "Rim & Tire",
+        metbicProb2Desc: "Rim bending and flat tires make riding impossible.",
+        metbicProb3Title: "Bulky Tools",
+        metbicProb3Desc: "Existing repair kits take up too much space and are hard to carry.",
+        metbicProb4Title: "Sustainability",
+        metbicProb4Desc: "Preventing planned obsolescence by encouraging repair.",
+        projectMetbicAdvTitle: "📦 Key Product Advantages",
+        metbicAdv1: "✅ Pocket-sized compact design (6×9 cm)",
+        metbicAdv2: "✅ 6+ functions in one product for emergency repairs",
+        metbicAdv3: "✅ Optimized usage for mountain bikers",
+        metbicAdv4: "✅ Modular, durable body",
+        metbicAdv5: "✅ Standard part compatibility",
+        metbicAdv6: "✅ Lightweight and portable",
+        metbicGal1: "Functional Stance",
+        metbicGal2: "Modular Parts",
+        metbicGal3: "Technical Assembly",
+        metbicGal4: "Minimalist Design",
+        metbicGal5: "Field Usage",
+        metbicGal6: "Portability",
+        metbicGal7: "Workshop & Product",
+        // FIRE BOX Project (EN placeholders)
+        projectFireboxTitle: "FIRE BOX",
+        projectFireboxSubtitle: "Industrial Design · Product",
+        projectFireboxDesc: "Compact camping cooking unit. Combines fire and grill use in one product outdoors thanks to its foldable metal body, wide cooking surface, and optimized airflow.",
+        projectFireboxFeat1: "Easy transport in suitcase form with foldable body",
+        projectFireboxFeat2: "Strong airflow and efficient combustion system",
+        projectFireboxFeat3: "Wide stainless steel cooking surface",
+        // Extended Firebox Details (EN)
+        projectFireboxHeroDesc: "A portable multi-purpose outdoor cooking system that simplifies the camping experience with compact transport, multi-mode cooking surfaces, optimized airflow, and quick setup.",
+        projectFireboxValueTitle: "⭐ Project Value Proposition",
+        projectFireboxValuePropHeading: "Solution-Oriented Design",
+        projectFireboxValuePropText: "Fire Box provides a solution to campers' biggest problems: carrying bulky equipment, large grills causing air pollution, setup difficulties, and portability issues. One product = Fire + Grill + Stove + Safe usage area. Being both compact and powerful differentiates the product in the outdoor market.",
+        projectFireboxFeaturesTitle: "🔥 Key Product Features",
+        fireboxFeat1Title: "1. Multi-Mode Use",
+        fireboxFeat1Desc: "Grill, oven, and open fire modes. Gathers nature needs in one product.",
+        fireboxFeat2Title: "2. Foldable & Portable",
+        fireboxFeat2Desc: "Compact suitcase form. Carried with one hand, takes minimal space.",
+        fireboxFeat3Title: "3. Quick Setup",
+        fireboxFeat3Desc: "Ready in seconds with sliding drawer and modular grills.",
+        fireboxFeat4Title: "4. Optimized Airflow",
+        fireboxFeat4Desc: "Perforated side surfaces and bottom ash area ensure efficient combustion.",
+        fireboxFeat5Title: "5. Wide Cooking Area",
+        fireboxFeat5Desc: "~400mm wide surface. Ideal for both individual and group use.",
+        fireboxFeat6Title: "6. Durable Material",
+        fireboxFeat6Desc: "Heat-resistant metal body and strong handles.",
+        projectGalleryTitle: "📸 Visual Gallery",
+        fireboxGallery1: "Camping Mode",
+        fireboxGallery2: "Easy Transport",
+        fireboxGallery3: "Unfolding Stages",
+        fireboxGallery4: "Exploded Assembly",
+        fireboxGallery5: "Technical Features",
+        fireboxGallery6: "Detailed Craftsmanship",
+        fireboxGallery7: "Social Camping Experience"
     },
     es: {
-        heroSubtitle: "Diseñadora UI/UX · Diseño Industrial · Estambul",
-        heroSubtitle: "Diseñadora UI/UX · Diseño Industrial · Estambul",
         heroSubtitle: "Diseñadora UI/UX · Diseño Industrial · Estambul",
         navProjects: "Proyectos",
         navAbout: "Sobre mí",
@@ -224,7 +342,7 @@ const translations = {
         botReply: "Este es un asistente de demostración. En un proyecto real podría conectarse a una API.",
         // METBIC Project
         projectMetbicCat: "Diseño Industrial · Producto",
-        projectMetbicTitle: "METBIC",
+        projectMetbicTitle: "MATBIC",
         projectMetbicSubtitle: "Herramienta de reparación compacta.",
         projectMetbicBar1Label: "Compacidad",
         projectMetbicBar2Label: "Funcionalidad",
@@ -233,7 +351,67 @@ const translations = {
         projectMetbicHighlight2: "6 puntas, llave de radios",
         projectMetbicHighlight3: "3 opciones de color",
         projectMetbicCtaDetails: "Ver Detalles",
-        projectMetbicMeta: "Proyecto de graduación · 2021"
+        projectMetbicMeta: "Proyecto de graduación · 2021",
+        projectMetbicSliderDesc: "Una herramienta de reparación modular y funcional diseñada para ciclistas de montaña y ciudad que cabe en tu bolsillo.",
+        // Extended Metbic Details (ES)
+        projectMetbicHeroSubtitle: "Herramienta Multiusos Compacta para Bicicletas",
+        projectMetbicHeroDesc: "Una herramienta de reparación modular y funcional diseñada para ciclistas de montaña y ciudad que cabe en tu bolsillo.",
+        projectMetbicProblemTitle: "📘 Definición del Problema",
+        metbicProb1Title: "Problemas de Cadena",
+        metbicProb1Desc: "El deslizamiento y rotura de la cadena es uno de los problemas mecánicos más comunes.",
+        metbicProb2Title: "Llanta y Neumático",
+        metbicProb2Desc: "La deformación de la llanta y los neumáticos pinchados hacen imposible la conducción.",
+        metbicProb3Title: "Herramientas Voluminosas",
+        metbicProb3Desc: "Los kits de reparación existentes ocupan mucho espacio y son difíciles de transportar.",
+        metbicProb4Title: "Sostenibilidad",
+        metbicProb4Desc: "Prevenir la obsolescencia programada fomentando la reparación.",
+        projectMetbicAdvTitle: "📦 Ventajas Clave del Producto",
+        metbicAdv1: "✅ Diseño compacto de bolsillo (6×9 cm)",
+        metbicAdv2: "✅ 6+ funciones en un producto para reparaciones de emergencia",
+        metbicAdv3: "✅ Uso optimizado para ciclistas de montaña",
+        metbicAdv4: "✅ Cuerpo modular y duradero",
+        metbicAdv5: "✅ Compatibilidad con piezas estándar",
+        metbicAdv6: "✅ Ligero y portátil",
+        metbicGal1: "Postura Funcional",
+        metbicGal2: "Partes Modulares",
+        metbicGal3: "Montaje Técnico",
+        metbicGal4: "Diseño Minimalista",
+        metbicGal5: "Uso en Campo",
+        metbicGal6: "Portabilidad",
+        metbicGal7: "Taller y Producto",
+        // FIRE BOX Project (ES placeholders)
+        projectFireboxTitle: "FIRE BOX",
+        projectFireboxSubtitle: "Diseño Industrial · Producto",
+        projectFireboxDesc: "Unidad de cocina compacta para acampar. Combina uso de fuego y parrilla en un solo producto al aire libre gracias a su cuerpo de metal plegable, amplia superficie de cocción y flujo de aire optimizado.",
+        projectFireboxFeat1: "Fácil transporte en forma de maleta",
+        projectFireboxFeat2: "Fuerte flujo de aire y sistema de combustión eficiente",
+        projectFireboxFeat3: "Amplia superficie de cocción de acero inoxidable",
+        // Extended Firebox Details (ES)
+        projectFireboxHeroDesc: "Un sistema de cocina al aire libre portátil y multiusos que simplifica la experiencia de camping con transporte compacto, superficies de cocción multimodo, flujo de aire optimizado y montaje rápido.",
+        projectFireboxValueTitle: "⭐ Propuesta de Valor del Proyecto",
+        projectFireboxValuePropHeading: "Diseño Orientado a Soluciones",
+        projectFireboxValuePropText: "Fire Box ofrece una solución a los mayores problemas de los campistas: transporte de equipos voluminosos, grandes parrillas que causan contaminación, dificultades de montaje y portabilidad. Un producto = Fuego + Parrilla + Estufa + Área de uso seguro. Ser compacto y potente diferencia al producto en el mercado outdoor.",
+        projectFireboxFeaturesTitle: "🔥 Características Destacadas",
+        fireboxFeat1Title: "1. Uso Multimodo",
+        fireboxFeat1Desc: "Modos parrilla, horno y fuego abierto. Reúne necesidades en un producto.",
+        fireboxFeat2Title: "2. Plegable y Portátil",
+        fireboxFeat2Desc: "Forma de maleta compacta. Se lleva con una mano, ocupa mínimo espacio.",
+        fireboxFeat3Title: "3. Montaje Rápido",
+        fireboxFeat3Desc: "Listo en segundos con cajón deslizante y parrillas modulares.",
+        fireboxFeat4Title: "4. Flujo de Aire Optimizado",
+        fireboxFeat4Desc: "Superficies laterales perforadas y área de cenizas inferior aseguran combustión eficiente.",
+        fireboxFeat5Title: "5. Amplia Área de Cocción",
+        fireboxFeat5Desc: "Superficie de ~400mm. Ideal para uso individual y grupal.",
+        fireboxFeat6Title: "6. Material Duradero",
+        fireboxFeat6Desc: "Cuerpo de metal resistente al calor y asas fuertes.",
+        projectGalleryTitle: "📸 Galería Visual",
+        fireboxGallery1: "Modo Camping",
+        fireboxGallery2: "Transporte Fácil",
+        fireboxGallery3: "Etapas de Despliegue",
+        fireboxGallery4: "Ensamblaje Explotado",
+        fireboxGallery5: "Características Técnicas",
+        fireboxGallery6: "Artesanía Detallada",
+        fireboxGallery7: "Experiencia de Camping Social"
     }
 };
 
@@ -429,6 +607,35 @@ function initChatbot() {
     chatToggle.addEventListener('click', toggleChat);
     if (closeBtn) closeBtn.addEventListener('click', toggleChat);
 
+    // Chat Logic
+    const chatInput = document.getElementById('chat-input');
+    const chatSend = document.getElementById('chat-send');
+
+    function handleUserMessage() {
+        const text = chatInput.value.trim();
+        if (!text) return;
+
+        // Add User Message
+        appendMessage('user', text);
+        chatInput.value = '';
+
+        // Fake Delay then Bot Reply
+        setTimeout(() => {
+            const currentData = chatbotData[currentLang] || chatbotData['tr'];
+            appendMessage('bot', currentData.botReply);
+        }, 600);
+    }
+
+    if (chatSend) {
+        chatSend.addEventListener('click', handleUserMessage);
+    }
+
+    if (chatInput) {
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleUserMessage();
+        });
+    }
+
     // Initial Render Function
     renderChatPills = function (lang) {
         if (!chatbotData[lang]) lang = 'tr';
@@ -529,3 +736,91 @@ function rotateHero(deg) {
 }
 
 
+
+/* --- Lightbox Logic --- */
+function initLightbox() {
+    // 1. Create Lightbox Elements if not present
+    if (!document.querySelector('.lightbox-overlay')) {
+        const overlay = document.createElement('div');
+        overlay.classList.add('lightbox-overlay');
+        overlay.innerHTML = `
+            <span class="lightbox-close">&times;</span>
+            <img class="lightbox-content" src="" alt="Full View">
+        `;
+        document.body.appendChild(overlay);
+
+        // Close Logic
+        overlay.addEventListener('click', (e) => {
+            if (e.target !== document.querySelector('.lightbox-content')) {
+                overlay.classList.remove('active');
+            }
+        });
+    }
+
+    const overlay = document.querySelector('.lightbox-overlay');
+    const lightboxImg = overlay.querySelector('.lightbox-content');
+
+    // 2. Attach Click Listeners
+    // Targeting wrappers as they have the zoom-in cursor
+    const galleryItems = document.querySelectorAll('.gallery-item-wrapper');
+
+    galleryItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const img = item.querySelector('.gallery-img');
+            if (img) {
+                lightboxImg.src = img.src;
+                overlay.classList.add('active');
+            }
+        });
+    });
+}
+
+
+/* --- Project Slider Logic --- */
+function initProjectSlider() {
+    const track = document.getElementById('slider-track');
+    const prevBtn = document.getElementById('slider-prev');
+    const nextBtn = document.getElementById('slider-next');
+    const thumbs = document.querySelectorAll('.thumb-card');
+
+    if (!track) return; // Exit if slider not present
+
+    let currentSlide = 0;
+    const totalSlides = thumbs.length;
+
+    function updateSlide(index) {
+        if (index < 0) index = totalSlides - 1;
+        if (index >= totalSlides) index = 0;
+
+        currentSlide = index;
+
+        // Move track
+        track.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+        // Update thumbs
+        thumbs.forEach(t => t.classList.remove('active'));
+        if (thumbs[currentSlide]) {
+            thumbs[currentSlide].classList.add('active');
+        }
+    }
+
+    // Event Listeners
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => updateSlide(currentSlide - 1));
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => updateSlide(currentSlide + 1));
+    }
+
+    thumbs.forEach((thumb, idx) => {
+        thumb.addEventListener('click', () => updateSlide(idx));
+    });
+}
+
+
+// Initialize Lightbox and Slider
+document.addEventListener('DOMContentLoaded', () => {
+    initLightbox();
+    initProjectSlider();
+});
