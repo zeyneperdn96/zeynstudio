@@ -58,12 +58,21 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }, 100);
                 }
+
+                // Initialize media player
+                if (windowId === 'showreel') {
+                    setTimeout(() => {
+                        const mpWindow = this.windows.get('showreel');
+                        if (mpWindow) {
+                            mpWindow.mediaPlayer = MediaPlayer.initialize(mpWindow.element);
+                        }
+                    }, 100);
+                }
             };
         }
     };
 
-    // Start boot sequence
-    bootSequence.start();
+    // Boot sequence auto-starts in constructor
 });
 
 // Update clock

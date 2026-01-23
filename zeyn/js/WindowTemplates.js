@@ -132,25 +132,51 @@ const WindowTemplates = {
         </div>
     `,
 
-    // Showreel.mp4 - Media Player
+    // Media Player - Audio with Playlist
     showreel: () => `
         <div class="window-titlebar">
-            <span class="window-title">🎬 Showreel.mp4 - Media Player</span>
+            <span class="window-title">🎵 Media Player</span>
             <div class="window-controls">
                 <button class="win-btn win-minimize" data-action="minimize">_</button>
                 <button class="win-btn win-maximize" data-action="maximize">□</button>
                 <button class="win-btn win-close" data-action="close">×</button>
             </div>
         </div>
-        <div class="window-content" style="text-align: center;">
-            <div style="background: #000; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 48px;">
-                ▶️
+        <div class="window-content media-player-content" style="padding: 0; display: flex; flex-direction: column; background: #000;">
+            <!-- Visualization Area -->
+            <div class="mp-visual" style="background: linear-gradient(180deg, #0a0a2e 0%, #1a0a3e 100%); height: 120px; display: flex; align-items: center; justify-content: center; border-bottom: 2px solid #333;">
+                <div class="mp-now-playing" style="color: #0f0; font-family: 'Courier New', monospace; font-size: 13px; text-align: center; padding: 8px;">
+                    <div class="mp-track-name">No track loaded</div>
+                </div>
             </div>
-            <p style="margin-top: 12px; color: #666;">Showreel placeholder - Add your video here</p>
-            <div style="margin-top: 16px; display: flex; gap: 8px; justify-content: center;">
-                <button class="btn btn-primary btn-sm">▶️ Play</button>
-                <button class="btn btn-secondary btn-sm">⏸️ Pause</button>
-                <button class="btn btn-secondary btn-sm">⏹️ Stop</button>
+            <!-- Progress Bar -->
+            <div class="mp-progress-wrapper" style="padding: 6px 10px; background: #1a1a1a;">
+                <div class="mp-progress-bar" style="width: 100%; height: 8px; background: #333; border-radius: 4px; cursor: pointer; position: relative;">
+                    <div class="mp-progress-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, #4a9eff, #00d4ff); border-radius: 4px; transition: width 0.1s;"></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-top: 3px;">
+                    <span class="mp-time-current" style="color: #888; font-size: 10px;">0:00</span>
+                    <span class="mp-time-total" style="color: #888; font-size: 10px;">0:00</span>
+                </div>
+            </div>
+            <!-- Controls -->
+            <div class="mp-controls" style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 8px; background: #2d2d2d; border-bottom: 1px solid #444;">
+                <button class="mp-btn mp-prev" title="Previous" style="background: none; border: none; color: #ccc; font-size: 16px; cursor: pointer; padding: 4px 8px;">⏮</button>
+                <button class="mp-btn mp-play" title="Play" style="background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; padding: 4px 10px;">▶</button>
+                <button class="mp-btn mp-next" title="Next" style="background: none; border: none; color: #ccc; font-size: 16px; cursor: pointer; padding: 4px 8px;">⏭</button>
+                <div style="margin-left: 16px; display: flex; align-items: center; gap: 4px;">
+                    <span style="color: #888; font-size: 12px;">🔊</span>
+                    <input type="range" class="mp-volume" min="0" max="100" value="80" style="width: 60px; cursor: pointer;">
+                </div>
+            </div>
+            <!-- Playlist -->
+            <div class="mp-playlist" style="flex: 1; overflow-y: auto; background: #1e1e2e; max-height: 180px;">
+                ${(window.CONFIG.playlist || []).map((track, i) => `
+                    <div class="mp-track" data-index="${i}" style="padding: 6px 12px; color: #ccc; font-size: 11px; cursor: pointer; border-bottom: 1px solid #2a2a3a; display: flex; align-items: center; gap: 8px;">
+                        <span style="color: #666; font-size: 10px; width: 18px;">${i + 1}.</span>
+                        <span class="mp-track-title">${track.title}</span>
+                    </div>
+                `).join('')}
             </div>
         </div>
     `,

@@ -8,7 +8,7 @@ const CONFIG = {
     social: {
         instagram: 'https://instagram.com/yourhandle',
         github: 'https://github.com/yourhandle',
-        linkedin: 'https://linkedin.com/in/yourhandle'
+        linkedin: 'https://www.linkedin.com/in/zynprdn/'
     },
 
     // Assets
@@ -38,6 +38,13 @@ const CONFIG = {
         studio: 'ZeynStudio',
         bio: `I'm an industrial designer with a passion for creating meaningful, user-centered experiences. My work spans digital interfaces, illustrations, and physical product design.`
     },
+
+    // Media Player Playlist
+    playlist: [
+        { title: 'Track 1', src: 'assets/audio/playlist/track1.mp3' },
+        { title: 'Track 2', src: 'assets/audio/playlist/track2.mp3' },
+        { title: 'Track 3', src: 'assets/audio/playlist/track3.mp3' }
+    ],
 
     // Terminal Easter Egg
     terminal: {

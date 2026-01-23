@@ -73,6 +73,11 @@ class WindowManager {
         const windowData = this.windows.get(windowId);
         if (!windowData) return;
 
+        // Cleanup matrix animation
+        if (windowId === 'terminal') {
+            Terminal.cleanup(windowData.element);
+        }
+
         windowData.element.remove();
         this.windows.delete(windowId);
         this.removeFromTaskbar(windowId);

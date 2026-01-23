@@ -10,7 +10,6 @@ class BootSequence {
         this.bootVideo = document.getElementById('boot-video');
         this.clickCatcher = document.getElementById('boot-click-catcher');
         this.loginContainer = document.getElementById('login-container');
-        this.loginHitArea = document.getElementById('login-hit-area');
         this.desktopContainer = document.getElementById('desktop-container');
 
         this.hasStarted = false;
@@ -20,43 +19,15 @@ class BootSequence {
     }
 
     setupEventListeners() {
-        // Click catcher - play video on click
-        if (this.clickCatcher) {
-            this.clickCatcher.addEventListener('click', () => {
-                this.startBoot();
-            });
-            this.clickCatcher.addEventListener('mousedown', () => {
-                this.startBoot();
-            });
-        }
-
-        // Enter key to start boot
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !this.hasStarted) {
-                this.startBoot();
-            }
-        });
-
-        // When video ends, show login screen
+        // Log video errors for debugging
         if (this.bootVideo) {
-            this.bootVideo.addEventListener('ended', async () => {
-                console.log('Video ended, showing login screen...');
-                await this.wait(500);
-                this.showLoginScreen();
-            });
-
-            // Log video errors for debugging
             this.bootVideo.addEventListener('error', (e) => {
                 console.error('Video error:', e);
             });
         }
 
-        // Login hit area click - show selected state then go to desktop
-        if (this.loginHitArea) {
-            this.loginHitArea.addEventListener('click', () => {
-                this.handleLogin();
-            });
-        }
+        // Auto-start boot immediately
+        this.startBoot();
     }
 
     async startBoot() {
@@ -113,6 +84,11 @@ class BootSequence {
                 this.loginContainer.offsetHeight;
                 this.loginContainer.classList.add('active');
             }
+
+            // Auto-transition to desktop after 1.5 seconds
+            setTimeout(() => {
+                this.handleLogin();
+            }, 1500);
         }, 500);
     }
 
@@ -146,6 +122,13 @@ class BootSequence {
 
             // Show desktop
             this.desktopContainer.classList.remove('hidden');
+
+            // Play XP startup sound
+            const startupSound = document.getElementById('xp-startup-sound');
+            if (startupSound) {
+                startupSound.volume = 0.7;
+                startupSound.play().catch(() => {});
+            }
 
             if (window.desktopManager) {
                 window.desktopManager.initialize();

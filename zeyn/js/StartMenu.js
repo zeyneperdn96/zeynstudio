@@ -1,6 +1,6 @@
 /* ================================================================
    START MENU MANAGER
-   Two-column Start menu with programs, links, and system controls
+   Single-column Start menu with right-side All Programs submenu
    =============================================================== */
 
 class StartMenu {
@@ -20,8 +20,26 @@ class StartMenu {
             this.toggle();
         });
 
+        // All Programs submenu toggle
+        const allProgramsBtn = document.getElementById('all-programs-btn');
+        const allProgramsSubmenu = document.getElementById('all-programs-submenu');
+
+        if (allProgramsBtn && allProgramsSubmenu) {
+            allProgramsBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                allProgramsSubmenu.classList.toggle('hidden');
+            });
+
+            // Submenu item clicks
+            allProgramsSubmenu.querySelectorAll('.all-programs-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    this.close();
+                });
+            });
+        }
+
         // Menu items
-        const menuItems = this.menu.querySelectorAll('.start-menu-item');
+        const menuItems = this.menu.querySelectorAll('.start-menu-item:not(.all-programs)');
         menuItems.forEach(item => {
             item.addEventListener('click', () => {
                 const action = item.dataset.action;
@@ -73,6 +91,12 @@ class StartMenu {
         this.menu.classList.add('hidden');
         this.startBtn.classList.remove('active');
         this.isOpen = false;
+        this.resetAllPrograms();
+    }
+
+    resetAllPrograms() {
+        const submenu = document.getElementById('all-programs-submenu');
+        if (submenu) submenu.classList.add('hidden');
     }
 
     handleLink(linkType) {

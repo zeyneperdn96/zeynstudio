@@ -1,7 +1,7 @@
 /* Icon image fixes for PNG icons */
 .icon-image {
-    width: 64px;
-    height: 64px;
+    width: 80px;
+    height: 80px;
     margin-bottom: 6px;
     filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.3));
     display: flex;
@@ -13,8 +13,7 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
+    background: transparent;
 }
 
 .item-icon {
@@ -32,6 +31,5 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
+    background: transparent;
 }

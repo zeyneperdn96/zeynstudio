@@ -11,14 +11,14 @@
     display: none !important;
 }
 
-/* Larger Desktop Icons (64px - XP Large Icons) */
+/* Larger Desktop Icons (80px - XP Large Icons) */
 .desktop-icons {
-    gap: 24px !important;
+    gap: 28px !important;
 }
 
 .desktop-icon {
-    width: 96px !important;
-    padding: 10px !important;
+    width: 110px !important;
+    padding: 12px !important;
 }
 
 .icon-label {

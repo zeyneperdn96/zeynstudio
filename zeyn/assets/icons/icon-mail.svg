@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="envBody" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFDE8"/>
+      <stop offset="100%" stop-color="#E8D888"/>
+    </linearGradient>
+    <linearGradient id="envFlap" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFF8C0"/>
+      <stop offset="100%" stop-color="#D4B84B"/>
+    </linearGradient>
+  </defs>
+  <!-- Body -->
+  <rect x="3" y="9" width="26" height="18" rx="2" fill="url(#envBody)" stroke="#A08030" stroke-width="0.8"/>
+  <!-- Bottom fold lines -->
+  <path d="M3 27 L16 18 L29 27" fill="none" stroke="#C0A040" stroke-width="0.6"/>
+  <!-- Flap -->
+  <path d="M3 9 L16 19 L29 9 Z" fill="url(#envFlap)" stroke="#A08030" stroke-width="0.8"/>
+  <!-- Gloss -->
+  <path d="M5 10 L16 17 L12 10 Z" fill="rgba(255,255,255,0.3)"/>
+  <!-- Seal -->
+  <circle cx="16" cy="20" r="2.5" fill="#CC3333" opacity="0.8"/>
+</svg>

@@ -40,13 +40,14 @@
     display: block;
 }
 
-/* Clickable hit area - positioned on avatar (top-left area) */
+/* Clickable hit area - positioned on avatar (right side of panel) */
 .login-hit-area {
     position: absolute;
-    top: 15%;
-    left: 5%;
-    width: 420px;
-    height: 200px;
+    top: 38%;
+    left: 73%;
+    transform: translate(-50%, -50%);
+    width: 140px;
+    height: 140px;
     cursor: pointer;
     border: 3px solid transparent;
     border-radius: 8px;
