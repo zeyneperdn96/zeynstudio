@@ -123,11 +123,24 @@ class BootSequence {
             // Show desktop
             this.desktopContainer.classList.remove('hidden');
 
-            // Play XP startup sound
+            // Play XP startup sound (retry on user interaction if blocked)
             const startupSound = document.getElementById('xp-startup-sound');
             if (startupSound) {
                 startupSound.volume = 0.7;
-                startupSound.play().catch(() => {});
+                startupSound.currentTime = 0;
+                const playAudio = () => {
+                    startupSound.play().then(() => {
+                        // Remove listeners once playing
+                        document.removeEventListener('click', playAudio);
+                        document.removeEventListener('touchstart', playAudio);
+                        document.removeEventListener('keydown', playAudio);
+                    }).catch(() => {});
+                };
+                playAudio();
+                // If blocked, retry on first user interaction
+                document.addEventListener('click', playAudio, { once: false });
+                document.addEventListener('touchstart', playAudio, { once: false });
+                document.addEventListener('keydown', playAudio, { once: false });
             }
 
             if (window.desktopManager) {
