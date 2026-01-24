@@ -73,9 +73,15 @@
 }
 
 @media (max-width: 768px) {
+    .login-image {
+        object-fit: contain;
+        background: #2952A3;
+    }
+
     .login-hit-area {
-        right: 25%;
-        width: 140px;
-        height: 90px;
+        left: 73%;
+        top: 40%;
+        width: 100px;
+        height: 100px;
     }
 }

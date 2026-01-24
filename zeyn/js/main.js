@@ -3,9 +3,9 @@
    Initialize desktop environment
    ======================================== */
 
-// Detect mobile
+// Mobile detection disabled - desktop XP experience on all devices
 function isMobile() {
-    return window.innerWidth <= 768;
+    return false;
 }
 
 // Initialize application
@@ -17,12 +17,21 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('desktop-container').classList.add('hidden');
         document.getElementById('mobile-view').classList.remove('hidden');
 
-        // Update mobile links
+        // Update mobile content from config
         document.getElementById('mobile-bio').textContent = CONFIG.personal.bio;
-        document.getElementById('mobile-instagram').href = CONFIG.social.instagram;
         document.getElementById('mobile-github').href = CONFIG.social.github;
         document.getElementById('mobile-linkedin').href = CONFIG.social.linkedin;
-        document.getElementById('mobile-resume').href = CONFIG.assets.resume;
+
+        // Mobile clock
+        function updateMobileClock() {
+            var now = new Date();
+            var h = now.getHours();
+            var m = now.getMinutes();
+            document.getElementById('mobile-clock').textContent =
+                (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m;
+        }
+        updateMobileClock();
+        setInterval(updateMobileClock, 30000);
 
         return;
     }

@@ -223,30 +223,127 @@
 
     <!-- Mobile View -->
     <div id="mobile-view" class="mobile-view hidden">
-        <div class="mobile-header">
-            <h1>Zeyn</h1>
-            <p>Industrial Designer</p>
-            <div class="mobile-notice">💻 Best experienced on desktop</div>
+        <!-- XP Header Bar -->
+        <div class="mobile-xp-header">
+            <div class="mobile-xp-header-left">
+                <img src="assets/icons/about-me.png" alt="Zeyn" class="mobile-xp-avatar">
+                <span class="mobile-xp-logo">Zeyn XP</span>
+            </div>
         </div>
+
+        <!-- Scrollable Content -->
         <div class="mobile-content">
-            <section class="mobile-section">
-                <h2>About</h2>
-                <p id="mobile-bio">Industrial designer passionate about creating meaningful experiences.</p>
-            </section>
-            <section class="mobile-section">
-                <h2>Links</h2>
-                <div class="mobile-links">
-                    <a href="#" id="mobile-instagram" class="btn btn-primary" target="_blank">Instagram</a>
-                    <a href="#" id="mobile-github" class="btn btn-primary" target="_blank">GitHub</a>
-                    <a href="#" id="mobile-linkedin" class="btn btn-primary" target="_blank">LinkedIn</a>
-                    <a href="#" id="mobile-resume" class="btn btn-secondary">Resume (PDF)</a>
+            <!-- Profile Card -->
+            <div class="mobile-xp-window">
+                <div class="mobile-xp-titlebar">
+                    <span class="mobile-xp-titlebar-text">About Me</span>
+                    <div class="mobile-xp-titlebar-buttons">
+                        <span class="mobile-xp-btn-min"></span>
+                        <span class="mobile-xp-btn-max"></span>
+                        <span class="mobile-xp-btn-close"></span>
+                    </div>
                 </div>
-            </section>
-            <section class="mobile-section">
-                <h2>Contact</h2>
-                <p>Get in touch for collaborations.</p>
-                <a href="mailto:hello@zeynstudio.com" class="btn btn-primary">Email Me</a>
-            </section>
+                <div class="mobile-xp-window-body mobile-profile">
+                    <img src="assets/icons/about-me.png" alt="About Me" class="mobile-profile-icon">
+                    <h2 class="mobile-profile-name">Zeyn</h2>
+                    <p class="mobile-profile-title">Industrial Designer</p>
+                    <p id="mobile-bio" class="mobile-profile-bio">Industrial designer passionate about creating meaningful experiences.</p>
+                </div>
+            </div>
+
+            <!-- Skills Card -->
+            <div class="mobile-xp-window">
+                <div class="mobile-xp-titlebar">
+                    <span class="mobile-xp-titlebar-text">Programs</span>
+                    <div class="mobile-xp-titlebar-buttons">
+                        <span class="mobile-xp-btn-min"></span>
+                        <span class="mobile-xp-btn-max"></span>
+                        <span class="mobile-xp-btn-close"></span>
+                    </div>
+                </div>
+                <div class="mobile-xp-window-body mobile-skills">
+                    <div class="mobile-skill-item">
+                        <img src="assets/icons/icon-figma.png" alt="Figma">
+                        <span>Figma</span>
+                    </div>
+                    <div class="mobile-skill-item">
+                        <img src="assets/icons/icon-photoshop.png" alt="Photoshop">
+                        <span>Photoshop</span>
+                    </div>
+                    <div class="mobile-skill-item">
+                        <img src="assets/icons/icon-illustrator.png" alt="Illustrator">
+                        <span>Illustrator</span>
+                    </div>
+                    <div class="mobile-skill-item">
+                        <img src="assets/icons/icon-blender.png" alt="Blender">
+                        <span>Blender</span>
+                    </div>
+                    <div class="mobile-skill-item">
+                        <img src="assets/icons/icon-rhino.png" alt="Rhino">
+                        <span>Rhino</span>
+                    </div>
+                    <div class="mobile-skill-item">
+                        <img src="assets/icons/icon-3dsmax.png" alt="3ds Max">
+                        <span>3ds Max</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Links Card -->
+            <div class="mobile-xp-window">
+                <div class="mobile-xp-titlebar">
+                    <span class="mobile-xp-titlebar-text">Links</span>
+                    <div class="mobile-xp-titlebar-buttons">
+                        <span class="mobile-xp-btn-min"></span>
+                        <span class="mobile-xp-btn-max"></span>
+                        <span class="mobile-xp-btn-close"></span>
+                    </div>
+                </div>
+                <div class="mobile-xp-window-body mobile-links">
+                    <a href="#" id="mobile-linkedin" class="mobile-xp-button" target="_blank">
+                        <img src="assets/icons/icon-linkedin.svg" alt="LinkedIn">
+                        <span>LinkedIn</span>
+                    </a>
+                    <a href="#" id="mobile-github" class="mobile-xp-button" target="_blank">
+                        <img src="assets/icons/icon-github.svg" alt="GitHub">
+                        <span>GitHub</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Contact Card -->
+            <div class="mobile-xp-window">
+                <div class="mobile-xp-titlebar">
+                    <span class="mobile-xp-titlebar-text">Contact</span>
+                    <div class="mobile-xp-titlebar-buttons">
+                        <span class="mobile-xp-btn-min"></span>
+                        <span class="mobile-xp-btn-max"></span>
+                        <span class="mobile-xp-btn-close"></span>
+                    </div>
+                </div>
+                <div class="mobile-xp-window-body mobile-contact">
+                    <img src="assets/icons/contact-me.png" alt="Contact" class="mobile-contact-icon">
+                    <p>Get in touch for collaborations.</p>
+                    <a href="mailto:hello@zeynstudio.com" class="mobile-xp-button mobile-xp-button-primary">
+                        <span>Email Me</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Desktop Notice -->
+            <div class="mobile-xp-notice">
+                Best experienced on desktop
+            </div>
+        </div>
+
+        <!-- XP Taskbar Footer -->
+        <div class="mobile-xp-taskbar">
+            <div class="mobile-xp-start-btn">
+                <span class="mobile-xp-start-text">ZeynStudio</span>
+            </div>
+            <div class="mobile-xp-taskbar-right">
+                <span class="mobile-xp-clock" id="mobile-clock">12:00</span>
+            </div>
         </div>
     </div>
 
