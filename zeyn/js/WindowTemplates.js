@@ -27,31 +27,18 @@ const WindowTemplates = {
         </div>
     `,
 
-    // About.txt - About window
+    // About.txt - Trading Cards About window
     about: () => `
         <div class="window-titlebar">
-            <span class="window-title">📄 About.txt - Notepad</span>
+            <span class="window-title">🎴 About Me - Trading Cards</span>
             <div class="window-controls">
                 <button class="win-btn win-minimize" data-action="minimize">_</button>
                 <button class="win-btn win-maximize" data-action="maximize">□</button>
                 <button class="win-btn win-close" data-action="close">×</button>
             </div>
         </div>
-        <div class="window-content" style="font-family: 'Courier New', monospace; font-size: 12px; line-height: 1.6;">
-            <h2 style="font-family: Tahoma, sans-serif;">About Zeyn</h2>
-            <p><strong>Name:</strong> ${window.CONFIG.personal.name}</p>
-            <p><strong>Title:</strong> ${window.CONFIG.personal.title}</p>
-            <p><strong>Studio:</strong> ${window.CONFIG.personal.studio}</p>
-            <br>
-            <p>${window.CONFIG.personal.bio}</p>
-            <br>
-            <h3 style="font-family: Tahoma, sans-serif;">Skills</h3>
-            <ul>
-                <li>UI/UX Design & Prototyping</li>
-                <li>Digital Illustration</li>
-                <li>Industrial Design & 3D Modeling</li>
-                <li>Creative Direction</li>
-            </ul>
+        <div class="window-content" style="padding: 0; height: 100%; overflow: hidden;">
+            <iframe src="trading-cards.html" style="width: 100%; height: 100%; border: none; min-height: 600px;"></iframe>
         </div>
     `,
 

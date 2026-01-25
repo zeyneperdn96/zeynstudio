@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Zeynep World</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Press Start 2P', 'Courier New', monospace;
+            overflow: hidden;
+        }
+
+        .game-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .game-title {
+            color: #f8d830;
+            font-size: 24px;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px #000;
+            letter-spacing: 2px;
+        }
+
+        #gameCanvas {
+            border: 4px solid #8b4513;
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+        }
+
+        .hud {
+            display: flex;
+            gap: 40px;
+            margin-top: 15px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .hud span {
+            color: #f8d830;
+        }
+
+        .controls {
+            margin-top: 15px;
+            color: #888;
+            font-size: 11px;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            text-align: center;
+            color: #fff;
+        }
+
+        .modal-content h2 {
+            font-size: 32px;
+            color: #f8d830;
+            margin-bottom: 20px;
+        }
+
+        .modal-content p {
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        .start-text {
+            color: #0f0;
+            animation: blink 0.8s infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-wrapper">
+        <h1 class="game-title">SUPER ZEYNEP WORLD</h1>
+        <canvas id="gameCanvas" width="800" height="500"></canvas>
+        <div class="hud">
+            <div>SKILLS: <span id="skillCount">0</span></div>
+            <div>SIZE: <span id="sizePercent">100</span>%</div>
+            <div>LEVEL: <span id="levelText">JUNIOR</span></div>
+        </div>
+        <p class="controls">[ ← → ] Move &nbsp; [ SPACE ] Jump &nbsp; [ R ] Restart</p>
+    </div>
+
+    <div class="modal" id="startModal">
+        <div class="modal-content">
+            <h2>SUPER ZEYNEP WORLD</h2>
+            <p>Collect skills to grow bigger!</p>
+            <p class="start-text">PRESS ENTER TO START</p>
+        </div>
+    </div>
+
+    <div class="modal" id="winModal">
+        <div class="modal-content">
+            <h2 style="color: #0f0;">LEVEL COMPLETE!</h2>
+            <p>You collected all the skills!</p>
+            <p class="start-text">PRESS ENTER TO RESTART</p>
+        </div>
+    </div>
+
+    <script>
+        // ========================================
+        // SUPER ZEYNEP WORLD - Mario Style Game
+        // ========================================
+
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const W = canvas.width;
+        const H = canvas.height;
+
+        // Game State
+        let gameStarted = false;
+        let gameWon = false;
+
+        // Show start modal
+        document.getElementById('startModal').classList.add('active');
+
+        // Physics
+        const GRAVITY = 0.5;
+        const JUMP_POWER = -12;
+        const MOVE_SPEED = 5;
+
+        // Player
+        const player = {
+            x: 50,
+            y: 300,
+            width: 32,
+            height: 48,
+            vx: 0,
+            vy: 0,
+            onGround: false,
+            scale: 1,
+            skills: 0,
+            facingRight: true,
+
+            reset() {
+                this.x = 50;
+                this.y = 300;
+                this.vx = 0;
+                this.vy = 0;
+                this.scale = 1;
+                this.skills = 0;
+                this.width = 32;
+                this.height = 48;
+            },
+
+            grow() {
+                this.scale += 0.15;
+                this.width = 32 * this.scale;
+                this.height = 48 * this.scale;
+                this.y -= 10; // Prevent clipping into ground
+            }
+        };
+
+        // Input
+        const keys = {};
+        document.addEventListener('keydown', e => {
+            keys[e.code] = true;
+
+            if (e.code === 'Enter') {
+                if (!gameStarted || gameWon) {
+                    startGame();
+                }
+            }
+            if (e.code === 'KeyR') {
+                startGame();
+            }
+            if (e.code === 'Space') e.preventDefault();
+        });
+        document.addEventListener('keyup', e => keys[e.code] = false);
+
+        // Platforms (brick style)
+        const platforms = [
+            // Ground
+            { x: 0, y: 450, w: 800, h: 50, type: 'ground' },
+
+            // Floating platforms
+            { x: 150, y: 350, w: 100, h: 30, type: 'brick' },
+            { x: 350, y: 300, w: 100, h: 30, type: 'brick' },
+            { x: 550, y: 250, w: 100, h: 30, type: 'brick' },
+            { x: 200, y: 200, w: 100, h: 30, type: 'brick' },
+            { x: 450, y: 150, w: 150, h: 30, type: 'brick' },
+        ];
+
+        // Question Blocks
+        const questionBlocks = [
+            { x: 200, y: 280, w: 40, h: 40, hit: false, skill: 'Figma' },
+            { x: 400, y: 230, w: 40, h: 40, hit: false, skill: 'React' },
+            { x: 600, y: 180, w: 40, h: 40, hit: false, skill: 'AI' },
+            { x: 250, y: 130, w: 40, h: 40, hit: false, skill: 'Blender' },
+            { x: 500, y: 80, w: 40, h: 40, hit: false, skill: 'Node' },
+        ];
+
+        // Skill Items (spawned from blocks)
+        let skillItems = [];
+
+        // Floating Texts
+        let floatingTexts = [];
+
+        // Clouds
+        const clouds = [
+            { x: 100, y: 50 },
+            { x: 350, y: 80 },
+            { x: 600, y: 40 },
+        ];
+
+        // Sound Effects (Web Audio)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(freq, duration, type = 'square') {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.frequency.value = freq;
+            osc.type = type;
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        function jumpSound() { playSound(200, 0.1); setTimeout(() => playSound(300, 0.1), 50); }
+        function bumpSound() { playSound(150, 0.15); }
+        function coinSound() {
+            playSound(988, 0.1);
+            setTimeout(() => playSound(1319, 0.3), 100);
+        }
+
+        // Start Game
+        function startGame() {
+            document.getElementById('startModal').classList.remove('active');
+            document.getElementById('winModal').classList.remove('active');
+            gameStarted = true;
+            gameWon = false;
+            player.reset();
+            questionBlocks.forEach(b => b.hit = false);
+            skillItems = [];
+            floatingTexts = [];
+            updateHUD();
+        }
+
+        // Update HUD
+        function updateHUD() {
+            document.getElementById('skillCount').textContent = player.skills;
+            document.getElementById('sizePercent').textContent = Math.round(player.scale * 100);
+            const levels = ['JUNIOR', 'MID', 'SENIOR', 'LEAD', 'CTO'];
+            document.getElementById('levelText').textContent = levels[Math.min(player.skills, 4)];
+        }
+
+        // Collision Detection
+        function collides(a, b) {
+            return a.x < b.x + b.w &&
+                   a.x + a.width > b.x &&
+                   a.y < b.y + b.h &&
+                   a.y + a.height > b.y;
+        }
+
+        // Spawn Skill Item
+        function spawnSkill(block) {
+            skillItems.push({
+                x: block.x + 5,
+                y: block.y - 30,
+                w: 30,
+                h: 30,
+                vy: -8,
+                skill: block.skill,
+                bounced: false
+            });
+        }
+
+        // Add Floating Text
+        function addFloatText(x, y, text) {
+            floatingTexts.push({ x, y, text, life: 60 });
+        }
+
+        // Update
+        function update() {
+            if (!gameStarted || gameWon) return;
+
+            // Player Movement
+            if (keys['ArrowLeft']) {
+                player.vx = -MOVE_SPEED;
+                player.facingRight = false;
+            } else if (keys['ArrowRight']) {
+                player.vx = MOVE_SPEED;
+                player.facingRight = true;
+            } else {
+                player.vx = 0;
+            }
+
+            // Jump
+            if ((keys['Space'] || keys['ArrowUp']) && player.onGround) {
+                player.vy = JUMP_POWER;
+                player.onGround = false;
+                jumpSound();
+            }
+
+            // Gravity
+            player.vy += GRAVITY;
+
+            // Move X
+            player.x += player.vx;
+
+            // Boundaries
+            if (player.x < 0) player.x = 0;
+            if (player.x + player.width > W) player.x = W - player.width;
+
+            // Move Y
+            player.y += player.vy;
+
+            // Ground/Platform Collision
+            player.onGround = false;
+
+            // Check platforms
+            for (let p of platforms) {
+                if (collides(player, { x: p.x, y: p.y, w: p.w, h: p.h })) {
+                    // Landing on top
+                    if (player.vy > 0 && player.y + player.height - player.vy <= p.y + 5) {
+                        player.y = p.y - player.height;
+                        player.vy = 0;
+                        player.onGround = true;
+                    }
+                    // Hitting from side or below - push out
+                    else if (player.vy <= 0 && player.y >= p.y + p.h - 10) {
+                        player.y = p.y + p.h;
+                        player.vy = 1;
+                    }
+                }
+            }
+
+            // Question Block Collision (hit from below)
+            for (let block of questionBlocks) {
+                if (!block.hit) {
+                    const playerTop = player.y;
+                    const blockBottom = block.y + block.h;
+
+                    // Check if player is hitting from below
+                    if (player.vy < 0 &&
+                        player.x + player.width > block.x &&
+                        player.x < block.x + block.w &&
+                        playerTop <= blockBottom &&
+                        playerTop > blockBottom - 15) {
+
+                        block.hit = true;
+                        player.vy = 2;
+                        bumpSound();
+                        spawnSkill(block);
+                    }
+                }
+            }
+
+            // Skill Items Physics
+            for (let item of skillItems) {
+                item.vy += 0.3;
+                item.y += item.vy;
+
+                // Bounce on platforms
+                for (let p of platforms) {
+                    if (item.y + item.h >= p.y && item.y + item.h <= p.y + 15 &&
+                        item.x + item.w > p.x && item.x < p.x + p.w) {
+                        item.y = p.y - item.h;
+                        if (!item.bounced) {
+                            item.vy = -5;
+                            item.bounced = true;
+                        } else {
+                            item.vy = 0;
+                        }
+                    }
+                }
+
+                // Collect skill
+                if (collides(player, { x: item.x, y: item.y, w: item.w, h: item.h })) {
+                    player.skills++;
+                    player.grow();
+                    coinSound();
+                    addFloatText(item.x, item.y - 20, item.skill + '!');
+                    item.collected = true;
+                    updateHUD();
+                }
+            }
+
+            // Remove collected items
+            skillItems = skillItems.filter(i => !i.collected);
+
+            // Update floating texts
+            floatingTexts = floatingTexts.filter(t => {
+                t.y -= 1;
+                t.life--;
+                return t.life > 0;
+            });
+
+            // Win condition
+            if (player.skills >= 5) {
+                gameWon = true;
+                document.getElementById('winModal').classList.add('active');
+            }
+
+            // Fall off screen
+            if (player.y > H + 100) {
+                player.y = 300;
+                player.x = 50;
+                player.vy = 0;
+            }
+        }
+
+        // Draw
+        function draw() {
+            // Sky gradient
+            const sky = ctx.createLinearGradient(0, 0, 0, H);
+            sky.addColorStop(0, '#5c94fc');
+            sky.addColorStop(1, '#87CEEB');
+            ctx.fillStyle = sky;
+            ctx.fillRect(0, 0, W, H);
+
+            // Clouds
+            ctx.fillStyle = '#fff';
+            for (let c of clouds) {
+                drawCloud(c.x, c.y);
+            }
+
+            // Platforms (brick style)
+            for (let p of platforms) {
+                if (p.type === 'ground') {
+                    drawGround(p);
+                } else {
+                    drawBricks(p.x, p.y, p.w, p.h);
+                }
+            }
+
+            // Question Blocks
+            for (let block of questionBlocks) {
+                drawQuestionBlock(block);
+            }
+
+            // Skill Items
+            for (let item of skillItems) {
+                drawSkillItem(item);
+            }
+
+            // Player
+            drawPlayer();
+
+            // Floating Texts
+            ctx.font = '14px "Courier New"';
+            ctx.textAlign = 'center';
+            for (let t of floatingTexts) {
+                ctx.fillStyle = `rgba(255, 255, 0, ${t.life / 60})`;
+                ctx.fillText(t.text, t.x + 15, t.y);
+            }
+        }
+
+        // Draw Cloud
+        function drawCloud(x, y) {
+            ctx.beginPath();
+            ctx.arc(x, y + 20, 25, 0, Math.PI * 2);
+            ctx.arc(x + 30, y + 15, 30, 0, Math.PI * 2);
+            ctx.arc(x + 60, y + 20, 25, 0, Math.PI * 2);
+            ctx.arc(x + 30, y + 30, 25, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // Draw Ground (green top, brown bottom)
+        function drawGround(p) {
+            // Brown dirt
+            ctx.fillStyle = '#8b4513';
+            ctx.fillRect(p.x, p.y, p.w, p.h);
+
+            // Green grass top
+            ctx.fillStyle = '#228b22';
+            ctx.fillRect(p.x, p.y, p.w, 15);
+
+            // Grass highlight
+            ctx.fillStyle = '#32cd32';
+            ctx.fillRect(p.x, p.y, p.w, 5);
+        }
+
+        // Draw Bricks
+        function drawBricks(x, y, w, h) {
+            const brickW = 25;
+            const brickH = 15;
+
+            for (let row = 0; row < h / brickH; row++) {
+                for (let col = 0; col < w / brickW; col++) {
+                    const bx = x + col * brickW;
+                    const by = y + row * brickH;
+
+                    // Brick base
+                    ctx.fillStyle = '#c84c0c';
+                    ctx.fillRect(bx, by, brickW - 2, brickH - 2);
+
+                    // Highlight
+                    ctx.fillStyle = '#fc9838';
+                    ctx.fillRect(bx, by, brickW - 2, 3);
+                    ctx.fillRect(bx, by, 3, brickH - 2);
+
+                    // Shadow
+                    ctx.fillStyle = '#8b2500';
+                    ctx.fillRect(bx + brickW - 5, by, 3, brickH - 2);
+                    ctx.fillRect(bx, by + brickH - 5, brickW - 2, 3);
+                }
+            }
+        }
+
+        // Draw Question Block
+        function drawQuestionBlock(block) {
+            const x = block.x;
+            const y = block.y;
+            const w = block.w;
+            const h = block.h;
+
+            if (block.hit) {
+                // Empty block (brown)
+                ctx.fillStyle = '#654321';
+                ctx.fillRect(x, y, w, h);
+                ctx.strokeStyle = '#4a3520';
+                ctx.lineWidth = 3;
+                ctx.strokeRect(x, y, w, h);
+            } else {
+                // Golden block
+                ctx.fillStyle = '#f8d830';
+                ctx.fillRect(x, y, w, h);
+
+                // Border
+                ctx.fillStyle = '#c84c0c';
+                ctx.fillRect(x, y, w, 4);
+                ctx.fillRect(x, y, 4, h);
+                ctx.fillRect(x + w - 4, y, 4, h);
+                ctx.fillRect(x, y + h - 4, w, 4);
+
+                // Inner border highlight
+                ctx.fillStyle = '#fff8dc';
+                ctx.fillRect(x + 4, y + 4, w - 8, 3);
+                ctx.fillRect(x + 4, y + 4, 3, h - 8);
+
+                // Question mark
+                ctx.fillStyle = '#8b4513';
+                ctx.font = 'bold 24px "Courier New"';
+                ctx.textAlign = 'center';
+                ctx.fillText('?', x + w/2, y + h - 10);
+            }
+        }
+
+        // Draw Skill Item
+        function drawSkillItem(item) {
+            // Icon background
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(item.x, item.y, item.w, item.h);
+
+            // Border
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(item.x, item.y, item.w, item.h);
+
+            // Skill icon (colored square with letter)
+            const colors = {
+                'Figma': '#a259ff',
+                'React': '#61dafb',
+                'AI': '#10a37f',
+                'Blender': '#f5792a',
+                'Node': '#68a063'
+            };
+
+            ctx.fillStyle = colors[item.skill] || '#ff0';
+            ctx.fillRect(item.x + 3, item.y + 3, item.w - 6, item.h - 6);
+
+            // Letter
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 16px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(item.skill[0], item.x + item.w/2, item.y + item.h/2 + 6);
+        }
+
+        // Draw Player (pixel art style character)
+        function drawPlayer() {
+            const x = player.x;
+            const y = player.y;
+            const w = player.width;
+            const h = player.height;
+            const dir = player.facingRight ? 1 : -1;
+
+            ctx.save();
+            if (!player.facingRight) {
+                ctx.translate(x + w, y);
+                ctx.scale(-1, 1);
+                ctx.translate(-x, -y);
+            }
+
+            // Body (red)
+            ctx.fillStyle = '#e52521';
+            ctx.fillRect(x + w*0.15, y + h*0.35, w*0.7, h*0.4);
+
+            // Head (skin color)
+            ctx.fillStyle = '#ffd8a8';
+            ctx.fillRect(x + w*0.2, y + h*0.08, w*0.6, h*0.32);
+
+            // Hair (brown)
+            ctx.fillStyle = '#4a2c0a';
+            ctx.fillRect(x + w*0.15, y + h*0.02, w*0.7, h*0.15);
+            ctx.fillRect(x + w*0.15, y + h*0.08, w*0.2, h*0.2);
+
+            // Eye
+            ctx.fillStyle = '#000';
+            ctx.fillRect(x + w*0.5, y + h*0.18, w*0.12, h*0.08);
+
+            // Pants (blue)
+            ctx.fillStyle = '#2058d8';
+            ctx.fillRect(x + w*0.2, y + h*0.7, w*0.6, h*0.2);
+
+            // Shoes
+            ctx.fillStyle = '#4a2c0a';
+            ctx.fillRect(x + w*0.15, y + h*0.88, w*0.3, h*0.12);
+            ctx.fillRect(x + w*0.55, y + h*0.88, w*0.3, h*0.12);
+
+            ctx.restore();
+        }
+
+        // Game Loop
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Start the game loop
+        gameLoop();
+    </script>
+</body>
+</html>

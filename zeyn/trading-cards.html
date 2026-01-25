@@ -1131,6 +1131,29 @@
                 font-size: 11px;
             }
         }
+
+        /* Iframe/Embedded Mode - smaller header/footer */
+        body.embedded .page-header {
+            padding: 20px 20px 10px;
+        }
+
+        body.embedded .page-title {
+            font-size: clamp(8px, 2.5vw, 14px);
+        }
+
+        body.embedded .page-subtitle {
+            font-size: 16px;
+            margin-top: 8px;
+        }
+
+        body.embedded .card-deck {
+            padding: 20px 40px 50px;
+        }
+
+        body.embedded .page-footer {
+            padding: 15px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -1437,6 +1460,11 @@
     </footer>
 
     <script>
+        // ===== DETECT IFRAME MODE =====
+        if (window.self !== window.top) {
+            document.body.classList.add('embedded');
+        }
+
         // ===== FLIP CARD FUNCTION =====
         function flipCard(card) {
             card.classList.toggle('flipped');

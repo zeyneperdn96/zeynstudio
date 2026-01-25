@@ -39,11 +39,20 @@ class WindowManager {
         windowEl.dataset.windowId = windowId;
         windowEl.innerHTML = template();
 
+        // Custom sizes for specific windows
+        const windowSizes = {
+            about: { width: 900, height: 700 },
+            work: { width: 700, height: 550 },
+            showreel: { width: 400, height: 450 }
+        };
+
+        const customSize = windowSizes[windowId] || {};
+
         const defaultPos = {
             top: 60 + (this.windows.size * 30),
-            left: 120 + (this.windows.size * 30),
-            width: options.width || 600,
-            height: options.height || 500
+            left: 80 + (this.windows.size * 30),
+            width: options.width || customSize.width || 600,
+            height: options.height || customSize.height || 500
         };
 
         windowEl.style.top = `${defaultPos.top}px`;
