@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>90s Radical Trading Card Deck | Zeynep</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        /* ========================================
+           90s RADICAL TRADING CARDS v2
+           Cyberpunk / Gamified Portfolio Component
+           ======================================== */
+
+        :root {
+            --neon-pink: #ff0099;
+            --neon-cyan: #00f0ff;
+            --neon-green: #0aff00;
+            --neon-yellow: #ffee00;
+            --dark-purple: #12001f;
+            --card-bg: #1a0a2e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'VT323', monospace;
+            background: var(--dark-purple);
+            background-image:
+                radial-gradient(ellipse at 10% 90%, rgba(255, 0, 153, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 10%, rgba(0, 240, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(10, 255, 0, 0.03) 0%, transparent 70%);
+            min-height: 100vh;
+            cursor: url('https://cur.cursors-4u.net/toons/too-12/too1133.cur'), auto;
+            position: relative;
+        }
+
+        /* ===== GLOBAL CRT SCANLINES ===== */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.08) 2px,
+                rgba(0, 0, 0, 0.08) 4px
+            );
+            pointer-events: none;
+            z-index: 99999;
+        }
+
+        /* ===== CYBER GRID ===== */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(255, 0, 153, 0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 153, 0.015) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: -1;
+            animation: gridPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
+            text-align: center;
+            padding: 50px 20px 25px;
+            position: relative;
+        }
+
+        .page-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: clamp(10px, 3vw, 20px);
+            color: var(--neon-cyan);
+            text-shadow:
+                0 0 10px var(--neon-cyan),
+                0 0 30px var(--neon-cyan),
+                4px 4px 0 var(--neon-pink);
+            letter-spacing: 3px;
+            animation: titleFlicker 5s infinite;
+        }
+
+        @keyframes titleFlicker {
+            0%, 95%, 100% { opacity: 1; transform: translateX(0); }
+            96% { opacity: 0.8; transform: translateX(-2px); filter: hue-rotate(90deg); }
+            97% { opacity: 1; transform: translateX(2px); }
+            98% { opacity: 0.9; transform: translateX(-1px); filter: hue-rotate(-90deg); }
+        }
+
+        .page-subtitle {
+            font-family: 'VT323', monospace;
+            font-size: 24px;
+            color: var(--neon-pink);
+            margin-top: 15px;
+            text-shadow: 0 0 15px var(--neon-pink);
+        }
+
+        .blink {
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* ===== CARD DECK CONTAINER ===== */
+        .card-deck {
+            display: flex;
+            gap: 40px;
+            padding: 40px 60px 70px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .card-deck::-webkit-scrollbar {
+            height: 12px;
+        }
+
+        .card-deck::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--neon-pink);
+            border-radius: 10px;
+        }
+
+        .card-deck::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-cyan), var(--neon-green));
+            border-radius: 10px;
+        }
+
+        /* ===== CARD WRAPPER ===== */
+        .card-wrapper {
+            flex: 0 0 350px;
+            height: 540px;
+            perspective: 1500px;
+            scroll-snap-align: center;
+        }
+
+        /* ===== CARD (3D Container) ===== */
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-15px) rotateX(5deg);
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card.flipped:hover {
+            transform: rotateY(180deg) translateY(-15px);
+        }
+
+        /* ===== CARD FACES ===== */
+        .face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Card Scanlines */
+        .face::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 3px,
+                rgba(0, 200, 255, 0.015) 3px,
+                rgba(0, 200, 255, 0.015) 6px
+            );
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* Front Face */
+        .front {
+            background: linear-gradient(180deg, #1f0a35 0%, #0a0012 100%);
+            border: 4px solid var(--neon-cyan);
+            box-shadow:
+                0 0 25px rgba(0, 240, 255, 0.25),
+                inset 0 0 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Back Face */
+        .back {
+            transform: rotateY(180deg);
+            border: 4px solid var(--neon-pink);
+            box-shadow:
+                0 0 25px rgba(255, 0, 153, 0.25),
+                inset 0 0 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Color variations per card */
+        .card-wrapper:nth-child(1) .front { border-color: var(--neon-pink); }
+        .card-wrapper:nth-child(2) .front { border-color: var(--neon-cyan); }
+        .card-wrapper:nth-child(3) .front { border-color: var(--neon-green); }
+        .card-wrapper:nth-child(4) .front { border-color: var(--neon-yellow); }
+        .card-wrapper:nth-child(5) .front { border-color: var(--neon-pink); }
+
+        /* ===== CARD HEADER ===== */
+        .card-header {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 11px;
+            text-align: center;
+            padding: 14px 12px;
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-cyan));
+            color: #000;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        .card-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: repeating-linear-gradient(90deg, #000 0px, #000 5px, transparent 5px, transparent 10px);
+        }
+
+        .card-number {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 9px;
+            color: var(--neon-yellow);
+            text-shadow: 0 0 10px var(--neon-yellow);
+            z-index: 10;
+        }
+
+        /* ===== CARD BODY ===== */
+        .card-body {
+            flex: 1;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== CARD FOOTER ===== */
+        .card-footer {
+            height: 55px;
+            background: rgba(0, 0, 0, 0.7);
+            border-top: 2px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* ===== FLIP HINT ===== */
+        .flip-hint {
+            position: absolute;
+            bottom: 62px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'VT323', monospace;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.2);
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        /* ========================================
+           CARD 1: THE HERO
+           ======================================== */
+
+        .hero-image {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 14px;
+            border: 4px solid var(--neon-pink);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            box-shadow:
+                0 0 20px rgba(255, 0, 153, 0.4),
+                inset 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            image-rendering: pixelated;
+            filter: contrast(1.1) saturate(1.15);
+        }
+
+        .hero-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 4px,
+                rgba(0, 0, 0, 0.12) 4px,
+                rgba(0, 0, 0, 0.12) 8px
+            );
+        }
+
+        .hero-name {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 18px;
+            color: var(--neon-yellow);
+            text-align: center;
+            text-shadow: 0 0 20px var(--neon-yellow);
+            margin-bottom: 5px;
+        }
+
+        .hero-class {
+            font-family: 'VT323', monospace;
+            font-size: 22px;
+            color: var(--neon-cyan);
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .stars {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-bottom: 14px;
+        }
+
+        .stars span {
+            color: var(--neon-yellow);
+            font-size: 16px;
+            text-shadow: 0 0 10px var(--neon-yellow);
+            animation: starGlow 1.2s ease-in-out infinite;
+        }
+
+        .stars span:nth-child(2) { animation-delay: 0.15s; }
+        .stars span:nth-child(3) { animation-delay: 0.3s; }
+        .stars span:nth-child(4) { animation-delay: 0.45s; }
+        .stars span:nth-child(5) { animation-delay: 0.6s; }
+
+        @keyframes starGlow {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.15); filter: brightness(1.4); }
+        }
+
+        /* Stat Bars */
+        .stats {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .stat-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stat-label {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 8px;
+            width: 28px;
+            text-shadow: 0 0 8px currentColor;
+        }
+
+        .stat-label.hp { color: #ff4444; }
+        .stat-label.mp { color: #4488ff; }
+        .stat-label.xp { color: var(--neon-yellow); }
+
+        .stat-bar {
+            flex: 1;
+            height: 16px;
+            background: #0a0a0a;
+            border: 2px solid #333;
+            overflow: hidden;
+        }
+
+        .stat-fill {
+            height: 100%;
+        }
+
+        .stat-fill.hp {
+            width: 75%;
+            background: repeating-linear-gradient(90deg, #ff4444 0px, #ff4444 7px, #cc2222 7px, #cc2222 9px);
+            box-shadow: 0 0 10px #ff4444;
+        }
+
+        .stat-fill.hp.full {
+            width: 100%;
+            animation: hpPulse 1.2s infinite alternate;
+        }
+
+        @keyframes hpPulse {
+            from { filter: brightness(1); }
+            to { filter: brightness(1.3); }
+        }
+
+        .stat-fill.mp {
+            width: 60%;
+            background: repeating-linear-gradient(90deg, #4488ff 0px, #4488ff 7px, #2266cc 7px, #2266cc 9px);
+            box-shadow: 0 0 10px #4488ff;
+        }
+
+        .stat-fill.mp.full {
+            width: 100%;
+            animation: mpPulse 1.2s infinite alternate;
+        }
+
+        @keyframes mpPulse {
+            from { filter: brightness(1); }
+            to { filter: brightness(1.3); }
+        }
+
+        .stat-fill.xp {
+            width: 100%;
+            background: repeating-linear-gradient(90deg, var(--neon-yellow) 0px, var(--neon-yellow) 7px, #ccaa00 7px, #ccaa00 9px);
+            box-shadow: 0 0 10px var(--neon-yellow);
+            animation: xpPulse 1s infinite alternate;
+        }
+
+        @keyframes xpPulse {
+            from { filter: brightness(1); }
+            to { filter: brightness(1.4); }
+        }
+
+        .stat-value {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 7px;
+            color: #fff;
+            width: 48px;
+            text-align: right;
+        }
+
+        /* Marquee Footer */
+        .marquee {
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .marquee-text {
+            font-family: 'VT323', monospace;
+            font-size: 18px;
+            color: var(--neon-green);
+            white-space: nowrap;
+            animation: scrollMarquee 10s linear infinite;
+            text-shadow: 0 0 15px var(--neon-green);
+        }
+
+        @keyframes scrollMarquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* ===== CARD 1 BACK: THE LORE ===== */
+        .back-lore {
+            background:
+                linear-gradient(rgba(20, 10, 30, 0.95), rgba(10, 5, 20, 0.98)),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect fill="%23150a20" width="100" height="100"/><circle fill="%23ff009915" cx="50" cy="50" r="40"/></svg>');
+        }
+
+        .back-lore .card-header {
+            background: linear-gradient(90deg, #8B008B, #4B0082);
+        }
+
+        .lore-content {
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .lore-text {
+            font-family: 'VT323', monospace;
+            font-size: 19px;
+            color: #ddd;
+            line-height: 1.7;
+            text-align: center;
+        }
+
+        .lore-motto {
+            margin-top: 25px;
+            padding: 15px;
+            border: 2px solid var(--neon-pink);
+            background: rgba(255, 0, 153, 0.1);
+            text-align: center;
+        }
+
+        .lore-motto p {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 9px;
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px var(--neon-pink);
+            line-height: 1.8;
+        }
+
+        /* ========================================
+           CARD 2: SKILLS
+           ======================================== */
+
+        .skills {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            flex: 1;
+        }
+
+        .skill-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .skill-name {
+            font-family: 'VT323', monospace;
+            font-size: 17px;
+            color: var(--neon-cyan);
+            width: 100px;
+            text-shadow: 0 0 8px var(--neon-cyan);
+        }
+
+        .skill-bar {
+            flex: 1;
+            height: 20px;
+            background: #080808;
+            border: 2px solid var(--neon-pink);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-cyan));
+            position: relative;
+            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .skill-fill::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(90deg, transparent 0px, transparent 7px, rgba(0,0,0,0.25) 7px, rgba(0,0,0,0.25) 9px);
+        }
+
+        .skill-fill::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 5px;
+            height: 100%;
+            background: #fff;
+            animation: skillGlow 1.5s infinite;
+        }
+
+        @keyframes skillGlow {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        .skill-percent {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            color: var(--neon-green);
+            width: 42px;
+            text-align: right;
+            text-shadow: 0 0 8px var(--neon-green);
+        }
+
+        /* Skill Video */
+        .skill-video-container {
+            flex: 1;
+            margin-top: -160px;
+            border: none;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+        }
+
+        .skill-video {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* Equalizer Footer */
+        .equalizer {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 8px;
+            height: 100%;
+            padding: 12px 0;
+        }
+
+        .eq-bar {
+            width: 14px;
+            background: linear-gradient(0deg, var(--neon-pink), var(--neon-cyan));
+            border-radius: 3px;
+            animation: eqJump 0.4s ease-in-out infinite alternate;
+        }
+
+        .eq-bar:nth-child(1) { animation-delay: 0s; }
+        .eq-bar:nth-child(2) { animation-delay: 0.08s; }
+        .eq-bar:nth-child(3) { animation-delay: 0.16s; }
+        .eq-bar:nth-child(4) { animation-delay: 0.12s; }
+        .eq-bar:nth-child(5) { animation-delay: 0.04s; }
+
+        @keyframes eqJump {
+            0% { height: 10px; }
+            100% { height: 32px; }
+        }
+
+        /* ===== CARD 2 BACK: HIDDEN DATA ===== */
+        .back-hidden {
+            background: linear-gradient(180deg, #0a0a1a 0%, #050508 100%);
+        }
+
+        .back-hidden .card-header {
+            background: linear-gradient(90deg, #333, #666);
+        }
+
+        .hidden-stats {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 25px;
+            gap: 22px;
+        }
+
+        .hidden-row {
+            text-align: center;
+        }
+
+        .hidden-row label {
+            font-family: 'VT323', monospace;
+            font-size: 17px;
+            color: var(--neon-pink);
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .hidden-row .value {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 11px;
+            color: var(--neon-yellow);
+            text-shadow: 0 0 12px var(--neon-yellow);
+        }
+
+        /* ========================================
+           CARD 3: PASSIVES
+           ======================================== */
+
+        .passives {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .passive {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            padding: 10px;
+            background: linear-gradient(135deg, rgba(10, 255, 0, 0.04) 0%, rgba(0, 0, 0, 0.3) 100%);
+            border-left: 4px solid var(--neon-green);
+            border-radius: 0 8px 8px 0;
+        }
+
+        .passive-icon {
+            font-size: 22px;
+            filter: drop-shadow(0 0 10px var(--neon-cyan));
+        }
+
+        .passive-info h4 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 7px;
+            color: var(--neon-yellow);
+            margin-bottom: 4px;
+            text-shadow: 0 0 8px var(--neon-yellow);
+        }
+
+        .passive-info p {
+            font-family: 'VT323', monospace;
+            font-size: 14px;
+            color: #aaa;
+            line-height: 1.3;
+        }
+
+        /* Server Lights Footer */
+        .server-lights {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .light {
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+            background: #222;
+            box-shadow: inset 0 0 4px rgba(0,0,0,0.6);
+            transition: all 0.1s;
+        }
+
+        .light.on {
+            box-shadow: 0 0 12px currentColor, 0 0 20px currentColor;
+        }
+
+        .light:nth-child(1) { color: var(--neon-green); }
+        .light:nth-child(2) { color: var(--neon-cyan); }
+        .light:nth-child(3) { color: var(--neon-pink); }
+        .light:nth-child(4) { color: var(--neon-yellow); }
+
+        /* ===== CARD 3 BACK: BLUEPRINT ===== */
+        .back-blueprint {
+            background:
+                linear-gradient(rgba(0, 40, 80, 0.92), rgba(0, 20, 50, 0.95)),
+                repeating-linear-gradient(0deg, transparent 0px, transparent 24px, rgba(100, 180, 255, 0.08) 24px, rgba(100, 180, 255, 0.08) 25px),
+                repeating-linear-gradient(90deg, transparent 0px, transparent 24px, rgba(100, 180, 255, 0.08) 24px, rgba(100, 180, 255, 0.08) 25px);
+        }
+
+        .back-blueprint .card-header {
+            background: linear-gradient(90deg, #0066aa, #00aadd);
+        }
+
+        .blueprint-content {
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .blueprint-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 9px;
+            color: #88ddff;
+            margin-bottom: 20px;
+            text-shadow: 0 0 12px #88ddff;
+        }
+
+        .blueprint-text {
+            font-family: 'VT323', monospace;
+            font-size: 18px;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        /* ========================================
+           CARD 4: INVENTORY
+           ======================================== */
+
+        .inventory {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            flex: 1;
+            align-content: center;
+        }
+
+        .inv-slot {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #151525 0%, #080812 100%);
+            border: 3px solid #2a2a4a;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .inv-slot::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            right: 4px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            border-radius: 2px;
+        }
+
+        .inv-slot:hover {
+            border-color: var(--neon-cyan);
+            background: rgba(0, 240, 255, 0.08);
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+
+        .inv-slot .icon {
+            font-size: 30px;
+            margin-bottom: 5px;
+        }
+
+        .inv-slot .label {
+            font-family: 'VT323', monospace;
+            font-size: 13px;
+            color: #777;
+            text-align: center;
+        }
+
+        /* Terminal Footer */
+        .terminal-footer {
+            font-family: 'VT323', monospace;
+            font-size: 20px;
+            color: var(--neon-green);
+            text-shadow: 0 0 12px var(--neon-green);
+        }
+
+        .cursor {
+            animation: cursorBlink 0.5s step-end infinite;
+        }
+
+        @keyframes cursorBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* ===== CARD 4 BACK: MATRIX ===== */
+        .back-matrix {
+            background: #000;
+        }
+
+        .back-matrix .card-header {
+            background: linear-gradient(90deg, #003300, #009900);
+            font-family: 'VT323', monospace;
+            font-size: 14px;
+        }
+
+        .matrix-terminal {
+            flex: 1;
+            padding: 22px;
+            font-family: 'VT323', monospace;
+            font-size: 18px;
+            color: var(--neon-green);
+            text-shadow: 0 0 10px var(--neon-green);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            line-height: 2;
+        }
+
+        .matrix-line {
+            opacity: 0;
+            animation: typeIn 0.4s forwards;
+        }
+
+        .matrix-line:nth-child(1) { animation-delay: 0.2s; }
+        .matrix-line:nth-child(2) { animation-delay: 0.6s; }
+        .matrix-line:nth-child(3) { animation-delay: 1.0s; }
+        .matrix-line:nth-child(4) { animation-delay: 1.4s; }
+        .matrix-line:nth-child(5) { animation-delay: 1.8s; }
+
+        @keyframes typeIn {
+            to { opacity: 1; }
+        }
+
+        /* ========================================
+           CARD 5: MISSION
+           ======================================== */
+
+        .quest {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 18px;
+        }
+
+        .quest-marker {
+            font-size: 100px;
+            color: var(--neon-yellow);
+            text-shadow: 0 0 50px var(--neon-yellow);
+            animation: bounce 0.5s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-18px); }
+        }
+
+        .quest-status {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            color: var(--neon-green);
+            text-shadow: 0 0 15px var(--neon-green);
+            padding: 12px 22px;
+            border: 2px solid var(--neon-green);
+            background: rgba(10, 255, 0, 0.08);
+            animation: statusGlow 2s infinite;
+        }
+
+        @keyframes statusGlow {
+            0%, 100% { box-shadow: 0 0 10px rgba(10, 255, 0, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(10, 255, 0, 0.5); }
+        }
+
+        .quest-sub {
+            font-family: 'VT323', monospace;
+            font-size: 20px;
+            color: var(--neon-cyan);
+        }
+
+        /* Insert Coin Footer */
+        .insert-coin {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            color: var(--neon-yellow);
+            text-shadow: 0 0 12px var(--neon-yellow);
+            animation: coinFlash 0.4s infinite;
+        }
+
+        @keyframes coinFlash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* ===== CARD 5 BACK: QUEST LOG ===== */
+        .back-quest {
+            background: linear-gradient(180deg, #2a1a08 0%, #120800 100%);
+        }
+
+        .back-quest .card-header {
+            background: linear-gradient(90deg, #8B4513, #CD853F);
+        }
+
+        .quest-log {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+            gap: 22px;
+            text-align: center;
+        }
+
+        .quest-log p {
+            font-family: 'VT323', monospace;
+            font-size: 19px;
+            color: #ccc;
+            line-height: 1.5;
+        }
+
+        .quest-log .reward {
+            color: var(--neon-yellow);
+            font-size: 17px;
+            border-top: 2px dashed #444;
+            padding-top: 18px;
+            margin-top: 10px;
+        }
+
+        /* Retro Button */
+        .retro-btn {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 11px;
+            padding: 16px 28px;
+            background: linear-gradient(180deg, #555 0%, #333 50%, #1a1a1a 100%);
+            color: var(--neon-green);
+            border: 4px solid;
+            border-color: #888 #222 #111 #666;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-shadow: 0 0 10px var(--neon-green);
+            box-shadow: 5px 5px 0 #000;
+            transition: all 0.1s;
+        }
+
+        .retro-btn:hover {
+            background: linear-gradient(180deg, #666 0%, #444 50%, #222 100%);
+            color: var(--neon-cyan);
+            text-shadow: 0 0 15px var(--neon-cyan);
+        }
+
+        .retro-btn:active {
+            border-color: #111 #666 #888 #222;
+            transform: translate(3px, 3px);
+            box-shadow: 2px 2px 0 #000;
+        }
+
+        /* ===== PAGE FOOTER ===== */
+        .page-footer {
+            text-align: center;
+            padding: 30px;
+            font-family: 'VT323', monospace;
+            font-size: 18px;
+            color: var(--neon-cyan);
+        }
+
+        .page-footer a {
+            color: var(--neon-pink);
+            text-decoration: none;
+            text-shadow: 0 0 10px var(--neon-pink);
+            transition: all 0.2s;
+        }
+
+        .page-footer a:hover {
+            color: var(--neon-yellow);
+            text-shadow: 0 0 20px var(--neon-yellow);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .card-deck {
+                padding: 30px 30px 60px;
+                gap: 30px;
+            }
+
+            .card-wrapper {
+                flex: 0 0 300px;
+                height: 480px;
+            }
+
+            .page-title {
+                font-size: 10px;
+            }
+
+            .card-header {
+                font-size: 9px;
+                padding: 12px 10px;
+            }
+
+            .hero-image {
+                width: 110px;
+                height: 110px;
+            }
+
+            .hero-name {
+                font-size: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card-wrapper {
+                flex: 0 0 270px;
+                height: 440px;
+            }
+
+            .card-body {
+                padding: 14px;
+            }
+
+            .passive {
+                padding: 10px;
+                gap: 10px;
+            }
+
+            .passive-icon {
+                font-size: 24px;
+            }
+
+            .passive-info h4 {
+                font-size: 7px;
+            }
+
+            .passive-info p {
+                font-size: 14px;
+            }
+
+            .inv-slot .icon {
+                font-size: 24px;
+            }
+
+            .inv-slot .label {
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="page-header">
+        <h1 class="page-title">[ 90s RADICAL TRADING DECK ]</h1>
+        <p class="page-subtitle">>>> CLICK CARDS TO REVEAL SECRETS <span class="blink">_</span></p>
+    </header>
+
+    <section class="card-deck">
+
+        <!-- ========== CARD 1: THE HERO ========== -->
+        <div class="card-wrapper">
+            <div class="card" onclick="flipCard(this)">
+                <div class="face front">
+                    <div class="card-header">THE HERO</div>
+                    <span class="card-number">#001</span>
+                    <div class="card-body">
+                        <div class="hero-image">
+                            <img src="assets/Gemini_Generated_Image_eh5x58eh5x58eh5x.png" alt="Zeynep" onerror="this.src='https://placehold.co/400x400/12001f/ff0099?text=ZEYN'">
+                        </div>
+                        <h2 class="hero-name">ZEYNEP</h2>
+                        <p class="hero-class">Product Designer</p>
+                        <div class="stars">
+                            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                        </div>
+                        <div class="stats">
+                            <div class="stat-row">
+                                <span class="stat-label hp">HP</span>
+                                <div class="stat-bar"><div class="stat-fill hp full"></div></div>
+                                <span class="stat-value">100/100</span>
+                            </div>
+                            <div class="stat-row">
+                                <span class="stat-label mp">MP</span>
+                                <div class="stat-bar"><div class="stat-fill mp full"></div></div>
+                                <span class="stat-value">100/100</span>
+                            </div>
+                            <div class="stat-row">
+                                <span class="stat-label xp">XP</span>
+                                <div class="stat-bar"><div class="stat-fill xp"></div></div>
+                                <span class="stat-value">MAX!</span>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="flip-hint">[ CLICK TO FLIP ]</span>
+                    <div class="card-footer">
+                        <div class="marquee">
+                            <span class="marquee-text">>>> STATUS: CREATING >>> MODE: DESIGN >>> VIBE: PIXEL PERFECT >>> STATUS: CREATING >>> MODE: DESIGN >>></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="face back back-lore">
+                    <div class="card-header">ORIGIN STORY</div>
+                    <div class="lore-content">
+                        <p class="lore-text">
+                            Zeynep has always loved tinkering. She doesn't wait for inspiration; she starts, reviews, and iterates.
+                            <br><br>
+                            For her, <strong style="color: var(--neon-cyan);">'Starting'</strong> is half the battle.
+                        </p>
+                        <div class="lore-motto">
+                            <p>"It won't be perfect<br>until you start."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== CARD 2: STATS ========== -->
+        <div class="card-wrapper">
+            <div class="card" onclick="flipCard(this)">
+                <div class="face front">
+                    <div class="card-header">SKILL LEVELS</div>
+                    <span class="card-number">#002</span>
+                    <div class="card-body">
+                        <div class="skills">
+                            <div class="skill-row">
+                                <span class="skill-name">UI Design</span>
+                                <div class="skill-bar"><div class="skill-fill" data-width="95"></div></div>
+                                <span class="skill-percent">95%</span>
+                            </div>
+                            <div class="skill-row">
+                                <span class="skill-name">UX Research</span>
+                                <div class="skill-bar"><div class="skill-fill" data-width="90"></div></div>
+                                <span class="skill-percent">90%</span>
+                            </div>
+                            <div class="skill-row">
+                                <span class="skill-name">Gamification</span>
+                                <div class="skill-bar"><div class="skill-fill" data-width="99"></div></div>
+                                <span class="skill-percent">99%</span>
+                            </div>
+                            <div class="skill-row">
+                                <span class="skill-name">Prototyping</span>
+                                <div class="skill-bar"><div class="skill-fill" data-width="85"></div></div>
+                                <span class="skill-percent">85%</span>
+                            </div>
+                        </div>
+                        <div class="skill-video-container">
+                            <video class="skill-video" autoplay loop muted playsinline>
+                                <source src="assets/skill-video.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                    </div>
+                    <span class="flip-hint">[ CLICK TO FLIP ]</span>
+                    <div class="card-footer">
+                        <div class="equalizer">
+                            <div class="eq-bar"></div>
+                            <div class="eq-bar"></div>
+                            <div class="eq-bar"></div>
+                            <div class="eq-bar"></div>
+                            <div class="eq-bar"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="face back back-hidden">
+                    <div class="card-header">SECRET STATS</div>
+                    <div class="hidden-stats">
+                        <div class="hidden-row">
+                            <label>Coffee Consumption:</label>
+                            <span class="value">∞ INFINITE</span>
+                        </div>
+                        <div class="hidden-row">
+                            <label>Unfinished Side Projects:</label>
+                            <span class="value">50+</span>
+                        </div>
+                        <div class="hidden-row">
+                            <label>Pixel Sensitivity:</label>
+                            <span class="value">EXTREME</span>
+                        </div>
+                        <div class="hidden-row">
+                            <label>Flow State:</label>
+                            <span class="value">ENABLED</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== CARD 3: PASSIVES ========== -->
+        <div class="card-wrapper">
+            <div class="card" onclick="flipCard(this)">
+                <div class="face front">
+                    <div class="card-header">PASSIVE SKILLS</div>
+                    <span class="card-number">#003</span>
+                    <div class="card-body">
+                        <div class="passives">
+                            <div class="passive">
+                                <span class="passive-icon">👁️</span>
+                                <div class="passive-info">
+                                    <h4>Pixel Precision</h4>
+                                    <p>Spots 1px misalignments instantly.</p>
+                                </div>
+                            </div>
+                            <div class="passive">
+                                <span class="passive-icon">🧠</span>
+                                <div class="passive-info">
+                                    <h4>Flow Intuition</h4>
+                                    <p>Predicts user behavior with accuracy.</p>
+                                </div>
+                            </div>
+                            <div class="passive">
+                                <span class="passive-icon">🤖</span>
+                                <div class="passive-info">
+                                    <h4>AI Whisperer</h4>
+                                    <p>Uses AI as leverage, not a shortcut.</p>
+                                </div>
+                            </div>
+                            <div class="passive">
+                                <span class="passive-icon">🛠️</span>
+                                <div class="passive-info">
+                                    <h4>Maker Mindset</h4>
+                                    <p>Converts ideas into shippable products.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="flip-hint">[ CLICK TO FLIP ]</span>
+                    <div class="card-footer">
+                        <div class="server-lights">
+                            <div class="light"></div>
+                            <div class="light"></div>
+                            <div class="light"></div>
+                            <div class="light"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="face back back-blueprint">
+                    <div class="card-header">ABILITY DETAILS</div>
+                    <div class="blueprint-content">
+                        <h4 class="blueprint-title">PASSIVE EFFECT: MAKER MINDSET</h4>
+                        <p class="blueprint-text">
+                            Rapidly converts abstract ideas into shippable products.
+                            <br><br>
+                            She doesn't just design screens; she engineers experiences with a beginning and an end.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== CARD 4: INVENTORY ========== -->
+        <div class="card-wrapper">
+            <div class="card" onclick="flipCard(this)">
+                <div class="face front">
+                    <div class="card-header">BACKPACK</div>
+                    <span class="card-number">#004</span>
+                    <div class="card-body">
+                        <div class="inventory">
+                            <div class="inv-slot">
+                                <span class="icon">🎨</span>
+                                <span class="label">Figma</span>
+                            </div>
+                            <div class="inv-slot">
+                                <span class="icon">📝</span>
+                                <span class="label">Notion</span>
+                            </div>
+                            <div class="inv-slot">
+                                <span class="icon">🅰️</span>
+                                <span class="label">Adobe</span>
+                            </div>
+                            <div class="inv-slot">
+                                <span class="icon">🤖</span>
+                                <span class="label">ChatGPT</span>
+                            </div>
+                            <div class="inv-slot">
+                                <span class="icon">🖼️</span>
+                                <span class="label">Midjourney</span>
+                            </div>
+                            <div class="inv-slot">
+                                <span class="icon">🎧</span>
+                                <span class="label">Spotify</span>
+                            </div>
+                            <div class="inv-slot">
+                                <span class="icon">🔊</span>
+                                <span class="label">Marshall IV</span>
+                            </div>
+                            <div class="inv-slot">
+                                <span class="icon">🧊</span>
+                                <span class="label">3D Model</span>
+                            </div>
+                            <div class="inv-slot">
+                                <span class="icon">☕</span>
+                                <span class="label">Coffee</span>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="flip-hint">[ CLICK TO FLIP ]</span>
+                    <div class="card-footer">
+                        <span class="terminal-footer">LOADED<span class="cursor">_</span></span>
+                    </div>
+                </div>
+                <div class="face back back-matrix">
+                    <div class="card-header">SYSTEM TERMINAL</div>
+                    <div class="matrix-terminal">
+                        <div class="matrix-line">> SYSTEM CHECK...</div>
+                        <div class="matrix-line">> LOADING FIGMA... OK</div>
+                        <div class="matrix-line">> LOADING ADOBE SUITE... OK</div>
+                        <div class="matrix-line">> LOADING 3D ENGINE... OK</div>
+                        <div class="matrix-line">> ALL SYSTEMS GO_</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== CARD 5: MISSION ========== -->
+        <div class="card-wrapper">
+            <div class="card" onclick="flipCard(this)">
+                <div class="face front">
+                    <div class="card-header">CURRENT QUEST</div>
+                    <span class="card-number">#005</span>
+                    <div class="card-body">
+                        <div class="quest">
+                            <div class="quest-marker">❗</div>
+                            <div class="quest-status">STATUS: OPEN TO WORK</div>
+                            <p class="quest-sub">New adventures await...</p>
+                        </div>
+                    </div>
+                    <span class="flip-hint">[ CLICK TO FLIP ]</span>
+                    <div class="card-footer">
+                        <span class="insert-coin">INSERT COIN</span>
+                    </div>
+                </div>
+                <div class="face back back-quest">
+                    <div class="card-header">QUEST LOG</div>
+                    <div class="quest-log">
+                        <p style="color: var(--neon-yellow); font-size: 22px; font-family: 'Press Start 2P'; font-size: 10px; line-height: 1.8;">ACCEPT QUEST?</p>
+                        <a href="mailto:hello@zeynstudio.com" class="retro-btn">
+                            ▶ START PROJECT
+                        </a>
+                        <p class="reward">
+                            <strong>REWARD:</strong><br>
+                            High-quality design &<br>eternal gratitude.
+                        </p>
+                        <p style="color: var(--neon-cyan); margin-top: 10px;">
+                            Are you ready to build<br>something legendary?
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <footer class="page-footer">
+        <p>>>> USE ← → ARROWS TO NAVIGATE >>> | <a href="index.html">RETURN TO DESKTOP</a></p>
+    </footer>
+
+    <script>
+        // ===== FLIP CARD FUNCTION =====
+        function flipCard(card) {
+            card.classList.toggle('flipped');
+
+            // Visual flash effect
+            card.style.filter = 'brightness(1.5)';
+            setTimeout(() => {
+                card.style.filter = 'brightness(1)';
+            }, 80);
+
+            // Reset matrix terminal animation on flip
+            if (card.closest('.card-wrapper') === document.querySelectorAll('.card-wrapper')[3]) {
+                const lines = card.querySelectorAll('.matrix-line');
+                lines.forEach(line => {
+                    line.style.animation = 'none';
+                    line.offsetHeight;
+                    line.style.animation = null;
+                });
+            }
+        }
+
+        // ===== ENTRANCE ANIMATIONS =====
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.card-wrapper');
+
+            cards.forEach((card, i) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(80px) rotateX(-15deg)';
+
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.7s ease-out, transform 0.7s ease-out';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0) rotateX(0)';
+                }, 200 + (i * 130));
+            });
+
+            // Animate skill bars
+            setTimeout(() => {
+                document.querySelectorAll('.skill-fill').forEach(bar => {
+                    const width = bar.getAttribute('data-width');
+                    bar.style.width = width + '%';
+                });
+            }, 800);
+        });
+
+        // ===== KEYBOARD NAVIGATION =====
+        document.addEventListener('keydown', (e) => {
+            const deck = document.querySelector('.card-deck');
+            const scrollAmount = 390;
+
+            if (e.key === 'ArrowRight') {
+                deck.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            } else if (e.key === 'ArrowLeft') {
+                deck.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            } else if (e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                // Flip the centered card
+                const cards = document.querySelectorAll('.card');
+                const deckRect = deck.getBoundingClientRect();
+                const centerX = deckRect.left + deckRect.width / 2;
+
+                let closest = null;
+                let closestDist = Infinity;
+
+                cards.forEach(card => {
+                    const rect = card.getBoundingClientRect();
+                    const cardCenter = rect.left + rect.width / 2;
+                    const dist = Math.abs(cardCenter - centerX);
+                    if (dist < closestDist) {
+                        closestDist = dist;
+                        closest = card;
+                    }
+                });
+
+                if (closest) flipCard(closest);
+            }
+        });
+
+        // ===== RANDOM SERVER LIGHTS =====
+        function randomizeLights() {
+            document.querySelectorAll('.light').forEach(light => {
+                light.classList.toggle('on', Math.random() > 0.35);
+            });
+        }
+        setInterval(randomizeLights, 350);
+        randomizeLights();
+    </script>
+</body>
+</html>
