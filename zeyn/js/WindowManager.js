@@ -103,6 +103,39 @@ class WindowManager {
         if (taskbarBtn) taskbarBtn.classList.remove('active');
     }
 
+    maximizeWindow(windowId) {
+        const windowData = this.windows.get(windowId);
+        if (!windowData) return;
+
+        const windowEl = windowData.element;
+
+        if (windowData.isMaximized) {
+            // Restore to original size
+            windowEl.style.top = windowData.originalPosition.top;
+            windowEl.style.left = windowData.originalPosition.left;
+            windowEl.style.width = windowData.originalPosition.width;
+            windowEl.style.height = windowData.originalPosition.height;
+            windowEl.classList.remove('maximized');
+            windowData.isMaximized = false;
+        } else {
+            // Save original position
+            windowData.originalPosition = {
+                top: windowEl.style.top,
+                left: windowEl.style.left,
+                width: windowEl.style.width,
+                height: windowEl.style.height
+            };
+
+            // Maximize (full screen minus taskbar)
+            windowEl.style.top = '0px';
+            windowEl.style.left = '0px';
+            windowEl.style.width = '100vw';
+            windowEl.style.height = 'calc(100vh - 40px)';
+            windowEl.classList.add('maximized');
+            windowData.isMaximized = true;
+        }
+    }
+
     focusWindow(windowId) {
         const windowData = this.windows.get(windowId);
         if (!windowData) return;
@@ -178,7 +211,7 @@ class WindowManager {
 
                 if (action === 'close') this.closeWindow(windowId);
                 else if (action === 'minimize') this.minimizeWindow(windowId);
-                else if (action === 'maximize') console.log('Maximize not implemented');
+                else if (action === 'maximize') this.maximizeWindow(windowId);
             });
         });
     }

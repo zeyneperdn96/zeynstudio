@@ -10,6 +10,7 @@ class BootSequence {
         this.bootVideo = document.getElementById('boot-video');
         this.clickCatcher = document.getElementById('boot-click-catcher');
         this.loginContainer = document.getElementById('login-container');
+        this.welcomeContainer = document.getElementById('welcome-container');
         this.desktopContainer = document.getElementById('desktop-container');
 
         this.hasStarted = false;
@@ -107,7 +108,7 @@ class BootSequence {
         // Wait for selected state to be visible (200ms)
         await this.wait(200);
 
-        console.log('Transitioning to desktop...');
+        console.log('Transitioning to welcome screen...');
 
         // Fade out login screen
         if (this.loginContainer) {
@@ -120,33 +121,69 @@ class BootSequence {
                 this.loginContainer.classList.add('hidden');
             }
 
-            // Show desktop
-            this.desktopContainer.classList.remove('hidden');
+            // Show welcome screen with music
+            this.showWelcomeScreen();
+        }, 500);
+    }
 
-            // Play XP startup sound (retry on user interaction if blocked)
-            const startupSound = document.getElementById('xp-startup-sound');
-            if (startupSound) {
-                startupSound.volume = 0.7;
-                startupSound.currentTime = 0;
+    showWelcomeScreen() {
+        console.log('Showing welcome screen...');
+
+        // Play XP startup sound IMMEDIATELY (before showing screen)
+        const startupSound = document.getElementById('xp-startup-sound');
+        if (startupSound) {
+            startupSound.volume = 0.7;
+            startupSound.currentTime = 0;
+            startupSound.play().catch(() => {
+                // If autoplay blocked, retry on interaction
                 const playAudio = () => {
                     startupSound.play().then(() => {
-                        // Remove listeners once playing
                         document.removeEventListener('click', playAudio);
                         document.removeEventListener('touchstart', playAudio);
                         document.removeEventListener('keydown', playAudio);
                     }).catch(() => {});
                 };
-                playAudio();
-                // If blocked, retry on first user interaction
                 document.addEventListener('click', playAudio, { once: false });
                 document.addEventListener('touchstart', playAudio, { once: false });
                 document.addEventListener('keydown', playAudio, { once: false });
+            });
+        }
+
+        // Show welcome container
+        if (this.welcomeContainer) {
+            this.welcomeContainer.classList.remove('hidden');
+            // Trigger reflow
+            this.welcomeContainer.offsetHeight;
+            this.welcomeContainer.classList.add('active');
+        }
+
+        // Wait for music intro, then transition to desktop
+        setTimeout(() => {
+            this.showDesktop();
+        }, 3500);
+    }
+
+    showDesktop() {
+        console.log('Transitioning to desktop...');
+
+        // Fade out welcome screen
+        if (this.welcomeContainer) {
+            this.welcomeContainer.classList.add('fade-out');
+        }
+
+        setTimeout(() => {
+            // Hide welcome
+            if (this.welcomeContainer) {
+                this.welcomeContainer.classList.add('hidden');
             }
+
+            // Show desktop
+            this.desktopContainer.classList.remove('hidden');
 
             if (window.desktopManager) {
                 window.desktopManager.initialize();
             }
-        }, 500);
+        }, 800);
     }
 
     wait(ms) {

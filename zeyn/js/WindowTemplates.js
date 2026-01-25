@@ -37,8 +37,8 @@ const WindowTemplates = {
                 <button class="win-btn win-close" data-action="close">×</button>
             </div>
         </div>
-        <div class="window-content" style="padding: 0; height: 100%; overflow: hidden;">
-            <iframe src="trading-cards.html" style="width: 100%; height: 100%; border: none; min-height: 600px;"></iframe>
+        <div class="window-content" style="padding: 0; overflow: hidden; flex: 1; display: flex;">
+            <iframe src="trading-cards.html" style="width: 100%; border: none; flex: 1;"></iframe>
         </div>
     `,
 

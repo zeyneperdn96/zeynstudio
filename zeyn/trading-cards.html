@@ -980,6 +980,7 @@
         .quest-status-section {
             margin-top: auto;
             padding-top: 14px;
+            padding-bottom: 8px;
             border-top: 2px dashed rgba(255, 238, 0, 0.2);
             text-align: center;
         }
@@ -1015,6 +1016,11 @@
             padding: 10px 16px;
             background: rgba(0, 0, 0, 0.4);
             transition: opacity 0.2s ease;
+        }
+
+        /* Card 5 specific - hide default flip hint, show custom one in flavor */
+        .quest-new + .flip-hint {
+            display: none;
         }
 
         .quest-shuffle-hint {
@@ -1507,9 +1513,11 @@
                                 <div class="quest-status-text" id="statusText">AVAILABLE FOR PARTY</div>
                             </div>
                         </div>
-                        <div class="quest-flavor" id="flavorText">"Save often. Breaks are free."</div>
+                        <div class="quest-flavor">
+                            <span id="flavorText">"Save often. Breaks are free."</span>
+                            <span style="display: block; margin-top: 6px; color: var(--neon-cyan); font-style: normal;">[ SPACE ] Shuffle &nbsp; [ CLICK ] Flip</span>
+                        </div>
                     </div>
-                    <span class="flip-hint">[ SPACE ] Shuffle &nbsp; [ CLICK ] Flip</span>
                 </div>
                 <div class="face back back-lore-new">
                     <div class="card-header">CHARACTER LORE</div>
