@@ -919,100 +919,175 @@
         }
 
         /* ========================================
-           CARD 5: MISSION
+           CARD 5: CURRENT QUEST (NEW DESIGN)
            ======================================== */
 
-        .quest {
+        .quest-new {
             flex: 1;
             display: flex;
             flex-direction: column;
+            padding: 0;
+        }
+
+        .quest-content {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .quest-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 16px;
+            border: 3px solid var(--neon-yellow);
+            background: rgba(255, 238, 0, 0.1);
+            display: flex;
             align-items: center;
             justify-content: center;
-            text-align: center;
-            gap: 18px;
+            font-size: 32px;
+            animation: questIconPulse 2s ease-in-out infinite;
         }
 
-        .quest-marker {
-            font-size: 100px;
-            color: var(--neon-yellow);
-            text-shadow: 0 0 50px var(--neon-yellow);
-            animation: bounce 0.5s ease-in-out infinite;
+        @keyframes questIconPulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(255, 238, 0, 0.3); }
+            50% { box-shadow: 0 0 25px var(--neon-yellow), 0 0 40px rgba(255, 238, 0, 0.4); }
         }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-18px); }
-        }
-
-        .quest-status {
+        .quest-label {
             font-family: 'Press Start 2P', cursive;
-            font-size: 10px;
+            font-size: 8px;
+            color: var(--neon-yellow);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px var(--neon-yellow);
+            text-align: center;
+        }
+
+        .quest-text {
+            font-family: 'VT323', monospace;
+            font-size: 22px;
+            color: #fff;
+            line-height: 1.4;
+            margin-bottom: 20px;
+            min-height: 60px;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+            text-align: center;
+            transition: opacity 0.2s ease;
+        }
+
+        .quest-status-section {
+            margin-top: auto;
+            padding-top: 14px;
+            border-top: 2px dashed rgba(255, 238, 0, 0.2);
+            text-align: center;
+        }
+
+        .quest-status-label {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 7px;
             color: var(--neon-green);
-            text-shadow: 0 0 15px var(--neon-green);
-            padding: 12px 22px;
-            border: 2px solid var(--neon-green);
-            background: rgba(10, 255, 0, 0.08);
-            animation: statusGlow 2s infinite;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
         }
 
-        @keyframes statusGlow {
-            0%, 100% { box-shadow: 0 0 10px rgba(10, 255, 0, 0.2); }
-            50% { box-shadow: 0 0 30px rgba(10, 255, 0, 0.5); }
-        }
-
-        .quest-sub {
+        .quest-status-text {
             font-family: 'VT323', monospace;
             font-size: 20px;
-            color: var(--neon-cyan);
+            color: var(--neon-green);
+            text-shadow: 0 0 10px var(--neon-green);
+            animation: statusBlink 3s ease-in-out infinite;
+            transition: opacity 0.2s ease;
         }
 
-        /* Insert Coin Footer */
-        .insert-coin {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 12px;
-            color: var(--neon-yellow);
-            text-shadow: 0 0 12px var(--neon-yellow);
-            animation: coinFlash 0.4s infinite;
-        }
-
-        @keyframes coinFlash {
+        @keyframes statusBlink {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+            50% { opacity: 0.7; }
         }
 
-        /* ===== CARD 5 BACK: QUEST LOG ===== */
-        .back-quest {
-            background: linear-gradient(180deg, #2a1a08 0%, #120800 100%);
+        .quest-flavor {
+            font-family: 'VT323', monospace;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.4);
+            font-style: italic;
+            text-align: center;
+            padding: 10px 16px;
+            background: rgba(0, 0, 0, 0.4);
+            transition: opacity 0.2s ease;
         }
 
-        .back-quest .card-header {
-            background: linear-gradient(90deg, #8B4513, #CD853F);
+        .quest-shuffle-hint {
+            font-family: 'VT323', monospace;
+            font-size: 14px;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 8px var(--neon-cyan);
         }
 
-        .quest-log {
+        /* ===== CARD 5 BACK: CHARACTER LORE ===== */
+        .back-lore-new {
+            background: linear-gradient(180deg, #1a0a30 0%, #0a0015 100%);
+        }
+
+        .back-lore-new .card-header {
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
+        }
+
+        .lore-content-new {
             flex: 1;
+            padding: 24px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 25px;
-            gap: 22px;
             text-align: center;
         }
 
-        .quest-log p {
-            font-family: 'VT323', monospace;
-            font-size: 19px;
-            color: #ccc;
-            line-height: 1.5;
+        .lore-icon-new {
+            width: 90px;
+            height: 90px;
+            margin-bottom: 20px;
+            border: 3px solid var(--neon-cyan);
+            border-radius: 50%;
+            background: rgba(0, 240, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 36px;
+            color: var(--neon-cyan);
+            box-shadow: 0 0 20px var(--neon-cyan);
         }
 
-        .quest-log .reward {
-            color: var(--neon-yellow);
-            font-size: 17px;
-            border-top: 2px dashed #444;
-            padding-top: 18px;
-            margin-top: 10px;
+        .lore-label-new {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 8px;
+            color: var(--neon-pink);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 14px;
+        }
+
+        .lore-text-new {
+            font-family: 'VT323', monospace;
+            font-size: 20px;
+            color: #ccc;
+            line-height: 1.5;
+            max-width: 280px;
+            transition: opacity 0.2s ease;
+        }
+
+        .lore-flavor-new {
+            margin-top: auto;
+            padding-top: 16px;
+        }
+
+        .lore-flavor-text {
+            font-family: 'VT323', monospace;
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.35);
+            font-style: italic;
+            transition: opacity 0.2s ease;
         }
 
         /* Retro Button */
@@ -1416,38 +1491,35 @@
             </div>
         </div>
 
-        <!-- ========== CARD 5: MISSION ========== -->
+        <!-- ========== CARD 5: CURRENT QUEST (NEW) ========== -->
         <div class="card-wrapper">
             <div class="card" onclick="flipCard(this)">
                 <div class="face front">
                     <div class="card-header">CURRENT QUEST</div>
                     <span class="card-number">#005</span>
-                    <div class="card-body">
-                        <div class="quest">
-                            <div class="quest-marker">❗</div>
-                            <div class="quest-status">STATUS: OPEN TO WORK</div>
-                            <p class="quest-sub">New adventures await...</p>
+                    <div class="card-body quest-new">
+                        <div class="quest-content">
+                            <div class="quest-icon">&#9733;</div>
+                            <div class="quest-label">OBJECTIVE</div>
+                            <div class="quest-text" id="questText">Learn something small. Apply it somewhere real.</div>
+                            <div class="quest-status-section">
+                                <div class="quest-status-label">STATUS</div>
+                                <div class="quest-status-text" id="statusText">AVAILABLE FOR PARTY</div>
+                            </div>
                         </div>
+                        <div class="quest-flavor" id="flavorText">"Save often. Breaks are free."</div>
                     </div>
-                    <span class="flip-hint">[ CLICK TO FLIP ]</span>
-                    <div class="card-footer">
-                        <span class="insert-coin">INSERT COIN</span>
-                    </div>
+                    <span class="flip-hint">[ SPACE ] Shuffle &nbsp; [ CLICK ] Flip</span>
                 </div>
-                <div class="face back back-quest">
-                    <div class="card-header">QUEST LOG</div>
-                    <div class="quest-log">
-                        <p style="color: var(--neon-yellow); font-size: 22px; font-family: 'Press Start 2P'; font-size: 10px; line-height: 1.8;">ACCEPT QUEST?</p>
-                        <a href="mailto:hello@zeynstudio.com" class="retro-btn">
-                            ▶ START PROJECT
-                        </a>
-                        <p class="reward">
-                            <strong>REWARD:</strong><br>
-                            High-quality design &<br>eternal gratitude.
-                        </p>
-                        <p style="color: var(--neon-cyan); margin-top: 10px;">
-                            Are you ready to build<br>something legendary?
-                        </p>
+                <div class="face back back-lore-new">
+                    <div class="card-header">CHARACTER LORE</div>
+                    <div class="lore-content-new">
+                        <div class="lore-icon-new">Z</div>
+                        <div class="lore-label-new">BACKSTORY</div>
+                        <div class="lore-text-new" id="loreText">Started drawing before learning the rules. Still makes things up along the way.</div>
+                        <div class="lore-flavor-new">
+                            <div class="lore-flavor-text" id="backFlavorText">"The tutorial never really ends."</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1551,6 +1623,103 @@
         }
         setInterval(randomizeLights, 350);
         randomizeLights();
+
+        // ===== QUEST SHUFFLE SYSTEM =====
+        const quests = [
+            "Learn something small. Apply it somewhere real.",
+            "Finish the draft. Polish it later.",
+            "Make one thing better than yesterday.",
+            "Ship it before it feels perfect.",
+            "Ask the question you've been avoiding.",
+            "Organize one folder. Just one.",
+            "Say yes to something slightly scary.",
+            "Rest without guilt. Resume tomorrow.",
+            "Help someone without announcing it.",
+            "Close 12 browser tabs. Open 3 new ones."
+        ];
+
+        const statuses = [
+            "AVAILABLE FOR PARTY",
+            "SEEKING NEW ADVENTURE",
+            "READY TO JOIN YOUR QUEST",
+            "ACCEPTING SIDE QUESTS",
+            "WAITING AT THE GUILD HALL",
+            "FREE AGENT / LFG"
+        ];
+
+        const lores = [
+            "Started drawing before learning the rules. Still makes things up along the way.",
+            "Collects unfinished projects like rare items. Finishes them eventually.",
+            "Trained in the art of figuring it out. Specializes in quiet problem-solving.",
+            "Has restarted many times. Each save file taught something new.",
+            "Works best with good music and bad coffee. Delivers either way."
+        ];
+
+        const flavors = [
+            '"Save often. Breaks are free."',
+            '"Grinding XP since the early levels."',
+            '"Not the chosen one. Just showed up."',
+            '"Loading... please stand by."',
+            '"Built different. Mostly by accident."',
+            '"Side quests are still quests."',
+            '"Work in progress. Always was."',
+            '"No speedrun. Just the long way."',
+            '"Quietly leveling up somewhere."',
+            '"The tutorial never really ends."'
+        ];
+
+        const questText = document.getElementById('questText');
+        const statusText = document.getElementById('statusText');
+        const loreText = document.getElementById('loreText');
+        const flavorText = document.getElementById('flavorText');
+        const backFlavorText = document.getElementById('backFlavorText');
+
+        function getRandom(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        function shuffleQuest() {
+            const elements = [questText, statusText, flavorText, loreText, backFlavorText];
+
+            elements.forEach(el => {
+                if (el) el.style.opacity = '0';
+            });
+
+            setTimeout(() => {
+                if (questText) questText.textContent = getRandom(quests);
+                if (statusText) statusText.textContent = getRandom(statuses);
+                if (flavorText) flavorText.textContent = getRandom(flavors);
+                if (loreText) loreText.textContent = getRandom(lores);
+                if (backFlavorText) backFlavorText.textContent = getRandom(flavors);
+
+                elements.forEach(el => {
+                    if (el) el.style.opacity = '1';
+                });
+            }, 200);
+        }
+
+        // Initial shuffle
+        shuffleQuest();
+
+        // Add Space key for shuffle (only when Card 5 is centered)
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                const deck = document.querySelector('.card-deck');
+                const card5 = document.querySelectorAll('.card-wrapper')[4];
+                if (!card5) return;
+
+                const deckRect = deck.getBoundingClientRect();
+                const cardRect = card5.getBoundingClientRect();
+                const centerX = deckRect.left + deckRect.width / 2;
+                const cardCenter = cardRect.left + cardRect.width / 2;
+
+                // If Card 5 is roughly centered, shuffle
+                if (Math.abs(cardCenter - centerX) < 200) {
+                    e.preventDefault();
+                    shuffleQuest();
+                }
+            }
+        });
     </script>
 </body>
 </html>
