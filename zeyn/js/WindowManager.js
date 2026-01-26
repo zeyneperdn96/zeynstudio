@@ -20,6 +20,10 @@ class WindowManager {
 
         document.addEventListener('mousemove', (e) => this.handleDrag(e));
         document.addEventListener('mouseup', () => this.stopDrag());
+
+        // Touch support for mobile
+        document.addEventListener('touchmove', (e) => this.handleDrag(e.touches[0]), { passive: false });
+        document.addEventListener('touchend', () => this.stopDrag());
     }
 
     openWindow(windowId, options = {}) {
@@ -165,21 +169,30 @@ class WindowManager {
     makeDraggable(windowEl) {
         const titlebar = windowEl.querySelector('.window-titlebar');
 
-        titlebar.addEventListener('mousedown', (e) => {
-            if (e.target.closest('.window-controls')) return;
-
+        const startDrag = (clientX, clientY) => {
             const rect = windowEl.getBoundingClientRect();
-
             this.dragState = {
                 isDragging: true,
                 currentWindow: windowEl,
-                offsetX: e.clientX - rect.left,
-                offsetY: e.clientY - rect.top
+                offsetX: clientX - rect.left,
+                offsetY: clientY - rect.top
             };
-
             const windowId = windowEl.dataset.windowId;
             this.focusWindow(windowId);
+        };
+
+        titlebar.addEventListener('mousedown', (e) => {
+            if (e.target.closest('.window-controls')) return;
+            startDrag(e.clientX, e.clientY);
         });
+
+        // Touch support for mobile - only on larger screens
+        titlebar.addEventListener('touchstart', (e) => {
+            if (e.target.closest('.window-controls')) return;
+            if (window.innerWidth > 768) {
+                startDrag(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        }, { passive: true });
     }
 
     handleDrag(e) {

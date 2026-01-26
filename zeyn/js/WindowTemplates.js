@@ -256,7 +256,7 @@ const WindowTemplates = {
                 <div class="metbic-main">
                     <!-- Header -->
                     <div class="metbic-header">
-                        <h2>METBİC — Modular Bicycle Repair Kit</h2>
+                        <h2>METBIC — Modular Bicycle Repair Kit</h2>
                         <p>Compact toolkit for mountain bikers • 2026 • Product Design</p>
                     </div>
 
@@ -290,7 +290,7 @@ const WindowTemplates = {
                                 <div class="metbic-info-title">My Role</div>
                                 <div class="metbic-info-text">
                                     <strong>Product Designer</strong><br>
-                                    User Research, Concept Development, Sketching, 3D Modeling (Fusion 360), Prototyping
+                                    User Research, Concept Development, Sketching, 3D Modeling (Rhino), Prototyping
                                 </div>
                             </div>
 

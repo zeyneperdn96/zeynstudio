@@ -95,21 +95,53 @@ function updateClock() {
 // Setup desktop icons
 function setupDesktopIcons() {
     const icons = document.querySelectorAll('.desktop-icon');
+    const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
     icons.forEach(icon => {
-        // Double-click to open
+        // Double-click to open (desktop)
         icon.addEventListener('dblclick', () => {
             const windowId = icon.dataset.window;
             window.windowManager.openWindow(windowId);
         });
 
-        // Single click to select
+        // Single click to select (desktop)
         icon.addEventListener('click', (e) => {
             if (e.detail === 1) {
                 icons.forEach(i => i.classList.remove('selected'));
                 icon.classList.add('selected');
             }
         });
+
+        // Touch support - single tap to open on mobile
+        if (isTouchDevice) {
+            let lastTap = 0;
+            icon.addEventListener('touchend', (e) => {
+                const currentTime = new Date().getTime();
+                const tapLength = currentTime - lastTap;
+
+                // Prevent default to avoid double-firing
+                e.preventDefault();
+
+                if (tapLength < 300 && tapLength > 0) {
+                    // Double tap - open window
+                    const windowId = icon.dataset.window;
+                    window.windowManager.openWindow(windowId);
+                } else {
+                    // Single tap - select, then open after short delay if no second tap
+                    icons.forEach(i => i.classList.remove('selected'));
+                    icon.classList.add('selected');
+
+                    // On mobile, also open after a brief moment
+                    if (window.innerWidth <= 768) {
+                        setTimeout(() => {
+                            const windowId = icon.dataset.window;
+                            window.windowManager.openWindow(windowId);
+                        }, 200);
+                    }
+                }
+                lastTap = currentTime;
+            });
+        }
     });
 
     // Clear selection on desktop click
