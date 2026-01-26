@@ -261,7 +261,22 @@ class WindowManager {
             const projectsGrid = windowEl.querySelector('#projects-grid');
             const filterBtns = windowEl.querySelectorAll('[data-filter]');
 
-            projectsGrid.innerHTML = projectsManager.renderProjectsHTML('all');
+            const renderAndBindProjects = (filter) => {
+                projectsGrid.innerHTML = projectsManager.renderProjectsHTML(filter);
+
+                // Add click handlers for project cards
+                projectsGrid.querySelectorAll('.project-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        const projectId = card.dataset.projectId;
+                        const project = projectsManager.getProjectById(projectId);
+                        if (project) {
+                            this.openCaseStudyWindow(project, projectsManager);
+                        }
+                    });
+                });
+            };
+
+            renderAndBindProjects('all');
 
             filterBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
@@ -273,7 +288,7 @@ class WindowManager {
                     btn.classList.add('btn-primary', 'active');
 
                     const filter = btn.dataset.filter;
-                    projectsGrid.innerHTML = projectsManager.renderProjectsHTML(filter);
+                    renderAndBindProjects(filter);
                 });
             });
         }
@@ -287,6 +302,55 @@ class WindowManager {
                 form.reset();
             });
         }
+    }
+
+    openCaseStudyWindow(project, projectsManager) {
+        const windowId = `casestudy-${project.id}`;
+
+        // If already open, focus it
+        if (this.windows.has(windowId)) {
+            this.focusWindow(windowId);
+            return;
+        }
+
+        const windowEl = document.createElement('div');
+        windowEl.className = 'window';
+        windowEl.dataset.windowId = windowId;
+
+        windowEl.innerHTML = `
+            <div class="window-titlebar">
+                <span class="window-title">📁 ${project.title} - Case Study</span>
+                <div class="window-controls">
+                    <button class="win-btn win-minimize" data-action="minimize">_</button>
+                    <button class="win-btn win-maximize" data-action="maximize">□</button>
+                    <button class="win-btn win-close" data-action="close">×</button>
+                </div>
+            </div>
+            <div class="window-content" style="padding: 0; overflow: hidden;">
+                ${projectsManager.renderCaseStudyHTML(project)}
+            </div>
+        `;
+
+        // Position and size
+        windowEl.style.top = '40px';
+        windowEl.style.left = '100px';
+        windowEl.style.width = '750px';
+        windowEl.style.height = '600px';
+        windowEl.style.zIndex = this.zIndexCounter++;
+
+        this.container.appendChild(windowEl);
+
+        this.windows.set(windowId, {
+            element: windowEl,
+            isMinimized: false
+        });
+
+        this.setupWindowControls(windowEl);
+        this.makeDraggable(windowEl);
+        this.addToTaskbar(windowId);
+
+        setTimeout(() => windowEl.classList.remove('hidden'), 10);
+        this.focusWindow(windowId);
     }
 }
 
