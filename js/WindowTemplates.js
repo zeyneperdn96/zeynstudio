@@ -215,17 +215,10 @@ const WindowTemplates = {
                 .metbic-content { flex: 1; display: flex; padding: 12px; gap: 12px; overflow: hidden; }
                 .metbic-preview { flex: 1; background: #1a1a2e; border: 2px inset #808080; border-radius: 4px; display: flex; align-items: center; justify-content: center; min-width: 0; }
                 .metbic-preview img { max-width: 100%; max-height: 100%; object-fit: contain; }
-                .metbic-info { width: 180px; display: flex; flex-direction: column; gap: 10px; }
-                .metbic-info-box { background: #f5f5f5; border: 1px solid #c0c0c0; border-radius: 3px; padding: 10px; }
-                .metbic-info-title { font-size: 10px; font-weight: bold; color: #0066cc; margin-bottom: 6px; text-transform: uppercase; }
-                .metbic-info-text { font-size: 11px; color: #333; line-height: 1.5; }
-                .metbic-log { flex: 1; background: #0c0c14; border: 1px solid #404040; border-radius: 3px; font-family: 'Consolas', 'Courier New', monospace; font-size: 10px; padding: 8px; overflow-y: auto; }
-                .metbic-log-line { margin-bottom: 3px; }
-                .metbic-log-info { color: #00cc66; }
-                .metbic-log-warning { color: #ffcc00; }
-                .metbic-log-action { color: #00aaff; }
-                .metbic-log-status { color: #cc66ff; }
-                .metbic-log-error { color: #ff4444; }
+                .metbic-info { width: 200px; display: flex; flex-direction: column; gap: 10px; }
+                .metbic-info-box { background: #f5f5f5; border: 1px solid #c0c0c0; border-radius: 3px; padding: 12px; }
+                .metbic-info-title { font-size: 10px; font-weight: bold; color: #0066cc; margin-bottom: 8px; text-transform: uppercase; }
+                .metbic-info-text { font-size: 11px; color: #333; line-height: 1.6; }
                 .metbic-statusbar { padding: 4px 10px; background: linear-gradient(180deg, #e8e8e8 0%, #d0d0d0 100%); border-top: 1px solid #a0a0a0; display: flex; justify-content: space-between; font-size: 10px; color: #444; }
                 .metbic-status-item { display: flex; align-items: center; gap: 4px; }
                 .metbic-status-led { width: 8px; height: 8px; border-radius: 50%; background: #00cc00; box-shadow: 0 0 4px #00cc00; }
@@ -304,12 +297,14 @@ const WindowTemplates = {
                                 </div>
                             </div>
 
-                            <!-- System Log -->
-                            <div class="metbic-log" id="metbic-log">
-                                <div class="metbic-log-line metbic-log-info">[INFO] System initialized</div>
-                                <div class="metbic-log-line metbic-log-info">[INFO] METBIC module loaded</div>
-                                <div class="metbic-log-line metbic-log-status">[STATUS] All modules ready</div>
-                                <div class="metbic-log-line metbic-log-info">[INFO] Awaiting input...</div>
+                            <div class="metbic-info-box" style="flex: 1;">
+                                <div class="metbic-info-title">🔧 Features</div>
+                                <div class="metbic-info-text">
+                                    • Modular design<br>
+                                    • Magnetic screwdriver<br>
+                                    • Waterproof storage<br>
+                                    • Pocket-sized
+                                </div>
                             </div>
                         </div>
                     </div>
