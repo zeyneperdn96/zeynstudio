@@ -226,19 +226,28 @@ const WindowTemplates = {
                 <!-- Gallery Sidebar -->
                 <div class="metbic-gallery">
                     <div class="metbic-gallery-title">Gallery</div>
-                    <div class="metbic-thumb active" data-img="assets/projects/metbic/hero.png">
+                    <div class="metbic-thumb active" data-img="assets/projects/metbic/hero.png" data-index="0">
                         <img src="assets/projects/metbic/hero.png" alt="Hero">
                     </div>
-                    <div class="metbic-thumb" data-img="assets/projects/metbic/render1.png">
+                    <div class="metbic-thumb" data-img="assets/projects/metbic/render1.png" data-index="1">
                         <img src="assets/projects/metbic/render1.png" alt="Render 1">
                     </div>
-                    <div class="metbic-thumb" data-img="assets/projects/metbic/render2.png">
+                    <div class="metbic-thumb" data-img="assets/projects/metbic/render2.png" data-index="2">
                         <img src="assets/projects/metbic/render2.png" alt="Render 2">
                     </div>
-                    <div class="metbic-thumb" data-img="assets/projects/metbic/context.png">
+                    <div class="metbic-thumb" data-img="assets/projects/metbic/render3.png" data-index="3">
+                        <img src="assets/projects/metbic/render3.png" alt="Render 3">
+                    </div>
+                    <div class="metbic-thumb" data-img="assets/projects/metbic/render4.png" data-index="4">
+                        <img src="assets/projects/metbic/render4.png" alt="Render 4">
+                    </div>
+                    <div class="metbic-thumb" data-img="assets/projects/metbic/render5.png" data-index="5">
+                        <img src="assets/projects/metbic/render5.png" alt="Render 5">
+                    </div>
+                    <div class="metbic-thumb" data-img="assets/projects/metbic/context.png" data-index="6">
                         <img src="assets/projects/metbic/context.png" alt="Context">
                     </div>
-                    <div class="metbic-thumb" data-img="assets/projects/metbic/technical.png">
+                    <div class="metbic-thumb" data-img="assets/projects/metbic/technical.png" data-index="7">
                         <img src="assets/projects/metbic/technical.png" alt="Technical">
                     </div>
                 </div>
@@ -253,37 +262,57 @@ const WindowTemplates = {
 
                     <!-- Content Area -->
                     <div class="metbic-content">
-                        <!-- Preview -->
-                        <div class="metbic-preview">
+                        <!-- Preview with Arrow Navigation -->
+                        <div class="metbic-preview" style="position: relative;">
+                            <button class="metbic-arrow metbic-arrow-left" id="metbic-prev" style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.9); border: 1px solid #ccc; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: all 0.15s;">❮</button>
                             <img src="assets/projects/metbic/hero.png" alt="METBIC" id="metbic-preview-img">
+                            <button class="metbic-arrow metbic-arrow-right" id="metbic-next" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.9); border: 1px solid #ccc; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: all 0.15s;">❯</button>
+                            <div class="metbic-counter" style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); color: #fff; padding: 4px 12px; border-radius: 12px; font-size: 11px;">1 / 8</div>
                         </div>
 
-                        <!-- Info Panel -->
-                        <div class="metbic-info">
+                        <!-- Info Panel - Scrollable Case Study -->
+                        <div class="metbic-info" style="width: 220px; overflow-y: auto;">
                             <div class="metbic-info-box">
-                                <div class="metbic-info-title">About</div>
+                                <div class="metbic-info-title">Project Overview</div>
                                 <div class="metbic-info-text">
-                                    Pocket-sized repair kit that transforms into a full workshop. All essential tools in one compact unit.
+                                    METBİC is a pocket-sized, all-in-one repair kit designed for mountain bikers. It transforms from a compact 90×60mm unit into a fully functional workshop.
+                                </div>
+                            </div>
+
+                            <div class="metbic-info-box">
+                                <div class="metbic-info-title">The Challenge</div>
+                                <div class="metbic-info-text">
+                                    Professional mountain bikers face mechanical failures on remote trails. Carrying multiple standalone tools disrupts the riding experience and takes up valuable space.
+                                </div>
+                            </div>
+
+                            <div class="metbic-info-box">
+                                <div class="metbic-info-title">My Role</div>
+                                <div class="metbic-info-text">
+                                    <strong>Product Designer</strong><br>
+                                    User Research, Concept Development, Sketching, 3D Modeling (Fusion 360), Prototyping
+                                </div>
+                            </div>
+
+                            <div class="metbic-info-box">
+                                <div class="metbic-info-title">Key Features</div>
+                                <div class="metbic-info-text">
+                                    • Modular tool organization<br>
+                                    • Magnetic screwdriver slot<br>
+                                    • 6 interchangeable bits<br>
+                                    • Integrated tire lever<br>
+                                    • Rim straightener<br>
+                                    • Secure storage compartment
                                 </div>
                             </div>
 
                             <div class="metbic-info-box">
                                 <div class="metbic-info-title">Specifications</div>
                                 <div class="metbic-info-text">
-                                    <strong>Size:</strong> 90×60×30mm<br>
-                                    <strong>Material:</strong> Polymer + Metal<br>
-                                    <strong>Weight:</strong> 145g
-                                </div>
-                            </div>
-
-                            <div class="metbic-info-box" style="flex: 1;">
-                                <div class="metbic-info-title">Includes</div>
-                                <div class="metbic-info-text">
-                                    • Tire Lever<br>
-                                    • Hex Nuts (8/10/15mm)<br>
-                                    • Wheel Alignment<br>
-                                    • Screwdriver Bits<br>
-                                    • Storage Unit
+                                    <strong>Dimensions:</strong> 90×60×30mm<br>
+                                    <strong>Material:</strong> Durable Polymer + Metal<br>
+                                    <strong>Weight:</strong> 145g<br>
+                                    <strong>Hex Sizes:</strong> 8mm, 10mm, 15mm
                                 </div>
                             </div>
                         </div>
@@ -293,13 +322,13 @@ const WindowTemplates = {
                     <div class="metbic-statusbar">
                         <div class="metbic-status-item">
                             <div class="metbic-status-led"></div>
-                            <span>System Ready</span>
+                            <span>Industrial Design Project</span>
                         </div>
                         <div class="metbic-status-item">
-                            <span>No internet. No service. No problem.</span>
+                            <span>Zeynep Erden • 2026</span>
                         </div>
                         <div class="metbic-status-item">
-                            <span>6 Modules Loaded</span>
+                            <span>8 Renders</span>
                         </div>
                     </div>
                 </div>

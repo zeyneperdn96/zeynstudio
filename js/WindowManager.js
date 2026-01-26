@@ -368,22 +368,55 @@ class WindowManager {
     initializeMetbicWindow(windowEl) {
         const previewImg = windowEl.querySelector('#metbic-preview-img');
         const thumbs = windowEl.querySelectorAll('.metbic-thumb');
+        const prevBtn = windowEl.querySelector('#metbic-prev');
+        const nextBtn = windowEl.querySelector('#metbic-next');
+        const counter = windowEl.querySelector('.metbic-counter');
+
+        let currentIndex = 0;
+        const totalImages = thumbs.length;
+
+        // Function to update gallery
+        const updateGallery = (index) => {
+            currentIndex = index;
+            if (currentIndex < 0) currentIndex = totalImages - 1;
+            if (currentIndex >= totalImages) currentIndex = 0;
+
+            const targetThumb = thumbs[currentIndex];
+            const imgSrc = targetThumb.dataset.img;
+
+            // Update active thumb
+            thumbs.forEach(t => t.classList.remove('active'));
+            targetThumb.classList.add('active');
+
+            // Update preview image with fade
+            if (imgSrc && previewImg) {
+                previewImg.style.opacity = '0';
+                setTimeout(() => {
+                    previewImg.src = imgSrc;
+                    previewImg.style.opacity = '1';
+                }, 150);
+            }
+
+            // Update counter
+            if (counter) {
+                counter.textContent = `${currentIndex + 1} / ${totalImages}`;
+            }
+
+            // Scroll thumb into view
+            targetThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        };
+
+        // Arrow button clicks
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => updateGallery(currentIndex - 1));
+        }
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => updateGallery(currentIndex + 1));
+        }
 
         // Gallery thumbnail clicks
-        thumbs.forEach(thumb => {
-            thumb.addEventListener('click', () => {
-                thumbs.forEach(t => t.classList.remove('active'));
-                thumb.classList.add('active');
-
-                const imgSrc = thumb.dataset.img;
-                if (imgSrc && previewImg) {
-                    previewImg.style.opacity = '0';
-                    setTimeout(() => {
-                        previewImg.src = imgSrc;
-                        previewImg.style.opacity = '1';
-                    }, 150);
-                }
-            });
+        thumbs.forEach((thumb, index) => {
+            thumb.addEventListener('click', () => updateGallery(index));
         });
 
         // Add smooth transition to preview image

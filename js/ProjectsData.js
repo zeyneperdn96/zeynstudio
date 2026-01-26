@@ -135,91 +135,75 @@ class ProjectsManager {
     renderCaseStudyHTML(project) {
         if (!project.caseStudy) {
             return `
-                <div style="padding: 20px; text-align: center;">
-                    <h2>${project.title}</h2>
-                    <p>${project.description}</p>
-                    <p style="color: #888; margin-top: 20px;">Case study coming soon...</p>
+                <div style="padding: 40px; text-align: center; background: #f5f5f5;">
+                    <h2 style="margin: 0 0 10px; color: #333;">${project.title}</h2>
+                    <p style="color: #666;">${project.description}</p>
+                    <p style="color: #999; margin-top: 20px; font-style: italic;">Case study coming soon...</p>
                 </div>
             `;
         }
 
         const cs = project.caseStudy;
         return `
-            <div class="case-study" style="max-height: 70vh; overflow-y: auto; padding: 0;">
-                <!-- Hero Image -->
-                <div style="width: 100%; height: 200px; background: url('${cs.hero}') center/cover no-repeat; border-bottom: 2px solid #808080;"></div>
+            <div class="case-study" style="max-height: 70vh; overflow-y: auto; padding: 0; background: #fff;">
 
-                <!-- Header -->
-                <div style="padding: 20px; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: #fff;">
-                    <h1 style="margin: 0; font-size: 24px;">${project.title}</h1>
-                    <p style="margin: 5px 0 0; color: #00d4ff; font-size: 14px;">${project.description}</p>
-                    <div style="margin-top: 10px; font-size: 12px; color: #888;">
-                        <span style="margin-right: 15px;">📅 ${project.year}</span>
-                        <span>👤 ${project.role}</span>
+                <!-- Hero Section -->
+                <div style="background: #1a1a2e; padding: 30px; text-align: center;">
+                    <img src="${cs.hero}" alt="${project.title}" style="max-width: 100%; max-height: 280px; object-fit: contain; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+                </div>
+
+                <!-- Title & Info -->
+                <div style="padding: 24px 30px; background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%); color: #fff;">
+                    <h1 style="margin: 0; font-size: 22px; font-weight: 600;">${project.title}</h1>
+                    <p style="margin: 8px 0 0; color: #3498db; font-size: 14px; font-weight: 500;">${project.description}</p>
+                    <div style="margin-top: 12px; font-size: 12px; color: rgba(255,255,255,0.6); display: flex; gap: 20px;">
+                        <span>${project.year}</span>
+                        <span>${project.role}</span>
                     </div>
                 </div>
 
-                <!-- Introduction -->
-                <div style="padding: 20px; background: #f5f5f5; border-bottom: 1px solid #ddd;">
-                    <h3 style="margin: 0 0 10px; color: #333; font-size: 14px;">📋 Introduction</h3>
-                    <p style="margin: 0; color: #555; line-height: 1.6; font-size: 13px;">${cs.intro}</p>
-                </div>
-
-                <!-- Challenge -->
-                <div style="padding: 20px; background: #fff3cd; border-bottom: 1px solid #ddd;">
-                    <h3 style="margin: 0 0 10px; color: #856404; font-size: 14px;">⚠️ The Challenge</h3>
-                    <p style="margin: 0; color: #856404; line-height: 1.6; font-size: 13px;">${cs.challenge}</p>
+                <!-- Overview -->
+                <div style="padding: 24px 30px; background: #fff; border-bottom: 1px solid #eee;">
+                    <h3 style="margin: 0 0 12px; color: #2c3e50; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Overview</h3>
+                    <p style="margin: 0; color: #555; line-height: 1.7; font-size: 13px;">${cs.intro}</p>
                 </div>
 
                 <!-- Solution -->
-                <div style="padding: 20px; background: #d4edda; border-bottom: 1px solid #ddd;">
-                    <h3 style="margin: 0 0 10px; color: #155724; font-size: 14px;">✅ The Solution</h3>
-                    <p style="margin: 0; color: #155724; line-height: 1.6; font-size: 13px;">${cs.solution}</p>
+                <div style="padding: 24px 30px; background: #f8fffe; border-bottom: 1px solid #eee;">
+                    <h3 style="margin: 0 0 12px; color: #2c3e50; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Solution</h3>
+                    <p style="margin: 0; color: #555; line-height: 1.7; font-size: 13px;">${cs.solution}</p>
                 </div>
 
-                <!-- Context Image -->
-                ${cs.images.context ? `
-                <div style="padding: 20px; background: #fff; border-bottom: 1px solid #ddd;">
-                    <h3 style="margin: 0 0 10px; color: #333; font-size: 14px;">🚴 In Use</h3>
-                    <img src="${cs.images.context}" alt="Context" style="width: 100%; border-radius: 8px; border: 1px solid #ddd;">
-                </div>
-                ` : ''}
-
-                <!-- Renders -->
-                <div style="padding: 20px; background: #f8f9fa; border-bottom: 1px solid #ddd;">
-                    <h3 style="margin: 0 0 10px; color: #333; font-size: 14px;">🎨 Product Renders</h3>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                        ${cs.images.render1 ? `<img src="${cs.images.render1}" alt="Render 1" style="width: 100%; border-radius: 8px; border: 1px solid #ddd;">` : ''}
-                        ${cs.images.render2 ? `<img src="${cs.images.render2}" alt="Render 2" style="width: 100%; border-radius: 8px; border: 1px solid #ddd;">` : ''}
+                <!-- Product Gallery -->
+                <div style="padding: 24px 30px; background: #fafafa; border-bottom: 1px solid #eee;">
+                    <h3 style="margin: 0 0 16px; color: #2c3e50; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Product Gallery</h3>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+                        ${cs.images.render1 ? `<img src="${cs.images.render1}" alt="Render" style="width: 100%; height: 150px; object-fit: cover; border-radius: 6px; border: 1px solid #e0e0e0;">` : ''}
+                        ${cs.images.render2 ? `<img src="${cs.images.render2}" alt="Render" style="width: 100%; height: 150px; object-fit: cover; border-radius: 6px; border: 1px solid #e0e0e0;">` : ''}
+                        ${cs.images.context ? `<img src="${cs.images.context}" alt="Context" style="width: 100%; height: 150px; object-fit: cover; border-radius: 6px; border: 1px solid #e0e0e0;">` : ''}
+                        ${cs.images.technical ? `<img src="${cs.images.technical}" alt="Technical" style="width: 100%; height: 150px; object-fit: cover; border-radius: 6px; border: 1px solid #e0e0e0;">` : ''}
                     </div>
                 </div>
 
-                <!-- Technical Specs -->
-                <div style="padding: 20px; background: #e2e3e5; border-bottom: 1px solid #ddd;">
-                    <h3 style="margin: 0 0 10px; color: #333; font-size: 14px;">📐 Technical Specifications</h3>
-                    <table style="width: 100%; font-size: 12px; border-collapse: collapse;">
-                        <tr style="border-bottom: 1px solid #ccc;">
-                            <td style="padding: 8px 0; font-weight: bold; color: #555;">Material</td>
-                            <td style="padding: 8px 0; color: #333;">${cs.specs.material}</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #ccc;">
-                            <td style="padding: 8px 0; font-weight: bold; color: #555;">Size</td>
-                            <td style="padding: 8px 0; color: #333;">${cs.specs.size}</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 8px 0; font-weight: bold; color: #555;">Components</td>
-                            <td style="padding: 8px 0; color: #333;">${cs.specs.components}</td>
-                        </tr>
-                    </table>
+                <!-- Specifications -->
+                <div style="padding: 24px 30px; background: #fff;">
+                    <h3 style="margin: 0 0 16px; color: #2c3e50; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Specifications</h3>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                        <div style="background: #f5f5f5; padding: 16px; border-radius: 6px; text-align: center;">
+                            <div style="font-size: 11px; color: #888; text-transform: uppercase; margin-bottom: 6px;">Material</div>
+                            <div style="font-size: 12px; color: #333; font-weight: 500;">${cs.specs.material}</div>
+                        </div>
+                        <div style="background: #f5f5f5; padding: 16px; border-radius: 6px; text-align: center;">
+                            <div style="font-size: 11px; color: #888; text-transform: uppercase; margin-bottom: 6px;">Size</div>
+                            <div style="font-size: 12px; color: #333; font-weight: 500;">${cs.specs.size}</div>
+                        </div>
+                        <div style="background: #f5f5f5; padding: 16px; border-radius: 6px; text-align: center;">
+                            <div style="font-size: 11px; color: #888; text-transform: uppercase; margin-bottom: 6px;">Components</div>
+                            <div style="font-size: 12px; color: #333; font-weight: 500;">${cs.specs.components}</div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Technical Drawing -->
-                ${cs.images.technical ? `
-                <div style="padding: 20px; background: #fff;">
-                    <h3 style="margin: 0 0 10px; color: #333; font-size: 14px;">📏 Technical Drawing</h3>
-                    <img src="${cs.images.technical}" alt="Technical Drawing" style="width: 100%; border-radius: 8px; border: 1px solid #ddd;">
-                </div>
-                ` : ''}
             </div>
         `;
     }
