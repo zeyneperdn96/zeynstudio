@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZeynStudio OS - Portfolio</title>
+  <meta name="description" content="Zeynep's creative portfolio - UI/UX Designer, Illustrator, Industrial Designer">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%2364B5A0' rx='20' width='100' height='100'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='50' fill='white' font-family='sans-serif' font-weight='bold'>Z</text></svg>">
+</head>
+<body>
+  <!-- ========== BOOT SCREEN ========== -->
+  <div id="boot-screen" class="screen active">
+    <div class="boot-content">
+      <div class="boot-logo">
+        <svg class="logo-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="80" height="80" rx="20" fill="url(#logoGrad)"/>
+          <path d="M25 55V25H50L30 45H55V55H25Z" fill="white"/>
+          <defs>
+            <linearGradient id="logoGrad" x1="0" y1="0" x2="80" y2="80">
+              <stop offset="0%" stop-color="#64B5A0"/>
+              <stop offset="100%" stop-color="#4A9A87"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <h1 class="boot-title">ZeynStudio<span>OS</span></h1>
+      </div>
+      <div class="boot-loader">
+        <div class="loader-bar">
+          <div class="loader-progress"></div>
+        </div>
+        <p class="loader-text">Initializing creative workspace...</p>
+      </div>
+      <p class="boot-prompt">Press <kbd>Enter</kbd> to continue</p>
+    </div>
+    <div class="boot-version">v1.0.0</div>
+  </div>
+
+  <!-- ========== LOGIN SCREEN ========== -->
+  <div id="login-screen" class="screen">
+    <div class="login-bg"></div>
+    <div class="login-content">
+      <div class="login-time">
+        <span id="login-clock">00:00</span>
+        <span id="login-date">January 1, 2024</span>
+      </div>
+      <div class="login-user" tabindex="0" role="button" aria-label="Click to login as Zeynep">
+        <div class="user-avatar">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="50" fill="url(#avatarGrad)"/>
+            <circle cx="50" cy="38" r="18" fill="white" opacity="0.9"/>
+            <ellipse cx="50" cy="80" rx="30" ry="25" fill="white" opacity="0.9"/>
+            <defs>
+              <linearGradient id="avatarGrad" x1="0" y1="0" x2="100" y2="100">
+                <stop offset="0%" stop-color="#64B5A0"/>
+                <stop offset="100%" stop-color="#4A9A87"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <h2 class="user-name">Zeynep</h2>
+        <p class="user-subtitle">ZeynStudio</p>
+        <button class="login-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+          <span>Sign In</span>
+        </button>
+      </div>
+      <p class="login-hint">Click profile or press Enter</p>
+    </div>
+  </div>
+
+  <!-- ========== DESKTOP ========== -->
+  <div id="desktop" class="screen">
+    <!-- Wallpaper -->
+    <div class="wallpaper"></div>
+
+    <!-- Desktop Icons -->
+    <div class="desktop-icons">
+      <button class="desktop-icon" data-app="about" tabindex="0">
+        <div class="icon-image">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="48" height="48" rx="12" fill="url(#aboutGrad)"/>
+            <circle cx="24" cy="18" r="8" fill="white"/>
+            <path d="M12 42c0-8 5-14 12-14s12 6 12 14" fill="white"/>
+            <defs>
+              <linearGradient id="aboutGrad" x1="0" y1="0" x2="48" y2="48">
+                <stop offset="0%" stop-color="#64B5A0"/>
+                <stop offset="100%" stop-color="#4A9A87"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <span class="icon-label">About</span>
+      </button>
+
+      <button class="desktop-icon" data-app="projects" tabindex="0">
+        <div class="icon-image">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="48" height="48" rx="12" fill="url(#projectsGrad)"/>
+            <rect x="8" y="12" width="14" height="11" rx="2" fill="white"/>
+            <rect x="26" y="12" width="14" height="11" rx="2" fill="white" opacity="0.7"/>
+            <rect x="8" y="26" width="14" height="11" rx="2" fill="white" opacity="0.7"/>
+            <rect x="26" y="26" width="14" height="11" rx="2" fill="white"/>
+            <defs>
+              <linearGradient id="projectsGrad" x1="0" y1="0" x2="48" y2="48">
+                <stop offset="0%" stop-color="#F4A574"/>
+                <stop offset="100%" stop-color="#E8956A"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <span class="icon-label">Projects</span>
+      </button>
+
+      <button class="desktop-icon" data-app="resume" tabindex="0">
+        <div class="icon-image">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="48" height="48" rx="12" fill="url(#resumeGrad)"/>
+            <rect x="12" y="8" width="24" height="32" rx="3" fill="white"/>
+            <rect x="16" y="14" width="16" height="2" rx="1" fill="#7B8EBF"/>
+            <rect x="16" y="20" width="12" height="2" rx="1" fill="#7B8EBF" opacity="0.6"/>
+            <rect x="16" y="26" width="14" height="2" rx="1" fill="#7B8EBF" opacity="0.6"/>
+            <rect x="16" y="32" width="10" height="2" rx="1" fill="#7B8EBF" opacity="0.6"/>
+            <defs>
+              <linearGradient id="resumeGrad" x1="0" y1="0" x2="48" y2="48">
+                <stop offset="0%" stop-color="#7B8EBF"/>
+                <stop offset="100%" stop-color="#6B7EAF"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <span class="icon-label">Resume</span>
+      </button>
+
+      <button class="desktop-icon" data-app="contact" tabindex="0">
+        <div class="icon-image">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="48" height="48" rx="12" fill="url(#contactGrad)"/>
+            <rect x="8" y="14" width="32" height="22" rx="3" fill="white"/>
+            <path d="M8 17l16 10 16-10" stroke="#D4708F" stroke-width="2" fill="none"/>
+            <defs>
+              <linearGradient id="contactGrad" x1="0" y1="0" x2="48" y2="48">
+                <stop offset="0%" stop-color="#D4708F"/>
+                <stop offset="100%" stop-color="#C46080"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <span class="icon-label">Contact</span>
+      </button>
+    </div>
+
+    <!-- Windows Container -->
+    <div id="windows-container"></div>
+
+    <!-- Start Menu -->
+    <div id="start-menu" class="hidden" role="menu">
+      <div class="start-header">
+        <div class="start-user">
+          <div class="start-avatar">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="50" cy="50" r="50" fill="url(#startAvatarGrad)"/>
+              <circle cx="50" cy="38" r="18" fill="white" opacity="0.9"/>
+              <ellipse cx="50" cy="80" rx="30" ry="25" fill="white" opacity="0.9"/>
+              <defs>
+                <linearGradient id="startAvatarGrad" x1="0" y1="0" x2="100" y2="100">
+                  <stop offset="0%" stop-color="#64B5A0"/>
+                  <stop offset="100%" stop-color="#4A9A87"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div class="start-user-info">
+            <span class="start-user-name">Zeynep</span>
+            <span class="start-user-role">Creative Designer</span>
+          </div>
+        </div>
+      </div>
+      <div class="start-apps">
+        <button class="start-app" data-app="about">
+          <svg class="start-app-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/>
+          </svg>
+          <span>About Me</span>
+        </button>
+        <button class="start-app" data-app="projects">
+          <svg class="start-app-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/>
+            <rect x="14" y="14" width="7" height="7" rx="1"/>
+          </svg>
+          <span>Projects</span>
+        </button>
+        <button class="start-app" data-app="resume">
+          <svg class="start-app-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+            <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+          </svg>
+          <span>Resume</span>
+        </button>
+        <button class="start-app" data-app="contact">
+          <svg class="start-app-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <path d="M22 6l-10 7L2 6"/>
+          </svg>
+          <span>Contact</span>
+        </button>
+      </div>
+      <div class="start-footer">
+        <button class="start-power" id="logout-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          <span>Sign Out</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Taskbar -->
+    <div id="taskbar">
+      <button id="start-btn" aria-label="Start Menu" aria-expanded="false">
+        <svg class="start-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3" y="3" width="8" height="8" rx="2" fill="currentColor"/>
+          <rect x="13" y="3" width="8" height="8" rx="2" fill="currentColor" opacity="0.7"/>
+          <rect x="3" y="13" width="8" height="8" rx="2" fill="currentColor" opacity="0.7"/>
+          <rect x="13" y="13" width="8" height="8" rx="2" fill="currentColor"/>
+        </svg>
+        <span>Start</span>
+      </button>
+
+      <div id="taskbar-apps"></div>
+
+      <div id="system-tray">
+        <button id="theme-toggle" aria-label="Toggle dark mode" title="Toggle Light/Dark Mode">
+          <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+          </svg>
+        </button>
+        <div id="clock">
+          <span id="taskbar-time">00:00</span>
+          <span id="taskbar-date">1/1/2024</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MOBILE APP LAUNCHER ========== -->
+  <div id="mobile-launcher" class="screen">
+    <div class="mobile-header">
+      <div class="mobile-time" id="mobile-clock">00:00</div>
+      <div class="mobile-date" id="mobile-date">January 1, 2024</div>
+      <button id="mobile-theme-toggle" aria-label="Toggle dark mode">
+        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+        </svg>
+      </button>
+    </div>
+    <div class="mobile-user">
+      <div class="mobile-avatar">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="50" fill="url(#mobileAvatarGrad)"/>
+          <circle cx="50" cy="38" r="18" fill="white" opacity="0.9"/>
+          <ellipse cx="50" cy="80" rx="30" ry="25" fill="white" opacity="0.9"/>
+          <defs>
+            <linearGradient id="mobileAvatarGrad" x1="0" y1="0" x2="100" y2="100">
+              <stop offset="0%" stop-color="#64B5A0"/>
+              <stop offset="100%" stop-color="#4A9A87"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <h1 class="mobile-name">Zeynep</h1>
+      <p class="mobile-role">UI/UX Designer • Illustrator • Industrial Designer</p>
+    </div>
+    <div class="mobile-apps">
+      <button class="mobile-app-btn" data-app="about">
+        <div class="mobile-app-icon about">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/>
+          </svg>
+        </div>
+        <span>About</span>
+      </button>
+      <button class="mobile-app-btn" data-app="projects">
+        <div class="mobile-app-icon projects">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/>
+            <rect x="14" y="14" width="7" height="7" rx="1"/>
+          </svg>
+        </div>
+        <span>Projects</span>
+      </button>
+      <button class="mobile-app-btn" data-app="resume">
+        <div class="mobile-app-icon resume">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+            <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+          </svg>
+        </div>
+        <span>Resume</span>
+      </button>
+      <button class="mobile-app-btn" data-app="contact">
+        <div class="mobile-app-icon contact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <path d="M22 6l-10 7L2 6"/>
+          </svg>
+        </div>
+        <span>Contact</span>
+      </button>
+    </div>
+    <div class="mobile-social">
+      <a href="#" class="social-link" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+        </svg>
+      </a>
+      <a href="#" class="social-link" aria-label="Behance">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M22 7h-7v-2h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14h-8.027c.13 3.211 3.483 3.312 4.588 2.029h3.168zm-7.686-4h4.965c-.105-1.547-1.136-2.219-2.477-2.219-1.466 0-2.277.768-2.488 2.219zm-9.574 6.988h-6.466v-14.967h6.953c5.476.081 5.58 5.444 2.72 6.906 3.461 1.26 3.577 8.061-3.207 8.061zm-3.466-8.988h3.584c2.508 0 2.906-3-.312-3h-3.272v3zm3.391 3h-3.391v3.016h3.341c3.055 0 2.868-3.016.05-3.016z"/>
+        </svg>
+      </a>
+      <a href="#" class="social-link" aria-label="Dribbble">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 24C5.385 24 0 18.615 0 12S5.385 0 12 0s12 5.385 12 12-5.385 12-12 12zm10.12-10.358c-.35-.11-3.17-.953-6.384-.438 1.34 3.684 1.887 6.684 1.992 7.308 2.3-1.555 3.936-4.02 4.395-6.87zm-6.115 7.808c-.153-.9-.75-4.032-2.19-7.77l-.066.02c-5.79 2.015-7.86 6.025-8.04 6.4 1.73 1.358 3.92 2.166 6.29 2.166 1.42 0 2.77-.29 4-.814zm-11.62-2.58c.232-.4 3.045-5.055 8.332-6.765.135-.045.27-.084.405-.12-.26-.585-.54-1.167-.832-1.74C7.17 11.775 2.206 11.71 1.756 11.7l-.004.312c0 2.633.998 5.037 2.634 6.855zm-2.42-8.955c.46.008 4.683.026 9.477-1.248-1.698-3.018-3.53-5.558-3.8-5.928-2.868 1.35-5.01 3.99-5.676 7.17zm7.56-7.872c.282.39 2.145 2.914 3.822 6 3.645-1.365 5.19-3.44 5.373-3.702-1.81-1.61-4.19-2.586-6.795-2.586-.825 0-1.63.1-2.4.285zm10.912 4.407c-.213.29-1.94 2.533-5.78 4.108.236.49.454.985.66 1.486.073.174.14.348.204.52 3.407-.43 6.793.26 7.13.33-.02-2.42-.88-4.64-2.21-6.44z"/>
+        </svg>
+      </a>
+      <a href="#" class="social-link" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- ========== MOBILE MODAL ========== -->
+  <div id="mobile-modal" class="hidden">
+    <div class="mobile-modal-overlay"></div>
+    <div class="mobile-modal-content">
+      <div class="mobile-modal-header">
+        <h2 id="mobile-modal-title">Title</h2>
+        <button class="mobile-modal-close" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="mobile-modal-body" id="mobile-modal-body">
+        <!-- Content injected by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Window Templates (hidden, used by JS) -->
+  <template id="window-template">
+    <div class="window" role="dialog" aria-modal="true">
+      <div class="window-titlebar">
+        <div class="window-title">
+          <span class="window-icon"></span>
+          <span class="window-name">Window</span>
+        </div>
+        <div class="window-controls">
+          <button class="window-btn minimize" aria-label="Minimize">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </button>
+          <button class="window-btn close" aria-label="Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="window-content"></div>
+    </div>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>
