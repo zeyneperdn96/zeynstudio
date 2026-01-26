@@ -6,7 +6,7 @@
 const projectsData = [
     {
         id: 1,
-        title: 'METBİC',
+        title: 'METBIC',
         category: 'industrial',
         thumbnail: 'assets/projects/metbic/hero.png',
         description: 'Compact Modular Bicycle Repair Kit',
@@ -15,9 +15,9 @@ const projectsData = [
         role: 'Product Designer (Research, Sketching, 3D Modeling)',
         caseStudy: {
             hero: 'assets/projects/metbic/hero.png',
-            intro: 'METBİC is a pocket-sized, all-in-one repair kit designed for mountain bikers. It solves the problem of carrying bulky tools by condensing essential maintenance functions into a 90mm x 60mm modular unit.',
+            intro: 'METBIC is a pocket-sized, all-in-one repair kit designed for mountain bikers. It solves the problem of carrying bulky tools by condensing essential maintenance functions into a 90mm x 60mm modular unit.',
             challenge: 'Professional mountain bikers often face mechanical failures like chain breaks or tire punctures on the trail. User research with personas like "Mehmet" (a 40-year-old pro cyclist) revealed that carrying multiple standalone tools disrupts the riding experience and takes up too much space. The goal was to design a tool that is both comprehensive and compact.',
-            solution: 'METBİC transforms from a compact box into a fully functional workshop. Dimensions: It measures just 90mm x 60mm x 30mm when closed, fitting easily into a pocket. Modular Tools: The kit includes a specialized tire lever, a rim straightener, a double-sided file, and a wrench. Versatility: It features a magnetic screwdriver slot with 6 interchangeable heads and a secure compartment for spare screws and hexagonal nuts (8mm, 10mm, 15mm).',
+            solution: 'METBIC transforms from a compact box into a fully functional workshop. Dimensions: It measures just 90mm x 60mm x 30mm when closed, fitting easily into a pocket. Modular Tools: The kit includes a specialized tire lever, a rim straightener, a double-sided file, and a wrench. Versatility: It features a magnetic screwdriver slot with 6 interchangeable heads and a secure compartment for spare screws and hexagonal nuts (8mm, 10mm, 15mm).',
             specs: {
                 material: 'Durable Polymer Casing with Metal Tools',
                 size: '9cm (H) x 6cm (W)',
