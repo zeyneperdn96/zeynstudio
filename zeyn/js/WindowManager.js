@@ -43,7 +43,8 @@ class WindowManager {
         const windowSizes = {
             about: { width: 900, height: 700 },
             work: { width: 700, height: 550 },
-            showreel: { width: 400, height: 450 }
+            showreel: { width: 400, height: 450 },
+            metbic: { width: 820, height: 520 }
         };
 
         const customSize = windowSizes[windowId] || {};
@@ -261,7 +262,22 @@ class WindowManager {
             const projectsGrid = windowEl.querySelector('#projects-grid');
             const filterBtns = windowEl.querySelectorAll('[data-filter]');
 
-            projectsGrid.innerHTML = projectsManager.renderProjectsHTML('all');
+            const renderAndBindProjects = (filter) => {
+                projectsGrid.innerHTML = projectsManager.renderProjectsHTML(filter);
+
+                // Add click handlers for project cards
+                projectsGrid.querySelectorAll('.project-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        const projectId = card.dataset.projectId;
+                        const project = projectsManager.getProjectById(projectId);
+                        if (project) {
+                            this.openCaseStudyWindow(project, projectsManager);
+                        }
+                    });
+                });
+            };
+
+            renderAndBindProjects('all');
 
             filterBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
@@ -273,7 +289,7 @@ class WindowManager {
                     btn.classList.add('btn-primary', 'active');
 
                     const filter = btn.dataset.filter;
-                    projectsGrid.innerHTML = projectsManager.renderProjectsHTML(filter);
+                    renderAndBindProjects(filter);
                 });
             });
         }
@@ -286,6 +302,126 @@ class WindowManager {
                 alert('Message sent! (Demo - integrate with your email service)');
                 form.reset();
             });
+        }
+
+        // METBIC.exe interactive window
+        if (windowId === 'metbic') {
+            this.initializeMetbicWindow(windowEl);
+        }
+    }
+
+    openCaseStudyWindow(project, projectsManager) {
+        // Special handling for METBIC - open XP-style window
+        if (project.title === 'METBİC') {
+            this.openWindow('metbic', { width: 800, height: 520 });
+            return;
+        }
+
+        const windowId = `casestudy-${project.id}`;
+
+        // If already open, focus it
+        if (this.windows.has(windowId)) {
+            this.focusWindow(windowId);
+            return;
+        }
+
+        const windowEl = document.createElement('div');
+        windowEl.className = 'window';
+        windowEl.dataset.windowId = windowId;
+
+        windowEl.innerHTML = `
+            <div class="window-titlebar">
+                <span class="window-title">📁 ${project.title} - Case Study</span>
+                <div class="window-controls">
+                    <button class="win-btn win-minimize" data-action="minimize">_</button>
+                    <button class="win-btn win-maximize" data-action="maximize">□</button>
+                    <button class="win-btn win-close" data-action="close">×</button>
+                </div>
+            </div>
+            <div class="window-content" style="padding: 0; overflow: hidden;">
+                ${projectsManager.renderCaseStudyHTML(project)}
+            </div>
+        `;
+
+        // Position and size
+        windowEl.style.top = '40px';
+        windowEl.style.left = '100px';
+        windowEl.style.width = '750px';
+        windowEl.style.height = '600px';
+        windowEl.style.zIndex = this.zIndexCounter++;
+
+        this.container.appendChild(windowEl);
+
+        this.windows.set(windowId, {
+            element: windowEl,
+            isMinimized: false
+        });
+
+        this.setupWindowControls(windowEl);
+        this.makeDraggable(windowEl);
+        this.addToTaskbar(windowId);
+
+        setTimeout(() => windowEl.classList.remove('hidden'), 10);
+        this.focusWindow(windowId);
+    }
+
+    initializeMetbicWindow(windowEl) {
+        const previewImg = windowEl.querySelector('#metbic-preview-img');
+        const thumbs = windowEl.querySelectorAll('.metbic-thumb');
+        const prevBtn = windowEl.querySelector('#metbic-prev');
+        const nextBtn = windowEl.querySelector('#metbic-next');
+        const counter = windowEl.querySelector('.metbic-counter');
+
+        let currentIndex = 0;
+        const totalImages = thumbs.length;
+
+        // Function to update gallery
+        const updateGallery = (index) => {
+            currentIndex = index;
+            if (currentIndex < 0) currentIndex = totalImages - 1;
+            if (currentIndex >= totalImages) currentIndex = 0;
+
+            const targetThumb = thumbs[currentIndex];
+            const imgSrc = targetThumb.dataset.img;
+
+            // Update active thumb
+            thumbs.forEach(t => t.classList.remove('active'));
+            targetThumb.classList.add('active');
+
+            // Update preview image with fade
+            if (imgSrc && previewImg) {
+                previewImg.style.opacity = '0';
+                setTimeout(() => {
+                    previewImg.src = imgSrc;
+                    previewImg.style.opacity = '1';
+                }, 150);
+            }
+
+            // Update counter
+            if (counter) {
+                counter.textContent = `${currentIndex + 1} / ${totalImages}`;
+            }
+
+            // Scroll thumb into view
+            targetThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        };
+
+        // Arrow button clicks
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => updateGallery(currentIndex - 1));
+        }
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => updateGallery(currentIndex + 1));
+        }
+
+        // Gallery thumbnail clicks
+        thumbs.forEach((thumb, index) => {
+            thumb.addEventListener('click', () => updateGallery(index));
+        });
+
+        // Add smooth transition to preview image
+        if (previewImg) {
+            previewImg.style.transition = 'opacity 0.15s ease';
         }
     }
 }

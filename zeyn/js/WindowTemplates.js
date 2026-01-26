@@ -185,6 +185,138 @@ const WindowTemplates = {
             <p style="margin-top: 12px; color: #666;">Drag and drop images here or browse files</p>
             <button class="btn btn-primary btn-sm" style="margin-top: 8px;">Browse Files</button>
         </div>
+    `,
+
+    // METBIC.exe - Portable Repair System
+    metbic: () => `
+        <div class="window-titlebar">
+            <span class="window-title">🧰 METBIC.exe — Portable Repair System</span>
+            <div class="window-controls">
+                <button class="win-btn win-minimize" data-action="minimize">_</button>
+                <button class="win-btn win-maximize" data-action="maximize">□</button>
+                <button class="win-btn win-close" data-action="close">×</button>
+            </div>
+        </div>
+        <div class="window-content" style="padding: 0; display: flex; flex-direction: column; height: 100%; font-family: 'Segoe UI', Tahoma, sans-serif; font-size: 11px;">
+            <style>
+                .metbic-container { display: flex; flex: 1; min-height: 0; }
+                .metbic-gallery { width: 100px; background: #f0f0f0; border-right: 1px solid #a0a0a0; display: flex; flex-direction: column; padding: 8px; gap: 8px; overflow-y: auto; }
+                .metbic-gallery-title { font-size: 9px; font-weight: bold; color: #666; text-transform: uppercase; letter-spacing: 0.5px; padding-bottom: 6px; border-bottom: 1px solid #ccc; margin-bottom: 4px; }
+                .metbic-thumb { width: 100%; aspect-ratio: 1; background: #fff; border: 2px solid #c0c0c0; border-radius: 3px; cursor: pointer; overflow: hidden; transition: all 0.15s; }
+                .metbic-thumb:hover { border-color: #0078d4; transform: scale(1.02); }
+                .metbic-thumb.active { border-color: #0078d4; box-shadow: 0 0 0 2px rgba(0,120,212,0.3); }
+                .metbic-thumb img { width: 100%; height: 100%; object-fit: cover; }
+                .metbic-main { flex: 1; display: flex; flex-direction: column; background: #fff; min-width: 0; }
+                .metbic-header { padding: 12px 16px; background: linear-gradient(180deg, #4a7eba 0%, #3d6a9e 100%); color: #fff; }
+                .metbic-header h2 { margin: 0; font-size: 14px; font-weight: 600; }
+                .metbic-header p { margin: 4px 0 0; font-size: 11px; opacity: 0.9; }
+                .metbic-content { flex: 1; display: flex; padding: 16px; gap: 16px; overflow: hidden; }
+                .metbic-preview { flex: 1; background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%); border: 2px solid #808080; border-radius: 4px; display: flex; align-items: center; justify-content: center; min-width: 0; }
+                .metbic-preview img { max-width: 95%; max-height: 95%; object-fit: contain; border-radius: 4px; }
+                .metbic-info { width: 180px; display: flex; flex-direction: column; gap: 12px; }
+                .metbic-info-box { background: #f8f8f8; border: 1px solid #d0d0d0; border-radius: 4px; padding: 12px; }
+                .metbic-info-title { font-size: 9px; font-weight: bold; color: #0066cc; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+                .metbic-info-text { font-size: 11px; color: #444; line-height: 1.6; }
+                .metbic-statusbar { padding: 6px 12px; background: linear-gradient(180deg, #e8e8e8 0%, #d0d0d0 100%); border-top: 1px solid #a0a0a0; display: flex; justify-content: space-between; font-size: 10px; color: #555; }
+                .metbic-status-item { display: flex; align-items: center; gap: 6px; }
+                .metbic-status-led { width: 8px; height: 8px; border-radius: 50%; background: #00cc00; box-shadow: 0 0 4px #00cc00; }
+            </style>
+
+            <div class="metbic-container">
+                <!-- Gallery Sidebar -->
+                <div class="metbic-gallery">
+                    <div class="metbic-gallery-title">Gallery</div>
+                    <div class="metbic-thumb active" data-img="assets/projects/metbic/hero.png" data-index="0">
+                        <img src="assets/projects/metbic/hero.png" alt="Hero">
+                    </div>
+                    <div class="metbic-thumb" data-img="assets/projects/metbic/render1.png" data-index="1">
+                        <img src="assets/projects/metbic/render1.png" alt="Render 1">
+                    </div>
+                    <div class="metbic-thumb" data-img="assets/projects/metbic/render2.png" data-index="2">
+                        <img src="assets/projects/metbic/render2.png" alt="Render 2">
+                    </div>
+                    <div class="metbic-thumb" data-img="assets/projects/metbic/render3.png" data-index="3">
+                        <img src="assets/projects/metbic/render3.png" alt="Render 3">
+                    </div>
+                    <div class="metbic-thumb" data-img="assets/projects/metbic/render4.png" data-index="4">
+                        <img src="assets/projects/metbic/render4.png" alt="Render 4">
+                    </div>
+                    <div class="metbic-thumb" data-img="assets/projects/metbic/render5.png" data-index="5">
+                        <img src="assets/projects/metbic/render5.png" alt="Render 5">
+                    </div>
+                    <div class="metbic-thumb" data-img="assets/projects/metbic/context.png" data-index="6">
+                        <img src="assets/projects/metbic/context.png" alt="Context">
+                    </div>
+                    <div class="metbic-thumb" data-img="assets/projects/metbic/technical.png" data-index="7">
+                        <img src="assets/projects/metbic/technical.png" alt="Technical">
+                    </div>
+                </div>
+
+                <!-- Main Area -->
+                <div class="metbic-main">
+                    <!-- Header -->
+                    <div class="metbic-header">
+                        <h2>METBİC — Modular Bicycle Repair Kit</h2>
+                        <p>Compact toolkit for mountain bikers • 2026 • Product Design</p>
+                    </div>
+
+                    <!-- Content Area -->
+                    <div class="metbic-content">
+                        <!-- Preview with Arrow Navigation -->
+                        <div class="metbic-preview" style="position: relative;">
+                            <button class="metbic-arrow metbic-arrow-left" id="metbic-prev" style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.9); border: 1px solid #ccc; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: all 0.15s;">❮</button>
+                            <img src="assets/projects/metbic/hero.png" alt="METBIC" id="metbic-preview-img">
+                            <button class="metbic-arrow metbic-arrow-right" id="metbic-next" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.9); border: 1px solid #ccc; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: all 0.15s;">❯</button>
+                            <div class="metbic-counter" style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); color: #fff; padding: 4px 12px; border-radius: 12px; font-size: 11px;">1 / 8</div>
+                        </div>
+
+                        <!-- Info Panel -->
+                        <div class="metbic-info">
+                            <div class="metbic-info-box">
+                                <div class="metbic-info-title">About</div>
+                                <div class="metbic-info-text">
+                                    Pocket-sized repair kit that transforms into a full workshop. All essential tools in one compact unit.
+                                </div>
+                            </div>
+
+                            <div class="metbic-info-box">
+                                <div class="metbic-info-title">Specifications</div>
+                                <div class="metbic-info-text">
+                                    <strong>Size:</strong> 90×60×30mm<br>
+                                    <strong>Material:</strong> Polymer + Metal<br>
+                                    <strong>Weight:</strong> 145g
+                                </div>
+                            </div>
+
+                            <div class="metbic-info-box" style="flex: 1;">
+                                <div class="metbic-info-title">Includes</div>
+                                <div class="metbic-info-text">
+                                    • Tire Lever<br>
+                                    • Hex Nuts (8/10/15mm)<br>
+                                    • Wheel Alignment<br>
+                                    • Screwdriver Bits<br>
+                                    • Storage Unit
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status Bar -->
+                    <div class="metbic-statusbar">
+                        <div class="metbic-status-item">
+                            <div class="metbic-status-led"></div>
+                            <span>System Ready</span>
+                        </div>
+                        <div class="metbic-status-item">
+                            <span>No internet. No service. No problem.</span>
+                        </div>
+                        <div class="metbic-status-item">
+                            <span>6 Modules Loaded</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     `
 };
 
