@@ -4,6 +4,72 @@ Bu dosya, ZeynStudio XP projesinde yapılan tüm değişiklikleri kronolojik ola
 
 ---
 
+## 📅 27 Ocak 2026 - 00:50
+
+### 🔥 FIREBOX Projesi Eklendi
+- **Değişiklik**: FIREBOX - Portable Camp & Cooking Station projesi eklendi
+- **Amaç**: Portfolyoya ikinci endüstriyel tasarım projesi eklemek
+- **Değiştirilen Dosyalar**:
+  - `js/WindowTemplates.js` - FIREBOX.exe pencere template'i
+  - `js/WindowManager.js` - FIREBOX galeri kontrolü
+  - `js/ProjectsData.js` - FIREBOX proje verisi
+  - `css/main.css` - FIREBOX mobil responsive stiller
+  - `assets/projects/firebox/` - 9 görsel
+
+#### ✨ Özellikler:
+- ✅ 9 görsel galeri (ok navigasyonu ile)
+- ✅ Turuncu/ateş teması renk şeması
+- ✅ XP-style pencere (METBIC gibi)
+- ✅ Mobil uyumlu layout
+- ✅ Case Study: Overview, Challenge, Role, Features, Specs
+- ✅ Katlanabilir kamp ateş kutusu/ızgara tasarımı
+
+---
+
+## 📅 27 Ocak 2026 - 00:30
+
+### 📱 Mobil Responsive Tasarım
+- **Değişiklik**: Site tamamen mobil uyumlu hale getirildi
+- **Değiştirilen Dosyalar**:
+  - `css/main.css` - Kapsamlı mobil stiller
+  - `css/login.css` - Login ekranı mobil
+  - `js/WindowManager.js` - Touch event desteği
+  - `js/main.js` - Mobil icon tap desteği
+
+#### ✨ Özellikler:
+- ✅ Desktop ikonları yatay grid (mobil)
+- ✅ Tek dokunuşla pencere açma
+- ✅ METBIC penceresi mobil layout (yatay thumbnails)
+- ✅ Taskbar touch-friendly
+- ✅ Pencereler tam genişlik (mobil)
+- ✅ Start menu tek sütun
+- ✅ 768px ve 480px breakpoint'leri
+- ✅ Touch cihaz optimizasyonları
+
+---
+
+## 📅 27 Ocak 2026 - 00:15
+
+### 🔧 METBIC Düzeltmeleri
+- **Değişiklik**: METBIC adı ve yazılım düzeltildi
+- **Düzeltmeler**:
+  - METBİC → METBIC (İngilizce karakterler)
+  - Fusion 360 → Rhino (doğru yazılım)
+
+---
+
+## 📅 26 Ocak 2026 - 23:50
+
+### 🖼️ METBIC Galeri Güncellendi
+- **Değişiklik**: METBIC galerisine ok navigasyonu ve eksik görseller eklendi
+- **Özellikler**:
+  - 8 görsel (3 yeni eklendi)
+  - Sol/sağ ok butonları
+  - Sayaç göstergesi (1/8, 2/8, vb.)
+  - Portfolyo odaklı case study içeriği
+
+---
+
 ## 📅 16 Ocak 2026 - 13:34
 
 ### 🔐 Login Ekranı İmplementasyonu (XP-Authentic)
