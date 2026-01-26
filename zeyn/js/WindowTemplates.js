@@ -270,32 +270,49 @@ const WindowTemplates = {
                             <div class="metbic-counter" style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); color: #fff; padding: 4px 12px; border-radius: 12px; font-size: 11px;">1 / 8</div>
                         </div>
 
-                        <!-- Info Panel -->
-                        <div class="metbic-info">
+                        <!-- Info Panel - Scrollable Case Study -->
+                        <div class="metbic-info" style="width: 220px; overflow-y: auto;">
                             <div class="metbic-info-box">
-                                <div class="metbic-info-title">About</div>
+                                <div class="metbic-info-title">Project Overview</div>
                                 <div class="metbic-info-text">
-                                    Pocket-sized repair kit that transforms into a full workshop. All essential tools in one compact unit.
+                                    METBİC is a pocket-sized, all-in-one repair kit designed for mountain bikers. It transforms from a compact 90×60mm unit into a fully functional workshop.
+                                </div>
+                            </div>
+
+                            <div class="metbic-info-box">
+                                <div class="metbic-info-title">The Challenge</div>
+                                <div class="metbic-info-text">
+                                    Professional mountain bikers face mechanical failures on remote trails. Carrying multiple standalone tools disrupts the riding experience and takes up valuable space.
+                                </div>
+                            </div>
+
+                            <div class="metbic-info-box">
+                                <div class="metbic-info-title">My Role</div>
+                                <div class="metbic-info-text">
+                                    <strong>Product Designer</strong><br>
+                                    User Research, Concept Development, Sketching, 3D Modeling (Fusion 360), Prototyping
+                                </div>
+                            </div>
+
+                            <div class="metbic-info-box">
+                                <div class="metbic-info-title">Key Features</div>
+                                <div class="metbic-info-text">
+                                    • Modular tool organization<br>
+                                    • Magnetic screwdriver slot<br>
+                                    • 6 interchangeable bits<br>
+                                    • Integrated tire lever<br>
+                                    • Rim straightener<br>
+                                    • Secure storage compartment
                                 </div>
                             </div>
 
                             <div class="metbic-info-box">
                                 <div class="metbic-info-title">Specifications</div>
                                 <div class="metbic-info-text">
-                                    <strong>Size:</strong> 90×60×30mm<br>
-                                    <strong>Material:</strong> Polymer + Metal<br>
-                                    <strong>Weight:</strong> 145g
-                                </div>
-                            </div>
-
-                            <div class="metbic-info-box" style="flex: 1;">
-                                <div class="metbic-info-title">Includes</div>
-                                <div class="metbic-info-text">
-                                    • Tire Lever<br>
-                                    • Hex Nuts (8/10/15mm)<br>
-                                    • Wheel Alignment<br>
-                                    • Screwdriver Bits<br>
-                                    • Storage Unit
+                                    <strong>Dimensions:</strong> 90×60×30mm<br>
+                                    <strong>Material:</strong> Durable Polymer + Metal<br>
+                                    <strong>Weight:</strong> 145g<br>
+                                    <strong>Hex Sizes:</strong> 8mm, 10mm, 15mm
                                 </div>
                             </div>
                         </div>
@@ -305,13 +322,13 @@ const WindowTemplates = {
                     <div class="metbic-statusbar">
                         <div class="metbic-status-item">
                             <div class="metbic-status-led"></div>
-                            <span>System Ready</span>
+                            <span>Industrial Design Project</span>
                         </div>
                         <div class="metbic-status-item">
-                            <span>No internet. No service. No problem.</span>
+                            <span>Zeynep Erden • 2026</span>
                         </div>
                         <div class="metbic-status-item">
-                            <span>6 Modules Loaded</span>
+                            <span>8 Renders</span>
                         </div>
                     </div>
                 </div>
