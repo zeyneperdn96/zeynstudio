@@ -185,6 +185,151 @@ const WindowTemplates = {
             <p style="margin-top: 12px; color: #666;">Drag and drop images here or browse files</p>
             <button class="btn btn-primary btn-sm" style="margin-top: 8px;">Browse Files</button>
         </div>
+    `,
+
+    // METBIC.exe - Portable Repair System
+    metbic: () => `
+        <div class="window-titlebar">
+            <span class="window-title">🧰 METBIC.exe — Portable Repair System</span>
+            <div class="window-controls">
+                <button class="win-btn win-minimize" data-action="minimize">_</button>
+                <button class="win-btn win-maximize" data-action="maximize">□</button>
+                <button class="win-btn win-close" data-action="close">×</button>
+            </div>
+        </div>
+        <div class="window-content" style="padding: 0; display: flex; flex-direction: column; height: 100%; font-family: 'Segoe UI', Tahoma, sans-serif; font-size: 11px;">
+            <style>
+                .metbic-container { display: flex; flex: 1; min-height: 0; }
+                .metbic-sidebar { width: 160px; background: linear-gradient(180deg, #f0f0f0 0%, #d4d4d4 100%); border-right: 1px solid #808080; display: flex; flex-direction: column; }
+                .metbic-sidebar-header { padding: 8px 10px; background: linear-gradient(180deg, #4a7eba 0%, #3d6a9e 100%); color: #fff; font-weight: bold; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #2d5a8a; }
+                .metbic-module { padding: 8px 10px; cursor: pointer; border-bottom: 1px solid #c0c0c0; display: flex; align-items: center; gap: 8px; transition: background 0.1s; }
+                .metbic-module:hover { background: #e8f4fc; }
+                .metbic-module.active { background: #cce8ff; border-left: 3px solid #0078d4; }
+                .metbic-module-icon { width: 16px; height: 16px; background: #808080; border-radius: 2px; display: flex; align-items: center; justify-content: center; font-size: 10px; }
+                .metbic-module-name { font-size: 11px; color: #333; }
+                .metbic-main { flex: 1; display: flex; flex-direction: column; background: #fff; min-width: 0; }
+                .metbic-toolbar { padding: 6px 10px; background: linear-gradient(180deg, #fafafa 0%, #e8e8e8 100%); border-bottom: 1px solid #a0a0a0; display: flex; gap: 6px; flex-wrap: wrap; }
+                .metbic-btn { padding: 4px 10px; background: linear-gradient(180deg, #fff 0%, #e8e8e8 100%); border: 1px solid #808080; border-radius: 3px; font-size: 10px; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+                .metbic-btn:hover { background: linear-gradient(180deg, #e8f4fc 0%, #cce8ff 100%); }
+                .metbic-btn:active { background: linear-gradient(180deg, #cce8ff 0%, #a8d8ff 100%); }
+                .metbic-content { flex: 1; display: flex; padding: 12px; gap: 12px; overflow: hidden; }
+                .metbic-preview { flex: 1; background: #1a1a2e; border: 2px inset #808080; border-radius: 4px; display: flex; align-items: center; justify-content: center; min-width: 0; }
+                .metbic-preview img { max-width: 100%; max-height: 100%; object-fit: contain; }
+                .metbic-info { width: 180px; display: flex; flex-direction: column; gap: 10px; }
+                .metbic-info-box { background: #f5f5f5; border: 1px solid #c0c0c0; border-radius: 3px; padding: 10px; }
+                .metbic-info-title { font-size: 10px; font-weight: bold; color: #0066cc; margin-bottom: 6px; text-transform: uppercase; }
+                .metbic-info-text { font-size: 11px; color: #333; line-height: 1.5; }
+                .metbic-log { flex: 1; background: #0c0c14; border: 1px solid #404040; border-radius: 3px; font-family: 'Consolas', 'Courier New', monospace; font-size: 10px; padding: 8px; overflow-y: auto; }
+                .metbic-log-line { margin-bottom: 3px; }
+                .metbic-log-info { color: #00cc66; }
+                .metbic-log-warning { color: #ffcc00; }
+                .metbic-log-action { color: #00aaff; }
+                .metbic-log-status { color: #cc66ff; }
+                .metbic-log-error { color: #ff4444; }
+                .metbic-statusbar { padding: 4px 10px; background: linear-gradient(180deg, #e8e8e8 0%, #d0d0d0 100%); border-top: 1px solid #a0a0a0; display: flex; justify-content: space-between; font-size: 10px; color: #444; }
+                .metbic-status-item { display: flex; align-items: center; gap: 4px; }
+                .metbic-status-led { width: 8px; height: 8px; border-radius: 50%; background: #00cc00; box-shadow: 0 0 4px #00cc00; }
+            </style>
+
+            <div class="metbic-container">
+                <!-- Left Sidebar -->
+                <div class="metbic-sidebar">
+                    <div class="metbic-sidebar-header">🔧 Tool Modules</div>
+                    <div class="metbic-module active" data-module="tire-lever">
+                        <div class="metbic-module-icon">🔩</div>
+                        <span class="metbic-module-name">Tire Lever</span>
+                    </div>
+                    <div class="metbic-module" data-module="hex-nut">
+                        <div class="metbic-module-icon">⚙️</div>
+                        <span class="metbic-module-name">Hex Nut Set</span>
+                    </div>
+                    <div class="metbic-module" data-module="wheel-align">
+                        <div class="metbic-module-icon">🎯</div>
+                        <span class="metbic-module-name">Wheel Alignment</span>
+                    </div>
+                    <div class="metbic-module" data-module="file">
+                        <div class="metbic-module-icon">📐</div>
+                        <span class="metbic-module-name">Double-Sided File</span>
+                    </div>
+                    <div class="metbic-module" data-module="screwdriver">
+                        <div class="metbic-module-icon">🪛</div>
+                        <span class="metbic-module-name">Screwdriver Bits</span>
+                    </div>
+                    <div class="metbic-module" data-module="storage">
+                        <div class="metbic-module-icon">📦</div>
+                        <span class="metbic-module-name">Storage Unit</span>
+                    </div>
+                    <div style="flex: 1;"></div>
+                    <div style="padding: 10px; border-top: 1px solid #c0c0c0; background: #e8e8e8;">
+                        <div style="font-size: 9px; color: #666; text-align: center;">
+                            METBIC v1.0<br>
+                            Offline Repair OS
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Area -->
+                <div class="metbic-main">
+                    <!-- Toolbar -->
+                    <div class="metbic-toolbar">
+                        <button class="metbic-btn" data-action="toolkit">📂 OPEN TOOLKIT</button>
+                        <button class="metbic-btn" data-action="repair">🔧 REPAIR MODE</button>
+                        <button class="metbic-btn" data-action="load">📥 LOAD MODULES</button>
+                        <button class="metbic-btn" data-action="recovery">💾 RECOVERY</button>
+                    </div>
+
+                    <!-- Content Area -->
+                    <div class="metbic-content">
+                        <!-- Preview -->
+                        <div class="metbic-preview">
+                            <img src="assets/projects/metbic/hero.png" alt="METBIC" id="metbic-preview-img">
+                        </div>
+
+                        <!-- Info Panel -->
+                        <div class="metbic-info">
+                            <div class="metbic-info-box">
+                                <div class="metbic-info-title">📋 Module Info</div>
+                                <div class="metbic-info-text" id="metbic-module-info">
+                                    <strong>Tire Lever</strong><br>
+                                    Specialized lever for quick tire removal. Ergonomic grip design.
+                                </div>
+                            </div>
+
+                            <div class="metbic-info-box">
+                                <div class="metbic-info-title">📐 Specifications</div>
+                                <div class="metbic-info-text">
+                                    <strong>Size:</strong> 90×60×30mm<br>
+                                    <strong>Material:</strong> Polymer + Metal<br>
+                                    <strong>Weight:</strong> 145g
+                                </div>
+                            </div>
+
+                            <!-- System Log -->
+                            <div class="metbic-log" id="metbic-log">
+                                <div class="metbic-log-line metbic-log-info">[INFO] System initialized</div>
+                                <div class="metbic-log-line metbic-log-info">[INFO] METBIC module loaded</div>
+                                <div class="metbic-log-line metbic-log-status">[STATUS] All modules ready</div>
+                                <div class="metbic-log-line metbic-log-info">[INFO] Awaiting input...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status Bar -->
+                    <div class="metbic-statusbar">
+                        <div class="metbic-status-item">
+                            <div class="metbic-status-led"></div>
+                            <span>System Ready</span>
+                        </div>
+                        <div class="metbic-status-item">
+                            <span>No internet. No service. No problem.</span>
+                        </div>
+                        <div class="metbic-status-item">
+                            <span>6 Modules Loaded</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     `
 };
 
