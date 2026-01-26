@@ -1,0 +1,2019 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zeyn XP - Industrial Designer</title>
+    <link rel="stylesheet" href="https://demo.themesberg.com/windows-95-ui-kit/css/windows-95.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/boot.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/boot-audio.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/icons.css">
+    <link rel="stylesheet" href="css/start-menu.css">
+    <link rel="stylesheet" href="css/icon-system.css">
+    <link rel="stylesheet" href="css/desktop-xp.css">
+
+    <!-- Trading Cards Styles -->
+    <style>
+        /* ========================================
+           90s RADICAL TRADING CARDS
+           Embedded Fullscreen Overlay
+           ======================================== */
+
+        .trading-cards-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100000;
+            display: none;
+            flex-direction: column;
+            --neon-pink: #ff0099;
+            --neon-cyan: #00f0ff;
+            --neon-green: #0aff00;
+            --neon-yellow: #ffee00;
+            --dark-purple: #12001f;
+            --card-bg: #1a0a2e;
+        }
+
+        .trading-cards-overlay.active {
+            display: flex;
+        }
+
+        .trading-cards-overlay .tc-body {
+            flex: 1;
+            font-family: 'VT323', monospace;
+            background: var(--dark-purple);
+            background-image:
+                radial-gradient(ellipse at 10% 90%, rgba(255, 0, 153, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 10%, rgba(0, 240, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(10, 255, 0, 0.03) 0%, transparent 70%);
+            overflow-x: hidden;
+            overflow-y: auto;
+            cursor: url('https://cur.cursors-4u.net/toons/too-12/too1133.cur'), auto;
+            position: relative;
+        }
+
+        /* CRT Scanlines */
+        .trading-cards-overlay .tc-body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.08) 2px,
+                rgba(0, 0, 0, 0.08) 4px
+            );
+            pointer-events: none;
+            z-index: 99999;
+        }
+
+        /* Cyber Grid */
+        .trading-cards-overlay .tc-body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(255, 0, 153, 0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 153, 0.015) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: -1;
+            animation: gridPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Close Button */
+        .tc-close-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100001;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            padding: 12px 20px;
+            background: linear-gradient(180deg, #555 0%, #333 50%, #1a1a1a 100%);
+            color: #ff4444;
+            border: 4px solid;
+            border-color: #888 #222 #111 #666;
+            cursor: pointer;
+            text-shadow: 0 0 10px #ff4444;
+            box-shadow: 5px 5px 0 #000;
+            transition: all 0.1s;
+        }
+
+        .tc-close-btn:hover {
+            background: linear-gradient(180deg, #666 0%, #444 50%, #222 100%);
+            color: #ff6666;
+        }
+
+        .tc-close-btn:active {
+            transform: translate(3px, 3px);
+            box-shadow: 2px 2px 0 #000;
+        }
+
+        /* Page Header */
+        .tc-page-header {
+            text-align: center;
+            padding: 50px 20px 25px;
+            position: relative;
+        }
+
+        .tc-page-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: clamp(10px, 3vw, 20px);
+            color: var(--neon-cyan);
+            text-shadow:
+                0 0 10px var(--neon-cyan),
+                0 0 30px var(--neon-cyan),
+                4px 4px 0 var(--neon-pink);
+            letter-spacing: 3px;
+            animation: titleFlicker 5s infinite;
+        }
+
+        @keyframes titleFlicker {
+            0%, 95%, 100% { opacity: 1; transform: translateX(0); }
+            96% { opacity: 0.8; transform: translateX(-2px); filter: hue-rotate(90deg); }
+            97% { opacity: 1; transform: translateX(2px); }
+            98% { opacity: 0.9; transform: translateX(-1px); filter: hue-rotate(-90deg); }
+        }
+
+        .tc-page-subtitle {
+            font-family: 'VT323', monospace;
+            font-size: 24px;
+            color: var(--neon-pink);
+            margin-top: 15px;
+            text-shadow: 0 0 15px var(--neon-pink);
+        }
+
+        .tc-blink {
+            animation: tcBlink 1s step-end infinite;
+        }
+
+        @keyframes tcBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Card Deck */
+        .tc-card-deck {
+            display: flex;
+            gap: 40px;
+            padding: 40px 60px 70px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tc-card-deck::-webkit-scrollbar {
+            height: 12px;
+        }
+
+        .tc-card-deck::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--neon-pink);
+            border-radius: 10px;
+        }
+
+        .tc-card-deck::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-cyan), var(--neon-green));
+            border-radius: 10px;
+        }
+
+        /* Card Wrapper */
+        .tc-card-wrapper {
+            flex: 0 0 350px;
+            height: 540px;
+            perspective: 1500px;
+            scroll-snap-align: center;
+        }
+
+        /* Card */
+        .tc-card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .tc-card:hover {
+            transform: translateY(-15px) rotateX(5deg);
+        }
+
+        .tc-card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .tc-card.flipped:hover {
+            transform: rotateY(180deg) translateY(-15px);
+        }
+
+        /* Card Faces */
+        .tc-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tc-face::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 3px,
+                rgba(0, 200, 255, 0.015) 3px,
+                rgba(0, 200, 255, 0.015) 6px
+            );
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .tc-front {
+            background: linear-gradient(180deg, #1f0a35 0%, #0a0012 100%);
+            border: 4px solid var(--neon-cyan);
+            box-shadow:
+                0 0 25px rgba(0, 240, 255, 0.25),
+                inset 0 0 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .tc-back {
+            transform: rotateY(180deg);
+            border: 4px solid var(--neon-pink);
+            box-shadow:
+                0 0 25px rgba(255, 0, 153, 0.25),
+                inset 0 0 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .tc-card-wrapper:nth-child(1) .tc-front { border-color: var(--neon-pink); }
+        .tc-card-wrapper:nth-child(2) .tc-front { border-color: var(--neon-cyan); }
+        .tc-card-wrapper:nth-child(3) .tc-front { border-color: var(--neon-green); }
+        .tc-card-wrapper:nth-child(4) .tc-front { border-color: var(--neon-yellow); }
+        .tc-card-wrapper:nth-child(5) .tc-front { border-color: var(--neon-pink); }
+
+        /* Card Header */
+        .tc-card-header {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 11px;
+            text-align: center;
+            padding: 14px 12px;
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-cyan));
+            color: #000;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        .tc-card-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: repeating-linear-gradient(90deg, #000 0px, #000 5px, transparent 5px, transparent 10px);
+        }
+
+        .tc-card-number {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 9px;
+            color: var(--neon-yellow);
+            text-shadow: 0 0 10px var(--neon-yellow);
+            z-index: 10;
+        }
+
+        /* Card Body */
+        .tc-card-body {
+            flex: 1;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Card Footer */
+        .tc-card-footer {
+            height: 55px;
+            background: rgba(0, 0, 0, 0.7);
+            border-top: 2px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Flip Hint */
+        .tc-flip-hint {
+            position: absolute;
+            bottom: 62px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'VT323', monospace;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.2);
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        /* CARD 1: THE HERO */
+        .tc-hero-image {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 14px;
+            border: 4px solid var(--neon-pink);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            box-shadow:
+                0 0 20px rgba(255, 0, 153, 0.4),
+                inset 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .tc-hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            image-rendering: pixelated;
+            filter: contrast(1.1) saturate(1.15);
+        }
+
+        .tc-hero-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 4px,
+                rgba(0, 0, 0, 0.12) 4px,
+                rgba(0, 0, 0, 0.12) 8px
+            );
+        }
+
+        .tc-hero-name {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 18px;
+            color: var(--neon-yellow);
+            text-align: center;
+            text-shadow: 0 0 20px var(--neon-yellow);
+            margin-bottom: 5px;
+        }
+
+        .tc-hero-class {
+            font-family: 'VT323', monospace;
+            font-size: 22px;
+            color: var(--neon-cyan);
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .tc-stars {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-bottom: 14px;
+        }
+
+        .tc-stars span {
+            color: var(--neon-yellow);
+            font-size: 16px;
+            text-shadow: 0 0 10px var(--neon-yellow);
+            animation: starGlow 1.2s ease-in-out infinite;
+        }
+
+        .tc-stars span:nth-child(2) { animation-delay: 0.15s; }
+        .tc-stars span:nth-child(3) { animation-delay: 0.3s; }
+        .tc-stars span:nth-child(4) { animation-delay: 0.45s; }
+        .tc-stars span:nth-child(5) { animation-delay: 0.6s; }
+
+        @keyframes starGlow {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.15); filter: brightness(1.4); }
+        }
+
+        /* Stat Bars */
+        .tc-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .tc-stat-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tc-stat-label {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 8px;
+            width: 28px;
+            text-shadow: 0 0 8px currentColor;
+        }
+
+        .tc-stat-label.hp { color: #ff4444; }
+        .tc-stat-label.mp { color: #4488ff; }
+        .tc-stat-label.xp { color: var(--neon-yellow); }
+
+        .tc-stat-bar {
+            flex: 1;
+            height: 16px;
+            background: #0a0a0a;
+            border: 2px solid #333;
+            overflow: hidden;
+        }
+
+        .tc-stat-fill {
+            height: 100%;
+        }
+
+        .tc-stat-fill.hp {
+            width: 100%;
+            background: repeating-linear-gradient(90deg, #ff4444 0px, #ff4444 7px, #cc2222 7px, #cc2222 9px);
+            box-shadow: 0 0 10px #ff4444;
+            animation: hpPulse 1.2s infinite alternate;
+        }
+
+        @keyframes hpPulse {
+            from { filter: brightness(1); }
+            to { filter: brightness(1.3); }
+        }
+
+        .tc-stat-fill.mp {
+            width: 100%;
+            background: repeating-linear-gradient(90deg, #4488ff 0px, #4488ff 7px, #2266cc 7px, #2266cc 9px);
+            box-shadow: 0 0 10px #4488ff;
+            animation: mpPulse 1.2s infinite alternate;
+        }
+
+        @keyframes mpPulse {
+            from { filter: brightness(1); }
+            to { filter: brightness(1.3); }
+        }
+
+        .tc-stat-fill.xp {
+            width: 100%;
+            background: repeating-linear-gradient(90deg, var(--neon-yellow) 0px, var(--neon-yellow) 7px, #ccaa00 7px, #ccaa00 9px);
+            box-shadow: 0 0 10px var(--neon-yellow);
+            animation: xpPulse 1s infinite alternate;
+        }
+
+        @keyframes xpPulse {
+            from { filter: brightness(1); }
+            to { filter: brightness(1.4); }
+        }
+
+        .tc-stat-value {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 7px;
+            color: #fff;
+            width: 48px;
+            text-align: right;
+        }
+
+        /* Marquee */
+        .tc-marquee {
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .tc-marquee-text {
+            font-family: 'VT323', monospace;
+            font-size: 18px;
+            color: var(--neon-green);
+            white-space: nowrap;
+            animation: scrollMarquee 10s linear infinite;
+            text-shadow: 0 0 15px var(--neon-green);
+        }
+
+        @keyframes scrollMarquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* Back Lore */
+        .tc-back-lore {
+            background:
+                linear-gradient(rgba(20, 10, 30, 0.95), rgba(10, 5, 20, 0.98)),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect fill="%23150a20" width="100" height="100"/><circle fill="%23ff009915" cx="50" cy="50" r="40"/></svg>');
+        }
+
+        .tc-back-lore .tc-card-header {
+            background: linear-gradient(90deg, #8B008B, #4B0082);
+        }
+
+        .tc-lore-content {
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .tc-lore-text {
+            font-family: 'VT323', monospace;
+            font-size: 19px;
+            color: #ddd;
+            line-height: 1.7;
+            text-align: center;
+        }
+
+        .tc-lore-motto {
+            margin-top: 25px;
+            padding: 15px;
+            border: 2px solid var(--neon-pink);
+            background: rgba(255, 0, 153, 0.1);
+            text-align: center;
+        }
+
+        .tc-lore-motto p {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 9px;
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px var(--neon-pink);
+            line-height: 1.8;
+        }
+
+        /* CARD 2: SKILLS */
+        .tc-skills {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            flex: 1;
+        }
+
+        .tc-skill-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .tc-skill-name {
+            font-family: 'VT323', monospace;
+            font-size: 17px;
+            color: var(--neon-cyan);
+            width: 100px;
+            text-shadow: 0 0 8px var(--neon-cyan);
+        }
+
+        .tc-skill-bar {
+            flex: 1;
+            height: 20px;
+            background: #080808;
+            border: 2px solid var(--neon-pink);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tc-skill-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-cyan));
+            position: relative;
+            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .tc-skill-fill::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(90deg, transparent 0px, transparent 7px, rgba(0,0,0,0.25) 7px, rgba(0,0,0,0.25) 9px);
+        }
+
+        .tc-skill-fill::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 5px;
+            height: 100%;
+            background: #fff;
+            animation: skillGlow 1.5s infinite;
+        }
+
+        @keyframes skillGlow {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        .tc-skill-percent {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            color: var(--neon-green);
+            width: 42px;
+            text-align: right;
+            text-shadow: 0 0 8px var(--neon-green);
+        }
+
+        /* Skill Video */
+        .tc-skill-video-container {
+            flex: 1;
+            margin-top: -160px;
+            border: none;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+        }
+
+        .tc-skill-video {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* Equalizer */
+        .tc-equalizer {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 8px;
+            height: 100%;
+            padding: 12px 0;
+        }
+
+        .tc-eq-bar {
+            width: 14px;
+            background: linear-gradient(0deg, var(--neon-pink), var(--neon-cyan));
+            border-radius: 3px;
+            animation: eqJump 0.4s ease-in-out infinite alternate;
+        }
+
+        .tc-eq-bar:nth-child(1) { animation-delay: 0s; }
+        .tc-eq-bar:nth-child(2) { animation-delay: 0.08s; }
+        .tc-eq-bar:nth-child(3) { animation-delay: 0.16s; }
+        .tc-eq-bar:nth-child(4) { animation-delay: 0.12s; }
+        .tc-eq-bar:nth-child(5) { animation-delay: 0.04s; }
+
+        @keyframes eqJump {
+            0% { height: 10px; }
+            100% { height: 32px; }
+        }
+
+        /* Back Hidden */
+        .tc-back-hidden {
+            background: linear-gradient(180deg, #0a0a1a 0%, #050508 100%);
+        }
+
+        .tc-back-hidden .tc-card-header {
+            background: linear-gradient(90deg, #333, #666);
+        }
+
+        .tc-hidden-stats {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 25px;
+            gap: 22px;
+        }
+
+        .tc-hidden-row {
+            text-align: center;
+        }
+
+        .tc-hidden-row label {
+            font-family: 'VT323', monospace;
+            font-size: 17px;
+            color: var(--neon-pink);
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .tc-hidden-row .value {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 11px;
+            color: var(--neon-yellow);
+            text-shadow: 0 0 12px var(--neon-yellow);
+        }
+
+        /* CARD 3: PASSIVES */
+        .tc-passives {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .tc-passive {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            padding: 10px;
+            background: linear-gradient(135deg, rgba(10, 255, 0, 0.04) 0%, rgba(0, 0, 0, 0.3) 100%);
+            border-left: 4px solid var(--neon-green);
+            border-radius: 0 8px 8px 0;
+        }
+
+        .tc-passive-icon {
+            font-size: 22px;
+            filter: drop-shadow(0 0 10px var(--neon-cyan));
+        }
+
+        .tc-passive-info h4 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 7px;
+            color: var(--neon-yellow);
+            margin-bottom: 4px;
+            text-shadow: 0 0 8px var(--neon-yellow);
+        }
+
+        .tc-passive-info p {
+            font-family: 'VT323', monospace;
+            font-size: 14px;
+            color: #aaa;
+            line-height: 1.3;
+        }
+
+        /* Server Lights */
+        .tc-server-lights {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .tc-light {
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+            background: #222;
+            box-shadow: inset 0 0 4px rgba(0,0,0,0.6);
+            transition: all 0.1s;
+        }
+
+        .tc-light.on {
+            box-shadow: 0 0 12px currentColor, 0 0 20px currentColor;
+        }
+
+        .tc-light:nth-child(1) { color: var(--neon-green); }
+        .tc-light:nth-child(2) { color: var(--neon-cyan); }
+        .tc-light:nth-child(3) { color: var(--neon-pink); }
+        .tc-light:nth-child(4) { color: var(--neon-yellow); }
+
+        /* Back Blueprint */
+        .tc-back-blueprint {
+            background:
+                linear-gradient(rgba(0, 40, 80, 0.92), rgba(0, 20, 50, 0.95)),
+                repeating-linear-gradient(0deg, transparent 0px, transparent 24px, rgba(100, 180, 255, 0.08) 24px, rgba(100, 180, 255, 0.08) 25px),
+                repeating-linear-gradient(90deg, transparent 0px, transparent 24px, rgba(100, 180, 255, 0.08) 24px, rgba(100, 180, 255, 0.08) 25px);
+        }
+
+        .tc-back-blueprint .tc-card-header {
+            background: linear-gradient(90deg, #0066aa, #00aadd);
+        }
+
+        .tc-blueprint-content {
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .tc-blueprint-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 9px;
+            color: #88ddff;
+            margin-bottom: 20px;
+            text-shadow: 0 0 12px #88ddff;
+        }
+
+        .tc-blueprint-text {
+            font-family: 'VT323', monospace;
+            font-size: 18px;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        /* CARD 4: INVENTORY */
+        .tc-inventory {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            flex: 1;
+            align-content: center;
+        }
+
+        .tc-inv-slot {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #151525 0%, #080812 100%);
+            border: 3px solid #2a2a4a;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .tc-inv-slot::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            right: 4px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            border-radius: 2px;
+        }
+
+        .tc-inv-slot:hover {
+            border-color: var(--neon-cyan);
+            background: rgba(0, 240, 255, 0.08);
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+
+        .tc-inv-slot .icon {
+            font-size: 30px;
+            margin-bottom: 5px;
+        }
+
+        .tc-inv-slot .label {
+            font-family: 'VT323', monospace;
+            font-size: 13px;
+            color: #777;
+            text-align: center;
+        }
+
+        /* Terminal Footer */
+        .tc-terminal-footer {
+            font-family: 'VT323', monospace;
+            font-size: 20px;
+            color: var(--neon-green);
+            text-shadow: 0 0 12px var(--neon-green);
+        }
+
+        .tc-cursor {
+            animation: cursorBlink 0.5s step-end infinite;
+        }
+
+        @keyframes cursorBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Back Matrix */
+        .tc-back-matrix {
+            background: #000;
+        }
+
+        .tc-back-matrix .tc-card-header {
+            background: linear-gradient(90deg, #003300, #009900);
+            font-family: 'VT323', monospace;
+            font-size: 14px;
+        }
+
+        .tc-matrix-terminal {
+            flex: 1;
+            padding: 22px;
+            font-family: 'VT323', monospace;
+            font-size: 18px;
+            color: var(--neon-green);
+            text-shadow: 0 0 10px var(--neon-green);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            line-height: 2;
+        }
+
+        .tc-matrix-line {
+            opacity: 0;
+            animation: typeIn 0.4s forwards;
+        }
+
+        .tc-matrix-line:nth-child(1) { animation-delay: 0.2s; }
+        .tc-matrix-line:nth-child(2) { animation-delay: 0.6s; }
+        .tc-matrix-line:nth-child(3) { animation-delay: 1.0s; }
+        .tc-matrix-line:nth-child(4) { animation-delay: 1.4s; }
+        .tc-matrix-line:nth-child(5) { animation-delay: 1.8s; }
+
+        @keyframes typeIn {
+            to { opacity: 1; }
+        }
+
+        /* CARD 5: CURRENT QUEST */
+        .tc-quest-new {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+        }
+
+        .tc-quest-content {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tc-quest-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 16px;
+            border: 3px solid var(--neon-yellow);
+            background: rgba(255, 238, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            animation: questIconPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes questIconPulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(255, 238, 0, 0.3); }
+            50% { box-shadow: 0 0 25px var(--neon-yellow), 0 0 40px rgba(255, 238, 0, 0.4); }
+        }
+
+        .tc-quest-label {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 8px;
+            color: var(--neon-yellow);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px var(--neon-yellow);
+            text-align: center;
+        }
+
+        .tc-quest-text {
+            font-family: 'VT323', monospace;
+            font-size: 22px;
+            color: #fff;
+            line-height: 1.4;
+            margin-bottom: 20px;
+            min-height: 60px;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+            text-align: center;
+            transition: opacity 0.2s ease;
+        }
+
+        .tc-quest-status-section {
+            margin-top: auto;
+            padding-top: 14px;
+            padding-bottom: 8px;
+            border-top: 2px dashed rgba(255, 238, 0, 0.2);
+            text-align: center;
+        }
+
+        .tc-quest-status-label {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 7px;
+            color: var(--neon-green);
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        .tc-quest-status-text {
+            font-family: 'VT323', monospace;
+            font-size: 20px;
+            color: var(--neon-green);
+            text-shadow: 0 0 10px var(--neon-green);
+            animation: statusBlink 3s ease-in-out infinite;
+            transition: opacity 0.2s ease;
+        }
+
+        @keyframes statusBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .tc-quest-flavor {
+            font-family: 'VT323', monospace;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.4);
+            font-style: italic;
+            text-align: center;
+            padding: 10px 16px;
+            background: rgba(0, 0, 0, 0.4);
+            transition: opacity 0.2s ease;
+        }
+
+        /* Back Lore New */
+        .tc-back-lore-new {
+            background: linear-gradient(180deg, #1a0a30 0%, #0a0015 100%);
+        }
+
+        .tc-back-lore-new .tc-card-header {
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
+        }
+
+        .tc-lore-content-new {
+            flex: 1;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .tc-lore-icon-new {
+            width: 90px;
+            height: 90px;
+            margin-bottom: 20px;
+            border: 3px solid var(--neon-cyan);
+            border-radius: 50%;
+            background: rgba(0, 240, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 36px;
+            color: var(--neon-cyan);
+            box-shadow: 0 0 20px var(--neon-cyan);
+        }
+
+        .tc-lore-label-new {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 8px;
+            color: var(--neon-pink);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 14px;
+        }
+
+        .tc-lore-text-new {
+            font-family: 'VT323', monospace;
+            font-size: 20px;
+            color: #ccc;
+            line-height: 1.5;
+            max-width: 280px;
+            transition: opacity 0.2s ease;
+        }
+
+        .tc-lore-flavor-new {
+            margin-top: auto;
+            padding-top: 16px;
+        }
+
+        .tc-lore-flavor-text {
+            font-family: 'VT323', monospace;
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.35);
+            font-style: italic;
+            transition: opacity 0.2s ease;
+        }
+
+        /* Page Footer */
+        .tc-page-footer {
+            text-align: center;
+            padding: 30px;
+            font-family: 'VT323', monospace;
+            font-size: 18px;
+            color: var(--neon-cyan);
+        }
+
+        .tc-page-footer a {
+            color: var(--neon-pink);
+            text-decoration: none;
+            text-shadow: 0 0 10px var(--neon-pink);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .tc-page-footer a:hover {
+            color: var(--neon-yellow);
+            text-shadow: 0 0 20px var(--neon-yellow);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .tc-card-deck {
+                padding: 30px 30px 60px;
+                gap: 30px;
+            }
+
+            .tc-card-wrapper {
+                flex: 0 0 300px;
+                height: 480px;
+            }
+
+            .tc-page-title {
+                font-size: 10px;
+            }
+
+            .tc-card-header {
+                font-size: 9px;
+                padding: 12px 10px;
+            }
+
+            .tc-hero-image {
+                width: 110px;
+                height: 110px;
+            }
+
+            .tc-hero-name {
+                font-size: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tc-card-wrapper {
+                flex: 0 0 270px;
+                height: 440px;
+            }
+
+            .tc-card-body {
+                padding: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- XP Startup Sound -->
+    <audio id="xp-startup-sound" preload="auto">
+        <source src="assets/audio/xp-startup.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- BOOT SEQUENCE -->
+    <div id="boot-container" class="boot-container">
+        <div id="boot-bios" class="boot-stage active">
+            <video id="boot-video" class="boot-video" muted playsinline preload="auto">
+                <source src="assets/boot/zeynepxpboo.mp4" type="video/mp4">
+            </video>
+        </div>
+    </div>
+
+    <!-- LOGIN SCREEN -->
+    <div id="login-container" class="login-container hidden">
+        <img src="assets/boot/login3.png" alt="Login" class="login-image">
+    </div>
+
+    <!-- WELCOME SCREEN -->
+    <div id="welcome-container" class="welcome-container hidden">
+        <img src="assets/welcome-screen.png" alt="The journey begins" class="welcome-image">
+    </div>
+
+    <!-- DESKTOP ENVIRONMENT -->
+    <div id="desktop-container" class="desktop-container hidden">
+
+        <!-- Desktop Icons -->
+        <div class="desktop-icons">
+            <div class="desktop-icon" data-window="work">
+                <div class="icon-image">
+                    <img src="assets/icons/my-project.png" alt="Work">
+                </div>
+                <span class="icon-label">My Work</span>
+            </div>
+            <div class="desktop-icon" data-window="about">
+                <div class="icon-image">
+                    <img src="assets/icons/about-me.png" alt="About">
+                </div>
+                <span class="icon-label">About Me</span>
+            </div>
+            <div class="desktop-icon" data-window="contact">
+                <div class="icon-image">
+                    <img src="assets/icons/contact-me.png" alt="Contact">
+                </div>
+                <span class="icon-label">Contact</span>
+            </div>
+            <div class="desktop-icon" data-window="tradingcards" id="trading-cards-icon">
+                <div class="icon-image">
+                    <img src="assets/icons/my-gallery.png" alt="Trading Cards">
+                </div>
+                <span class="icon-label">Trading Cards</span>
+            </div>
+        </div>
+
+        <div class="windows-container" id="windows-container"></div>
+
+        <!-- Taskbar -->
+        <div class="taskbar">
+            <button class="start-button btn btn-primary" id="start-btn">
+                <span class="start-logo">🪟</span>
+                <span>Start</span>
+            </button>
+            <div class="taskbar-separator"></div>
+            <div class="taskbar-windows" id="taskbar-windows"></div>
+            <div class="system-tray">
+                <span class="tray-icon">🎨</span>
+                <span class="tray-clock" id="tray-clock">01:31</span>
+            </div>
+        </div>
+
+        <!-- XP-STYLE START MENU -->
+        <div class="start-menu hidden" id="start-menu">
+
+            <!-- HEADER -->
+            <div class="start-menu-header">
+                <div class="start-user-avatar">Z</div>
+                <div class="start-user-info">
+                    <div class="start-user-name">Zeyn XP</div>
+                    <div class="start-user-title">Industrial Designer</div>
+                </div>
+            </div>
+
+            <!-- SINGLE COLUMN BODY -->
+            <div class="start-menu-body">
+                <div class="start-menu-programs">
+                    <div class="start-menu-item" data-action="window" data-window="work">
+                        <img src="assets/icons/my-project.png" class="menu-item-icon" alt="">
+                        <div class="menu-item-text">
+                            <div class="menu-item-title">My Projects</div>
+                            <div class="menu-item-desc">View my work</div>
+                        </div>
+                    </div>
+
+                    <div class="start-menu-item" data-action="window" data-window="contact">
+                        <img src="assets/icons/contact-me.png" class="menu-item-icon" style="width: 48px; height: 48px;" alt="">
+                        <div class="menu-item-text">
+                            <div class="menu-item-title">Contact Me</div>
+                            <div class="menu-item-desc">Send me a message</div>
+                        </div>
+                    </div>
+
+                    <div class="start-menu-item" data-action="window" data-window="about">
+                        <img src="assets/icons/about-me.png" class="menu-item-icon" alt="">
+                        <div class="menu-item-text">
+                            <div class="menu-item-title">About Me</div>
+                            <div class="menu-item-desc">My story</div>
+                        </div>
+                    </div>
+
+                    <div class="start-menu-item" data-action="tradingcards" id="start-trading-cards">
+                        <img src="assets/icons/my-gallery.png" class="menu-item-icon" alt="">
+                        <div class="menu-item-text">
+                            <div class="menu-item-title">Trading Cards</div>
+                            <div class="menu-item-desc">90s Radical Deck</div>
+                        </div>
+                    </div>
+
+                    <div class="start-menu-item" data-action="window" data-window="showreel">
+                        <img src="assets/icons/icon-mediaplayer.svg" class="menu-item-icon" alt="">
+                        <div class="menu-item-text">
+                            <div class="menu-item-title">Media Player</div>
+                            <div class="menu-item-desc">Music</div>
+                        </div>
+                    </div>
+
+                    <div class="start-menu-item" data-action="window" data-window="terminal">
+                        <img src="assets/icons/icon-cmd.svg" class="menu-item-icon" alt="">
+                        <div class="menu-item-text">
+                            <div class="menu-item-title">Command Prompt</div>
+                            <div class="menu-item-desc">Terminal</div>
+                        </div>
+                    </div>
+
+                    <div class="start-menu-divider"></div>
+
+                    <div class="start-menu-item" data-action="link" data-link="github">
+                        <img src="assets/icons/icon-github.svg" class="menu-item-icon" alt="">
+                        <div class="menu-item-text">
+                            <div class="menu-item-title">Github</div>
+                        </div>
+                    </div>
+
+                    <div class="start-menu-item" data-action="link" data-link="linkedin">
+                        <img src="assets/icons/icon-linkedin.svg" class="menu-item-icon" alt="">
+                        <div class="menu-item-text">
+                            <div class="menu-item-title">LinkedIn</div>
+                        </div>
+                    </div>
+
+                    <div class="start-menu-divider"></div>
+
+                    <div class="start-menu-item all-programs" id="all-programs-btn">
+                        <img src="assets/icons/All Programs.png" class="menu-item-icon-small" alt="">
+                        <span style="flex: 1; font-size: 12px;">All Programs</span>
+                        <span class="arrow">►</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ALL PROGRAMS SUBMENU -->
+            <div class="all-programs-submenu hidden" id="all-programs-submenu">
+                <div class="all-programs-item" data-program="figma">
+                    <img src="assets/icons/icon-figma.png" class="program-icon" alt="">
+                    <span>Figma</span>
+                </div>
+                <div class="all-programs-item" data-program="photoshop">
+                    <img src="assets/icons/icon-photoshop.png" class="program-icon" alt="">
+                    <span>Adobe Photoshop 2026</span>
+                </div>
+                <div class="all-programs-item" data-program="illustrator">
+                    <img src="assets/icons/icon-illustrator.png" class="program-icon" alt="">
+                    <span>Adobe Illustrator 2026</span>
+                </div>
+                <div class="all-programs-item" data-program="aftereffects">
+                    <img src="assets/icons/icon-aftereffects.png" class="program-icon" alt="">
+                    <span>Adobe After Effects</span>
+                </div>
+                <div class="all-programs-item" data-program="blender">
+                    <img src="assets/icons/icon-blender.png" class="program-icon" alt="">
+                    <span>Blender</span>
+                </div>
+                <div class="all-programs-item" data-program="rhino">
+                    <img src="assets/icons/icon-rhino.png" class="program-icon" alt="">
+                    <span>Rhino - Rhinoceros 3D</span>
+                </div>
+                <div class="all-programs-item" data-program="3dsmax">
+                    <img src="assets/icons/icon-3dsmax.png" class="program-icon" alt="">
+                    <span>Autodesk 3ds Max</span>
+                </div>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="start-menu-footer">
+                <button class="btn btn-warning" id="logoff-btn">
+                    <img src="assets/icons/icon-logoff.svg" alt="">
+                    Log Off
+                </button>
+                <button class="btn btn-danger" id="shutdown-btn">
+                    <img src="assets/icons/icon-shutdown.svg" alt="">
+                    Shut Down
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Mobile View -->
+    <div id="mobile-view" class="mobile-view hidden">
+        <div class="mobile-xp-header">
+            <div class="mobile-xp-header-left">
+                <img src="assets/icons/about-me.png" alt="Zeyn" class="mobile-xp-avatar">
+                <span class="mobile-xp-logo">Zeyn XP</span>
+            </div>
+        </div>
+
+        <div class="mobile-content">
+            <div class="mobile-xp-window">
+                <div class="mobile-xp-titlebar">
+                    <span class="mobile-xp-titlebar-text">About Me</span>
+                    <div class="mobile-xp-titlebar-buttons">
+                        <span class="mobile-xp-btn-min"></span>
+                        <span class="mobile-xp-btn-max"></span>
+                        <span class="mobile-xp-btn-close"></span>
+                    </div>
+                </div>
+                <div class="mobile-xp-window-body mobile-profile">
+                    <img src="assets/icons/about-me.png" alt="About Me" class="mobile-profile-icon">
+                    <h2 class="mobile-profile-name">Zeyn</h2>
+                    <p class="mobile-profile-title">Industrial Designer</p>
+                    <p id="mobile-bio" class="mobile-profile-bio">Industrial designer passionate about creating meaningful experiences.</p>
+                </div>
+            </div>
+
+            <div class="mobile-xp-window">
+                <div class="mobile-xp-titlebar">
+                    <span class="mobile-xp-titlebar-text">Programs</span>
+                    <div class="mobile-xp-titlebar-buttons">
+                        <span class="mobile-xp-btn-min"></span>
+                        <span class="mobile-xp-btn-max"></span>
+                        <span class="mobile-xp-btn-close"></span>
+                    </div>
+                </div>
+                <div class="mobile-xp-window-body mobile-skills">
+                    <div class="mobile-skill-item">
+                        <img src="assets/icons/icon-figma.png" alt="Figma">
+                        <span>Figma</span>
+                    </div>
+                    <div class="mobile-skill-item">
+                        <img src="assets/icons/icon-photoshop.png" alt="Photoshop">
+                        <span>Photoshop</span>
+                    </div>
+                    <div class="mobile-skill-item">
+                        <img src="assets/icons/icon-illustrator.png" alt="Illustrator">
+                        <span>Illustrator</span>
+                    </div>
+                    <div class="mobile-skill-item">
+                        <img src="assets/icons/icon-blender.png" alt="Blender">
+                        <span>Blender</span>
+                    </div>
+                    <div class="mobile-skill-item">
+                        <img src="assets/icons/icon-rhino.png" alt="Rhino">
+                        <span>Rhino</span>
+                    </div>
+                    <div class="mobile-skill-item">
+                        <img src="assets/icons/icon-3dsmax.png" alt="3ds Max">
+                        <span>3ds Max</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mobile-xp-window">
+                <div class="mobile-xp-titlebar">
+                    <span class="mobile-xp-titlebar-text">Links</span>
+                    <div class="mobile-xp-titlebar-buttons">
+                        <span class="mobile-xp-btn-min"></span>
+                        <span class="mobile-xp-btn-max"></span>
+                        <span class="mobile-xp-btn-close"></span>
+                    </div>
+                </div>
+                <div class="mobile-xp-window-body mobile-links">
+                    <a href="#" id="mobile-linkedin" class="mobile-xp-button" target="_blank">
+                        <img src="assets/icons/icon-linkedin.svg" alt="LinkedIn">
+                        <span>LinkedIn</span>
+                    </a>
+                    <a href="#" id="mobile-github" class="mobile-xp-button" target="_blank">
+                        <img src="assets/icons/icon-github.svg" alt="GitHub">
+                        <span>GitHub</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="mobile-xp-window">
+                <div class="mobile-xp-titlebar">
+                    <span class="mobile-xp-titlebar-text">Contact</span>
+                    <div class="mobile-xp-titlebar-buttons">
+                        <span class="mobile-xp-btn-min"></span>
+                        <span class="mobile-xp-btn-max"></span>
+                        <span class="mobile-xp-btn-close"></span>
+                    </div>
+                </div>
+                <div class="mobile-xp-window-body mobile-contact">
+                    <img src="assets/icons/contact-me.png" alt="Contact" class="mobile-contact-icon">
+                    <p>Get in touch for collaborations.</p>
+                    <a href="mailto:hello@zeynstudio.com" class="mobile-xp-button mobile-xp-button-primary">
+                        <span>Email Me</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="mobile-xp-notice">
+                Best experienced on desktop
+            </div>
+        </div>
+
+        <div class="mobile-xp-taskbar">
+            <div class="mobile-xp-start-btn">
+                <span class="mobile-xp-start-text">ZeynStudio</span>
+            </div>
+            <div class="mobile-xp-taskbar-right">
+                <span class="mobile-xp-clock" id="mobile-clock">12:00</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- TRADING CARDS OVERLAY -->
+    <div class="trading-cards-overlay" id="trading-cards-overlay">
+        <button class="tc-close-btn" id="tc-close-btn">[X] CLOSE</button>
+        <div class="tc-body">
+            <header class="tc-page-header">
+                <h1 class="tc-page-title">[ 90s RADICAL TRADING DECK ]</h1>
+                <p class="tc-page-subtitle">>>> CLICK CARDS TO REVEAL SECRETS <span class="tc-blink">_</span></p>
+            </header>
+
+            <section class="tc-card-deck" id="tc-card-deck">
+
+                <!-- CARD 1: THE HERO -->
+                <div class="tc-card-wrapper">
+                    <div class="tc-card" onclick="flipTcCard(this)">
+                        <div class="tc-face tc-front">
+                            <div class="tc-card-header">THE HERO</div>
+                            <span class="tc-card-number">#001</span>
+                            <div class="tc-card-body">
+                                <div class="tc-hero-image">
+                                    <img src="assets/Gemini_Generated_Image_eh5x58eh5x58eh5x.png" alt="Zeynep" onerror="this.src='https://placehold.co/400x400/12001f/ff0099?text=ZEYN'">
+                                </div>
+                                <h2 class="tc-hero-name">ZEYNEP</h2>
+                                <p class="tc-hero-class">Product Designer</p>
+                                <div class="tc-stars">
+                                    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                                </div>
+                                <div class="tc-stats">
+                                    <div class="tc-stat-row">
+                                        <span class="tc-stat-label hp">HP</span>
+                                        <div class="tc-stat-bar"><div class="tc-stat-fill hp"></div></div>
+                                        <span class="tc-stat-value">100/100</span>
+                                    </div>
+                                    <div class="tc-stat-row">
+                                        <span class="tc-stat-label mp">MP</span>
+                                        <div class="tc-stat-bar"><div class="tc-stat-fill mp"></div></div>
+                                        <span class="tc-stat-value">100/100</span>
+                                    </div>
+                                    <div class="tc-stat-row">
+                                        <span class="tc-stat-label xp">XP</span>
+                                        <div class="tc-stat-bar"><div class="tc-stat-fill xp"></div></div>
+                                        <span class="tc-stat-value">MAX!</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="tc-flip-hint">[ CLICK TO FLIP ]</span>
+                            <div class="tc-card-footer">
+                                <div class="tc-marquee">
+                                    <span class="tc-marquee-text">>>> STATUS: CREATING >>> MODE: DESIGN >>> VIBE: PIXEL PERFECT >>> STATUS: CREATING >>> MODE: DESIGN >>></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tc-face tc-back tc-back-lore">
+                            <div class="tc-card-header">ORIGIN STORY</div>
+                            <div class="tc-lore-content">
+                                <p class="tc-lore-text">
+                                    Zeynep has always loved tinkering. She doesn't wait for inspiration; she starts, reviews, and iterates.
+                                    <br><br>
+                                    For her, <strong style="color: var(--neon-cyan);">'Starting'</strong> is half the battle.
+                                </p>
+                                <div class="tc-lore-motto">
+                                    <p>"It won't be perfect<br>until you start."</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD 2: STATS -->
+                <div class="tc-card-wrapper">
+                    <div class="tc-card" onclick="flipTcCard(this)">
+                        <div class="tc-face tc-front">
+                            <div class="tc-card-header">SKILL LEVELS</div>
+                            <span class="tc-card-number">#002</span>
+                            <div class="tc-card-body">
+                                <div class="tc-skills">
+                                    <div class="tc-skill-row">
+                                        <span class="tc-skill-name">UI Design</span>
+                                        <div class="tc-skill-bar"><div class="tc-skill-fill" data-width="95"></div></div>
+                                        <span class="tc-skill-percent">95%</span>
+                                    </div>
+                                    <div class="tc-skill-row">
+                                        <span class="tc-skill-name">UX Research</span>
+                                        <div class="tc-skill-bar"><div class="tc-skill-fill" data-width="90"></div></div>
+                                        <span class="tc-skill-percent">90%</span>
+                                    </div>
+                                    <div class="tc-skill-row">
+                                        <span class="tc-skill-name">Gamification</span>
+                                        <div class="tc-skill-bar"><div class="tc-skill-fill" data-width="99"></div></div>
+                                        <span class="tc-skill-percent">99%</span>
+                                    </div>
+                                    <div class="tc-skill-row">
+                                        <span class="tc-skill-name">Prototyping</span>
+                                        <div class="tc-skill-bar"><div class="tc-skill-fill" data-width="85"></div></div>
+                                        <span class="tc-skill-percent">85%</span>
+                                    </div>
+                                </div>
+                                <div class="tc-skill-video-container">
+                                    <video class="tc-skill-video" autoplay loop muted playsinline>
+                                        <source src="assets/skill-video.mp4" type="video/mp4">
+                                    </video>
+                                </div>
+                            </div>
+                            <span class="tc-flip-hint">[ CLICK TO FLIP ]</span>
+                            <div class="tc-card-footer">
+                                <div class="tc-equalizer">
+                                    <div class="tc-eq-bar"></div>
+                                    <div class="tc-eq-bar"></div>
+                                    <div class="tc-eq-bar"></div>
+                                    <div class="tc-eq-bar"></div>
+                                    <div class="tc-eq-bar"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tc-face tc-back tc-back-hidden">
+                            <div class="tc-card-header">SECRET STATS</div>
+                            <div class="tc-hidden-stats">
+                                <div class="tc-hidden-row">
+                                    <label>Coffee Consumption:</label>
+                                    <span class="value">∞ INFINITE</span>
+                                </div>
+                                <div class="tc-hidden-row">
+                                    <label>Unfinished Side Projects:</label>
+                                    <span class="value">50+</span>
+                                </div>
+                                <div class="tc-hidden-row">
+                                    <label>Pixel Sensitivity:</label>
+                                    <span class="value">EXTREME</span>
+                                </div>
+                                <div class="tc-hidden-row">
+                                    <label>Flow State:</label>
+                                    <span class="value">ENABLED</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD 3: PASSIVES -->
+                <div class="tc-card-wrapper">
+                    <div class="tc-card" onclick="flipTcCard(this)">
+                        <div class="tc-face tc-front">
+                            <div class="tc-card-header">PASSIVE SKILLS</div>
+                            <span class="tc-card-number">#003</span>
+                            <div class="tc-card-body">
+                                <div class="tc-passives">
+                                    <div class="tc-passive">
+                                        <span class="tc-passive-icon">👁️</span>
+                                        <div class="tc-passive-info">
+                                            <h4>Pixel Precision</h4>
+                                            <p>Spots 1px misalignments instantly.</p>
+                                        </div>
+                                    </div>
+                                    <div class="tc-passive">
+                                        <span class="tc-passive-icon">🧠</span>
+                                        <div class="tc-passive-info">
+                                            <h4>Flow Intuition</h4>
+                                            <p>Predicts user behavior with accuracy.</p>
+                                        </div>
+                                    </div>
+                                    <div class="tc-passive">
+                                        <span class="tc-passive-icon">🤖</span>
+                                        <div class="tc-passive-info">
+                                            <h4>AI Whisperer</h4>
+                                            <p>Uses AI as leverage, not a shortcut.</p>
+                                        </div>
+                                    </div>
+                                    <div class="tc-passive">
+                                        <span class="tc-passive-icon">🛠️</span>
+                                        <div class="tc-passive-info">
+                                            <h4>Maker Mindset</h4>
+                                            <p>Converts ideas into shippable products.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="tc-flip-hint">[ CLICK TO FLIP ]</span>
+                            <div class="tc-card-footer">
+                                <div class="tc-server-lights">
+                                    <div class="tc-light"></div>
+                                    <div class="tc-light"></div>
+                                    <div class="tc-light"></div>
+                                    <div class="tc-light"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tc-face tc-back tc-back-blueprint">
+                            <div class="tc-card-header">ABILITY DETAILS</div>
+                            <div class="tc-blueprint-content">
+                                <h4 class="tc-blueprint-title">PASSIVE EFFECT: MAKER MINDSET</h4>
+                                <p class="tc-blueprint-text">
+                                    Rapidly converts abstract ideas into shippable products.
+                                    <br><br>
+                                    She doesn't just design screens; she engineers experiences with a beginning and an end.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD 4: INVENTORY -->
+                <div class="tc-card-wrapper">
+                    <div class="tc-card" onclick="flipTcCard(this)">
+                        <div class="tc-face tc-front">
+                            <div class="tc-card-header">BACKPACK</div>
+                            <span class="tc-card-number">#004</span>
+                            <div class="tc-card-body">
+                                <div class="tc-inventory">
+                                    <div class="tc-inv-slot">
+                                        <span class="icon">🎨</span>
+                                        <span class="label">Figma</span>
+                                    </div>
+                                    <div class="tc-inv-slot">
+                                        <span class="icon">📝</span>
+                                        <span class="label">Notion</span>
+                                    </div>
+                                    <div class="tc-inv-slot">
+                                        <span class="icon">🅰️</span>
+                                        <span class="label">Adobe</span>
+                                    </div>
+                                    <div class="tc-inv-slot">
+                                        <span class="icon">🤖</span>
+                                        <span class="label">ChatGPT</span>
+                                    </div>
+                                    <div class="tc-inv-slot">
+                                        <span class="icon">🖼️</span>
+                                        <span class="label">Midjourney</span>
+                                    </div>
+                                    <div class="tc-inv-slot">
+                                        <span class="icon">🎧</span>
+                                        <span class="label">Spotify</span>
+                                    </div>
+                                    <div class="tc-inv-slot">
+                                        <span class="icon">🔊</span>
+                                        <span class="label">Marshall IV</span>
+                                    </div>
+                                    <div class="tc-inv-slot">
+                                        <span class="icon">🧊</span>
+                                        <span class="label">3D Model</span>
+                                    </div>
+                                    <div class="tc-inv-slot">
+                                        <span class="icon">☕</span>
+                                        <span class="label">Coffee</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="tc-flip-hint">[ CLICK TO FLIP ]</span>
+                            <div class="tc-card-footer">
+                                <span class="tc-terminal-footer">LOADED<span class="tc-cursor">_</span></span>
+                            </div>
+                        </div>
+                        <div class="tc-face tc-back tc-back-matrix">
+                            <div class="tc-card-header">SYSTEM TERMINAL</div>
+                            <div class="tc-matrix-terminal">
+                                <div class="tc-matrix-line">> SYSTEM CHECK...</div>
+                                <div class="tc-matrix-line">> LOADING FIGMA... OK</div>
+                                <div class="tc-matrix-line">> LOADING ADOBE SUITE... OK</div>
+                                <div class="tc-matrix-line">> LOADING 3D ENGINE... OK</div>
+                                <div class="tc-matrix-line">> ALL SYSTEMS GO_</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD 5: CURRENT QUEST -->
+                <div class="tc-card-wrapper">
+                    <div class="tc-card" onclick="flipTcCard(this)">
+                        <div class="tc-face tc-front">
+                            <div class="tc-card-header">CURRENT QUEST</div>
+                            <span class="tc-card-number">#005</span>
+                            <div class="tc-card-body tc-quest-new">
+                                <div class="tc-quest-content">
+                                    <div class="tc-quest-icon">★</div>
+                                    <div class="tc-quest-label">OBJECTIVE</div>
+                                    <div class="tc-quest-text" id="tcQuestText">Learn something small. Apply it somewhere real.</div>
+                                    <div class="tc-quest-status-section">
+                                        <div class="tc-quest-status-label">STATUS</div>
+                                        <div class="tc-quest-status-text" id="tcStatusText">AVAILABLE FOR PARTY</div>
+                                    </div>
+                                </div>
+                                <div class="tc-quest-flavor">
+                                    <span id="tcFlavorText">"Save often. Breaks are free."</span>
+                                    <span style="display: block; margin-top: 6px; color: var(--neon-cyan); font-style: normal;">[ SPACE ] Shuffle &nbsp; [ CLICK ] Flip</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tc-face tc-back tc-back-lore-new">
+                            <div class="tc-card-header">CHARACTER LORE</div>
+                            <div class="tc-lore-content-new">
+                                <div class="tc-lore-icon-new">Z</div>
+                                <div class="tc-lore-label-new">BACKSTORY</div>
+                                <div class="tc-lore-text-new" id="tcLoreText">Started drawing before learning the rules. Still makes things up along the way.</div>
+                                <div class="tc-lore-flavor-new">
+                                    <div class="tc-lore-flavor-text" id="tcBackFlavorText">"The tutorial never really ends."</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <footer class="tc-page-footer">
+                <p>>>> USE ← → ARROWS TO NAVIGATE >>> | <a id="tc-return-btn">RETURN TO DESKTOP</a></p>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/ProjectsData.js"></script>
+    <script src="js/WindowTemplates.js"></script>
+    <script src="js/BootSequence.js"></script>
+    <script src="js/WindowManager.js"></script>
+    <script src="js/StartMenu.js"></script>
+    <script src="js/MediaPlayer.js"></script>
+    <script src="js/Terminal.js"></script>
+    <script src="js/main.js"></script>
+
+    <!-- Trading Cards Script -->
+    <script>
+        // Trading Cards Functions
+        function flipTcCard(card) {
+            card.classList.toggle('flipped');
+            card.style.filter = 'brightness(1.5)';
+            setTimeout(() => {
+                card.style.filter = 'brightness(1)';
+            }, 80);
+
+            // Reset matrix terminal animation
+            if (card.closest('.tc-card-wrapper') === document.querySelectorAll('.tc-card-wrapper')[3]) {
+                const lines = card.querySelectorAll('.tc-matrix-line');
+                lines.forEach(line => {
+                    line.style.animation = 'none';
+                    line.offsetHeight;
+                    line.style.animation = null;
+                });
+            }
+        }
+
+        // Open Trading Cards
+        function openTradingCards() {
+            const overlay = document.getElementById('trading-cards-overlay');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            // Animate cards entrance
+            setTimeout(() => {
+                const cards = document.querySelectorAll('.tc-card-wrapper');
+                cards.forEach((card, i) => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(80px) rotateX(-15deg)';
+                    setTimeout(() => {
+                        card.style.transition = 'opacity 0.7s ease-out, transform 0.7s ease-out';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0) rotateX(0)';
+                    }, 200 + (i * 130));
+                });
+
+                // Animate skill bars
+                setTimeout(() => {
+                    document.querySelectorAll('.tc-skill-fill').forEach(bar => {
+                        const width = bar.getAttribute('data-width');
+                        bar.style.width = width + '%';
+                    });
+                }, 800);
+            }, 100);
+
+            // Hide start menu
+            const startMenu = document.getElementById('start-menu');
+            if (startMenu) startMenu.classList.add('hidden');
+        }
+
+        // Close Trading Cards
+        function closeTradingCards() {
+            const overlay = document.getElementById('trading-cards-overlay');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // Desktop icon
+            const tcIcon = document.getElementById('trading-cards-icon');
+            if (tcIcon) {
+                tcIcon.addEventListener('dblclick', openTradingCards);
+            }
+
+            // Start menu item
+            const startTc = document.getElementById('start-trading-cards');
+            if (startTc) {
+                startTc.addEventListener('click', openTradingCards);
+            }
+
+            // Close button
+            const closeBtn = document.getElementById('tc-close-btn');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', closeTradingCards);
+            }
+
+            // Return link
+            const returnBtn = document.getElementById('tc-return-btn');
+            if (returnBtn) {
+                returnBtn.addEventListener('click', closeTradingCards);
+            }
+
+            // ESC key to close
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeTradingCards();
+                }
+            });
+
+            // Keyboard navigation for cards
+            document.addEventListener('keydown', (e) => {
+                const overlay = document.getElementById('trading-cards-overlay');
+                if (!overlay.classList.contains('active')) return;
+
+                const deck = document.getElementById('tc-card-deck');
+                const scrollAmount = 390;
+
+                if (e.key === 'ArrowRight') {
+                    deck.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                } else if (e.key === 'ArrowLeft') {
+                    deck.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+                }
+            });
+
+            // Server lights animation
+            function randomizeLights() {
+                document.querySelectorAll('.tc-light').forEach(light => {
+                    light.classList.toggle('on', Math.random() > 0.35);
+                });
+            }
+            setInterval(randomizeLights, 350);
+            randomizeLights();
+
+            // Quest shuffle system
+            const quests = [
+                "Learn something small. Apply it somewhere real.",
+                "Finish the draft. Polish it later.",
+                "Make one thing better than yesterday.",
+                "Ship it before it feels perfect.",
+                "Ask the question you've been avoiding."
+            ];
+
+            const statuses = [
+                "AVAILABLE FOR PARTY",
+                "SEEKING NEW ADVENTURE",
+                "READY TO JOIN YOUR QUEST",
+                "ACCEPTING SIDE QUESTS"
+            ];
+
+            const lores = [
+                "Started drawing before learning the rules. Still makes things up along the way.",
+                "Collects unfinished projects like rare items. Finishes them eventually.",
+                "Trained in the art of figuring it out. Specializes in quiet problem-solving."
+            ];
+
+            const flavors = [
+                '"Save often. Breaks are free."',
+                '"Grinding XP since the early levels."',
+                '"Not the chosen one. Just showed up."',
+                '"Loading... please stand by."'
+            ];
+
+            function getRandom(arr) {
+                return arr[Math.floor(Math.random() * arr.length)];
+            }
+
+            function shuffleQuest() {
+                const questText = document.getElementById('tcQuestText');
+                const statusText = document.getElementById('tcStatusText');
+                const loreText = document.getElementById('tcLoreText');
+                const flavorText = document.getElementById('tcFlavorText');
+                const backFlavorText = document.getElementById('tcBackFlavorText');
+
+                const elements = [questText, statusText, flavorText, loreText, backFlavorText];
+
+                elements.forEach(el => {
+                    if (el) el.style.opacity = '0';
+                });
+
+                setTimeout(() => {
+                    if (questText) questText.textContent = getRandom(quests);
+                    if (statusText) statusText.textContent = getRandom(statuses);
+                    if (flavorText) flavorText.textContent = getRandom(flavors);
+                    if (loreText) loreText.textContent = getRandom(lores);
+                    if (backFlavorText) backFlavorText.textContent = getRandom(flavors);
+
+                    elements.forEach(el => {
+                        if (el) el.style.opacity = '1';
+                    });
+                }, 200);
+            }
+
+            shuffleQuest();
+
+            // Space key for shuffle
+            document.addEventListener('keydown', (e) => {
+                if (e.code === 'Space') {
+                    const overlay = document.getElementById('trading-cards-overlay');
+                    if (!overlay.classList.contains('active')) return;
+
+                    const deck = document.getElementById('tc-card-deck');
+                    const card5 = document.querySelectorAll('.tc-card-wrapper')[4];
+                    if (!card5) return;
+
+                    const deckRect = deck.getBoundingClientRect();
+                    const cardRect = card5.getBoundingClientRect();
+                    const centerX = deckRect.left + deckRect.width / 2;
+                    const cardCenter = cardRect.left + cardRect.width / 2;
+
+                    if (Math.abs(cardCenter - centerX) < 200) {
+                        e.preventDefault();
+                        shuffleQuest();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
