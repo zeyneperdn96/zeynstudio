@@ -366,96 +366,30 @@ class WindowManager {
     }
 
     initializeMetbicWindow(windowEl) {
-        const log = windowEl.querySelector('#metbic-log');
-        const moduleInfo = windowEl.querySelector('#metbic-module-info');
         const previewImg = windowEl.querySelector('#metbic-preview-img');
-        const modules = windowEl.querySelectorAll('.metbic-module');
-        const buttons = windowEl.querySelectorAll('.metbic-btn');
+        const thumbs = windowEl.querySelectorAll('.metbic-thumb');
 
-        const moduleData = {
-            'tire-lever': {
-                name: 'Tire Lever',
-                desc: 'Specialized lever for quick tire removal. Ergonomic grip design prevents hand fatigue.',
-                img: 'assets/projects/metbic/hero.png'
-            },
-            'hex-nut': {
-                name: 'Hex Nut Set',
-                desc: '15mm, 10mm, 8mm sizes included. Hardened steel construction for durability.',
-                img: 'assets/projects/metbic/render1.png'
-            },
-            'wheel-align': {
-                name: 'Wheel Alignment Tool',
-                desc: 'Precision rim straightener. Fixes minor wheel wobbles on the trail.',
-                img: 'assets/projects/metbic/render2.png'
-            },
-            'file': {
-                name: 'Double-Sided File',
-                desc: 'Coarse and fine sides. Perfect for brake pad adjustment and burr removal.',
-                img: 'assets/projects/metbic/context.png'
-            },
-            'screwdriver': {
-                name: 'Screwdriver Bits',
-                desc: '6 interchangeable heads with magnetic holder. Phillips, flathead, and hex included.',
-                img: 'assets/projects/metbic/technical.png'
-            },
-            'storage': {
-                name: 'Storage Compartment',
-                desc: 'Secure space for spare screws, chain links, and small parts. Waterproof seal.',
-                img: 'assets/projects/metbic/hero.png'
-            }
-        };
+        // Gallery thumbnail clicks
+        thumbs.forEach(thumb => {
+            thumb.addEventListener('click', () => {
+                thumbs.forEach(t => t.classList.remove('active'));
+                thumb.classList.add('active');
 
-        const addLog = (type, message) => {
-            const line = document.createElement('div');
-            line.className = `metbic-log-line metbic-log-${type}`;
-            const prefix = type === 'info' ? '[INFO]' : type === 'warning' ? '[WARNING]' : type === 'action' ? '[ACTION]' : type === 'status' ? '[STATUS]' : '[ERROR]';
-            line.textContent = `${prefix} ${message}`;
-            log.appendChild(line);
-            log.scrollTop = log.scrollHeight;
-        };
-
-        // Module clicks
-        modules.forEach(mod => {
-            mod.addEventListener('click', () => {
-                modules.forEach(m => m.classList.remove('active'));
-                mod.classList.add('active');
-
-                const moduleKey = mod.dataset.module;
-                const data = moduleData[moduleKey];
-
-                if (data) {
-                    moduleInfo.innerHTML = `<strong>${data.name}</strong><br>${data.desc}`;
-                    if (data.img) previewImg.src = data.img;
-                    addLog('info', `Module selected: ${data.name}`);
+                const imgSrc = thumb.dataset.img;
+                if (imgSrc && previewImg) {
+                    previewImg.style.opacity = '0';
+                    setTimeout(() => {
+                        previewImg.src = imgSrc;
+                        previewImg.style.opacity = '1';
+                    }, 150);
                 }
             });
         });
 
-        // Button clicks
-        buttons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const action = btn.dataset.action;
-
-                if (action === 'toolkit') {
-                    addLog('action', 'Opening toolkit interface...');
-                    addLog('status', 'All 6 modules accessible');
-                } else if (action === 'repair') {
-                    addLog('warning', 'Repair mode activated');
-                    addLog('action', 'Diagnostics running...');
-                    setTimeout(() => addLog('status', 'System ready for repair'), 800);
-                } else if (action === 'load') {
-                    addLog('info', 'Loading modules from storage...');
-                    setTimeout(() => addLog('status', '6 modules loaded successfully'), 600);
-                } else if (action === 'recovery') {
-                    addLog('warning', 'Initiating system recovery...');
-                    setTimeout(() => addLog('info', 'Recovery point created'), 500);
-                    setTimeout(() => addLog('status', 'System stable'), 1000);
-                }
-            });
-        });
-
-        // Initial log
-        setTimeout(() => addLog('status', 'Ready for operation'), 500);
+        // Add smooth transition to preview image
+        if (previewImg) {
+            previewImg.style.transition = 'opacity 0.15s ease';
+        }
     }
 }
 
