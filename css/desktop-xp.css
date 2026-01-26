@@ -1,0 +1,59 @@
+/* Desktop-specific CSS overrides for XP look */
+
+/* Bliss Wallpaper Background */
+.desktop-container {
+    background: url('../assets/wallpaper/bliss.jpg') no-repeat center center !important;
+    background-size: cover !important;
+}
+
+/* Remove gradient overlay */
+.desktop-container::before {
+    display: none !important;
+}
+
+/* Larger Desktop Icons (80px - XP Large Icons) */
+.desktop-icons {
+    gap: 28px !important;
+}
+
+.desktop-icon {
+    width: 110px !important;
+    padding: 12px !important;
+}
+
+.icon-label {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    line-height: 1.3 !important;
+}
+
+/* Responsive overrides for mobile */
+@media only screen and (max-width: 768px) {
+    .desktop-icons {
+        gap: 12px !important;
+    }
+
+    .desktop-icon {
+        width: 72px !important;
+        padding: 6px !important;
+    }
+
+    .icon-label {
+        font-size: 10px !important;
+    }
+}
+
+@media only screen and (max-width: 380px) {
+    .desktop-icons {
+        gap: 8px !important;
+    }
+
+    .desktop-icon {
+        width: 60px !important;
+        padding: 4px !important;
+    }
+
+    .icon-label {
+        font-size: 9px !important;
+    }
+}
