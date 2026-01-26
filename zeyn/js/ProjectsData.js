@@ -6,7 +6,7 @@
 const projectsData = [
     {
         id: 1,
-        title: 'METBİC',
+        title: 'METBIC',
         category: 'industrial',
         thumbnail: 'assets/projects/metbic/hero.png',
         description: 'Compact Modular Bicycle Repair Kit',
@@ -15,9 +15,9 @@ const projectsData = [
         role: 'Product Designer (Research, Sketching, 3D Modeling)',
         caseStudy: {
             hero: 'assets/projects/metbic/hero.png',
-            intro: 'METBİC is a pocket-sized, all-in-one repair kit designed for mountain bikers. It solves the problem of carrying bulky tools by condensing essential maintenance functions into a 90mm x 60mm modular unit.',
+            intro: 'METBIC is a pocket-sized, all-in-one repair kit designed for mountain bikers. It solves the problem of carrying bulky tools by condensing essential maintenance functions into a 90mm x 60mm modular unit.',
             challenge: 'Professional mountain bikers often face mechanical failures like chain breaks or tire punctures on the trail. User research with personas like "Mehmet" (a 40-year-old pro cyclist) revealed that carrying multiple standalone tools disrupts the riding experience and takes up too much space. The goal was to design a tool that is both comprehensive and compact.',
-            solution: 'METBİC transforms from a compact box into a fully functional workshop. Dimensions: It measures just 90mm x 60mm x 30mm when closed, fitting easily into a pocket. Modular Tools: The kit includes a specialized tire lever, a rim straightener, a double-sided file, and a wrench. Versatility: It features a magnetic screwdriver slot with 6 interchangeable heads and a secure compartment for spare screws and hexagonal nuts (8mm, 10mm, 15mm).',
+            solution: 'METBIC transforms from a compact box into a fully functional workshop. Dimensions: It measures just 90mm x 60mm x 30mm when closed, fitting easily into a pocket. Modular Tools: The kit includes a specialized tire lever, a rim straightener, a double-sided file, and a wrench. Versatility: It features a magnetic screwdriver slot with 6 interchangeable heads and a secure compartment for spare screws and hexagonal nuts (8mm, 10mm, 15mm).',
             specs: {
                 material: 'Durable Polymer Casing with Metal Tools',
                 size: '9cm (H) x 6cm (W)',
@@ -33,6 +33,33 @@ const projectsData = [
     },
     {
         id: 2,
+        title: 'FIREBOX',
+        category: 'industrial',
+        thumbnail: 'assets/projects/firebox/hero.png',
+        description: 'Portable Camp & Cooking Station',
+        featured: true,
+        year: '2025',
+        role: 'Product Designer (Research, Sketching, 3D Modeling)',
+        caseStudy: {
+            hero: 'assets/projects/firebox/hero.png',
+            intro: 'FIREBOX is a portable, foldable camping fire pit and cooking station designed for outdoor enthusiasts. It transforms from a compact carrying case into a fully functional grill and fire pit, perfect for camping, tailgating, and backyard gatherings.',
+            challenge: 'Campers and outdoor enthusiasts struggle with bulky, heavy fire pits that are difficult to transport. Traditional camping grills lack versatility and proper airflow for efficient burning. The goal was to design a lightweight, portable solution that combines fire pit and cooking functionality.',
+            solution: 'FIREBOX features an innovative folding mechanism that collapses into a briefcase-like form for easy transport. The modular design includes removable grill grates, heat-resistant silicone handles, and an integrated ash drawer for easy cleanup.',
+            specs: {
+                material: 'Stainless Steel + Silicone Grips',
+                size: 'Compact folded dimensions',
+                components: 'Grill Grate, Fire Chamber, Ash Drawer, Folding Panels'
+            },
+            images: {
+                context: 'assets/projects/firebox/context.png',
+                render1: 'assets/projects/firebox/exploded.png',
+                render2: 'assets/projects/firebox/inuse.png',
+                technical: 'assets/projects/firebox/technical.png'
+            }
+        }
+    },
+    {
+        id: 10,
         title: 'Mobile Banking App',
         category: 'ui-ux',
         thumbnail: 'assets/projects/project-1.jpg',

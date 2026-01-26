@@ -334,6 +334,158 @@ const WindowTemplates = {
                 </div>
             </div>
         </div>
+    `,
+
+    // FIREBOX.exe - Portable Camp & Cooking Station
+    firebox: () => `
+        <div class="window-titlebar">
+            <span class="window-title">🔥 FIREBOX.exe — Portable Cooking Station</span>
+            <div class="window-controls">
+                <button class="win-btn win-minimize" data-action="minimize">_</button>
+                <button class="win-btn win-maximize" data-action="maximize">□</button>
+                <button class="win-btn win-close" data-action="close">×</button>
+            </div>
+        </div>
+        <div class="window-content" style="padding: 0; display: flex; flex-direction: column; height: 100%; font-family: 'Segoe UI', Tahoma, sans-serif; font-size: 11px;">
+            <style>
+                .firebox-container { display: flex; flex: 1; min-height: 0; }
+                .firebox-gallery { width: 100px; background: #f0f0f0; border-right: 1px solid #a0a0a0; display: flex; flex-direction: column; padding: 8px; gap: 8px; overflow-y: auto; }
+                .firebox-gallery-title { font-size: 9px; font-weight: bold; color: #666; text-transform: uppercase; letter-spacing: 0.5px; padding-bottom: 6px; border-bottom: 1px solid #ccc; margin-bottom: 4px; }
+                .firebox-thumb { width: 100%; aspect-ratio: 1; background: #fff; border: 2px solid #c0c0c0; border-radius: 3px; cursor: pointer; overflow: hidden; transition: all 0.15s; }
+                .firebox-thumb:hover { border-color: #e85d04; transform: scale(1.02); }
+                .firebox-thumb.active { border-color: #e85d04; box-shadow: 0 0 0 2px rgba(232,93,4,0.3); }
+                .firebox-thumb img { width: 100%; height: 100%; object-fit: cover; }
+                .firebox-main { flex: 1; display: flex; flex-direction: column; background: #fff; min-width: 0; }
+                .firebox-header { padding: 12px 16px; background: linear-gradient(180deg, #e85d04 0%, #dc2f02 100%); color: #fff; }
+                .firebox-header h2 { margin: 0; font-size: 14px; font-weight: 600; }
+                .firebox-header p { margin: 4px 0 0; font-size: 11px; opacity: 0.9; }
+                .firebox-content { flex: 1; display: flex; padding: 16px; gap: 16px; overflow: hidden; }
+                .firebox-preview { flex: 1; background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%); border: 2px solid #808080; border-radius: 4px; display: flex; align-items: center; justify-content: center; min-width: 0; position: relative; }
+                .firebox-preview img { max-width: 95%; max-height: 95%; object-fit: contain; border-radius: 4px; }
+                .firebox-info { width: 220px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; }
+                .firebox-info-box { background: #fff8f0; border: 1px solid #ffd6a5; border-radius: 4px; padding: 12px; }
+                .firebox-info-title { font-size: 9px; font-weight: bold; color: #e85d04; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+                .firebox-info-text { font-size: 11px; color: #444; line-height: 1.6; }
+                .firebox-statusbar { padding: 6px 12px; background: linear-gradient(180deg, #e8e8e8 0%, #d0d0d0 100%); border-top: 1px solid #a0a0a0; display: flex; justify-content: space-between; font-size: 10px; color: #555; }
+                .firebox-status-item { display: flex; align-items: center; gap: 6px; }
+                .firebox-status-led { width: 8px; height: 8px; border-radius: 50%; background: #e85d04; box-shadow: 0 0 4px #e85d04; }
+            </style>
+
+            <div class="firebox-container">
+                <!-- Gallery Sidebar -->
+                <div class="firebox-gallery">
+                    <div class="firebox-gallery-title">Gallery</div>
+                    <div class="firebox-thumb active" data-img="assets/projects/firebox/hero.png" data-index="0">
+                        <img src="assets/projects/firebox/hero.png" alt="Hero">
+                    </div>
+                    <div class="firebox-thumb" data-img="assets/projects/firebox/technical.png" data-index="1">
+                        <img src="assets/projects/firebox/technical.png" alt="Technical">
+                    </div>
+                    <div class="firebox-thumb" data-img="assets/projects/firebox/exploded.png" data-index="2">
+                        <img src="assets/projects/firebox/exploded.png" alt="Exploded">
+                    </div>
+                    <div class="firebox-thumb" data-img="assets/projects/firebox/exploded-fire.png" data-index="3">
+                        <img src="assets/projects/firebox/exploded-fire.png" alt="Exploded Fire">
+                    </div>
+                    <div class="firebox-thumb" data-img="assets/projects/firebox/details.png" data-index="4">
+                        <img src="assets/projects/firebox/details.png" alt="Details">
+                    </div>
+                    <div class="firebox-thumb" data-img="assets/projects/firebox/inuse.png" data-index="5">
+                        <img src="assets/projects/firebox/inuse.png" alt="In Use">
+                    </div>
+                    <div class="firebox-thumb" data-img="assets/projects/firebox/context.png" data-index="6">
+                        <img src="assets/projects/firebox/context.png" alt="Context">
+                    </div>
+                    <div class="firebox-thumb" data-img="assets/projects/firebox/carrying.png" data-index="7">
+                        <img src="assets/projects/firebox/carrying.png" alt="Carrying">
+                    </div>
+                    <div class="firebox-thumb" data-img="assets/projects/firebox/product.png" data-index="8">
+                        <img src="assets/projects/firebox/product.png" alt="Product">
+                    </div>
+                </div>
+
+                <!-- Main Area -->
+                <div class="firebox-main">
+                    <!-- Header -->
+                    <div class="firebox-header">
+                        <h2>FIREBOX — Portable Camp & Cooking Station</h2>
+                        <p>Foldable fire pit and grill for outdoor adventures • 2025 • Product Design</p>
+                    </div>
+
+                    <!-- Content Area -->
+                    <div class="firebox-content">
+                        <!-- Preview with Arrow Navigation -->
+                        <div class="firebox-preview">
+                            <button class="firebox-arrow firebox-arrow-left" id="firebox-prev" style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.9); border: 1px solid #ccc; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: all 0.15s;">❮</button>
+                            <img src="assets/projects/firebox/hero.png" alt="FIREBOX" id="firebox-preview-img">
+                            <button class="firebox-arrow firebox-arrow-right" id="firebox-next" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.9); border: 1px solid #ccc; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: all 0.15s;">❯</button>
+                            <div class="firebox-counter" style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); color: #fff; padding: 4px 12px; border-radius: 12px; font-size: 11px;">1 / 9</div>
+                        </div>
+
+                        <!-- Info Panel - Scrollable Case Study -->
+                        <div class="firebox-info">
+                            <div class="firebox-info-box">
+                                <div class="firebox-info-title">Project Overview</div>
+                                <div class="firebox-info-text">
+                                    FIREBOX is a portable, foldable fire pit and cooking station. It transforms from a compact briefcase into a fully functional grill and campfire setup.
+                                </div>
+                            </div>
+
+                            <div class="firebox-info-box">
+                                <div class="firebox-info-title">The Challenge</div>
+                                <div class="firebox-info-text">
+                                    Traditional camping fire pits are bulky and difficult to transport. Outdoor enthusiasts need a lightweight, portable solution that combines fire pit and cooking functionality.
+                                </div>
+                            </div>
+
+                            <div class="firebox-info-box">
+                                <div class="firebox-info-title">My Role</div>
+                                <div class="firebox-info-text">
+                                    <strong>Product Designer</strong><br>
+                                    User Research, Concept Development, Sketching, 3D Modeling (Rhino), Rendering
+                                </div>
+                            </div>
+
+                            <div class="firebox-info-box">
+                                <div class="firebox-info-title">Key Features</div>
+                                <div class="firebox-info-text">
+                                    • Foldable compact design<br>
+                                    • Heat-resistant silicone handles<br>
+                                    • Integrated ash drawer<br>
+                                    • Airflow ventilation system<br>
+                                    • Removable grill grate<br>
+                                    • Modular quick setup<br>
+                                    • Sliding lock mechanism
+                                </div>
+                            </div>
+
+                            <div class="firebox-info-box">
+                                <div class="firebox-info-title">Specifications</div>
+                                <div class="firebox-info-text">
+                                    <strong>Material:</strong> Stainless Steel<br>
+                                    <strong>Handles:</strong> Heat-Resistant Silicone<br>
+                                    <strong>Features:</strong> Foldable panels, Ash drawer
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status Bar -->
+                    <div class="firebox-statusbar">
+                        <div class="firebox-status-item">
+                            <div class="firebox-status-led"></div>
+                            <span>Industrial Design Project</span>
+                        </div>
+                        <div class="firebox-status-item">
+                            <span>Zeynep Erden • 2025</span>
+                        </div>
+                        <div class="firebox-status-item">
+                            <span>9 Renders</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     `
 };
 

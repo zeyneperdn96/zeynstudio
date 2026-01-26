@@ -784,6 +784,111 @@
     }
 
     /* ========================================
+       FIREBOX Window - Mobile Layout
+       ======================================== */
+    .firebox-container {
+        flex-direction: column !important;
+    }
+
+    .firebox-gallery {
+        width: 100% !important;
+        flex-direction: row !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        padding: 8px !important;
+        gap: 8px !important;
+        border-right: none !important;
+        border-bottom: 1px solid #a0a0a0 !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .firebox-gallery-title {
+        display: none !important;
+    }
+
+    .firebox-thumb {
+        width: 60px !important;
+        min-width: 60px !important;
+        aspect-ratio: 1 !important;
+    }
+
+    .firebox-main {
+        min-height: 0 !important;
+    }
+
+    .firebox-header {
+        padding: 10px 12px !important;
+    }
+
+    .firebox-header h2 {
+        font-size: 13px !important;
+    }
+
+    .firebox-header p {
+        font-size: 10px !important;
+    }
+
+    .firebox-content {
+        flex-direction: column !important;
+        padding: 10px !important;
+        gap: 10px !important;
+        overflow-y: auto !important;
+    }
+
+    .firebox-preview {
+        width: 100% !important;
+        min-height: 200px !important;
+        max-height: 250px !important;
+    }
+
+    .firebox-preview img {
+        max-width: 90% !important;
+        max-height: 90% !important;
+    }
+
+    .firebox-arrow {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 16px !important;
+    }
+
+    .firebox-counter {
+        font-size: 10px !important;
+        padding: 3px 10px !important;
+    }
+
+    .firebox-info {
+        width: 100% !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        overflow-y: visible !important;
+    }
+
+    .firebox-info-box {
+        flex: 1 1 calc(50% - 4px) !important;
+        min-width: 140px !important;
+        padding: 10px !important;
+    }
+
+    .firebox-info-title {
+        font-size: 8px !important;
+        margin-bottom: 6px !important;
+    }
+
+    .firebox-info-text {
+        font-size: 10px !important;
+        line-height: 1.4 !important;
+    }
+
+    .firebox-statusbar {
+        padding: 6px 10px !important;
+        font-size: 9px !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+
+    /* ========================================
        Projects Grid - Mobile
        ======================================== */
     .projects-grid {

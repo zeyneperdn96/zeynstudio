@@ -48,7 +48,8 @@ class WindowManager {
             about: { width: 900, height: 700 },
             work: { width: 700, height: 550 },
             showreel: { width: 400, height: 450 },
-            metbic: { width: 820, height: 520 }
+            metbic: { width: 820, height: 520 },
+            firebox: { width: 820, height: 520 }
         };
 
         const customSize = windowSizes[windowId] || {};
@@ -321,12 +322,23 @@ class WindowManager {
         if (windowId === 'metbic') {
             this.initializeMetbicWindow(windowEl);
         }
+
+        // FIREBOX.exe interactive window
+        if (windowId === 'firebox') {
+            this.initializeFireboxWindow(windowEl);
+        }
     }
 
     openCaseStudyWindow(project, projectsManager) {
         // Special handling for METBIC - open XP-style window
-        if (project.title === 'METBİC') {
-            this.openWindow('metbic', { width: 800, height: 520 });
+        if (project.title === 'METBIC') {
+            this.openWindow('metbic', { width: 820, height: 520 });
+            return;
+        }
+
+        // Special handling for FIREBOX - open XP-style window
+        if (project.title === 'FIREBOX') {
+            this.openWindow('firebox', { width: 820, height: 520 });
             return;
         }
 
@@ -384,6 +396,66 @@ class WindowManager {
         const prevBtn = windowEl.querySelector('#metbic-prev');
         const nextBtn = windowEl.querySelector('#metbic-next');
         const counter = windowEl.querySelector('.metbic-counter');
+
+        let currentIndex = 0;
+        const totalImages = thumbs.length;
+
+        // Function to update gallery
+        const updateGallery = (index) => {
+            currentIndex = index;
+            if (currentIndex < 0) currentIndex = totalImages - 1;
+            if (currentIndex >= totalImages) currentIndex = 0;
+
+            const targetThumb = thumbs[currentIndex];
+            const imgSrc = targetThumb.dataset.img;
+
+            // Update active thumb
+            thumbs.forEach(t => t.classList.remove('active'));
+            targetThumb.classList.add('active');
+
+            // Update preview image with fade
+            if (imgSrc && previewImg) {
+                previewImg.style.opacity = '0';
+                setTimeout(() => {
+                    previewImg.src = imgSrc;
+                    previewImg.style.opacity = '1';
+                }, 150);
+            }
+
+            // Update counter
+            if (counter) {
+                counter.textContent = `${currentIndex + 1} / ${totalImages}`;
+            }
+
+            // Scroll thumb into view
+            targetThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        };
+
+        // Arrow button clicks
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => updateGallery(currentIndex - 1));
+        }
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => updateGallery(currentIndex + 1));
+        }
+
+        // Gallery thumbnail clicks
+        thumbs.forEach((thumb, index) => {
+            thumb.addEventListener('click', () => updateGallery(index));
+        });
+
+        // Add smooth transition to preview image
+        if (previewImg) {
+            previewImg.style.transition = 'opacity 0.15s ease';
+        }
+    }
+
+    initializeFireboxWindow(windowEl) {
+        const previewImg = windowEl.querySelector('#firebox-preview-img');
+        const thumbs = windowEl.querySelectorAll('.firebox-thumb');
+        const prevBtn = windowEl.querySelector('#firebox-prev');
+        const nextBtn = windowEl.querySelector('#firebox-next');
+        const counter = windowEl.querySelector('.firebox-counter');
 
         let currentIndex = 0;
         const totalImages = thumbs.length;
