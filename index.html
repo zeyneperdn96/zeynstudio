@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zeyn XP - Industrial Designer</title>
+    <link rel="stylesheet" href="https://demo.themesberg.com/windows-95-ui-kit/css/windows-95.min.css">
+    <link rel="stylesheet" href="css/boot.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/boot-audio.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/icons.css">
+    <link rel="stylesheet" href="css/start-menu.css">
+    <link rel="stylesheet" href="css/icon-system.css">
+    <link rel="stylesheet" href="css/desktop-xp.css">
+</head>
+
+<body>
+
+    <!-- XP Startup Sound -->
+    <audio id="xp-startup-sound" preload="auto">
+        <source src="assets/audio/xp-startup.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- BOOT SEQUENCE -->
+    <div id="boot-container" class="boot-container">
+
+        <div id="boot-bios" class="boot-stage active">
+            <video id="boot-video" class="boot-video" muted playsinline preload="auto">
+                <source src="assets/boot/zeynepxpboo.mp4" type="video/mp4">
+            </video>
+        </div>
+    </div>
+
+    <!-- LOGIN SCREEN - Image Based -->
+    <div id="login-container" class="login-container hidden">
+        <img src="assets/boot/login3.png" alt="Login" class="login-image">
+    </div>
+
+    <!-- WELCOME SCREEN - "The journey begins" -->
+    <div id="welcome-container" class="welcome-container hidden">
+        <img src="assets/welcome-screen.png" alt="The journey begins" class="welcome-image">
+    </div>
+
+    <!-- DESKTOP ENVIRONMENT -->
+    <div id="desktop-container" class="desktop-container hidden">
+
+        <!-- Desktop Icons -->
+        <div class="desktop-icons">
+            <div class="desktop-icon" data-window="work">
+                <div class="icon-image">
+                    <img src="assets/icons/my-project.png" alt="Work">
+                </div>
+                <span class="icon-label">My Work</span>
+            </div>
+            <div class="desktop-icon" data-window="about">
+                <div class="icon-image">
+                    <img src="assets/icons/about-me.png" alt="About">
+                </div>
+                <span class="icon-label">About Me</span>
+            </div>
+            <div class="desktop-icon" data-window="contact">
+                <div class="icon-image">
+                    <img src="assets/icons/contact-me.png" alt="Contact">
+                </div>
+                <span class="icon-label">Contact</span>
+            </div>
+            <div class="desktop-icon" data-window="illustration">
+                <div class="icon-image">
+                    <img src="assets/icons/my-gallery.png" alt="Gallery">
+                </div>
+                <span class="icon-label">Gallery</span>
+            </div>
+        </div>
+
+        <div class="windows-container" id="windows-container"></div>
+
+        <!-- Taskbar -->
+        <div class="taskbar">
+            <button class="start-button btn btn-primary" id="start-btn">
+                <span class="start-logo">🪟</span>
+                <span>Start</span>
+            </button>
+            <div class="taskbar-separator"></div>
+            <div class="taskbar-windows" id="taskbar-windows"></div>
+            <div class="system-tray">
+                <span class="tray-icon">🎨</span>
+                <span class="tray-clock" id="tray-clock">01:31</span>
+            </div>
+        </div>
+
+        <!-- XP-STYLE START MENU -->
+        <div class="start-menu hidden" id="start-menu">
+
+            <!-- HEADER -->
+            <div class="start-menu-header">
+                <div class="start-user-avatar">Z</div>
+                <div class="start-user-info">
+                    <div class="start-user-name">Zeyn XP</div>
+                    <div class="start-user-title">Industrial Designer</div>
+                </div>
+            </div>
+
+            <!-- SINGLE COLUMN BODY -->
+            <div class="start-menu-body">
+                <div class="start-menu-programs">
+                    <div class="start-menu-item" data-action="window" data-window="work">
+                        <img src="assets/icons/my-project.png" class="menu-item-icon" alt="">
+                        <div class="menu-item-text">
+                            <div class="menu-item-title">My Projects</div>
+                            <div class="menu-item-desc">View my work</div>
+                        </div>
+                    </div>
+
+                    <div class="start-menu-item" data-action="window" data-window="contact">
+                        <img src="assets/icons/contact-me.png" class="menu-item-icon" style="width: 48px; height: 48px;" alt="">
+                        <div class="menu-item-text">
+                            <div class="menu-item-title">Contact Me</div>
+                            <div class="menu-item-desc">Send me a message</div>
+                        </div>
+                    </div>
+
+                    <div class="start-menu-item" data-action="window" data-window="about">
+                        <img src="assets/icons/about-me.png" class="menu-item-icon" alt="">
+                        <div class="menu-item-text">
+                            <div class="menu-item-title">About Me</div>
+                            <div class="menu-item-desc">My story</div>
+                        </div>
+                    </div>
+
+                    <div class="start-menu-item" data-action="window" data-window="showreel">
+                        <img src="assets/icons/icon-mediaplayer.svg" class="menu-item-icon" alt="">
+                        <div class="menu-item-text">
+                            <div class="menu-item-title">Media Player</div>
+                            <div class="menu-item-desc">Music</div>
+                        </div>
+                    </div>
+
+                    <div class="start-menu-item" data-action="window" data-window="imageviewer">
+                        <img src="assets/icons/icon-imageviewer.svg" class="menu-item-icon" alt="">
+                        <div class="menu-item-text">
+                            <div class="menu-item-title">Image Viewer</div>
+                            <div class="menu-item-desc">View pictures</div>
+                        </div>
+                    </div>
+
+                    <div class="start-menu-item" data-action="window" data-window="terminal">
+                        <img src="assets/icons/icon-cmd.svg" class="menu-item-icon" alt="">
+                        <div class="menu-item-text">
+                            <div class="menu-item-title">Command Prompt</div>
+                            <div class="menu-item-desc">Terminal</div>
+                        </div>
+                    </div>
+
+                    <div class="start-menu-divider"></div>
+
+                    <div class="start-menu-item" data-action="link" data-link="github">
+                        <img src="assets/icons/icon-github.svg" class="menu-item-icon" alt="">
+                        <div class="menu-item-text">
+                            <div class="menu-item-title">Github</div>
+                        </div>
+                    </div>
+
+                    <div class="start-menu-item" data-action="link" data-link="linkedin">
+                        <img src="assets/icons/icon-linkedin.svg" class="menu-item-icon" alt="">
+                        <div class="menu-item-text">
+                            <div class="menu-item-title">LinkedIn</div>
+                        </div>
+                    </div>
+
+                    <div class="start-menu-divider"></div>
+
+                    <div class="start-menu-item all-programs" id="all-programs-btn">
+                        <img src="assets/icons/All Programs.png" class="menu-item-icon-small" alt="">
+                        <span style="flex: 1; font-size: 12px;">All Programs</span>
+                        <span class="arrow">►</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ALL PROGRAMS SUBMENU (opens to the right) -->
+            <div class="all-programs-submenu hidden" id="all-programs-submenu">
+                <div class="all-programs-item" data-program="figma">
+                    <img src="assets/icons/icon-figma.png" class="program-icon" alt="">
+                    <span>Figma</span>
+                </div>
+                <div class="all-programs-item" data-program="photoshop">
+                    <img src="assets/icons/icon-photoshop.png" class="program-icon" alt="">
+                    <span>Adobe Photoshop 2026</span>
+                </div>
+                <div class="all-programs-item" data-program="illustrator">
+                    <img src="assets/icons/icon-illustrator.png" class="program-icon" alt="">
+                    <span>Adobe Illustrator 2026</span>
+                </div>
+                <div class="all-programs-item" data-program="aftereffects">
+                    <img src="assets/icons/icon-aftereffects.png" class="program-icon" alt="">
+                    <span>Adobe After Effects</span>
+                </div>
+                <div class="all-programs-item" data-program="blender">
+                    <img src="assets/icons/icon-blender.png" class="program-icon" alt="">
+                    <span>Blender</span>
+                </div>
+                <div class="all-programs-item" data-program="rhino">
+                    <img src="assets/icons/icon-rhino.png" class="program-icon" alt="">
+                    <span>Rhino - Rhinoceros 3D</span>
+                </div>
+                <div class="all-programs-item" data-program="3dsmax">
+                    <img src="assets/icons/icon-3dsmax.png" class="program-icon" alt="">
+                    <span>Autodesk 3ds Max</span>
+                </div>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="start-menu-footer">
+                <button class="btn btn-warning" id="logoff-btn">
+                    <img src="assets/icons/icon-logoff.svg" alt="">
+                    Log Off
+                </button>
+                <button class="btn btn-danger" id="shutdown-btn">
+                    <img src="assets/icons/icon-shutdown.svg" alt="">
+                    Shut Down
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Mobile View -->
+    <div id="mobile-view" class="mobile-view hidden">
+        <!-- XP Header Bar -->
+        <div class="mobile-xp-header">
+            <div class="mobile-xp-header-left">
+                <img src="assets/icons/about-me.png" alt="Zeyn" class="mobile-xp-avatar">
+                <span class="mobile-xp-logo">Zeyn XP</span>
+            </div>
+        </div>
+
+        <!-- Scrollable Content -->
+        <div class="mobile-content">
+            <!-- Profile Card -->
+            <div class="mobile-xp-window">
+                <div class="mobile-xp-titlebar">
+                    <span class="mobile-xp-titlebar-text">About Me</span>
+                    <div class="mobile-xp-titlebar-buttons">
+                        <span class="mobile-xp-btn-min"></span>
+                        <span class="mobile-xp-btn-max"></span>
+                        <span class="mobile-xp-btn-close"></span>
+                    </div>
+                </div>
+                <div class="mobile-xp-window-body mobile-profile">
+                    <img src="assets/icons/about-me.png" alt="About Me" class="mobile-profile-icon">
+                    <h2 class="mobile-profile-name">Zeyn</h2>
+                    <p class="mobile-profile-title">Industrial Designer</p>
+                    <p id="mobile-bio" class="mobile-profile-bio">Industrial designer passionate about creating meaningful experiences.</p>
+                </div>
+            </div>
+
+            <!-- Skills Card -->
+            <div class="mobile-xp-window">
+                <div class="mobile-xp-titlebar">
+                    <span class="mobile-xp-titlebar-text">Programs</span>
+                    <div class="mobile-xp-titlebar-buttons">
+                        <span class="mobile-xp-btn-min"></span>
+                        <span class="mobile-xp-btn-max"></span>
+                        <span class="mobile-xp-btn-close"></span>
+                    </div>
+                </div>
+                <div class="mobile-xp-window-body mobile-skills">
+                    <div class="mobile-skill-item">
+                        <img src="assets/icons/icon-figma.png" alt="Figma">
+                        <span>Figma</span>
+                    </div>
+                    <div class="mobile-skill-item">
+                        <img src="assets/icons/icon-photoshop.png" alt="Photoshop">
+                        <span>Photoshop</span>
+                    </div>
+                    <div class="mobile-skill-item">
+                        <img src="assets/icons/icon-illustrator.png" alt="Illustrator">
+                        <span>Illustrator</span>
+                    </div>
+                    <div class="mobile-skill-item">
+                        <img src="assets/icons/icon-blender.png" alt="Blender">
+                        <span>Blender</span>
+                    </div>
+                    <div class="mobile-skill-item">
+                        <img src="assets/icons/icon-rhino.png" alt="Rhino">
+                        <span>Rhino</span>
+                    </div>
+                    <div class="mobile-skill-item">
+                        <img src="assets/icons/icon-3dsmax.png" alt="3ds Max">
+                        <span>3ds Max</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Links Card -->
+            <div class="mobile-xp-window">
+                <div class="mobile-xp-titlebar">
+                    <span class="mobile-xp-titlebar-text">Links</span>
+                    <div class="mobile-xp-titlebar-buttons">
+                        <span class="mobile-xp-btn-min"></span>
+                        <span class="mobile-xp-btn-max"></span>
+                        <span class="mobile-xp-btn-close"></span>
+                    </div>
+                </div>
+                <div class="mobile-xp-window-body mobile-links">
+                    <a href="#" id="mobile-linkedin" class="mobile-xp-button" target="_blank">
+                        <img src="assets/icons/icon-linkedin.svg" alt="LinkedIn">
+                        <span>LinkedIn</span>
+                    </a>
+                    <a href="#" id="mobile-github" class="mobile-xp-button" target="_blank">
+                        <img src="assets/icons/icon-github.svg" alt="GitHub">
+                        <span>GitHub</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Contact Card -->
+            <div class="mobile-xp-window">
+                <div class="mobile-xp-titlebar">
+                    <span class="mobile-xp-titlebar-text">Contact</span>
+                    <div class="mobile-xp-titlebar-buttons">
+                        <span class="mobile-xp-btn-min"></span>
+                        <span class="mobile-xp-btn-max"></span>
+                        <span class="mobile-xp-btn-close"></span>
+                    </div>
+                </div>
+                <div class="mobile-xp-window-body mobile-contact">
+                    <img src="assets/icons/contact-me.png" alt="Contact" class="mobile-contact-icon">
+                    <p>Get in touch for collaborations.</p>
+                    <a href="mailto:hello@zeynstudio.com" class="mobile-xp-button mobile-xp-button-primary">
+                        <span>Email Me</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Desktop Notice -->
+            <div class="mobile-xp-notice">
+                Best experienced on desktop
+            </div>
+        </div>
+
+        <!-- XP Taskbar Footer -->
+        <div class="mobile-xp-taskbar">
+            <div class="mobile-xp-start-btn">
+                <span class="mobile-xp-start-text">ZeynStudio</span>
+            </div>
+            <div class="mobile-xp-taskbar-right">
+                <span class="mobile-xp-clock" id="mobile-clock">12:00</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/ProjectsData.js"></script>
+    <script src="js/WindowTemplates.js"></script>
+    <script src="js/BootSequence.js"></script>
+    <script src="js/WindowManager.js"></script>
+    <script src="js/StartMenu.js"></script>
+    <script src="js/MediaPlayer.js"></script>
+    <script src="js/Terminal.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
