@@ -100,6 +100,50 @@
     }
 }
 
+@media (max-width: 390px) {
+    .login-hit-area {
+        left: 68%;
+        top: 43%;
+        width: 70px;
+        height: 70px;
+    }
+}
+
+@media (max-width: 360px) {
+    .login-hit-area {
+        left: 66%;
+        top: 44%;
+        width: 60px;
+        height: 60px;
+        border-width: 2px;
+    }
+
+    .login-hit-area:hover {
+        border-width: 2px;
+    }
+}
+
+/* Landscape mode adjustments */
+@media (max-height: 500px) and (orientation: landscape) {
+    .login-image {
+        object-fit: contain;
+    }
+
+    .login-hit-area {
+        left: 73%;
+        top: 45%;
+        width: 90px;
+        height: 90px;
+    }
+}
+
+/* Safe area support for notched phones */
+@supports (padding: max(0px)) {
+    .login-container {
+        padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+}
+
 /* ========================================
    WELCOME SCREEN - "The journey begins"
    ======================================== */
@@ -138,4 +182,25 @@
     object-fit: cover;
     object-position: center;
     display: block;
+}
+
+/* Welcome screen responsive */
+@media (max-width: 768px) {
+    .welcome-image {
+        object-fit: contain;
+        background: #1a3180;
+    }
+}
+
+@media (max-width: 480px) {
+    .welcome-container {
+        background-color: #1a3180;
+    }
+}
+
+/* Safe area for welcome screen */
+@supports (padding: max(0px)) {
+    .welcome-container {
+        padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
 }
