@@ -84,14 +84,14 @@ const WindowTemplates = {
                 <button class="win-btn win-close" data-action="close">×</button>
             </div>
         </div>
-        <div class="window-content" style="overflow-y: auto;">
+        <div class="window-content" style="overflow-y: auto; padding: 16px;">
             <style>
                 .gallery-section-title { font-size: 13px; font-weight: 700; color: #333; margin: 16px 0 8px; padding-bottom: 6px; border-bottom: 2px solid #0078d4; display: flex; align-items: center; gap: 6px; }
                 .gallery-section-title:first-child { margin-top: 0; }
-                .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
-                .gallery-item { aspect-ratio: 4/3; border: 2px solid #c0c0c0; border-radius: 4px; overflow: hidden; cursor: pointer; transition: all 0.2s; background: #f0f0f0; }
+                .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-bottom: 16px; }
+                .gallery-item { min-height: 100px; border: 2px solid #c0c0c0; border-radius: 4px; overflow: hidden; cursor: pointer; transition: all 0.2s; background: #f0f0f0; }
                 .gallery-item:hover { border-color: #0078d4; transform: scale(1.03); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-                .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+                .gallery-item img { width: 100%; height: auto; display: block; object-fit: cover; }
                 .gallery-lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 99999; align-items: center; justify-content: center; cursor: pointer; }
                 .gallery-lightbox.active { display: flex; }
                 .gallery-lightbox img { max-width: 90%; max-height: 90%; object-fit: contain; border-radius: 6px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
