@@ -1486,10 +1486,10 @@
             </div>
             <div class="wlm-titlebar-text">Zeyn Chat - Zeynep Erden</div>
             <div class="wlm-window-controls">
-                <button class="wlm-ctrl-btn wlm-sound-btn" id="btnSound" title="Sesleri aç/kapat">🔊</button>
-                <button class="wlm-ctrl-btn" id="btnMin" title="Simge Durumuna Küçült">─</button>
-                <button class="wlm-ctrl-btn" id="btnMax" title="Ekranı Kapla">☐</button>
-                <button class="wlm-ctrl-btn close-btn" id="btnClose" title="Kapat">✕</button>
+                <button class="wlm-ctrl-btn wlm-sound-btn" id="btnSound" title="Toggle sounds">🔊</button>
+                <button class="wlm-ctrl-btn" id="btnMin" title="Minimize">─</button>
+                <button class="wlm-ctrl-btn" id="btnMax" title="Maximize">☐</button>
+                <button class="wlm-ctrl-btn close-btn" id="btnClose" title="Close">✕</button>
             </div>
         </div>
 
@@ -1498,7 +1498,7 @@
         <div class="wlm-header-panel">
             <!-- Zeynep -->
             <div class="wlm-user-section">
-                <div class="wlm-avatar-frame" id="zeynepAvatar" title="Kişi kartını görüntüle">
+                <div class="wlm-avatar-frame" id="zeynepAvatar" title="View contact card">
                     <div class="wlm-avatar-placeholder zeynep">Z</div>
                     <div class="wlm-avatar-status-gem online" id="zeynepStatusGem"></div>
                 </div>
@@ -1507,47 +1507,47 @@
                         <span class="wlm-status-indicator" id="zeynepStatusDot"></span>
                         Zeynep
                     </div>
-                    <div class="wlm-status-text" id="zeynepStatusText">(Çevrimiçi)</div>
-                    <div class="wlm-personal-msg">✨ Tasarımlarla dünyayı keşfediyorum</div>
+                    <div class="wlm-status-text" id="zeynepStatusText">(Online)</div>
+                    <div class="wlm-personal-msg">✨ Exploring the world through design</div>
                     <div class="wlm-now-playing" id="nowPlaying">
                         <span class="wlm-now-playing-icon">♫</span>
                         <span class="wlm-now-playing-text" id="nowPlayingText">Daft Punk - Digital Love</span>
                     </div>
-                    <div class="wlm-online-since" id="onlineSince">Çevrimiçi olalı: 2 saat</div>
+                    <div class="wlm-online-since" id="onlineSince">Online for: 2 hours</div>
                 </div>
             </div>
 
             <!-- Visitor -->
             <div class="wlm-user-section right" style="position: relative;">
-                <div class="wlm-avatar-frame user-avatar" id="visitorAvatar" title="Durumunu değiştir">
+                <div class="wlm-avatar-frame user-avatar" id="visitorAvatar" title="Change status">
                     <div class="wlm-avatar-placeholder visitor">?</div>
                     <div class="wlm-avatar-status-gem online" id="visitorStatusGem"></div>
                 </div>
                 <div class="wlm-user-info">
                     <div class="wlm-user-name">
-                        Sen 👋
+                        You 👋
                         <span class="wlm-status-indicator" id="visitorStatusDot"></span>
                     </div>
-                    <div class="wlm-status-text" id="visitorStatusText">(Çevrimiçi)</div>
+                    <div class="wlm-status-text" id="visitorStatusText">(Online)</div>
                 </div>
 
                 <div class="wlm-status-dropdown" id="statusDropdown">
                     <div class="wlm-status-option active" data-status="online">
                         <div class="wlm-status-option-dot" style="background: #7CB87C;"></div>
-                        Çevrimiçi
+                        Online
                     </div>
                     <div class="wlm-status-option" data-status="busy">
                         <div class="wlm-status-option-dot" style="background: #E04343;"></div>
-                        Meşgul
+                        Busy
                     </div>
                     <div class="wlm-status-option" data-status="away">
                         <div class="wlm-status-option-dot" style="background: #F5A623;"></div>
-                        Uzakta
+                        Away
                     </div>
                     <div class="wlm-status-divider"></div>
                     <div class="wlm-status-option" data-status="offline">
                         <div class="wlm-status-option-dot" style="background: #999;"></div>
-                        Çevrimdışı Görün
+                        Appear Offline
                     </div>
                 </div>
             </div>
@@ -1555,20 +1555,20 @@
 
         <!-- Toolbar -->
         <div class="wlm-toolbar">
-            <button class="wlm-tool-btn" id="btnSendFile" title="Dosya gönder">
+            <button class="wlm-tool-btn" id="btnSendFile" title="Send a file">
                 <span class="tool-icon">📎</span>
-                <span>Dosya</span>
+                <span>File</span>
             </button>
-            <button class="wlm-tool-btn" id="btnGames" title="Oyunlar">
+            <button class="wlm-tool-btn" id="btnGames" title="Games">
                 <span class="tool-icon">🎮</span>
-                <span>Oyunlar</span>
+                <span>Games</span>
             </button>
             <div class="wlm-toolbar-separator"></div>
-            <button class="wlm-tool-btn" id="btnBackground" title="Arka plan değiştir">
+            <button class="wlm-tool-btn" id="btnBackground" title="Change background">
                 <span class="tool-icon">🎨</span>
-                <span>Tema</span>
+                <span>Theme</span>
             </button>
-            <button class="wlm-tool-btn" id="btnBlock" title="Kişiyi engelle">
+            <button class="wlm-tool-btn" id="btnBlock" title="Block contact">
                 <span class="tool-icon">🚫</span>
             </button>
             <div class="wlm-toolbar-separator"></div>
@@ -1589,125 +1589,125 @@
         <!-- Input Section -->
         <div class="wlm-input-section">
             <div class="wlm-emoticon-bar">
-                <button class="wlm-emo-btn has-dropdown" id="btnEmoji" title="İfade seç">😊</button>
-                <button class="wlm-emo-btn has-dropdown" id="btnWink" title="Wink gönder">😉</button>
-                <button class="wlm-emo-btn" id="btnNudge" title="Titreşim gönder">📳</button>
-                <button class="wlm-emo-btn" id="btnFont" title="Yazı tipi">🔤</button>
-                <button class="wlm-emo-btn" id="btnVoiceClip" title="Ses kaydı">🎤</button>
+                <button class="wlm-emo-btn has-dropdown" id="btnEmoji" title="Select emoticon">😊</button>
+                <button class="wlm-emo-btn has-dropdown" id="btnWink" title="Send a wink">😉</button>
+                <button class="wlm-emo-btn" id="btnNudge" title="Send a nudge">📳</button>
+                <button class="wlm-emo-btn" id="btnFont" title="Font">🔤</button>
+                <button class="wlm-emo-btn" id="btnVoiceClip" title="Voice clip">🎤</button>
             </div>
 
             <!-- Emoticon Picker -->
             <div class="wlm-emoticon-picker" id="emojiPicker">
                 <div class="wlm-picker-tabs">
-                    <div class="wlm-picker-tab active" data-tab="smileys">😊 İfadeler</div>
-                    <div class="wlm-picker-tab" data-tab="symbols">❤️ Semboller</div>
+                    <div class="wlm-picker-tab active" data-tab="smileys">😊 Smileys</div>
+                    <div class="wlm-picker-tab" data-tab="symbols">❤️ Symbols</div>
                 </div>
                 <div class="wlm-picker-grid" id="emojiGrid"></div>
             </div>
 
             <!-- Wink Picker -->
             <div class="wlm-wink-picker" id="winkPicker">
-                <div class="wlm-wink-picker-title">Bir Wink Seç</div>
+                <div class="wlm-wink-picker-title">Choose a Wink</div>
                 <div class="wlm-wink-grid">
-                    <div class="wlm-wink-item" data-wink="😘" data-name="Öpücük" data-anim="heartbeat">
+                    <div class="wlm-wink-item" data-wink="😘" data-name="Kiss" data-anim="heartbeat">
                         😘
-                        <div class="wlm-wink-item-label">Öpücük</div>
+                        <div class="wlm-wink-item-label">Kiss</div>
                     </div>
-                    <div class="wlm-wink-item" data-wink="😍" data-name="Aşık" data-anim="heartbeat">
+                    <div class="wlm-wink-item" data-wink="😍" data-name="In Love" data-anim="heartbeat">
                         😍
-                        <div class="wlm-wink-item-label">Aşık</div>
+                        <div class="wlm-wink-item-label">In Love</div>
                     </div>
-                    <div class="wlm-wink-item" data-wink="🎉" data-name="Parti" data-anim="spin">
+                    <div class="wlm-wink-item" data-wink="🎉" data-name="Party" data-anim="spin">
                         🎉
-                        <div class="wlm-wink-item-label">Parti</div>
+                        <div class="wlm-wink-item-label">Party</div>
                     </div>
-                    <div class="wlm-wink-item" data-wink="🌹" data-name="Gül" data-anim="heartbeat">
+                    <div class="wlm-wink-item" data-wink="🌹" data-name="Rose" data-anim="heartbeat">
                         🌹
-                        <div class="wlm-wink-item-label">Gül</div>
+                        <div class="wlm-wink-item-label">Rose</div>
                     </div>
-                    <div class="wlm-wink-item" data-wink="🐷" data-name="Dans Eden Domuz" data-anim="dancing">
+                    <div class="wlm-wink-item" data-wink="🐷" data-name="Dancing Pig" data-anim="dancing">
                         🐷
-                        <div class="wlm-wink-item-label">Domuz</div>
+                        <div class="wlm-wink-item-label">Pig</div>
                     </div>
-                    <div class="wlm-wink-item" data-wink="💃" data-name="Dans" data-anim="dancing">
+                    <div class="wlm-wink-item" data-wink="💃" data-name="Dance" data-anim="dancing">
                         💃
-                        <div class="wlm-wink-item-label">Dans</div>
+                        <div class="wlm-wink-item-label">Dance</div>
                     </div>
-                    <div class="wlm-wink-item" data-wink="🔥" data-name="Ateş" data-anim="spin">
+                    <div class="wlm-wink-item" data-wink="🔥" data-name="Fire" data-anim="spin">
                         🔥
-                        <div class="wlm-wink-item-label">Ateş</div>
+                        <div class="wlm-wink-item-label">Fire</div>
                     </div>
-                    <div class="wlm-wink-item" data-wink="⭐" data-name="Yıldız" data-anim="spin">
+                    <div class="wlm-wink-item" data-wink="⭐" data-name="Star" data-anim="spin">
                         ⭐
-                        <div class="wlm-wink-item-label">Yıldız</div>
+                        <div class="wlm-wink-item-label">Star</div>
                     </div>
-                    <div class="wlm-wink-item" data-wink="🦋" data-name="Kelebek" data-anim="dancing">
+                    <div class="wlm-wink-item" data-wink="🦋" data-name="Butterfly" data-anim="dancing">
                         🦋
-                        <div class="wlm-wink-item-label">Kelebek</div>
+                        <div class="wlm-wink-item-label">Butterfly</div>
                     </div>
-                    <div class="wlm-wink-item" data-wink="💋" data-name="Dudak" data-anim="heartbeat">
+                    <div class="wlm-wink-item" data-wink="💋" data-name="Lips" data-anim="heartbeat">
                         💋
-                        <div class="wlm-wink-item-label">Dudak</div>
+                        <div class="wlm-wink-item-label">Lips</div>
                     </div>
-                    <div class="wlm-wink-item" data-wink="🎸" data-name="Gitar" data-anim="dancing">
+                    <div class="wlm-wink-item" data-wink="🎸" data-name="Guitar" data-anim="dancing">
                         🎸
-                        <div class="wlm-wink-item-label">Gitar</div>
+                        <div class="wlm-wink-item-label">Guitar</div>
                     </div>
-                    <div class="wlm-wink-item" data-wink="🌈" data-name="Gökkuşağı" data-anim="spin">
+                    <div class="wlm-wink-item" data-wink="🌈" data-name="Rainbow" data-anim="spin">
                         🌈
-                        <div class="wlm-wink-item-label">Gökkuşağı</div>
+                        <div class="wlm-wink-item-label">Rainbow</div>
                     </div>
                 </div>
             </div>
 
             <!-- Background Picker -->
             <div class="wlm-bg-picker" id="bgPicker">
-                <div class="wlm-bg-picker-title">Arka Plan Seç</div>
+                <div class="wlm-bg-picker-title">Choose Background</div>
                 <div class="wlm-bg-option active" data-theme="">
                     <div class="wlm-bg-swatch" style="background: #fff;"></div>
-                    Klasik (Beyaz)
+                    Classic (White)
                 </div>
                 <div class="wlm-bg-option" data-theme="clouds">
                     <div class="wlm-bg-swatch" style="background: linear-gradient(180deg, #e8f4ff 0%, #fff 100%);"></div>
-                    Bulutlar
+                    Clouds
                 </div>
                 <div class="wlm-bg-option" data-theme="sunset">
                     <div class="wlm-bg-swatch" style="background: linear-gradient(180deg, #fff5e6 0%, #ffe6cc 100%);"></div>
-                    Gün Batımı
+                    Sunset
                 </div>
                 <div class="wlm-bg-option" data-theme="nature">
                     <div class="wlm-bg-swatch" style="background: linear-gradient(180deg, #e8ffe8 0%, #f0fff0 100%);"></div>
-                    Doğa
+                    Nature
                 </div>
                 <div class="wlm-bg-option" data-theme="purple">
                     <div class="wlm-bg-swatch" style="background: linear-gradient(180deg, #f5e8ff 0%, #efe0f8 100%);"></div>
-                    Mor Rüya
+                    Purple Dream
                 </div>
             </div>
 
             <!-- Games Picker -->
             <div class="wlm-games-picker" id="gamesPicker">
-                <div class="wlm-games-picker-title">🎮 Oyun Seç</div>
+                <div class="wlm-games-picker-title">🎮 Choose a Game</div>
                 <div class="wlm-game-option" data-game="ttt">
                     <span>❌⭕</span> Tic Tac Toe
                 </div>
                 <div class="wlm-game-option" data-game="rps">
-                    <span>✊✋✌️</span> Taş Kağıt Makas
+                    <span>✊✋✌️</span> Rock Paper Scissors
                 </div>
                 <div class="wlm-game-option" data-game="guess">
-                    <span>🔢</span> Sayı Tahmin
+                    <span>🔢</span> Guess the Number
                 </div>
             </div>
 
             <div class="wlm-input-wrapper">
-                <textarea class="wlm-input-box" id="inputBox" placeholder="Bir ileti yazın..."></textarea>
-                <button class="wlm-send-btn" id="btnSend">Gönder</button>
+                <textarea class="wlm-input-box" id="inputBox" placeholder="Type a message..."></textarea>
+                <button class="wlm-send-btn" id="btnSend">Send</button>
             </div>
         </div>
 
         <!-- Status Bar -->
         <div class="wlm-statusbar">
-            <span>Son etkinlik: <span id="lastActivity">şimdi</span></span>
+            <span>Last activity: <span id="lastActivity">now</span></span>
             <a href="https://zeynstudio.com" target="_blank">zeynstudio.com</a>
         </div>
 
@@ -1717,19 +1717,19 @@
             <div class="wlm-card-header">
                 <div class="wlm-card-avatar">Z</div>
                 <div class="wlm-card-name">Zeynep Erden 🦋</div>
-                <div class="wlm-card-status">✨ Tasarımlarla dünyayı keşfediyorum</div>
+                <div class="wlm-card-status">✨ Exploring the world through design</div>
             </div>
             <div class="wlm-card-body">
                 <div class="wlm-card-info">
-                    <span class="wlm-card-info-label">Durum:</span>
-                    <span id="cardStatusValue">Çevrimiçi</span>
+                    <span class="wlm-card-info-label">Status:</span>
+                    <span id="cardStatusValue">Online</span>
                 </div>
                 <div class="wlm-card-info">
-                    <span class="wlm-card-info-label">Meslek:</span>
+                    <span class="wlm-card-info-label">Job:</span>
                     <span>UI/UX Designer</span>
                 </div>
                 <div class="wlm-card-info">
-                    <span class="wlm-card-info-label">Dinliyor:</span>
+                    <span class="wlm-card-info-label">Listening:</span>
                     <span id="cardNowPlaying">Daft Punk - Digital Love</span>
                 </div>
                 <div class="wlm-card-info">
@@ -1737,8 +1737,8 @@
                     <span><a href="https://zeynstudio.com" target="_blank">zeynstudio.com</a></span>
                 </div>
                 <div class="wlm-card-actions">
-                    <button class="wlm-card-btn" id="cardBlock">Engelle</button>
-                    <button class="wlm-card-btn primary" id="cardMessage">Mesaj Gönder</button>
+                    <button class="wlm-card-btn" id="cardBlock">Block</button>
+                    <button class="wlm-card-btn primary" id="cardMessage">Send Message</button>
                 </div>
             </div>
         </div>
@@ -1752,7 +1752,7 @@
         </div>
         <div class="wlm-notification-content">
             <span class="wlm-notification-name">Zeynep</span> 🦋
-            <div id="notificationText">Yeni mesaj!</div>
+            <div id="notificationText">New message!</div>
         </div>
     </div>
 

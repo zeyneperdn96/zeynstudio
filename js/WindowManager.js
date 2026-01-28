@@ -50,7 +50,7 @@ class WindowManager {
             showreel: { width: 400, height: 450 },
             metbic: { width: 820, height: 520 },
             firebox: { width: 820, height: 520 },
-            zeynshat: { width: 480, height: 650 }
+            zeynshat: { width: 500, height: 700 }
         };
 
         const customSize = windowSizes[windowId] || {};
