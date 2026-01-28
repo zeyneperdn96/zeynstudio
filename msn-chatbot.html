@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -1572,9 +1572,9 @@
                 <span class="tool-icon">🚫</span>
             </button>
             <div class="wlm-toolbar-separator"></div>
-            <button class="wlm-tool-btn" id="btnLang" title="Dil / Language">
+            <button class="wlm-tool-btn" id="btnLang" title="Language" style="display:none;">
                 <span class="tool-icon">🌐</span>
-                <span id="langLabel">TR</span>
+                <span id="langLabel">EN</span>
             </button>
         </div>
 
@@ -1820,7 +1820,7 @@
             let gameState = {};
             let textEnteredTimeout = null;
             let lastInputValue = '';
-            let currentLang = 'tr';
+            let currentLang = 'en';
 
             // ========================================
             // Translations
@@ -2306,7 +2306,7 @@
             }
 
             function getTime() {
-                return new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+                return new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
             }
 
             function scrollDown() {
@@ -2314,18 +2314,11 @@
             }
 
             function saveChat() {
-                try { localStorage.setItem('wlmChat5', JSON.stringify(history)); } catch(e) {}
+                // Chat resets on every page load - no persistence
             }
 
             function loadChat() {
-                try {
-                    const saved = localStorage.getItem('wlmChat5');
-                    if (saved) {
-                        history = JSON.parse(saved);
-                        history.forEach(m => addMessage(m.type, m.name, m.text, m.time, false));
-                        return true;
-                    }
-                } catch(e) {}
+                // Always start fresh
                 return false;
             }
 
@@ -3091,6 +3084,7 @@
             // Initialize
             // ========================================
             function init() {
+                try { localStorage.removeItem('wlmChat5'); } catch(e) {}
                 buildEmojiPicker('smileys');
                 updateNowPlaying();
                 updateSaysCSS(); // Initialize CSS for current language
