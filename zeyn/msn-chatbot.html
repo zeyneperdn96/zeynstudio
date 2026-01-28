@@ -1,0 +1,3122 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Zeyn Chat</title>
+    <style>
+        /* ========================================
+           WINDOWS LIVE MESSENGER - Authentic WLM 2009
+           Full Feature Recreation v2.0
+           ======================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-size: 12px;
+            background: linear-gradient(180deg, #4CA1E0 0%, #2B7BC2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* ========================================
+           CHAT WINDOW - WLM 2009 Style
+           ======================================== */
+
+        .wlm-chat-window {
+            width: 450px;
+            max-width: 100%;
+            background: #f0f0f0;
+            border-radius: 6px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Nudge Animation */
+        @keyframes nudgeShake {
+            0%, 100% { transform: translate(0,0); }
+            10% { transform: translate(-8px,-5px); }
+            20% { transform: translate(8px,5px); }
+            30% { transform: translate(-6px,-4px); }
+            40% { transform: translate(6px,4px); }
+            50% { transform: translate(-4px,-2px); }
+            60% { transform: translate(4px,2px); }
+        }
+
+        .wlm-chat-window.nudge {
+            animation: nudgeShake 0.4s ease-in-out;
+        }
+
+        /* ========================================
+           TITLE BAR
+           ======================================== */
+
+        .wlm-titlebar {
+            background: linear-gradient(180deg, #B8D6F0 0%, #9BC4E8 50%, #7AB3E0 100%);
+            padding: 6px 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #6AA5D8;
+        }
+
+        .wlm-titlebar-icon {
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wlm-titlebar-text {
+            flex: 1;
+            font-size: 12px;
+            color: #1a4a6e;
+            font-weight: 400;
+        }
+
+        .wlm-window-controls {
+            display: flex;
+            gap: 2px;
+        }
+
+        .wlm-ctrl-btn {
+            width: 28px;
+            height: 20px;
+            border: none;
+            background: transparent;
+            color: #1a4a6e;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wlm-ctrl-btn:hover {
+            background: rgba(255,255,255,0.5);
+        }
+
+        .wlm-ctrl-btn.close-btn:hover {
+            background: #e04343;
+            color: #fff;
+        }
+
+        /* Sound toggle button */
+        .wlm-sound-btn {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .wlm-sound-btn:hover {
+            opacity: 1;
+        }
+
+        .wlm-sound-btn.muted {
+            opacity: 0.4;
+        }
+
+        /* ========================================
+           AVATAR HEADER
+           ======================================== */
+
+        .wlm-header-panel {
+            background: linear-gradient(180deg, #fff 0%, #f5f5f5 100%);
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid #ddd;
+            gap: 10px;
+        }
+
+        .wlm-user-section {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            flex: 1;
+        }
+
+        .wlm-user-section.right {
+            flex-direction: row-reverse;
+            text-align: right;
+        }
+
+        .wlm-avatar-frame {
+            width: 64px;
+            height: 64px;
+            border: 2px solid #7CB87C;
+            border-radius: 4px;
+            background: #fff;
+            padding: 2px;
+            flex-shrink: 0;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .wlm-avatar-frame:hover {
+            border-color: #5a9a5a;
+        }
+
+        .wlm-avatar-frame.user-avatar {
+            border-color: #5B9BD5;
+        }
+
+        .wlm-avatar-frame.user-avatar:hover {
+            border-color: #4a8ac4;
+        }
+
+        .wlm-avatar-status-gem {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .wlm-avatar-status-gem.online { background: linear-gradient(135deg, #7CB87C 0%, #5a9a5a 100%); }
+        .wlm-avatar-status-gem.busy { background: linear-gradient(135deg, #E04343 0%, #c03030 100%); }
+        .wlm-avatar-status-gem.away { background: linear-gradient(135deg, #F5A623 0%, #d48c1a 100%); }
+        .wlm-avatar-status-gem.offline { background: linear-gradient(135deg, #999 0%, #777 100%); }
+
+        .wlm-avatar-placeholder {
+            width: 100%;
+            height: 100%;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .wlm-avatar-placeholder.zeynep {
+            background: linear-gradient(135deg, #8E5BA5 0%, #6B3A8C 100%);
+        }
+
+        .wlm-avatar-placeholder.visitor {
+            background: linear-gradient(135deg, #5B9BD5 0%, #3A7AB4 100%);
+        }
+
+        .wlm-user-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .wlm-user-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .wlm-user-section.right .wlm-user-name {
+            justify-content: flex-end;
+        }
+
+        .wlm-status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #7CB87C;
+            flex-shrink: 0;
+        }
+
+        .wlm-status-indicator.busy { background: #E04343; }
+        .wlm-status-indicator.away { background: #F5A623; }
+        .wlm-status-indicator.offline { background: #999; }
+
+        .wlm-status-text {
+            font-size: 10px;
+            color: #666;
+        }
+
+        .wlm-personal-msg {
+            font-size: 10px;
+            color: #888;
+            font-style: italic;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 130px;
+        }
+
+        .wlm-now-playing {
+            font-size: 10px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 2px;
+        }
+
+        .wlm-now-playing-icon {
+            color: #7CB87C;
+            animation: musicPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes musicPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .wlm-now-playing-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100px;
+        }
+
+        .wlm-online-since {
+            font-size: 9px;
+            color: #999;
+            margin-top: 2px;
+        }
+
+        /* ========================================
+           STATUS DROPDOWN
+           ======================================== */
+
+        .wlm-status-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #fff;
+            border: 1px solid #888;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+            z-index: 1000;
+            min-width: 180px;
+            display: none;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .wlm-status-dropdown.show {
+            display: block;
+        }
+
+        .wlm-status-option {
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .wlm-status-option:hover {
+            background: #e8f4fc;
+        }
+
+        .wlm-status-option.active {
+            background: #d0e8f8;
+        }
+
+        .wlm-status-option-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .wlm-status-divider {
+            height: 1px;
+            background: #ddd;
+            margin: 4px 0;
+        }
+
+        /* ========================================
+           TOOLBAR
+           ======================================== */
+
+        .wlm-toolbar {
+            background: linear-gradient(180deg, #e8f0f8 0%, #d8e8f4 100%);
+            padding: 6px 10px;
+            display: flex;
+            gap: 4px;
+            border-bottom: 1px solid #c0d0e0;
+            flex-wrap: wrap;
+        }
+
+        .wlm-tool-btn {
+            padding: 4px 8px;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 11px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .wlm-tool-btn:hover {
+            background: #fff;
+            border-color: #a0c0e0;
+        }
+
+        .wlm-tool-btn:active {
+            background: #d0e0f0;
+        }
+
+        .wlm-tool-btn.active {
+            background: #c8dff0;
+            border-color: #90b0d0;
+        }
+
+        .wlm-toolbar-separator {
+            width: 1px;
+            background: #b0c0d0;
+            margin: 0 4px;
+        }
+
+        /* ========================================
+           CONVERSATION AREA
+           ======================================== */
+
+        .wlm-conversation {
+            background: #fff;
+            height: 220px;
+            overflow-y: auto;
+            padding: 10px 12px;
+            font-size: 12px;
+            border-bottom: 1px solid #ccc;
+            position: relative;
+        }
+
+        .wlm-conversation.theme-clouds {
+            background: linear-gradient(180deg, #e8f4ff 0%, #fff 100%);
+        }
+
+        .wlm-conversation.theme-sunset {
+            background: linear-gradient(180deg, #fff5e6 0%, #ffe6cc 100%);
+        }
+
+        .wlm-conversation.theme-nature {
+            background: linear-gradient(180deg, #e8ffe8 0%, #f0fff0 100%);
+        }
+
+        .wlm-conversation.theme-purple {
+            background: linear-gradient(180deg, #f5e8ff 0%, #efe0f8 100%);
+        }
+
+        .wlm-conversation::-webkit-scrollbar {
+            width: 17px;
+        }
+
+        .wlm-conversation::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .wlm-conversation::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border: 1px solid #a8a8a8;
+        }
+
+        .wlm-conversation::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        /* Message Styling */
+        .wlm-message {
+            margin-bottom: 12px;
+            line-height: 1.5;
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+        }
+
+        .wlm-message.from-user {
+            flex-direction: row-reverse;
+        }
+
+        .wlm-msg-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 3px;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .wlm-msg-avatar-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            border-radius: 3px;
+        }
+
+        .wlm-msg-avatar-placeholder.zeynep {
+            background: linear-gradient(135deg, #8E5BA5 0%, #6B3A8C 100%);
+        }
+
+        .wlm-msg-avatar-placeholder.visitor {
+            background: linear-gradient(135deg, #5B9BD5 0%, #3A7AB4 100%);
+        }
+
+        .wlm-msg-bubble {
+            flex: 1;
+            max-width: 75%;
+        }
+
+        .wlm-msg-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 2px;
+        }
+
+        .wlm-message.from-user .wlm-msg-header {
+            flex-direction: row-reverse;
+        }
+
+        .wlm-msg-sender {
+            font-weight: 600;
+            font-size: 11px;
+        }
+
+        .wlm-msg-sender::after {
+            font-weight: 400;
+            color: #888;
+        }
+
+        .wlm-message.from-zeynep .wlm-msg-sender {
+            color: #6B3A8C;
+        }
+
+        .wlm-message.from-user .wlm-msg-sender {
+            color: #3A7AB4;
+        }
+
+        .wlm-message.from-user .wlm-msg-sender::after {
+            /* content set dynamically by updateSaysCSS() */
+        }
+
+        .wlm-msg-time {
+            font-size: 9px;
+            color: #999;
+        }
+
+        .wlm-msg-content {
+            color: #333;
+            background: #f8f8f8;
+            padding: 8px 10px;
+            border-radius: 4px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .wlm-message.from-zeynep .wlm-msg-content {
+            background: #f3e8f7;
+            border-color: #d4b8de;
+        }
+
+        .wlm-message.from-user .wlm-msg-content {
+            background: #e8f0f8;
+            border-color: #b8d0e8;
+        }
+
+        /* System messages */
+        .wlm-system {
+            color: #888;
+            font-size: 11px;
+            font-style: italic;
+            text-align: center;
+            padding: 8px 0;
+        }
+
+        .wlm-system.nudge-msg {
+            color: #9C27B0;
+        }
+
+        .wlm-system.wink-msg {
+            color: #E91E63;
+            font-size: 12px;
+        }
+
+        .wlm-system.file-msg {
+            color: #2196F3;
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .wlm-system.hint {
+            color: #666;
+            background: #f5f5f5;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin: 8px 0;
+        }
+
+        .wlm-system.signin-msg {
+            color: #4CAF50;
+            background: #e8f5e9;
+            padding: 6px 12px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .wlm-system.signout-msg {
+            color: #ff9800;
+            background: #fff3e0;
+            padding: 6px 12px;
+            border-radius: 4px;
+        }
+
+        .wlm-system.game-msg {
+            color: #673AB7;
+            background: #ede7f6;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .wlm-timestamp {
+            color: #999;
+            font-size: 10px;
+            text-align: center;
+            padding: 6px 0;
+        }
+
+        /* Typing indicator */
+        .wlm-typing {
+            color: #888;
+            font-size: 11px;
+            font-style: italic;
+            padding: 4px 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .wlm-typing-dots {
+            display: flex;
+            gap: 2px;
+        }
+
+        .wlm-typing-dots span {
+            width: 4px;
+            height: 4px;
+            background: #888;
+            border-radius: 50%;
+            animation: typingBounce 1.4s infinite;
+        }
+
+        .wlm-typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .wlm-typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingBounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-4px); }
+        }
+
+        /* Text entered indicator */
+        .wlm-text-entered {
+            color: #666;
+            font-size: 10px;
+            padding: 2px 0;
+            font-style: italic;
+        }
+
+        /* ========================================
+           WINK OVERLAY
+           ======================================== */
+
+        .wlm-wink-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .wlm-wink-overlay.show {
+            display: flex;
+            animation: winkFadeIn 0.3s ease;
+        }
+
+        @keyframes winkFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .wlm-wink-content {
+            font-size: 100px;
+            animation: winkBounce 0.8s ease-in-out;
+        }
+
+        @keyframes winkBounce {
+            0% { transform: scale(0) rotate(-30deg); }
+            50% { transform: scale(1.3) rotate(15deg); }
+            70% { transform: scale(0.9) rotate(-5deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        /* Dancing Pig Wink */
+        .wlm-wink-content.dancing {
+            animation: winkDance 1s ease-in-out;
+        }
+
+        @keyframes winkDance {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-20px) rotate(-10deg); }
+            50% { transform: translateY(0) rotate(10deg); }
+            75% { transform: translateY(-15px) rotate(-5deg); }
+        }
+
+        /* Heart Wink */
+        .wlm-wink-content.heartbeat {
+            animation: winkHeartbeat 0.8s ease-in-out;
+        }
+
+        @keyframes winkHeartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.3); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.2); }
+        }
+
+        /* Spin Wink */
+        .wlm-wink-content.spin {
+            animation: winkSpin 1s ease-in-out;
+        }
+
+        @keyframes winkSpin {
+            0% { transform: scale(0) rotate(0deg); }
+            100% { transform: scale(1) rotate(720deg); }
+        }
+
+        /* ========================================
+           GAME AREA
+           ======================================== */
+
+        .wlm-game-container {
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 12px;
+            margin: 8px 0;
+        }
+
+        .wlm-game-title {
+            font-weight: 600;
+            color: #673AB7;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        /* Tic Tac Toe */
+        .wlm-ttt-board {
+            display: grid;
+            grid-template-columns: repeat(3, 40px);
+            gap: 4px;
+            justify-content: center;
+            margin: 10px 0;
+        }
+
+        .wlm-ttt-cell {
+            width: 40px;
+            height: 40px;
+            background: #e8f0f8;
+            border: 1px solid #b8d0e8;
+            border-radius: 4px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wlm-ttt-cell:hover:not(.taken) {
+            background: #d0e8f8;
+        }
+
+        .wlm-ttt-cell.x { color: #E91E63; }
+        .wlm-ttt-cell.o { color: #2196F3; }
+
+        .wlm-game-status {
+            text-align: center;
+            font-size: 11px;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        .wlm-game-btn {
+            display: block;
+            margin: 8px auto 0;
+            padding: 6px 16px;
+            background: #673AB7;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .wlm-game-btn:hover {
+            background: #7E57C2;
+        }
+
+        /* Rock Paper Scissors */
+        .wlm-rps-options {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .wlm-rps-btn {
+            width: 50px;
+            height: 50px;
+            font-size: 28px;
+            background: #f5f5f5;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .wlm-rps-btn:hover {
+            background: #e8f0f8;
+            border-color: #5B9BD5;
+            transform: scale(1.1);
+        }
+
+        .wlm-rps-result {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .wlm-rps-display {
+            font-size: 40px;
+            margin: 10px 0;
+        }
+
+        /* ========================================
+           INPUT AREA
+           ======================================== */
+
+        .wlm-input-section {
+            background: #f5f5f5;
+            padding: 8px;
+            position: relative;
+        }
+
+        .wlm-emoticon-bar {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 6px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #ddd;
+            flex-wrap: wrap;
+        }
+
+        .wlm-emo-btn {
+            width: 28px;
+            height: 28px;
+            background: transparent;
+            border: 1px solid transparent;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wlm-emo-btn:hover {
+            background: #e0e0e0;
+            border-color: #ccc;
+        }
+
+        .wlm-emo-btn:active {
+            background: #d0d0d0;
+        }
+
+        .wlm-emo-btn.has-dropdown::after {
+            content: '▾';
+            font-size: 8px;
+            position: absolute;
+            bottom: 1px;
+            right: 1px;
+            color: #666;
+        }
+
+        .wlm-emo-btn.has-dropdown {
+            position: relative;
+        }
+
+        .wlm-input-wrapper {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+        }
+
+        .wlm-input-box {
+            flex: 1;
+            min-height: 50px;
+            max-height: 80px;
+            border: 1px solid #aaa;
+            padding: 6px 8px;
+            font-family: inherit;
+            font-size: 12px;
+            resize: none;
+            outline: none;
+            border-radius: 2px;
+        }
+
+        .wlm-input-box:focus {
+            border-color: #5B9BD5;
+        }
+
+        .wlm-send-btn {
+            padding: 10px 18px;
+            background: linear-gradient(180deg, #5B9BD5 0%, #4A8BC4 100%);
+            border: 1px solid #3A7AB4;
+            border-radius: 3px;
+            color: #fff;
+            font-size: 12px;
+            font-family: inherit;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .wlm-send-btn:hover {
+            background: linear-gradient(180deg, #6BABF5 0%, #5A9BD4 100%);
+        }
+
+        .wlm-send-btn:active {
+            background: linear-gradient(180deg, #4A8BC4 0%, #3A7AB4 100%);
+        }
+
+        /* ========================================
+           PICKERS
+           ======================================== */
+
+        .wlm-emoticon-picker {
+            position: absolute;
+            bottom: calc(100% + 4px);
+            left: 0;
+            background: #fff;
+            border: 1px solid #888;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+            padding: 8px;
+            display: none;
+            z-index: 1000;
+            border-radius: 4px;
+        }
+
+        .wlm-emoticon-picker.show {
+            display: block;
+        }
+
+        .wlm-picker-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 6px;
+        }
+
+        .wlm-picker-tab {
+            padding: 4px 10px;
+            font-size: 10px;
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .wlm-picker-tab.active {
+            background: #5B9BD5;
+            color: #fff;
+            border-color: #4A8BC4;
+        }
+
+        .wlm-picker-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 28px);
+            gap: 2px;
+        }
+
+        .wlm-picker-emo {
+            width: 28px;
+            height: 28px;
+            background: #fff;
+            border: 1px solid transparent;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 3px;
+        }
+
+        .wlm-picker-emo:hover {
+            background: #e8f4fc;
+            border-color: #5B9BD5;
+        }
+
+        .wlm-wink-picker {
+            position: absolute;
+            bottom: calc(100% + 4px);
+            left: 30px;
+            background: #fff;
+            border: 1px solid #888;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+            padding: 8px;
+            display: none;
+            z-index: 1000;
+            border-radius: 4px;
+            min-width: 240px;
+        }
+
+        .wlm-wink-picker.show {
+            display: block;
+        }
+
+        .wlm-wink-picker-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .wlm-wink-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
+        }
+
+        .wlm-wink-item {
+            padding: 6px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 22px;
+        }
+
+        .wlm-wink-item:hover {
+            background: #e8f4fc;
+        }
+
+        .wlm-wink-item-label {
+            font-size: 8px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        .wlm-bg-picker {
+            position: absolute;
+            bottom: calc(100% + 4px);
+            right: 0;
+            background: #fff;
+            border: 1px solid #888;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+            padding: 8px;
+            display: none;
+            z-index: 1000;
+            border-radius: 4px;
+            min-width: 160px;
+        }
+
+        .wlm-bg-picker.show {
+            display: block;
+        }
+
+        .wlm-bg-picker-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .wlm-bg-option {
+            padding: 6px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .wlm-bg-option:hover {
+            background: #e8f4fc;
+        }
+
+        .wlm-bg-option.active {
+            background: #d0e8f8;
+        }
+
+        .wlm-bg-swatch {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+        }
+
+        /* Games Picker */
+        .wlm-games-picker {
+            position: absolute;
+            bottom: calc(100% + 4px);
+            left: 80px;
+            background: #fff;
+            border: 1px solid #888;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+            padding: 8px;
+            display: none;
+            z-index: 1000;
+            border-radius: 4px;
+            min-width: 150px;
+        }
+
+        .wlm-games-picker.show {
+            display: block;
+        }
+
+        .wlm-games-picker-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: #673AB7;
+            margin-bottom: 8px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .wlm-game-option {
+            padding: 8px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .wlm-game-option:hover {
+            background: #ede7f6;
+        }
+
+        /* ========================================
+           CONTACT CARD
+           ======================================== */
+
+        .wlm-contact-card {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            border: 1px solid #888;
+            box-shadow: 4px 4px 16px rgba(0,0,0,0.3);
+            padding: 0;
+            display: none;
+            z-index: 2000;
+            border-radius: 6px;
+            width: 280px;
+            overflow: hidden;
+        }
+
+        .wlm-contact-card.show {
+            display: block;
+            animation: cardSlideIn 0.2s ease;
+        }
+
+        @keyframes cardSlideIn {
+            from { transform: translate(-50%, -50%) scale(0.9); opacity: 0; }
+            to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        .wlm-card-header {
+            background: linear-gradient(180deg, #8E5BA5 0%, #6B3A8C 100%);
+            padding: 16px;
+            color: #fff;
+            text-align: center;
+        }
+
+        .wlm-card-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #fff;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: bold;
+            color: #6B3A8C;
+        }
+
+        .wlm-card-name {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .wlm-card-status {
+            font-size: 11px;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        .wlm-card-body {
+            padding: 16px;
+        }
+
+        .wlm-card-info {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 8px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .wlm-card-info-label {
+            color: #333;
+            font-weight: 600;
+            min-width: 80px;
+        }
+
+        .wlm-card-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .wlm-card-btn {
+            flex: 1;
+            padding: 8px;
+            font-size: 11px;
+            border: 1px solid #ccc;
+            background: #f0f0f0;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .wlm-card-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .wlm-card-btn.primary {
+            background: linear-gradient(180deg, #5B9BD5 0%, #4A8BC4 100%);
+            border-color: #3A7AB4;
+            color: #fff;
+        }
+
+        .wlm-card-close {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+
+        .wlm-card-close:hover {
+            opacity: 1;
+        }
+
+        /* ========================================
+           NOTIFICATIONS
+           ======================================== */
+
+        .wlm-notification {
+            position: fixed;
+            bottom: 60px;
+            right: 20px;
+            background: linear-gradient(180deg, #4A90C8 0%, #3578B0 100%);
+            color: #fff;
+            padding: 12px 16px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 10000;
+            max-width: 280px;
+        }
+
+        .wlm-notification.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .wlm-notification-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .wlm-notification-icon {
+            font-size: 18px;
+        }
+
+        .wlm-notification-title {
+            font-size: 11px;
+            opacity: 0.9;
+        }
+
+        .wlm-notification-content {
+            font-size: 12px;
+        }
+
+        .wlm-notification-name {
+            font-weight: 600;
+        }
+
+        /* Sign In Toast */
+        .wlm-signin-toast {
+            position: fixed;
+            bottom: 60px;
+            right: 20px;
+            background: linear-gradient(180deg, #4CAF50 0%, #388E3C 100%);
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 10001;
+            font-size: 12px;
+        }
+
+        .wlm-signin-toast.show {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: toastSlide 0.3s ease;
+        }
+
+        @keyframes toastSlide {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* ========================================
+           STATUS BAR
+           ======================================== */
+
+        .wlm-statusbar {
+            background: #e8e8e8;
+            padding: 4px 10px;
+            font-size: 10px;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #ccc;
+        }
+
+        .wlm-statusbar a {
+            color: #3A7AB4;
+            text-decoration: none;
+        }
+
+        .wlm-statusbar a:hover {
+            text-decoration: underline;
+        }
+
+        /* ========================================
+           MOBILE RESPONSIVE
+           ======================================== */
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .wlm-chat-window {
+                width: 100%;
+                border-radius: 0;
+            }
+
+            .wlm-header-panel {
+                padding: 8px;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .wlm-user-section.right {
+                flex-direction: row;
+                text-align: left;
+            }
+
+            .wlm-user-section.right .wlm-user-name {
+                justify-content: flex-start;
+            }
+
+            .wlm-avatar-frame {
+                width: 48px;
+                height: 48px;
+            }
+
+            .wlm-personal-msg,
+            .wlm-now-playing {
+                display: none;
+            }
+
+            .wlm-conversation {
+                height: 180px;
+            }
+
+            .wlm-toolbar {
+                padding: 4px 6px;
+            }
+
+            .wlm-tool-btn {
+                padding: 4px 6px;
+                font-size: 10px;
+            }
+
+            .wlm-tool-btn span:not(.tool-icon) {
+                display: none;
+            }
+
+            .wlm-msg-avatar {
+                width: 28px;
+                height: 28px;
+            }
+
+            .wlm-picker-grid {
+                grid-template-columns: repeat(6, 28px);
+            }
+
+            .wlm-wink-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 360px) {
+            .wlm-avatar-frame {
+                width: 40px;
+                height: 40px;
+            }
+
+            .wlm-conversation {
+                height: 150px;
+                font-size: 11px;
+            }
+
+            .wlm-user-name {
+                font-size: 12px;
+            }
+
+            .wlm-msg-bubble {
+                max-width: 80%;
+            }
+
+            .wlm-emoticon-bar {
+                gap: 1px;
+            }
+
+            .wlm-emo-btn {
+                width: 26px;
+                height: 26px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MSN Sounds (Base64 embedded) -->
+    <audio id="sndMessage" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdH2LkZugnp2XjHxwYFRQUl1pcHyHkJeZmZaPgXFjVUxLUFxqdIGNl5ydm5WLfW5fUktJT1xqeIaMlZuenJiPgXFjVUxITVtpd4WPlpyen5qSg3RlV05KTltpdoSPlpyen5uUhndoWlFMTVtoc4KOlpyfoJyWiXtqXFNOTltocYCMlJueoJ2Yintq" type="audio/wav">
+    </audio>
+    <audio id="sndNudge" preload="auto">
+        <source src="data:audio/wav;base64,UklGRl9CAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YTs/AACAgICAgICAgICAgIB8fHx4eHh0dHRwcHBsbGxoaGhkZGRgYGBcXFxYWFhUVFRQUFBMTExISEhERERAQEA8PDw4ODg0NDQwMDAoKCgkJCQgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA=" type="audio/wav">
+    </audio>
+    <audio id="sndOnline" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACAgICAgICAgIB4eHhwcHBsbGxoaGhkZGRgYGBcXFxYWFhUVFRQUFBMTExISEhERERFRUVJSUlNTU1RUVFVVVVZWV1dXWFhYWVlZWlpaW1tbXFxc" type="audio/wav">
+    </audio>
+
+    <!-- Chat Window -->
+    <div class="wlm-chat-window" id="chatWindow">
+
+        <!-- Title Bar -->
+        <div class="wlm-titlebar">
+            <div class="wlm-titlebar-icon">
+                <img src="assets/icons/zeyn-chat-logo.png" alt="Zeyn Chat" style="height: 18px; width: auto;">
+            </div>
+            <div class="wlm-titlebar-text">Zeyn Chat - Zeynep Erden</div>
+            <div class="wlm-window-controls">
+                <button class="wlm-ctrl-btn wlm-sound-btn" id="btnSound" title="Sesleri aç/kapat">🔊</button>
+                <button class="wlm-ctrl-btn" id="btnMin" title="Simge Durumuna Küçült">─</button>
+                <button class="wlm-ctrl-btn" id="btnMax" title="Ekranı Kapla">☐</button>
+                <button class="wlm-ctrl-btn close-btn" id="btnClose" title="Kapat">✕</button>
+            </div>
+        </div>
+
+
+        <!-- Header Panel -->
+        <div class="wlm-header-panel">
+            <!-- Zeynep -->
+            <div class="wlm-user-section">
+                <div class="wlm-avatar-frame" id="zeynepAvatar" title="Kişi kartını görüntüle">
+                    <div class="wlm-avatar-placeholder zeynep">Z</div>
+                    <div class="wlm-avatar-status-gem online" id="zeynepStatusGem"></div>
+                </div>
+                <div class="wlm-user-info">
+                    <div class="wlm-user-name">
+                        <span class="wlm-status-indicator" id="zeynepStatusDot"></span>
+                        Zeynep
+                    </div>
+                    <div class="wlm-status-text" id="zeynepStatusText">(Çevrimiçi)</div>
+                    <div class="wlm-personal-msg">✨ Tasarımlarla dünyayı keşfediyorum</div>
+                    <div class="wlm-now-playing" id="nowPlaying">
+                        <span class="wlm-now-playing-icon">♫</span>
+                        <span class="wlm-now-playing-text" id="nowPlayingText">Daft Punk - Digital Love</span>
+                    </div>
+                    <div class="wlm-online-since" id="onlineSince">Çevrimiçi olalı: 2 saat</div>
+                </div>
+            </div>
+
+            <!-- Visitor -->
+            <div class="wlm-user-section right" style="position: relative;">
+                <div class="wlm-avatar-frame user-avatar" id="visitorAvatar" title="Durumunu değiştir">
+                    <div class="wlm-avatar-placeholder visitor">?</div>
+                    <div class="wlm-avatar-status-gem online" id="visitorStatusGem"></div>
+                </div>
+                <div class="wlm-user-info">
+                    <div class="wlm-user-name">
+                        Sen 👋
+                        <span class="wlm-status-indicator" id="visitorStatusDot"></span>
+                    </div>
+                    <div class="wlm-status-text" id="visitorStatusText">(Çevrimiçi)</div>
+                </div>
+
+                <div class="wlm-status-dropdown" id="statusDropdown">
+                    <div class="wlm-status-option active" data-status="online">
+                        <div class="wlm-status-option-dot" style="background: #7CB87C;"></div>
+                        Çevrimiçi
+                    </div>
+                    <div class="wlm-status-option" data-status="busy">
+                        <div class="wlm-status-option-dot" style="background: #E04343;"></div>
+                        Meşgul
+                    </div>
+                    <div class="wlm-status-option" data-status="away">
+                        <div class="wlm-status-option-dot" style="background: #F5A623;"></div>
+                        Uzakta
+                    </div>
+                    <div class="wlm-status-divider"></div>
+                    <div class="wlm-status-option" data-status="offline">
+                        <div class="wlm-status-option-dot" style="background: #999;"></div>
+                        Çevrimdışı Görün
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="wlm-toolbar">
+            <button class="wlm-tool-btn" id="btnSendFile" title="Dosya gönder">
+                <span class="tool-icon">📎</span>
+                <span>Dosya</span>
+            </button>
+            <button class="wlm-tool-btn" id="btnGames" title="Oyunlar">
+                <span class="tool-icon">🎮</span>
+                <span>Oyunlar</span>
+            </button>
+            <div class="wlm-toolbar-separator"></div>
+            <button class="wlm-tool-btn" id="btnBackground" title="Arka plan değiştir">
+                <span class="tool-icon">🎨</span>
+                <span>Tema</span>
+            </button>
+            <button class="wlm-tool-btn" id="btnBlock" title="Kişiyi engelle">
+                <span class="tool-icon">🚫</span>
+            </button>
+            <div class="wlm-toolbar-separator"></div>
+            <button class="wlm-tool-btn" id="btnLang" title="Dil / Language">
+                <span class="tool-icon">🌐</span>
+                <span id="langLabel">TR</span>
+            </button>
+        </div>
+
+        <!-- Conversation -->
+        <div class="wlm-conversation" id="conversation"></div>
+
+        <!-- Wink Overlay -->
+        <div class="wlm-wink-overlay" id="winkOverlay">
+            <div class="wlm-wink-content" id="winkContent">😘</div>
+        </div>
+
+        <!-- Input Section -->
+        <div class="wlm-input-section">
+            <div class="wlm-emoticon-bar">
+                <button class="wlm-emo-btn has-dropdown" id="btnEmoji" title="İfade seç">😊</button>
+                <button class="wlm-emo-btn has-dropdown" id="btnWink" title="Wink gönder">😉</button>
+                <button class="wlm-emo-btn" id="btnNudge" title="Titreşim gönder">📳</button>
+                <button class="wlm-emo-btn" id="btnFont" title="Yazı tipi">🔤</button>
+                <button class="wlm-emo-btn" id="btnVoiceClip" title="Ses kaydı">🎤</button>
+            </div>
+
+            <!-- Emoticon Picker -->
+            <div class="wlm-emoticon-picker" id="emojiPicker">
+                <div class="wlm-picker-tabs">
+                    <div class="wlm-picker-tab active" data-tab="smileys">😊 İfadeler</div>
+                    <div class="wlm-picker-tab" data-tab="symbols">❤️ Semboller</div>
+                </div>
+                <div class="wlm-picker-grid" id="emojiGrid"></div>
+            </div>
+
+            <!-- Wink Picker -->
+            <div class="wlm-wink-picker" id="winkPicker">
+                <div class="wlm-wink-picker-title">Bir Wink Seç</div>
+                <div class="wlm-wink-grid">
+                    <div class="wlm-wink-item" data-wink="😘" data-name="Öpücük" data-anim="heartbeat">
+                        😘
+                        <div class="wlm-wink-item-label">Öpücük</div>
+                    </div>
+                    <div class="wlm-wink-item" data-wink="😍" data-name="Aşık" data-anim="heartbeat">
+                        😍
+                        <div class="wlm-wink-item-label">Aşık</div>
+                    </div>
+                    <div class="wlm-wink-item" data-wink="🎉" data-name="Parti" data-anim="spin">
+                        🎉
+                        <div class="wlm-wink-item-label">Parti</div>
+                    </div>
+                    <div class="wlm-wink-item" data-wink="🌹" data-name="Gül" data-anim="heartbeat">
+                        🌹
+                        <div class="wlm-wink-item-label">Gül</div>
+                    </div>
+                    <div class="wlm-wink-item" data-wink="🐷" data-name="Dans Eden Domuz" data-anim="dancing">
+                        🐷
+                        <div class="wlm-wink-item-label">Domuz</div>
+                    </div>
+                    <div class="wlm-wink-item" data-wink="💃" data-name="Dans" data-anim="dancing">
+                        💃
+                        <div class="wlm-wink-item-label">Dans</div>
+                    </div>
+                    <div class="wlm-wink-item" data-wink="🔥" data-name="Ateş" data-anim="spin">
+                        🔥
+                        <div class="wlm-wink-item-label">Ateş</div>
+                    </div>
+                    <div class="wlm-wink-item" data-wink="⭐" data-name="Yıldız" data-anim="spin">
+                        ⭐
+                        <div class="wlm-wink-item-label">Yıldız</div>
+                    </div>
+                    <div class="wlm-wink-item" data-wink="🦋" data-name="Kelebek" data-anim="dancing">
+                        🦋
+                        <div class="wlm-wink-item-label">Kelebek</div>
+                    </div>
+                    <div class="wlm-wink-item" data-wink="💋" data-name="Dudak" data-anim="heartbeat">
+                        💋
+                        <div class="wlm-wink-item-label">Dudak</div>
+                    </div>
+                    <div class="wlm-wink-item" data-wink="🎸" data-name="Gitar" data-anim="dancing">
+                        🎸
+                        <div class="wlm-wink-item-label">Gitar</div>
+                    </div>
+                    <div class="wlm-wink-item" data-wink="🌈" data-name="Gökkuşağı" data-anim="spin">
+                        🌈
+                        <div class="wlm-wink-item-label">Gökkuşağı</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Background Picker -->
+            <div class="wlm-bg-picker" id="bgPicker">
+                <div class="wlm-bg-picker-title">Arka Plan Seç</div>
+                <div class="wlm-bg-option active" data-theme="">
+                    <div class="wlm-bg-swatch" style="background: #fff;"></div>
+                    Klasik (Beyaz)
+                </div>
+                <div class="wlm-bg-option" data-theme="clouds">
+                    <div class="wlm-bg-swatch" style="background: linear-gradient(180deg, #e8f4ff 0%, #fff 100%);"></div>
+                    Bulutlar
+                </div>
+                <div class="wlm-bg-option" data-theme="sunset">
+                    <div class="wlm-bg-swatch" style="background: linear-gradient(180deg, #fff5e6 0%, #ffe6cc 100%);"></div>
+                    Gün Batımı
+                </div>
+                <div class="wlm-bg-option" data-theme="nature">
+                    <div class="wlm-bg-swatch" style="background: linear-gradient(180deg, #e8ffe8 0%, #f0fff0 100%);"></div>
+                    Doğa
+                </div>
+                <div class="wlm-bg-option" data-theme="purple">
+                    <div class="wlm-bg-swatch" style="background: linear-gradient(180deg, #f5e8ff 0%, #efe0f8 100%);"></div>
+                    Mor Rüya
+                </div>
+            </div>
+
+            <!-- Games Picker -->
+            <div class="wlm-games-picker" id="gamesPicker">
+                <div class="wlm-games-picker-title">🎮 Oyun Seç</div>
+                <div class="wlm-game-option" data-game="ttt">
+                    <span>❌⭕</span> Tic Tac Toe
+                </div>
+                <div class="wlm-game-option" data-game="rps">
+                    <span>✊✋✌️</span> Taş Kağıt Makas
+                </div>
+                <div class="wlm-game-option" data-game="guess">
+                    <span>🔢</span> Sayı Tahmin
+                </div>
+            </div>
+
+            <div class="wlm-input-wrapper">
+                <textarea class="wlm-input-box" id="inputBox" placeholder="Bir ileti yazın..."></textarea>
+                <button class="wlm-send-btn" id="btnSend">Gönder</button>
+            </div>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="wlm-statusbar">
+            <span>Son etkinlik: <span id="lastActivity">şimdi</span></span>
+            <a href="https://zeynstudio.com" target="_blank">zeynstudio.com</a>
+        </div>
+
+        <!-- Contact Card -->
+        <div class="wlm-contact-card" id="contactCard">
+            <button class="wlm-card-close" id="cardClose">✕</button>
+            <div class="wlm-card-header">
+                <div class="wlm-card-avatar">Z</div>
+                <div class="wlm-card-name">Zeynep Erden 🦋</div>
+                <div class="wlm-card-status">✨ Tasarımlarla dünyayı keşfediyorum</div>
+            </div>
+            <div class="wlm-card-body">
+                <div class="wlm-card-info">
+                    <span class="wlm-card-info-label">Durum:</span>
+                    <span id="cardStatusValue">Çevrimiçi</span>
+                </div>
+                <div class="wlm-card-info">
+                    <span class="wlm-card-info-label">Meslek:</span>
+                    <span>UI/UX Designer</span>
+                </div>
+                <div class="wlm-card-info">
+                    <span class="wlm-card-info-label">Dinliyor:</span>
+                    <span id="cardNowPlaying">Daft Punk - Digital Love</span>
+                </div>
+                <div class="wlm-card-info">
+                    <span class="wlm-card-info-label">Web:</span>
+                    <span><a href="https://zeynstudio.com" target="_blank">zeynstudio.com</a></span>
+                </div>
+                <div class="wlm-card-actions">
+                    <button class="wlm-card-btn" id="cardBlock">Engelle</button>
+                    <button class="wlm-card-btn primary" id="cardMessage">Mesaj Gönder</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="wlm-notification" id="notification">
+        <div class="wlm-notification-header">
+            <img src="assets/icons/zeyn-chat-logo.png" alt="Zeyn Chat" style="height: 20px; width: auto;">
+            <span class="wlm-notification-title">Zeyn Chat</span>
+        </div>
+        <div class="wlm-notification-content">
+            <span class="wlm-notification-name">Zeynep</span> 🦋
+            <div id="notificationText">Yeni mesaj!</div>
+        </div>
+    </div>
+
+    <!-- Sign In Toast -->
+    <div class="wlm-signin-toast" id="signinToast">
+        <span>🟢</span>
+        <span id="signinToastText">Zeynep oturum açtı</span>
+    </div>
+
+    <script>
+        /* ========================================
+           WINDOWS LIVE MESSENGER CHATBOT v2.0
+           With Sounds, Games, Timestamps & More
+           ======================================== */
+
+        (function() {
+            'use strict';
+
+            // ========================================
+            // DOM Elements
+            // ========================================
+            const chatWindow = document.getElementById('chatWindow');
+            const conversation = document.getElementById('conversation');
+            const inputBox = document.getElementById('inputBox');
+            const btnSend = document.getElementById('btnSend');
+            const btnMin = document.getElementById('btnMin');
+            const btnClose = document.getElementById('btnClose');
+            const btnNudge = document.getElementById('btnNudge');
+            const btnWink = document.getElementById('btnWink');
+            const btnEmoji = document.getElementById('btnEmoji');
+            const btnSound = document.getElementById('btnSound');
+            const btnGames = document.getElementById('btnGames');
+            const emojiPicker = document.getElementById('emojiPicker');
+            const emojiGrid = document.getElementById('emojiGrid');
+            const winkPicker = document.getElementById('winkPicker');
+            const winkOverlay = document.getElementById('winkOverlay');
+            const winkContent = document.getElementById('winkContent');
+            const bgPicker = document.getElementById('bgPicker');
+            const gamesPicker = document.getElementById('gamesPicker');
+            const btnBackground = document.getElementById('btnBackground');
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            const signinToast = document.getElementById('signinToast');
+            const signinToastText = document.getElementById('signinToastText');
+            const contactCard = document.getElementById('contactCard');
+            const zeynepAvatar = document.getElementById('zeynepAvatar');
+            const visitorAvatar = document.getElementById('visitorAvatar');
+            const statusDropdown = document.getElementById('statusDropdown');
+            const nowPlayingText = document.getElementById('nowPlayingText');
+            const lastActivity = document.getElementById('lastActivity');
+
+            // Sound elements
+            const sndMessage = document.getElementById('sndMessage');
+            const sndNudge = document.getElementById('sndNudge');
+            const sndOnline = document.getElementById('sndOnline');
+
+            // ========================================
+            // State
+            // ========================================
+            let history = [];
+            let typing = false;
+            let messageCount = 0;
+            let soundEnabled = true;
+            let currentGame = null;
+            let gameState = {};
+            let textEnteredTimeout = null;
+            let lastInputValue = '';
+            let currentLang = 'tr';
+
+            // ========================================
+            // Translations
+            // ========================================
+            const translations = {
+                tr: {
+                    // Title bar
+                    windowTitle: 'Zeyn Chat - Zeynep Erden',
+                    soundToggle: 'Sesleri aç/kapat',
+                    minimize: 'Simge Durumuna Küçült',
+                    maximize: 'Ekranı Kapla',
+                    close: 'Kapat',
+
+                    // Status
+                    online: '(Çevrimiçi)',
+                    busy: '(Meşgul)',
+                    away: '(Uzakta)',
+                    offline: '(Çevrimdışı Görünüyor)',
+                    onlineSince: 'Çevrimiçi olalı: 2 saat',
+
+                    // Status dropdown
+                    statusOnline: 'Çevrimiçi',
+                    statusBusy: 'Meşgul',
+                    statusAway: 'Uzakta',
+                    statusOffline: 'Çevrimdışı Görün',
+
+                    // Toolbar
+                    file: 'Dosya',
+                    fileTitle: 'Dosya gönder',
+                    games: 'Oyunlar',
+                    gamesTitle: 'Oyunlar',
+                    theme: 'Tema',
+                    themeTitle: 'Arka plan değiştir',
+                    block: 'Kişiyi engelle',
+
+                    // Input
+                    placeholder: 'Bir ileti yazın...',
+                    send: 'Gönder',
+                    selectEmoji: 'İfade seç',
+                    sendWink: 'Wink gönder',
+                    sendNudge: 'Titreşim gönder',
+                    fontBtn: 'Yazı tipi',
+                    voiceClip: 'Ses kaydı',
+
+                    // Pickers
+                    emojisTab: '😊 İfadeler',
+                    symbolsTab: '❤️ Semboller',
+                    selectWink: 'Bir Wink Seç',
+                    selectBg: 'Arka Plan Seç',
+                    selectGame: '🎮 Oyun Seç',
+
+                    // Backgrounds
+                    bgClassic: 'Klasik (Beyaz)',
+                    bgClouds: 'Bulutlar',
+                    bgSunset: 'Gün Batımı',
+                    bgNature: 'Doğa',
+                    bgPurple: 'Mor Rüya',
+
+                    // Games
+                    gameTTT: 'Tic Tac Toe',
+                    gameRPS: 'Taş Kağıt Makas',
+                    gameGuess: 'Sayı Tahmin',
+
+                    // Wink labels
+                    winkKiss: 'Öpücük',
+                    winkLove: 'Aşık',
+                    winkParty: 'Parti',
+                    winkRose: 'Gül',
+                    winkPig: 'Domuz',
+                    winkDance: 'Dans',
+                    winkFire: 'Ateş',
+                    winkStar: 'Yıldız',
+                    winkButterfly: 'Kelebek',
+                    winkLips: 'Dudak',
+                    winkGuitar: 'Gitar',
+                    winkRainbow: 'Gökkuşağı',
+
+                    // Status bar
+                    lastActivity: 'Son etkinlik:',
+                    now: 'şimdi',
+                    viewCard: 'Kişi kartını görüntüle',
+                    changeStatus: 'Durumunu değiştir',
+
+                    // Contact card
+                    cardStatus: 'Durum:',
+                    cardJob: 'Meslek:',
+                    cardListening: 'Dinliyor:',
+                    cardWeb: 'Web:',
+                    cardBlock: 'Engelle',
+                    cardMessage: 'Mesaj Gönder',
+
+                    // Messages
+                    says: ' diyor:',
+                    saysReverse: ' :diyor',
+                    you: 'Sen 👋',
+                    typing: 'Zeynep yazıyor',
+                    textEntered: 'Sen metin girdin...',
+                    personalMsg: '✨ Tasarımlarla dünyayı keşfediyorum',
+                    zeynepOnline: 'Zeynep çevrimiçi!',
+
+                    // System messages
+                    nudgeSent: 'Bir titreşim gönderdin!',
+                    winkSent: 'wink\'i gönderdin!',
+                    bgChanged: '🎨 Arka plan değiştirildi!',
+                    cantBlock: '🚫 Zeynep\'i engelleyemezsin! 😄',
+                    comicSans: '🔤 Zaten Comic Sans kullanıyoruz! 😎',
+                    voiceSoon: '🎤 Ses kaydı özelliği çok yakında!',
+                    fileSending: 'Dosya gönderiliyor: portfolio.pdf (2.4 MB)',
+                    fileSent: '✓ Dosya başarıyla gönderildi!',
+                    signedIn: 'oturum açtı',
+                    signedOut: 'çevrimdışı oldu',
+
+                    // Game texts
+                    tttTitle: '❌⭕ Tic Tac Toe',
+                    tttYourTurn: 'Senin sıran (X)',
+                    tttThinking: 'Zeynep düşünüyor...',
+                    tttYouWin: '🎉 Kazandın!',
+                    tttZeynepWins: 'Zeynep kazandı!',
+                    tttDraw: 'Berabere!',
+                    tttRestart: 'Yeniden Başla',
+                    rpsTitle: '✊✋✌️ Taş Kağıt Makas',
+                    rpsDraw: 'Berabere!',
+                    rpsYouWin: '🎉 Kazandın!',
+                    rpsZeynepWins: 'Zeynep kazandı!',
+                    guessTitle: '🔢 Sayı Tahmin Oyunu',
+                    guessIntro: '1-100 arası bir sayı tuttum. Tahmin et!',
+                    guessHigher: 'Daha büyük! ⬆️',
+                    guessLower: 'Daha küçük! ⬇️',
+
+                    // Bot responses
+                    welcome: 'Selam! Portfolyoma hoş geldin 👋\n\n🎮 Oyunlar butonuyla oyun oynayabilirsin!\n📳 Titreşim ve wink gönderebilirsin!',
+                    fallbacks: [
+                        'Tam anlayamadım 🙂 "projeler" veya "oyun" dene!',
+                        'Hmm? 🤔 Bir oyun oynamak ister misin?',
+                        'Anlamadım ama sorun değil! Wink ya da nudge gönder 😉'
+                    ]
+                },
+                en: {
+                    // Title bar
+                    windowTitle: 'Zeyn Chat - Zeynep Erden',
+                    soundToggle: 'Toggle sounds',
+                    minimize: 'Minimize',
+                    maximize: 'Maximize',
+                    close: 'Close',
+
+                    // Status
+                    online: '(Online)',
+                    busy: '(Busy)',
+                    away: '(Away)',
+                    offline: '(Appear Offline)',
+                    onlineSince: 'Online for: 2 hours',
+
+                    // Status dropdown
+                    statusOnline: 'Online',
+                    statusBusy: 'Busy',
+                    statusAway: 'Away',
+                    statusOffline: 'Appear Offline',
+
+                    // Toolbar
+                    file: 'File',
+                    fileTitle: 'Send file',
+                    games: 'Games',
+                    gamesTitle: 'Games',
+                    theme: 'Theme',
+                    themeTitle: 'Change background',
+                    block: 'Block contact',
+
+                    // Input
+                    placeholder: 'Type a message...',
+                    send: 'Send',
+                    selectEmoji: 'Select emoticon',
+                    sendWink: 'Send wink',
+                    sendNudge: 'Send nudge',
+                    fontBtn: 'Font',
+                    voiceClip: 'Voice clip',
+
+                    // Pickers
+                    emojisTab: '😊 Emoticons',
+                    symbolsTab: '❤️ Symbols',
+                    selectWink: 'Select a Wink',
+                    selectBg: 'Select Background',
+                    selectGame: '🎮 Select Game',
+
+                    // Backgrounds
+                    bgClassic: 'Classic (White)',
+                    bgClouds: 'Clouds',
+                    bgSunset: 'Sunset',
+                    bgNature: 'Nature',
+                    bgPurple: 'Purple Dream',
+
+                    // Games
+                    gameTTT: 'Tic Tac Toe',
+                    gameRPS: 'Rock Paper Scissors',
+                    gameGuess: 'Number Guess',
+
+                    // Wink labels
+                    winkKiss: 'Kiss',
+                    winkLove: 'In Love',
+                    winkParty: 'Party',
+                    winkRose: 'Rose',
+                    winkPig: 'Pig',
+                    winkDance: 'Dance',
+                    winkFire: 'Fire',
+                    winkStar: 'Star',
+                    winkButterfly: 'Butterfly',
+                    winkLips: 'Lips',
+                    winkGuitar: 'Guitar',
+                    winkRainbow: 'Rainbow',
+
+                    // Status bar
+                    lastActivity: 'Last activity:',
+                    now: 'now',
+                    viewCard: 'View contact card',
+                    changeStatus: 'Change your status',
+
+                    // Contact card
+                    cardStatus: 'Status:',
+                    cardJob: 'Job:',
+                    cardListening: 'Listening:',
+                    cardWeb: 'Web:',
+                    cardBlock: 'Block',
+                    cardMessage: 'Send Message',
+
+                    // Messages
+                    says: ' says:',
+                    saysReverse: ' :says',
+                    you: 'You 👋',
+                    typing: 'Zeynep is typing',
+                    textEntered: 'You have entered text...',
+                    personalMsg: '✨ Exploring the world through design',
+                    zeynepOnline: 'Zeynep is online!',
+
+                    // System messages
+                    nudgeSent: 'You sent a nudge!',
+                    winkSent: 'wink sent!',
+                    bgChanged: '🎨 Background changed!',
+                    cantBlock: '🚫 You can\'t block Zeynep! 😄',
+                    comicSans: '🔤 We\'re already using Comic Sans! 😎',
+                    voiceSoon: '🎤 Voice clip feature coming soon!',
+                    fileSending: 'Sending file: portfolio.pdf (2.4 MB)',
+                    fileSent: '✓ File sent successfully!',
+                    signedIn: 'signed in',
+                    signedOut: 'went offline',
+
+                    // Game texts
+                    tttTitle: '❌⭕ Tic Tac Toe',
+                    tttYourTurn: 'Your turn (X)',
+                    tttThinking: 'Zeynep is thinking...',
+                    tttYouWin: '🎉 You win!',
+                    tttZeynepWins: 'Zeynep wins!',
+                    tttDraw: 'Draw!',
+                    tttRestart: 'Restart',
+                    rpsTitle: '✊✋✌️ Rock Paper Scissors',
+                    rpsDraw: 'Draw!',
+                    rpsYouWin: '🎉 You win!',
+                    rpsZeynepWins: 'Zeynep wins!',
+                    guessTitle: '🔢 Number Guessing Game',
+                    guessIntro: 'I\'m thinking of a number between 1-100. Guess it!',
+                    guessHigher: 'Higher! ⬆️',
+                    guessLower: 'Lower! ⬇️',
+
+                    // Bot responses
+                    welcome: 'Hi! Welcome to my portfolio 👋\n\n🎮 Play games using the Games button!\n📳 Send nudges and winks!',
+                    fallbacks: [
+                        'I didn\'t quite understand 🙂 Try "projects" or "game"!',
+                        'Hmm? 🤔 Want to play a game?',
+                        'Didn\'t get that but no worries! Send a wink or nudge 😉'
+                    ]
+                }
+            };
+
+            // English bot responses
+            const botResponsesEN = [
+                {
+                    keywords: ['who are you', 'about you', 'introduce', 'yourself'],
+                    responses: [
+                        'I\'m Zeynep Erden 🙋‍♀️\nI work on UI/UX design, digital products and creative experiences.',
+                        'Zeynep here 🙋‍♀️\nI specialize in interface design and user experience.',
+                        'I\'m Zeynep! ✨\nI tell stories through digital design.'
+                    ]
+                },
+                {
+                    keywords: ['project', 'portfolio', 'work', 'case'],
+                    responses: [
+                        'My portfolio has UI/UX case studies.\nClick on "My Work" icon on the desktop! 🎨',
+                        'I have UI/UX and interactive web projects.\nWhich one interests you?'
+                    ]
+                },
+                {
+                    keywords: ['game', 'play', 'bored'],
+                    responses: [
+                        'Want to play a game? 🎮\nClick the Games button in the toolbar!',
+                        'Let\'s play! Tic Tac Toe or Rock Paper Scissors? 🎮'
+                    ]
+                },
+                {
+                    keywords: ['contact', 'mail', 'email', 'reach'],
+                    responses: [
+                        'Check the Contact section on the site to get in touch 📬',
+                        'Click on the "Contact" icon on the desktop! 😊'
+                    ]
+                },
+                {
+                    keywords: ['thank', 'thanks'],
+                    responses: [
+                        'You\'re welcome! 😄',
+                        'No problem! I\'m always here 🙂'
+                    ]
+                },
+                {
+                    keywords: ['hi', 'hello', 'hey', 'what\'s up', 'how are you'],
+                    responses: [
+                        'Hey! 👋 How can I help you?',
+                        'Hello! 😊 Ready to explore my portfolio?',
+                        'Hey there! 🙋‍♀️ What would you like to know?'
+                    ]
+                },
+                {
+                    keywords: ['music', 'song', 'listen', 'what are you listening'],
+                    responses: [
+                        'Currently listening to ' + 'Daft Punk - Digital Love' + ' 🎵',
+                        'Playing some nostalgic tracks today 🎧'
+                    ]
+                },
+                {
+                    keywords: ['nice', 'great', 'cool', 'awesome'],
+                    responses: [
+                        'Thanks! 🥰',
+                        'Yaay! Glad you like it 😊'
+                    ]
+                }
+            ];
+
+            const playlist = [
+                'Daft Punk - Digital Love',
+                'Gorillaz - Feel Good Inc.',
+                'The Killers - Mr. Brightside',
+                'Arctic Monkeys - Do I Wanna Know?',
+                'Tame Impala - The Less I Know',
+                'MGMT - Electric Feel'
+            ];
+
+            // ========================================
+            // Sound Functions
+            // ========================================
+            function playSound(soundId) {
+                if (!soundEnabled) return;
+                try {
+                    const audio = document.getElementById(soundId);
+                    if (audio) {
+                        audio.currentTime = 0;
+                        audio.volume = 0.5;
+                        audio.play().catch(() => {});
+                    }
+                } catch(e) {}
+            }
+
+            function toggleSound() {
+                soundEnabled = !soundEnabled;
+                btnSound.textContent = soundEnabled ? '🔊' : '🔇';
+                btnSound.classList.toggle('muted', !soundEnabled);
+            }
+
+            // ========================================
+            // Emoticon Data
+            // ========================================
+            const smileys = [
+                { code: ':)', emoji: '😊' }, { code: ':D', emoji: '😄' },
+                { code: ';)', emoji: '😉' }, { code: ':P', emoji: '😛' },
+                { code: ':(', emoji: '😢' }, { code: ':O', emoji: '😮' },
+                { code: '<3', emoji: '❤️' }, { code: ':*', emoji: '😘' },
+                { code: 'B)', emoji: '😎' }, { code: ':|', emoji: '😐' },
+                { code: ':S', emoji: '😖' }, { code: '^_^', emoji: '😁' },
+                { code: 'xD', emoji: '🤣' }, { code: '-_-', emoji: '😑' },
+                { code: ':/', emoji: '😕' }, { code: ":'(", emoji: '😭' },
+                { code: ':3', emoji: '😺' }, { code: 'o.O', emoji: '🤨' },
+                { code: '>:(', emoji: '😠' }, { code: ':$', emoji: '😳' },
+                { code: '(cool)', emoji: '😎' }, { code: '(angel)', emoji: '😇' },
+                { code: '(devil)', emoji: '😈' }, { code: '(sleepy)', emoji: '😴' }
+            ];
+
+            const symbols = [
+                { code: '(Y)', emoji: '👍' }, { code: '(N)', emoji: '👎' },
+                { code: '(H)', emoji: '🌞' }, { code: '(F)', emoji: '🌸' },
+                { code: '(K)', emoji: '💋' }, { code: '(G)', emoji: '🎁' },
+                { code: '(^)', emoji: '🎂' }, { code: '(I)', emoji: '💡' },
+                { code: '(C)', emoji: '☕' }, { code: '(B)', emoji: '🍺' },
+                { code: '(D)', emoji: '🍸' }, { code: '(X)', emoji: '👧' },
+                { code: '(Z)', emoji: '👦' }, { code: '({)', emoji: '🤗' },
+                { code: '(})', emoji: '💃' }, { code: '(S)', emoji: '🌙' },
+                { code: '(*)', emoji: '⭐' }, { code: '(#)', emoji: '☀️' },
+                { code: '(R)', emoji: '🌈' }, { code: '(8)', emoji: '🎵' },
+                { code: '(E)', emoji: '📧' }, { code: '(M)', emoji: '📱' },
+                { code: '(O)', emoji: '⏰' }, { code: '(P)', emoji: '📸' }
+            ];
+
+            const emojiMap = {};
+            [...smileys, ...symbols].forEach(e => {
+                emojiMap[e.code] = e.emoji;
+                emojiMap[e.code.toLowerCase()] = e.emoji;
+            });
+
+            // ========================================
+            // Bot Responses
+            // ========================================
+            const botResponses = [
+                {
+                    keywords: ['kimsin', 'sen kimsin', 'hakkında', 'kim', 'kendini tanıt'],
+                    responses: [
+                        'Ben Zeynep Erden 🙋‍♀️\nUI/UX tasarımı, dijital ürünler ve yaratıcı deneyimler üzerine çalışıyorum.',
+                        'Zeynep burada 🙋‍♀️\nArayüz tasarımı ve kullanıcı deneyimi ile uğraşıyorum.',
+                        'Ben Zeynep! ✨\nDijital tasarım dünyasında hikayeler anlatıyorum.'
+                    ]
+                },
+                {
+                    keywords: ['proje', 'portfolyo', 'işler', 'case', 'çalışma', 'work'],
+                    responses: [
+                        'Portfolyomda UI/UX case study\'ler var.\nMasaüstündeki "My Work" ikonuna tıklayabilirsin! 🎨',
+                        'UI/UX, interaktif web projelerim var.\nHangisini merak ediyorsun?'
+                    ]
+                },
+                {
+                    keywords: ['oyun', 'game', 'oyna', 'sıkıldım'],
+                    responses: [
+                        'Oyun oynamak ister misin? 🎮\nAraç çubuğundaki Oyunlar butonuna tıkla!',
+                        'Hadi bir oyun oynayalım! Tic Tac Toe veya Taş Kağıt Makas? 🎮'
+                    ]
+                },
+                {
+                    keywords: ['iletişim', 'mail', 'email', 'ulaş', 'contact'],
+                    responses: [
+                        'Benimle iletişime geçmek için sitedeki Contact bölümüne bakabilirsin 📬',
+                        'Masaüstündeki "Contact" ikonuna tıkla! 😊'
+                    ]
+                },
+                {
+                    keywords: ['teşekkür', 'sağ ol', 'thanks', 'eyvallah'],
+                    responses: [
+                        'Rica ederim! 😄',
+                        'Ne demek! Her zaman buradayım 🙂'
+                    ]
+                },
+                {
+                    keywords: ['selam', 'merhaba', 'hey', 'hi', 'hello', 'naber', 'nasılsın'],
+                    responses: [
+                        'Selamm! 👋 Nasıl yardımcı olabilirim?',
+                        'Merhaba! 😊 Portfolyomu keşfetmeye hazır mısın?',
+                        'Hey! 🙋‍♀️ Ne sormak istersin?'
+                    ]
+                },
+                {
+                    keywords: ['müzik', 'şarkı', 'dinle', 'ne dinliyorsun'],
+                    responses: [
+                        'Şu an ' + playlist[0] + ' dinliyorum 🎵',
+                        'Bugün biraz nostaljik parçalar açtım 🎧'
+                    ]
+                },
+                {
+                    keywords: ['güzel', 'harika', 'süper', 'cool'],
+                    responses: [
+                        'Teşekkürler! 🥰',
+                        'Yaay! Beğenmene sevindim 😊'
+                    ]
+                }
+            ];
+
+            const fallbacks = [
+                'Tam anlayamadım 🙂 "projeler" veya "oyun" dene!',
+                'Hmm? 🤔 Bir oyun oynamak ister misin?',
+                'Anlamadım ama sorun değil! Wink ya da nudge gönder 😉'
+            ];
+
+            // ========================================
+            // Utility Functions
+            // ========================================
+            function convertEmojis(text) {
+                let result = text;
+                for (const [code, emoji] of Object.entries(emojiMap)) {
+                    const escaped = code.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    result = result.replace(new RegExp(escaped, 'g'), emoji);
+                }
+                return result;
+            }
+
+            function getTime() {
+                return new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+            }
+
+            function scrollDown() {
+                conversation.scrollTop = conversation.scrollHeight;
+            }
+
+            function saveChat() {
+                try { localStorage.setItem('wlmChat5', JSON.stringify(history)); } catch(e) {}
+            }
+
+            function loadChat() {
+                try {
+                    const saved = localStorage.getItem('wlmChat5');
+                    if (saved) {
+                        history = JSON.parse(saved);
+                        history.forEach(m => addMessage(m.type, m.name, m.text, m.time, false));
+                        return true;
+                    }
+                } catch(e) {}
+                return false;
+            }
+
+            function updateLastActivity() {
+                lastActivity.textContent = getTime();
+            }
+
+            function updateNowPlaying() {
+                const song = playlist[Math.floor(Math.random() * playlist.length)];
+                nowPlayingText.textContent = song;
+                document.getElementById('cardNowPlaying').textContent = song;
+            }
+
+            // ========================================
+            // Language Switching
+            // ========================================
+            function t(key) {
+                return translations[currentLang][key] || key;
+            }
+
+            function switchLanguage() {
+                currentLang = currentLang === 'tr' ? 'en' : 'tr';
+                document.getElementById('langLabel').textContent = currentLang.toUpperCase();
+
+                // Update title bar
+                document.querySelector('.wlm-titlebar-text').textContent = t('windowTitle');
+                btnSound.title = t('soundToggle');
+                btnMin.title = t('minimize');
+                document.getElementById('btnMax').title = t('maximize');
+                btnClose.title = t('close');
+
+                // Update status texts
+                document.getElementById('zeynepStatusText').textContent = t('online');
+                document.getElementById('onlineSince').textContent = t('onlineSince');
+                document.querySelector('.wlm-personal-msg').textContent = t('personalMsg');
+                document.getElementById('visitorStatusText').textContent = t('online');
+
+                // Update avatar titles
+                document.getElementById('zeynepAvatar').title = t('viewCard');
+                document.getElementById('visitorAvatar').title = t('changeStatus');
+
+                // Update visitor section
+                const visitorName = document.querySelector('.wlm-user-section.right .wlm-user-name');
+                visitorName.innerHTML = t('you') + ' <span class="wlm-status-indicator" id="visitorStatusDot"></span>';
+
+                // Update status dropdown
+                const statusOptions = statusDropdown.querySelectorAll('.wlm-status-option');
+                const updateStatusOption = (opt, dotColor, textKey) => {
+                    const isActive = opt.classList.contains('active');
+                    opt.innerHTML = `<div class="wlm-status-option-dot" style="background: ${dotColor};"></div>` + t(textKey);
+                    if (isActive) opt.classList.add('active');
+                };
+                updateStatusOption(statusOptions[0], '#7CB87C', 'statusOnline');
+                updateStatusOption(statusOptions[1], '#E04343', 'statusBusy');
+                updateStatusOption(statusOptions[2], '#F5A623', 'statusAway');
+                updateStatusOption(statusOptions[4], '#999', 'statusOffline');
+
+                // Update toolbar
+                document.getElementById('btnSendFile').title = t('fileTitle');
+                document.querySelector('#btnSendFile span:not(.tool-icon)').textContent = t('file');
+                document.getElementById('btnGames').title = t('gamesTitle');
+                document.querySelector('#btnGames span:not(.tool-icon)').textContent = t('games');
+                document.getElementById('btnBackground').title = t('themeTitle');
+                document.querySelector('#btnBackground span:not(.tool-icon)').textContent = t('theme');
+                document.getElementById('btnBlock').title = t('block');
+
+                // Update input section
+                inputBox.placeholder = t('placeholder');
+                btnSend.textContent = t('send');
+                btnEmoji.title = t('selectEmoji');
+                btnWink.title = t('sendWink');
+                btnNudge.title = t('sendNudge');
+                document.getElementById('btnFont').title = t('fontBtn');
+                document.getElementById('btnVoiceClip').title = t('voiceClip');
+
+                // Update picker tabs
+                const pickerTabs = emojiPicker.querySelectorAll('.wlm-picker-tab');
+                pickerTabs[0].textContent = t('emojisTab');
+                pickerTabs[1].textContent = t('symbolsTab');
+
+                // Update wink picker
+                document.querySelector('.wlm-wink-picker-title').textContent = t('selectWink');
+                const winkLabels = ['winkKiss', 'winkLove', 'winkParty', 'winkRose', 'winkPig', 'winkDance', 'winkFire', 'winkStar', 'winkButterfly', 'winkLips', 'winkGuitar', 'winkRainbow'];
+                winkPicker.querySelectorAll('.wlm-wink-item-label').forEach((label, i) => {
+                    label.textContent = t(winkLabels[i]);
+                });
+
+                // Update background picker
+                document.querySelector('.wlm-bg-picker-title').textContent = t('selectBg');
+                const bgOptions = bgPicker.querySelectorAll('.wlm-bg-option');
+                const bgLabels = ['bgClassic', 'bgClouds', 'bgSunset', 'bgNature', 'bgPurple'];
+                bgOptions.forEach((opt, i) => {
+                    const swatch = opt.querySelector('.wlm-bg-swatch').outerHTML;
+                    const isActive = opt.classList.contains('active');
+                    opt.innerHTML = swatch + ' ' + t(bgLabels[i]);
+                    if (isActive) opt.classList.add('active');
+                });
+
+                // Update games picker
+                document.querySelector('.wlm-games-picker-title').textContent = t('selectGame');
+                const gameOptions = gamesPicker.querySelectorAll('.wlm-game-option');
+                gameOptions[0].innerHTML = '<span>❌⭕</span> ' + t('gameTTT');
+                gameOptions[1].innerHTML = '<span>✊✋✌️</span> ' + t('gameRPS');
+                gameOptions[2].innerHTML = '<span>🔢</span> ' + t('gameGuess');
+
+                // Update status bar
+                document.querySelector('.wlm-statusbar span').innerHTML = t('lastActivity') + ' <span id="lastActivity">' + t('now') + '</span>';
+
+                // Update contact card
+                const cardInfos = document.querySelectorAll('.wlm-card-info-label');
+                cardInfos[0].textContent = t('cardStatus');
+                cardInfos[1].textContent = t('cardJob');
+                cardInfos[2].textContent = t('cardListening');
+                cardInfos[3].textContent = t('cardWeb');
+                document.getElementById('cardBlock').textContent = t('cardBlock');
+                document.getElementById('cardMessage').textContent = t('cardMessage');
+                document.querySelector('.wlm-card-status').textContent = t('personalMsg');
+                document.getElementById('cardStatusValue').textContent = currentLang === 'en' ? 'Online' : 'Çevrimiçi';
+
+                // Update CSS for "says"
+                updateSaysCSS();
+
+                addMessage('system', null, currentLang === 'en' ? '🌐 Language changed to English!' : '🌐 Dil Türkçe olarak değiştirildi!', null, false);
+            }
+
+            function updateSaysCSS() {
+                let styleEl = document.getElementById('langStyle');
+                if (!styleEl) {
+                    styleEl = document.createElement('style');
+                    styleEl.id = 'langStyle';
+                    document.head.appendChild(styleEl);
+                }
+                styleEl.textContent = `
+                    .wlm-msg-sender::after { content: '${t('says')}'; }
+                    .wlm-message.from-user .wlm-msg-sender::after { content: '${t('saysReverse')}'; }
+                `;
+            }
+
+            function getResponseLang(input) {
+                const msg = input.toLowerCase().trim();
+                const responses = currentLang === 'en' ? botResponsesEN : botResponses;
+                for (const category of responses) {
+                    for (const keyword of category.keywords) {
+                        if (msg.includes(keyword)) {
+                            return category.responses[Math.floor(Math.random() * category.responses.length)];
+                        }
+                    }
+                }
+                const fb = t('fallbacks');
+                return fb[Math.floor(Math.random() * fb.length)];
+            }
+
+            // ========================================
+            // Sign In/Out Toast
+            // ========================================
+            function showSigninToast(name, isSignIn = true) {
+                const signText = isSignIn ? t('signedIn') : t('signedOut');
+                signinToastText.textContent = `${name} ${signText}`;
+                signinToast.style.background = isSignIn
+                    ? 'linear-gradient(180deg, #4CAF50 0%, #388E3C 100%)'
+                    : 'linear-gradient(180deg, #ff9800 0%, #f57c00 100%)';
+                signinToast.querySelector('span').textContent = isSignIn ? '🟢' : '🟠';
+                signinToast.classList.add('show');
+                if (isSignIn) playSound('sndOnline');
+                setTimeout(() => signinToast.classList.remove('show'), 3000);
+            }
+
+            // ========================================
+            // Message Functions
+            // ========================================
+            function addMessage(type, name, text, time = null, save = true) {
+                const msgTime = time || getTime();
+                const div = document.createElement('div');
+
+                if (type === 'system' || type === 'hint' || type === 'nudge' || type === 'wink' || type === 'file' || type === 'signin' || type === 'signout' || type === 'game') {
+                    const classMap = {
+                        system: 'wlm-system',
+                        hint: 'wlm-system hint',
+                        nudge: 'wlm-system nudge-msg',
+                        wink: 'wlm-system wink-msg',
+                        file: 'wlm-system file-msg',
+                        signin: 'wlm-system signin-msg',
+                        signout: 'wlm-system signout-msg',
+                        game: 'wlm-system game-msg'
+                    };
+                    div.className = classMap[type] || 'wlm-system';
+
+                    if (type === 'nudge') div.innerHTML = '📳 ' + text;
+                    else if (type === 'signin') div.innerHTML = '🟢 ' + text;
+                    else if (type === 'signout') div.innerHTML = '🟠 ' + text;
+                    else if (type === 'file') div.innerHTML = '📎 ' + text;
+                    else div.innerHTML = text;
+                } else if (type === 'timestamp') {
+                    div.className = 'wlm-timestamp';
+                    div.textContent = text;
+                } else {
+                    const isZeynep = name === 'Zeynep';
+                    div.className = 'wlm-message ' + (isZeynep ? 'from-zeynep' : 'from-user');
+
+                    const convertedText = convertEmojis(text).replace(/\n/g, '<br>');
+                    const avatarClass = isZeynep ? 'zeynep' : 'visitor';
+                    const avatarLetter = isZeynep ? 'Z' : '?';
+
+                    div.innerHTML = `
+                        <div class="wlm-msg-avatar">
+                            <div class="wlm-msg-avatar-placeholder ${avatarClass}">${avatarLetter}</div>
+                        </div>
+                        <div class="wlm-msg-bubble">
+                            <div class="wlm-msg-header">
+                                <div class="wlm-msg-sender">${name}</div>
+                                <div class="wlm-msg-time">${msgTime}</div>
+                            </div>
+                            <div class="wlm-msg-content">${convertedText}</div>
+                        </div>
+                    `;
+
+                    if (isZeynep && save) playSound('sndMessage');
+                }
+
+                conversation.appendChild(div);
+                scrollDown();
+
+                if (save && (type === 'user' || type === 'zeynep')) {
+                    history.push({ type, name, text, time: msgTime });
+                    saveChat();
+                    messageCount++;
+                }
+
+                updateLastActivity();
+            }
+
+            // ========================================
+            // Typing Indicators
+            // ========================================
+            function showTextEntered() {
+                let el = document.getElementById('textEnteredIndicator');
+                if (!el) {
+                    el = document.createElement('div');
+                    el.id = 'textEnteredIndicator';
+                    el.className = 'wlm-text-entered';
+                    el.textContent = t('textEntered');
+                    conversation.appendChild(el);
+                    scrollDown();
+                }
+            }
+
+            function hideTextEntered() {
+                const el = document.getElementById('textEnteredIndicator');
+                if (el) el.remove();
+            }
+
+            function showTyping() {
+                if (typing) return;
+                typing = true;
+                hideTextEntered();
+
+                const div = document.createElement('div');
+                div.className = 'wlm-typing';
+                div.id = 'typingIndicator';
+                div.innerHTML = `
+                    <span>${t('typing')}</span>
+                    <div class="wlm-typing-dots"><span></span><span></span><span></span></div>
+                `;
+                conversation.appendChild(div);
+                scrollDown();
+            }
+
+            function hideTyping() {
+                typing = false;
+                const el = document.getElementById('typingIndicator');
+                if (el) el.remove();
+            }
+
+            // ========================================
+            // Input monitoring for "text entered"
+            // ========================================
+            inputBox.addEventListener('input', () => {
+                const val = inputBox.value.trim();
+                if (val && val !== lastInputValue) {
+                    showTextEntered();
+                    clearTimeout(textEnteredTimeout);
+                    textEnteredTimeout = setTimeout(() => {
+                        hideTextEntered();
+                    }, 3000);
+                } else if (!val) {
+                    hideTextEntered();
+                }
+                lastInputValue = val;
+            });
+
+            // ========================================
+            // Notifications
+            // ========================================
+            function showNotification(text) {
+                notificationText.textContent = text.substring(0, 60) + (text.length > 60 ? '...' : '');
+                notification.classList.add('show');
+                setTimeout(() => notification.classList.remove('show'), 3000);
+            }
+
+            // ========================================
+            // Actions
+            // ========================================
+            function sendMessage() {
+                const text = inputBox.value.trim();
+                if (!text) return;
+
+                hideTextEntered();
+                addMessage('user', currentLang === 'en' ? 'You' : 'Sen', text);
+                inputBox.value = '';
+                lastInputValue = '';
+
+                // Check for game commands
+                if (currentGame === 'guess' && !isNaN(text)) {
+                    handleGuessGame(parseInt(text));
+                    return;
+                }
+
+                showTyping();
+                setTimeout(() => {
+                    hideTyping();
+                    const response = getResponseLang(text);
+                    addMessage('zeynep', 'Zeynep', response);
+                    showNotification(response.split('\n')[0]);
+                }, 800 + Math.random() * 600);
+            }
+
+            function sendNudge() {
+                chatWindow.classList.add('nudge');
+                playSound('sndNudge');
+                setTimeout(() => chatWindow.classList.remove('nudge'), 400);
+
+                addMessage('nudge', null, t('nudgeSent'));
+
+                setTimeout(() => {
+                    chatWindow.classList.add('nudge');
+                    playSound('sndNudge');
+                    setTimeout(() => chatWindow.classList.remove('nudge'), 400);
+                    const nudgeResponse = currentLang === 'en' ? 'Ooh a nudge! xD What\'s up?' : 'Aaa titreşim! xD Ne var ne yok?';
+                    const nudgeNotif = currentLang === 'en' ? 'Zeynep sent you a nudge!' : 'Zeynep sana bir titreşim gönderdi!';
+                    addMessage('zeynep', 'Zeynep', nudgeResponse);
+                    showNotification(nudgeNotif);
+                }, 1200);
+            }
+
+            function sendWink(winkEmoji, winkName, animation) {
+                winkContent.textContent = winkEmoji;
+                winkContent.className = 'wlm-wink-content ' + (animation || '');
+                winkOverlay.classList.add('show');
+                playSound('sndMessage');
+
+                setTimeout(() => winkOverlay.classList.remove('show'), 1800);
+
+                const winkMsg = currentLang === 'en'
+                    ? `${winkEmoji} You sent "${winkName}" wink!`
+                    : `${winkEmoji} "${winkName}" wink'i gönderdin!`;
+                addMessage('wink', null, winkMsg);
+
+                setTimeout(() => {
+                    const responseWinks = ['😘', '🥰', '💕', '😊'];
+                    winkContent.textContent = responseWinks[Math.floor(Math.random() * responseWinks.length)];
+                    winkContent.className = 'wlm-wink-content heartbeat';
+                    winkOverlay.classList.add('show');
+                    playSound('sndMessage');
+                    setTimeout(() => winkOverlay.classList.remove('show'), 1500);
+
+                    addMessage('zeynep', 'Zeynep', currentLang === 'en' ? 'Aww what a cute wink! 😘 That\'s the MSN spirit!' : 'Aww ne tatlı bir wink! 😘 İşte bu MSN ruhu!');
+                }, 2200);
+            }
+
+            // ========================================
+            // Games
+            // ========================================
+
+            // Tic Tac Toe
+            function startTicTacToe() {
+                currentGame = 'ttt';
+                gameState = {
+                    board: ['', '', '', '', '', '', '', '', ''],
+                    turn: 'X',
+                    gameOver: false
+                };
+
+                const gameHtml = `
+                    <div class="wlm-game-container" id="tttGame">
+                        <div class="wlm-game-title">${t('tttTitle')}</div>
+                        <div class="wlm-ttt-board" id="tttBoard">
+                            ${[0,1,2,3,4,5,6,7,8].map(i => `<div class="wlm-ttt-cell" data-index="${i}"></div>`).join('')}
+                        </div>
+                        <div class="wlm-game-status" id="tttStatus">${t('tttYourTurn')}</div>
+                        <button class="wlm-game-btn" id="tttReset">${t('tttRestart')}</button>
+                    </div>
+                `;
+
+                addMessage('game', null, gameHtml, null, false);
+
+                setTimeout(() => {
+                    document.querySelectorAll('.wlm-ttt-cell').forEach(cell => {
+                        cell.addEventListener('click', handleTTTClick);
+                    });
+                    document.getElementById('tttReset')?.addEventListener('click', startTicTacToe);
+                }, 100);
+
+                addMessage('zeynep', 'Zeynep', currentLang === 'en' ? 'Let\'s play! You\'re X, I\'m O 😊' : 'Hadi oynayalım! Sen X\'sin, ben O 😊');
+            }
+
+            function handleTTTClick(e) {
+                if (gameState.gameOver || gameState.turn !== 'X') return;
+                const idx = parseInt(e.target.dataset.index);
+                if (gameState.board[idx]) return;
+
+                gameState.board[idx] = 'X';
+                e.target.textContent = 'X';
+                e.target.classList.add('x', 'taken');
+
+                if (checkTTTWin('X')) {
+                    document.getElementById('tttStatus').textContent = t('tttYouWin');
+                    gameState.gameOver = true;
+                    addMessage('zeynep', 'Zeynep', currentLang === 'en' ? 'Congrats, you won! 🎉 Play again?' : 'Tebrikler kazandın! 🎉 Bir daha oynayalım mı?');
+                    return;
+                }
+
+                if (gameState.board.every(c => c)) {
+                    document.getElementById('tttStatus').textContent = t('tttDraw');
+                    gameState.gameOver = true;
+                    return;
+                }
+
+                gameState.turn = 'O';
+                document.getElementById('tttStatus').textContent = t('tttThinking');
+
+                setTimeout(() => {
+                    const aiMove = getTTTAIMove();
+                    gameState.board[aiMove] = 'O';
+                    const cells = document.querySelectorAll('.wlm-ttt-cell');
+                    cells[aiMove].textContent = 'O';
+                    cells[aiMove].classList.add('o', 'taken');
+
+                    if (checkTTTWin('O')) {
+                        document.getElementById('tttStatus').textContent = t('tttZeynepWins');
+                        gameState.gameOver = true;
+                        addMessage('zeynep', 'Zeynep', currentLang === 'en' ? 'Yay I won! 😄 Try again?' : 'Yaay ben kazandım! 😄 Tekrar deneyelim mi?');
+                        return;
+                    }
+
+                    gameState.turn = 'X';
+                    document.getElementById('tttStatus').textContent = t('tttYourTurn');
+                }, 600);
+            }
+
+            function getTTTAIMove() {
+                const empty = gameState.board.map((v, i) => v === '' ? i : null).filter(v => v !== null);
+                // Simple AI: try to win, block, or random
+                for (const mark of ['O', 'X']) {
+                    for (const i of empty) {
+                        const test = [...gameState.board];
+                        test[i] = mark;
+                        if (checkTTTWinBoard(test, mark)) return i;
+                    }
+                }
+                return empty[Math.floor(Math.random() * empty.length)];
+            }
+
+            function checkTTTWin(mark) {
+                return checkTTTWinBoard(gameState.board, mark);
+            }
+
+            function checkTTTWinBoard(board, mark) {
+                const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+                return wins.some(([a,b,c]) => board[a] === mark && board[b] === mark && board[c] === mark);
+            }
+
+            // Rock Paper Scissors
+            function startRPS() {
+                currentGame = 'rps';
+                const gameHtml = `
+                    <div class="wlm-game-container" id="rpsGame">
+                        <div class="wlm-game-title">${t('rpsTitle')}</div>
+                        <div class="wlm-rps-options">
+                            <button class="wlm-rps-btn" data-choice="rock">✊</button>
+                            <button class="wlm-rps-btn" data-choice="paper">✋</button>
+                            <button class="wlm-rps-btn" data-choice="scissors">✌️</button>
+                        </div>
+                        <div class="wlm-rps-result" id="rpsResult"></div>
+                    </div>
+                `;
+
+                addMessage('game', null, gameHtml, null, false);
+
+                setTimeout(() => {
+                    document.querySelectorAll('.wlm-rps-btn').forEach(btn => {
+                        btn.addEventListener('click', () => handleRPSClick(btn.dataset.choice));
+                    });
+                }, 100);
+
+                addMessage('zeynep', 'Zeynep', currentLang === 'en' ? 'Rock, paper, or scissors? 🤔' : 'Taş mı, kağıt mı, makas mı? 🤔');
+            }
+
+            function handleRPSClick(choice) {
+                const choices = ['rock', 'paper', 'scissors'];
+                const emojis = { rock: '✊', paper: '✋', scissors: '✌️' };
+                const aiChoice = choices[Math.floor(Math.random() * 3)];
+
+                const resultDiv = document.getElementById('rpsResult');
+                resultDiv.innerHTML = `
+                    <div class="wlm-rps-display">${emojis[choice]} vs ${emojis[aiChoice]}</div>
+                `;
+
+                let result, msg;
+                if (choice === aiChoice) {
+                    result = t('rpsDraw');
+                    msg = currentLang === 'en' ? 'It\'s a draw! 😄 Again?' : 'Berabere kaldık! 😄 Bir daha?';
+                } else if (
+                    (choice === 'rock' && aiChoice === 'scissors') ||
+                    (choice === 'paper' && aiChoice === 'rock') ||
+                    (choice === 'scissors' && aiChoice === 'paper')
+                ) {
+                    result = t('rpsYouWin');
+                    msg = currentLang === 'en' ? 'You won! 🎉 Lucky!' : 'Sen kazandın! 🎉 Şanslısın!';
+                } else {
+                    result = t('rpsZeynepWins');
+                    msg = currentLang === 'en' ? 'I won! 😊 Try again?' : 'Ben kazandım! 😊 Tekrar deneyelim mi?';
+                }
+
+                resultDiv.innerHTML += `<div style="margin-top:8px;font-weight:600;">${result}</div>`;
+                playSound('sndMessage');
+                setTimeout(() => addMessage('zeynep', 'Zeynep', msg), 500);
+            }
+
+            // Number Guessing
+            function startGuessGame() {
+                currentGame = 'guess';
+                gameState.secretNumber = Math.floor(Math.random() * 100) + 1;
+                gameState.attempts = 0;
+
+                addMessage('game', null, `🔢 <b>${t('guessTitle')}</b><br>${t('guessIntro')}`, null, false);
+                addMessage('zeynep', 'Zeynep', currentLang === 'en' ? 'I\'m thinking of a number between 1 and 100! Try to guess 🔢' : '1 ile 100 arasında bir sayı tuttum! Tahmin etmeye çalış 🔢');
+            }
+
+            function handleGuessGame(guess) {
+                gameState.attempts++;
+                const secret = gameState.secretNumber;
+
+                if (guess === secret) {
+                    const correctMsg = currentLang === 'en'
+                        ? `🎉 Correct! You got it in ${gameState.attempts} tries! The number was ${secret}.`
+                        : `🎉 Doğru! ${gameState.attempts} denemede bildin! Sayı ${secret} idi.`;
+                    addMessage('zeynep', 'Zeynep', correctMsg);
+                    currentGame = null;
+                } else if (guess < secret) {
+                    addMessage('zeynep', 'Zeynep', t('guessHigher'));
+                } else {
+                    addMessage('zeynep', 'Zeynep', t('guessLower'));
+                }
+            }
+
+            // ========================================
+            // Theme
+            // ========================================
+            function changeTheme(theme) {
+                conversation.classList.remove('theme-clouds', 'theme-sunset', 'theme-nature', 'theme-purple');
+                if (theme) conversation.classList.add('theme-' + theme);
+
+                bgPicker.querySelectorAll('.wlm-bg-option').forEach(opt => {
+                    opt.classList.toggle('active', opt.dataset.theme === theme);
+                });
+
+                addMessage('system', null, t('bgChanged'), null, false);
+            }
+
+            function changeStatus(status) {
+                const statusKeys = {
+                    online: 'online', busy: 'busy',
+                    away: 'away', offline: 'offline'
+                };
+
+                document.getElementById('visitorStatusText').textContent = t(statusKeys[status]);
+                document.getElementById('visitorStatusDot').className = 'wlm-status-indicator ' + (status === 'online' ? '' : status);
+                document.getElementById('visitorStatusGem').className = 'wlm-avatar-status-gem ' + status;
+
+                statusDropdown.querySelectorAll('.wlm-status-option').forEach(opt => {
+                    opt.classList.toggle('active', opt.dataset.status === status);
+                });
+                statusDropdown.classList.remove('show');
+
+                if (status === 'offline') {
+                    setTimeout(() => {
+                        addMessage('zeynep', 'Zeynep', currentLang === 'en' ? 'You appear offline but I can see you 👀😄' : 'Çevrimdışı görünüyorsun ama ben seni görüyorum 👀😄');
+                    }, 1000);
+                }
+            }
+
+            // ========================================
+            // Build Emoji Picker
+            // ========================================
+            function buildEmojiPicker(type) {
+                const emojis = type === 'smileys' ? smileys : symbols;
+                emojiGrid.innerHTML = '';
+                emojis.forEach(e => {
+                    const btn = document.createElement('button');
+                    btn.className = 'wlm-picker-emo';
+                    btn.textContent = e.emoji;
+                    btn.title = e.code;
+                    btn.addEventListener('click', () => {
+                        inputBox.value += e.code + ' ';
+                        inputBox.focus();
+                        emojiPicker.classList.remove('show');
+                    });
+                    emojiGrid.appendChild(btn);
+                });
+            }
+
+            // ========================================
+            // Event Listeners
+            // ========================================
+            btnSend.addEventListener('click', sendMessage);
+            inputBox.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            btnNudge.addEventListener('click', sendNudge);
+            btnSound.addEventListener('click', toggleSound);
+
+            btnEmoji.addEventListener('click', (e) => {
+                e.stopPropagation();
+                winkPicker.classList.remove('show');
+                bgPicker.classList.remove('show');
+                gamesPicker.classList.remove('show');
+                emojiPicker.classList.toggle('show');
+            });
+
+            btnWink.addEventListener('click', (e) => {
+                e.stopPropagation();
+                emojiPicker.classList.remove('show');
+                bgPicker.classList.remove('show');
+                gamesPicker.classList.remove('show');
+                winkPicker.classList.toggle('show');
+            });
+
+            btnBackground.addEventListener('click', (e) => {
+                e.stopPropagation();
+                emojiPicker.classList.remove('show');
+                winkPicker.classList.remove('show');
+                gamesPicker.classList.remove('show');
+                bgPicker.classList.toggle('show');
+            });
+
+            btnGames.addEventListener('click', (e) => {
+                e.stopPropagation();
+                emojiPicker.classList.remove('show');
+                winkPicker.classList.remove('show');
+                bgPicker.classList.remove('show');
+                gamesPicker.classList.toggle('show');
+            });
+
+            // Picker tabs
+            emojiPicker.querySelectorAll('.wlm-picker-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    emojiPicker.querySelectorAll('.wlm-picker-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    buildEmojiPicker(tab.dataset.tab);
+                });
+            });
+
+            // Wink items
+            winkPicker.querySelectorAll('.wlm-wink-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    // Get the translated name from the label element
+                    const winkLabel = item.querySelector('.wlm-wink-item-label');
+                    const winkName = winkLabel ? winkLabel.textContent : item.dataset.name;
+                    sendWink(item.dataset.wink, winkName, item.dataset.anim);
+                    winkPicker.classList.remove('show');
+                });
+            });
+
+            // Background options
+            bgPicker.querySelectorAll('.wlm-bg-option').forEach(opt => {
+                opt.addEventListener('click', () => {
+                    changeTheme(opt.dataset.theme);
+                    bgPicker.classList.remove('show');
+                });
+            });
+
+            // Games options
+            gamesPicker.querySelectorAll('.wlm-game-option').forEach(opt => {
+                opt.addEventListener('click', () => {
+                    gamesPicker.classList.remove('show');
+                    const game = opt.dataset.game;
+                    if (game === 'ttt') startTicTacToe();
+                    else if (game === 'rps') startRPS();
+                    else if (game === 'guess') startGuessGame();
+                });
+            });
+
+            // File send
+            document.getElementById('btnSendFile').addEventListener('click', () => {
+                addMessage('file', null, t('fileSending'));
+                setTimeout(() => {
+                    addMessage('system', null, t('fileSent'));
+                    addMessage('zeynep', 'Zeynep', currentLang === 'en' ? 'Got the file, thanks! 📄' : 'Dosyayı aldım, teşekkürler! 📄');
+                }, 2000);
+            });
+
+            document.getElementById('btnBlock').addEventListener('click', () => {
+                addMessage('system', null, t('cantBlock'));
+            });
+
+            document.getElementById('btnFont').addEventListener('click', () => {
+                addMessage('system', null, t('comicSans'));
+            });
+
+            document.getElementById('btnVoiceClip').addEventListener('click', () => {
+                addMessage('system', null, t('voiceSoon'));
+            });
+
+            // Language toggle
+            document.getElementById('btnLang').addEventListener('click', switchLanguage);
+
+            // Contact card
+            zeynepAvatar.addEventListener('click', () => contactCard.classList.add('show'));
+            document.getElementById('cardClose').addEventListener('click', () => contactCard.classList.remove('show'));
+            document.getElementById('cardMessage').addEventListener('click', () => {
+                contactCard.classList.remove('show');
+                inputBox.focus();
+            });
+            document.getElementById('cardBlock').addEventListener('click', () => {
+                contactCard.classList.remove('show');
+                addMessage('system', null, t('cantBlock'));
+            });
+
+            // Status dropdown
+            visitorAvatar.addEventListener('click', (e) => {
+                e.stopPropagation();
+                statusDropdown.classList.toggle('show');
+            });
+
+            statusDropdown.querySelectorAll('.wlm-status-option').forEach(opt => {
+                opt.addEventListener('click', () => changeStatus(opt.dataset.status));
+            });
+
+            // Window controls
+            btnMin.addEventListener('click', () => chatWindow.style.display = 'none');
+            btnClose.addEventListener('click', () => {
+                chatWindow.style.transition = 'all 0.2s ease';
+                chatWindow.style.opacity = '0';
+                chatWindow.style.transform = 'scale(0.95)';
+                setTimeout(() => chatWindow.style.display = 'none', 200);
+            });
+
+            // Close pickers
+            document.addEventListener('click', (e) => {
+                if (!emojiPicker.contains(e.target) && e.target !== btnEmoji) emojiPicker.classList.remove('show');
+                if (!winkPicker.contains(e.target) && e.target !== btnWink) winkPicker.classList.remove('show');
+                if (!bgPicker.contains(e.target) && e.target !== btnBackground) bgPicker.classList.remove('show');
+                if (!gamesPicker.contains(e.target) && e.target !== btnGames) gamesPicker.classList.remove('show');
+                if (!statusDropdown.contains(e.target) && !visitorAvatar.contains(e.target)) statusDropdown.classList.remove('show');
+                if (!contactCard.contains(e.target) && !zeynepAvatar.contains(e.target)) contactCard.classList.remove('show');
+            });
+
+            // ========================================
+            // Initialize
+            // ========================================
+            function init() {
+                buildEmojiPicker('smileys');
+                updateNowPlaying();
+                updateSaysCSS(); // Initialize CSS for current language
+                setInterval(updateNowPlaying, 30000);
+
+                const hasHistory = loadChat();
+
+                if (!hasHistory) {
+                    // Show sign-in animation
+                    setTimeout(() => {
+                        showSigninToast('Zeynep', true);
+                        addMessage('signin', null, `Zeynep ${t('signedIn')}`, null, false);
+                    }, 500);
+
+                    setTimeout(() => {
+                        addMessage('zeynep', 'Zeynep', t('welcome'));
+                        showNotification(t('zeynepOnline'));
+                    }, 1500);
+                }
+
+                setTimeout(() => inputBox.focus(), 600);
+            }
+
+            init();
+        })();
+    </script>
+
+</body>
+</html>
