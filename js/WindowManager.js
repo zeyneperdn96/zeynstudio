@@ -313,7 +313,8 @@ class WindowManager {
 
                 // Add click handlers for project cards
                 projectsGrid.querySelectorAll('.project-card').forEach(card => {
-                    card.addEventListener('click', () => {
+                    card.addEventListener('click', (e) => {
+                        e.stopPropagation();
                         const projectId = card.dataset.projectId;
                         const project = projectsManager.getProjectById(projectId);
                         if (project) {
