@@ -35,11 +35,18 @@
 .desktop-icons {
     position: absolute;
     top: 20px;
-    left: 20px;
     display: flex;
     flex-direction: column;
     gap: 20px;
     z-index: 1;
+}
+
+.desktop-icons-left {
+    left: 20px;
+}
+
+.desktop-icons-right {
+    right: 20px;
 }
 
 .desktop-icon {
