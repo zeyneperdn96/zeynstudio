@@ -401,35 +401,35 @@ const WindowTemplates = {
                 <!-- Gallery Sidebar -->
                 <div class="firebox-gallery">
                     <div class="firebox-gallery-title">Gallery</div>
-                    <div class="firebox-thumb active" data-img="assets/projects/firebox/hero.png" data-index="0">
+                    <div class="firebox-thumb active" data-video="assets/projects/firebox/render.mp4" data-index="0">
+                        <div style="width:100%;height:100%;background:#1a1a2e;display:flex;align-items:center;justify-content:center;font-size:24px;">▶</div>
+                    </div>
+                    <div class="firebox-thumb" data-img="assets/projects/firebox/hero.png" data-index="1">
                         <img src="assets/projects/firebox/hero.png" alt="Hero">
                     </div>
-                    <div class="firebox-thumb" data-img="assets/projects/firebox/technical.png" data-index="1">
+                    <div class="firebox-thumb" data-img="assets/projects/firebox/technical.png" data-index="2">
                         <img src="assets/projects/firebox/technical.png" alt="Technical">
                     </div>
-                    <div class="firebox-thumb" data-img="assets/projects/firebox/exploded.png" data-index="2">
+                    <div class="firebox-thumb" data-img="assets/projects/firebox/exploded.png" data-index="3">
                         <img src="assets/projects/firebox/exploded.png" alt="Exploded">
                     </div>
-                    <div class="firebox-thumb" data-img="assets/projects/firebox/exploded-fire.png" data-index="3">
+                    <div class="firebox-thumb" data-img="assets/projects/firebox/exploded-fire.png" data-index="4">
                         <img src="assets/projects/firebox/exploded-fire.png" alt="Exploded Fire">
                     </div>
-                    <div class="firebox-thumb" data-img="assets/projects/firebox/details.png" data-index="4">
+                    <div class="firebox-thumb" data-img="assets/projects/firebox/details.png" data-index="5">
                         <img src="assets/projects/firebox/details.png" alt="Details">
                     </div>
-                    <div class="firebox-thumb" data-img="assets/projects/firebox/inuse.png" data-index="5">
+                    <div class="firebox-thumb" data-img="assets/projects/firebox/inuse.png" data-index="6">
                         <img src="assets/projects/firebox/inuse.png" alt="In Use">
                     </div>
-                    <div class="firebox-thumb" data-img="assets/projects/firebox/context.png" data-index="6">
+                    <div class="firebox-thumb" data-img="assets/projects/firebox/context.png" data-index="7">
                         <img src="assets/projects/firebox/context.png" alt="Context">
                     </div>
-                    <div class="firebox-thumb" data-img="assets/projects/firebox/carrying.png" data-index="7">
+                    <div class="firebox-thumb" data-img="assets/projects/firebox/carrying.png" data-index="8">
                         <img src="assets/projects/firebox/carrying.png" alt="Carrying">
                     </div>
-                    <div class="firebox-thumb" data-img="assets/projects/firebox/product.png" data-index="8">
+                    <div class="firebox-thumb" data-img="assets/projects/firebox/product.png" data-index="9">
                         <img src="assets/projects/firebox/product.png" alt="Product">
-                    </div>
-                    <div class="firebox-thumb" data-video="assets/projects/firebox/render.mp4" data-index="9">
-                        <div style="width:100%;height:100%;background:#1a1a2e;display:flex;align-items:center;justify-content:center;font-size:24px;">▶</div>
                     </div>
                 </div>
 
@@ -446,8 +446,8 @@ const WindowTemplates = {
                         <!-- Preview with Arrow Navigation -->
                         <div class="firebox-preview">
                             <button class="firebox-arrow firebox-arrow-left" id="firebox-prev" style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.9); border: 1px solid #ccc; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: all 0.15s;">❮</button>
-                            <img src="assets/projects/firebox/hero.png" alt="FIREBOX" id="firebox-preview-img">
-                            <video id="firebox-preview-video" style="display:none; max-width:95%; max-height:95%; border-radius:4px;" controls loop></video>
+                            <img src="assets/projects/firebox/hero.png" alt="FIREBOX" id="firebox-preview-img" style="display:none;">
+                            <video id="firebox-preview-video" src="assets/projects/firebox/render.mp4" style="max-width:95%; max-height:95%; border-radius:4px;" controls loop autoplay muted></video>
                             <button class="firebox-arrow firebox-arrow-right" id="firebox-next" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.9); border: 1px solid #ccc; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: all 0.15s;">❯</button>
                             <div class="firebox-counter" style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); color: #fff; padding: 4px 12px; border-radius: 12px; font-size: 11px;">1 / 10</div>
                         </div>
