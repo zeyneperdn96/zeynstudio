@@ -479,6 +479,48 @@
             text-align: right;
         }
 
+        /* ===== NAVIGATION ARROWS ===== */
+        .nav-arrows {
+            position: fixed;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            padding: 0 12px;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .nav-arrow {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            pointer-events: all;
+            transition: all 0.2s;
+            text-shadow: 0 0 10px var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+        }
+
+        .nav-arrow:hover {
+            background: rgba(0, 240, 255, 0.2);
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
+            transform: scale(1.1);
+        }
+
+        .nav-arrow:active {
+            transform: scale(0.95);
+        }
+
         /* Marquee Footer */
         .marquee {
             width: 100%;
@@ -1535,8 +1577,14 @@
 
     </section>
 
+    <!-- Navigation Arrows -->
+    <div class="nav-arrows">
+        <button class="nav-arrow" id="navPrev">❮</button>
+        <button class="nav-arrow" id="navNext">❯</button>
+    </div>
+
     <footer class="page-footer">
-        <p>>>> USE ← → ARROWS TO NAVIGATE >>> | <a href="index.html">RETURN TO DESKTOP</a></p>
+        <p>>>> CLICK ARROWS OR SCROLL TO NAVIGATE >>> | <a href="index.html">RETURN TO DESKTOP</a></p>
     </footer>
 
     <script>
@@ -1590,11 +1638,25 @@
             }, 800);
         });
 
+        // ===== ARROW BUTTON NAVIGATION =====
+        const deck = document.querySelector('.card-deck');
+        const scrollAmount = 390;
+
+        document.getElementById('navPrev').addEventListener('click', () => {
+            deck.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        });
+        document.getElementById('navNext').addEventListener('click', () => {
+            deck.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        });
+
+        // ===== MOUSE WHEEL → HORIZONTAL SCROLL =====
+        deck.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            deck.scrollBy({ left: e.deltaY > 0 ? scrollAmount : -scrollAmount, behavior: 'smooth' });
+        }, { passive: false });
+
         // ===== KEYBOARD NAVIGATION =====
         document.addEventListener('keydown', (e) => {
-            const deck = document.querySelector('.card-deck');
-            const scrollAmount = 390;
-
             if (e.key === 'ArrowRight') {
                 deck.scrollBy({ left: scrollAmount, behavior: 'smooth' });
             } else if (e.key === 'ArrowLeft') {
