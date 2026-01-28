@@ -96,60 +96,113 @@ function updateClock() {
 function setupDesktopIcons() {
     const icons = document.querySelectorAll('.desktop-icon');
     const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    const isMobileWidth = () => window.innerWidth <= 768;
 
     icons.forEach(icon => {
-        // Double-click to open (desktop)
-        icon.addEventListener('dblclick', () => {
+        let touchTimeout = null;
+        let lastTap = 0;
+        let touchHandled = false;
+
+        // Double-click to open (desktop only)
+        icon.addEventListener('dblclick', (e) => {
+            // Skip if touch was just handled
+            if (touchHandled) {
+                touchHandled = false;
+                return;
+            }
             const windowId = icon.dataset.window;
             window.windowManager.openWindow(windowId);
         });
 
-        // Single click to select (desktop)
+        // Single click to select (desktop only)
         icon.addEventListener('click', (e) => {
-            if (e.detail === 1) {
+            // Skip if touch was just handled
+            if (touchHandled) {
+                touchHandled = false;
+                return;
+            }
+            if (e.detail === 1 && !isMobileWidth()) {
                 icons.forEach(i => i.classList.remove('selected'));
                 icon.classList.add('selected');
             }
         });
 
-        // Touch support - single tap to open on mobile
+        // Touch support - improved for mobile
         if (isTouchDevice) {
-            let lastTap = 0;
+            icon.addEventListener('touchstart', (e) => {
+                // Clear any pending timeout
+                if (touchTimeout) {
+                    clearTimeout(touchTimeout);
+                    touchTimeout = null;
+                }
+                // Add visual feedback
+                icon.classList.add('selected');
+            }, { passive: true });
+
             icon.addEventListener('touchend', (e) => {
                 const currentTime = new Date().getTime();
                 const tapLength = currentTime - lastTap;
+                touchHandled = true;
 
-                // Prevent default to avoid double-firing
+                // Prevent default to avoid mouse events
                 e.preventDefault();
 
+                // Clear selection from others
+                icons.forEach(i => {
+                    if (i !== icon) i.classList.remove('selected');
+                });
+
                 if (tapLength < 300 && tapLength > 0) {
-                    // Double tap - open window
+                    // Double tap - open immediately
+                    if (touchTimeout) {
+                        clearTimeout(touchTimeout);
+                        touchTimeout = null;
+                    }
                     const windowId = icon.dataset.window;
                     window.windowManager.openWindow(windowId);
                 } else {
-                    // Single tap - select, then open after short delay if no second tap
-                    icons.forEach(i => i.classList.remove('selected'));
-                    icon.classList.add('selected');
-
-                    // On mobile, also open after a brief moment
-                    if (window.innerWidth <= 768) {
-                        setTimeout(() => {
+                    // Single tap on mobile - open after brief delay
+                    // This allows for double-tap detection
+                    if (isMobileWidth()) {
+                        touchTimeout = setTimeout(() => {
                             const windowId = icon.dataset.window;
                             window.windowManager.openWindow(windowId);
-                        }, 200);
+                            touchTimeout = null;
+                        }, 250);
                     }
                 }
                 lastTap = currentTime;
+
+                // Reset touch handled flag after a short delay
+                setTimeout(() => { touchHandled = false; }, 100);
+            });
+
+            icon.addEventListener('touchcancel', () => {
+                if (touchTimeout) {
+                    clearTimeout(touchTimeout);
+                    touchTimeout = null;
+                }
             });
         }
     });
 
-    // Clear selection on desktop click
-    document.getElementById('desktop-container').addEventListener('click', (e) => {
-        if (e.target.id === 'desktop-container' || e.target.classList.contains('desktop-container')) {
+    // Clear selection on desktop click/touch
+    const desktopContainer = document.getElementById('desktop-container');
+
+    desktopContainer.addEventListener('click', (e) => {
+        if (e.target === desktopContainer || e.target.classList.contains('desktop-container')) {
             icons.forEach(i => i.classList.remove('selected'));
         }
     });
+
+    // Also handle touch on desktop background
+    if (isTouchDevice) {
+        desktopContainer.addEventListener('touchend', (e) => {
+            if (e.target === desktopContainer || e.target.classList.contains('desktop-container')) {
+                icons.forEach(i => i.classList.remove('selected'));
+            }
+        }, { passive: true });
+    }
 }
 
 // Handle window resize

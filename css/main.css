@@ -1021,12 +1021,429 @@
 }
 
 /* ========================================
+   RESPONSIVE - MEDIUM MOBILE (max-width: 414px)
+   iPhone Plus/Max, Pixel XL, Galaxy S series
+   ======================================== */
+
+@media only screen and (max-width: 414px) {
+    /* Desktop icons - 3 per row */
+    .desktop-icons {
+        gap: 6px !important;
+        padding: 0 8px !important;
+    }
+
+    .desktop-icon {
+        width: 65px !important;
+        padding: 5px !important;
+    }
+
+    .icon-image {
+        width: 38px !important;
+        height: 38px !important;
+        font-size: 34px !important;
+    }
+
+    .icon-label {
+        font-size: 9px !important;
+        line-height: 1.2 !important;
+    }
+
+    /* Taskbar refinements */
+    .taskbar {
+        padding: 0 2px;
+    }
+
+    .taskbar-window-btn {
+        min-width: 60px;
+        max-width: 90px;
+        padding: 3px 5px;
+    }
+
+    .system-tray {
+        padding: 0 4px;
+        gap: 4px;
+    }
+
+    .tray-clock {
+        min-width: 42px;
+        font-size: 10px !important;
+    }
+
+    /* Window content spacing */
+    .window-content {
+        padding: 8px !important;
+    }
+
+    /* Projects grid refinements */
+    .project-thumbnail {
+        height: 70px !important;
+    }
+
+    .project-info {
+        padding: 6px !important;
+    }
+
+    .project-title {
+        font-size: 10px !important;
+    }
+
+    /* METBIC/FIREBOX preview sizing */
+    .metbic-preview,
+    .firebox-preview {
+        min-height: 170px !important;
+        max-height: 200px !important;
+    }
+
+    .metbic-info-box,
+    .firebox-info-box {
+        padding: 8px !important;
+    }
+
+    .metbic-info-title,
+    .firebox-info-title {
+        font-size: 7px !important;
+    }
+
+    .metbic-info-text,
+    .firebox-info-text {
+        font-size: 9px !important;
+    }
+}
+
+/* ========================================
+   RESPONSIVE - SMALL MOBILE (max-width: 390px)
+   iPhone 12/13/14 Pro, Pixel 5/6
+   ======================================== */
+
+@media only screen and (max-width: 390px) {
+    /* Desktop icons - tighter */
+    .desktop-icons {
+        top: 10px !important;
+        left: 8px !important;
+        right: 8px !important;
+        gap: 4px !important;
+    }
+
+    .desktop-icon {
+        width: 58px !important;
+        padding: 4px !important;
+    }
+
+    .icon-image {
+        width: 34px !important;
+        height: 34px !important;
+        font-size: 30px !important;
+    }
+
+    .icon-label {
+        font-size: 8px !important;
+    }
+
+    /* Taskbar compacted */
+    .start-button {
+        padding: 4px 6px !important;
+        gap: 3px !important;
+    }
+
+    .start-logo {
+        font-size: 14px !important;
+    }
+
+    .taskbar-window-btn {
+        min-width: 50px;
+        max-width: 75px;
+        font-size: 8px !important;
+    }
+
+    /* Window controls */
+    .win-btn {
+        width: 26px !important;
+        height: 26px !important;
+        font-size: 14px !important;
+    }
+
+    /* Start menu header */
+    .start-user-avatar {
+        width: 40px !important;
+        height: 40px !important;
+        font-size: 20px !important;
+    }
+
+    .start-user-name {
+        font-size: 14px !important;
+    }
+
+    /* Projects grid - single column threshold */
+    .projects-grid {
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
+    }
+
+    /* METBIC/FIREBOX adjustments */
+    .metbic-header h2,
+    .firebox-header h2 {
+        font-size: 11px !important;
+    }
+
+    .metbic-header p,
+    .firebox-header p {
+        font-size: 9px !important;
+    }
+
+    .metbic-thumb,
+    .firebox-thumb {
+        width: 48px !important;
+        min-width: 48px !important;
+    }
+
+    .metbic-arrow,
+    .firebox-arrow {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 14px !important;
+    }
+}
+
+/* ========================================
+   RESPONSIVE - EXTRA SMALL (max-width: 360px)
+   iPhone SE, Galaxy S10e, older phones
+   ======================================== */
+
+@media only screen and (max-width: 360px) {
+    /* Desktop icons - minimal */
+    .desktop-icons {
+        top: 8px !important;
+        left: 6px !important;
+        right: 6px !important;
+        gap: 3px !important;
+    }
+
+    .desktop-icon {
+        width: 52px !important;
+        padding: 3px !important;
+    }
+
+    .icon-image {
+        width: 30px !important;
+        height: 30px !important;
+        font-size: 26px !important;
+    }
+
+    .icon-label {
+        font-size: 7px !important;
+        max-width: 48px !important;
+    }
+
+    /* Taskbar minimal */
+    .taskbar {
+        height: 40px !important;
+        gap: 2px !important;
+    }
+
+    .start-button {
+        height: 32px !important;
+        padding: 2px 5px !important;
+    }
+
+    .start-button span:last-child {
+        display: none !important;
+    }
+
+    .taskbar-separator {
+        display: none !important;
+    }
+
+    .taskbar-window-btn {
+        height: 28px !important;
+        min-width: 40px !important;
+        max-width: 65px !important;
+        font-size: 8px !important;
+        padding: 2px 4px !important;
+    }
+
+    .system-tray {
+        height: 32px !important;
+        padding: 0 3px !important;
+    }
+
+    .tray-icon {
+        font-size: 12px !important;
+    }
+
+    .tray-clock {
+        font-size: 9px !important;
+        min-width: 36px !important;
+    }
+
+    /* Window full-height adjustment */
+    .window {
+        height: calc(100vh - 48px) !important;
+        max-height: calc(100vh - 48px) !important;
+    }
+
+    .windows-container {
+        height: calc(100% - 40px) !important;
+    }
+
+    /* Window title */
+    .window-title {
+        font-size: 10px !important;
+    }
+
+    .window-titlebar {
+        padding: 6px 8px !important;
+    }
+
+    .win-btn {
+        width: 24px !important;
+        height: 24px !important;
+        font-size: 12px !important;
+    }
+
+    /* Window content minimal padding */
+    .window-content {
+        padding: 6px !important;
+    }
+
+    /* Start menu full width, minimal */
+    .start-menu {
+        bottom: 44px !important;
+    }
+
+    .start-menu-header {
+        padding: 10px 12px !important;
+    }
+
+    .start-user-avatar {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 18px !important;
+    }
+
+    .start-user-name {
+        font-size: 13px !important;
+    }
+
+    .start-user-title {
+        font-size: 10px !important;
+    }
+
+    .start-menu-item {
+        padding: 10px 12px !important;
+    }
+
+    .item-icon {
+        font-size: 20px !important;
+    }
+
+    .item-title {
+        font-size: 12px !important;
+    }
+
+    .item-desc {
+        font-size: 10px !important;
+    }
+
+    /* METBIC/FIREBOX minimal */
+    .metbic-gallery,
+    .firebox-gallery {
+        padding: 6px !important;
+        gap: 6px !important;
+    }
+
+    .metbic-thumb,
+    .firebox-thumb {
+        width: 44px !important;
+        min-width: 44px !important;
+    }
+
+    .metbic-preview,
+    .firebox-preview {
+        min-height: 150px !important;
+        max-height: 170px !important;
+    }
+
+    .metbic-content,
+    .firebox-content {
+        padding: 8px !important;
+        gap: 8px !important;
+    }
+
+    .metbic-info,
+    .firebox-info {
+        gap: 6px !important;
+    }
+
+    .metbic-info-box,
+    .firebox-info-box {
+        padding: 6px !important;
+        min-width: 100% !important;
+    }
+
+    .metbic-info-title,
+    .firebox-info-title {
+        font-size: 6px !important;
+        margin-bottom: 4px !important;
+    }
+
+    .metbic-info-text,
+    .firebox-info-text {
+        font-size: 8px !important;
+        line-height: 1.3 !important;
+    }
+
+    .metbic-statusbar,
+    .firebox-statusbar {
+        padding: 5px 8px !important;
+        font-size: 8px !important;
+    }
+
+    /* Projects grid minimal */
+    .project-thumbnail {
+        height: 60px !important;
+    }
+
+    .project-info {
+        padding: 5px !important;
+    }
+
+    .project-title {
+        font-size: 9px !important;
+    }
+
+    .project-category {
+        font-size: 8px !important;
+    }
+
+    /* Explorer toolbar */
+    .explorer-toolbar {
+        padding: 4px !important;
+        gap: 4px !important;
+    }
+
+    .explorer-toolbar .btn {
+        font-size: 9px !important;
+        padding: 3px 6px !important;
+    }
+
+    /* Contact form */
+    .form-group label {
+        font-size: 11px !important;
+    }
+
+    .form-control {
+        font-size: 13px !important;
+        padding: 8px !important;
+    }
+}
+
+/* ========================================
    TOUCH DEVICE IMPROVEMENTS
    ======================================== */
 @media (hover: none) and (pointer: coarse) {
     /* Larger touch targets */
     .desktop-icon {
-        min-height: 80px;
+        min-height: 70px;
     }
 
     .win-btn {
@@ -1038,14 +1455,20 @@
         min-height: 48px;
     }
 
-    .metbic-thumb {
-        min-width: 56px !important;
-        min-height: 56px !important;
+    .taskbar-window-btn {
+        min-height: 32px;
     }
 
-    .metbic-arrow {
-        min-width: 40px !important;
-        min-height: 40px !important;
+    .metbic-thumb,
+    .firebox-thumb {
+        min-width: 50px !important;
+        min-height: 50px !important;
+    }
+
+    .metbic-arrow,
+    .firebox-arrow {
+        min-width: 36px !important;
+        min-height: 36px !important;
     }
 
     /* Remove hover effects that don't work on touch */
@@ -1059,8 +1482,167 @@
         border-color: rgba(255, 255, 255, 0.6);
     }
 
+    /* Active states for buttons */
+    .start-button:active,
+    .taskbar-window-btn:active {
+        transform: scale(0.97);
+    }
+
+    .start-menu-item:active {
+        background: #0054E3 !important;
+        color: #FFFFFF !important;
+    }
+
     /* Disable window dragging hint */
     .window-titlebar {
         cursor: default;
+    }
+
+    /* Smooth scrolling for galleries */
+    .metbic-gallery,
+    .firebox-gallery {
+        scroll-snap-type: x mandatory;
+    }
+
+    .metbic-thumb,
+    .firebox-thumb {
+        scroll-snap-align: start;
+    }
+}
+
+/* ========================================
+   SAFE AREA INSETS (iPhone X+ notch support)
+   ======================================== */
+@supports (padding: max(0px)) {
+    .taskbar {
+        padding-bottom: max(0px, env(safe-area-inset-bottom));
+        padding-left: max(4px, env(safe-area-inset-left));
+        padding-right: max(4px, env(safe-area-inset-right));
+    }
+
+    .start-menu {
+        bottom: calc(48px + env(safe-area-inset-bottom)) !important;
+        left: max(4px, env(safe-area-inset-left)) !important;
+    }
+
+    @media only screen and (max-width: 768px) {
+        .window {
+            left: max(4px, env(safe-area-inset-left)) !important;
+            width: calc(100vw - max(8px, env(safe-area-inset-left) + env(safe-area-inset-right))) !important;
+        }
+
+        .desktop-icons {
+            left: max(10px, env(safe-area-inset-left)) !important;
+            right: max(10px, env(safe-area-inset-right)) !important;
+        }
+    }
+}
+
+/* ========================================
+   LANDSCAPE MOBILE ORIENTATION
+   ======================================== */
+@media only screen and (max-height: 500px) and (orientation: landscape) {
+    /* Compact taskbar in landscape */
+    .taskbar {
+        height: 36px !important;
+    }
+
+    .start-button {
+        height: 28px !important;
+        padding: 2px 8px !important;
+    }
+
+    .taskbar-window-btn {
+        height: 26px !important;
+    }
+
+    .system-tray {
+        height: 28px !important;
+    }
+
+    /* Larger window area */
+    .window {
+        height: calc(100vh - 40px) !important;
+        max-height: calc(100vh - 40px) !important;
+    }
+
+    .windows-container {
+        height: calc(100% - 36px) !important;
+    }
+
+    /* Hide desktop icons in landscape to maximize space */
+    .desktop-icons {
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        top: 8px !important;
+        left: 8px !important;
+        right: auto !important;
+        max-height: calc(100vh - 50px);
+        overflow-y: auto;
+    }
+
+    .desktop-icon {
+        width: 50px !important;
+    }
+
+    /* Start menu shorter */
+    .start-menu {
+        max-height: calc(100vh - 50px) !important;
+        bottom: 40px !important;
+    }
+
+    /* METBIC/FIREBOX horizontal layout in landscape */
+    .metbic-content,
+    .firebox-content {
+        flex-direction: row !important;
+    }
+
+    .metbic-preview,
+    .firebox-preview {
+        width: 50% !important;
+        max-height: none !important;
+    }
+
+    .metbic-info,
+    .firebox-info {
+        width: 50% !important;
+        overflow-y: auto !important;
+    }
+}
+
+/* ========================================
+   REDUCED MOTION PREFERENCE
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .window {
+        transition: none !important;
+    }
+}
+
+/* ========================================
+   HIGH CONTRAST MODE SUPPORT
+   ======================================== */
+@media (prefers-contrast: high) {
+    .window {
+        border-width: 3px;
+    }
+
+    .window-titlebar {
+        border-bottom-width: 3px;
+    }
+
+    .taskbar {
+        border-top-width: 3px;
+    }
+
+    .desktop-icon.selected {
+        border-width: 3px;
+        outline: 2px solid #FFFFFF;
     }
 }

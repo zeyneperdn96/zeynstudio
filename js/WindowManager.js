@@ -218,8 +218,10 @@ class WindowManager {
     setupWindowControls(windowEl) {
         const controls = windowEl.querySelectorAll('.window-controls button');
         const windowId = windowEl.dataset.windowId;
+        const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
         controls.forEach(btn => {
+            // Click handler for mouse
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const action = btn.dataset.action;
@@ -228,7 +230,35 @@ class WindowManager {
                 else if (action === 'minimize') this.minimizeWindow(windowId);
                 else if (action === 'maximize') this.maximizeWindow(windowId);
             });
+
+            // Touch handler for better mobile response
+            if (isTouchDevice) {
+                btn.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const action = btn.dataset.action;
+
+                    // Visual feedback
+                    btn.style.transform = 'scale(0.9)';
+                    setTimeout(() => { btn.style.transform = ''; }, 100);
+
+                    if (action === 'close') this.closeWindow(windowId);
+                    else if (action === 'minimize') this.minimizeWindow(windowId);
+                    else if (action === 'maximize') this.maximizeWindow(windowId);
+                });
+            }
         });
+
+        // Make window content focusable on click/tap
+        windowEl.addEventListener('click', () => {
+            this.focusWindow(windowId);
+        });
+
+        if (isTouchDevice) {
+            windowEl.addEventListener('touchstart', () => {
+                this.focusWindow(windowId);
+            }, { passive: true });
+        }
     }
 
     addToTaskbar(windowId) {

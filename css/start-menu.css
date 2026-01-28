@@ -243,3 +243,301 @@ img.program-icon {
     object-fit: contain;
     background: transparent;
 }
+
+/* ========================================
+   START MENU - MOBILE RESPONSIVE
+   ======================================== */
+
+@media only screen and (max-width: 768px) {
+    .start-menu {
+        width: calc(100vw - 8px) !important;
+        left: 4px !important;
+        bottom: 48px !important;
+        max-height: 70vh;
+        border-radius: 6px 6px 0 0;
+    }
+
+    .start-menu-header {
+        padding: 10px 14px;
+    }
+
+    .start-user-avatar {
+        width: 44px;
+        height: 44px;
+        font-size: 22px;
+    }
+
+    .start-user-name {
+        font-size: 16px;
+    }
+
+    .start-user-title {
+        font-size: 10px;
+    }
+
+    .start-menu-body {
+        max-height: calc(70vh - 140px);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .start-menu-programs .start-menu-item {
+        padding: 10px 14px;
+        margin: 2px 6px;
+    }
+
+    .menu-item-icon {
+        width: 32px;
+        height: 32px;
+    }
+
+    .menu-item-icon-small {
+        width: 20px;
+        height: 20px;
+    }
+
+    .menu-item-title {
+        font-size: 13px;
+    }
+
+    .menu-item-desc {
+        font-size: 10px;
+    }
+
+    /* All Programs Submenu - below instead of right */
+    .all-programs-submenu {
+        position: static !important;
+        width: 100% !important;
+        left: 0 !important;
+        border: none !important;
+        border-top: 1px solid #D4D0C8 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        max-height: 200px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .all-programs-item {
+        padding: 10px 16px;
+        font-size: 12px;
+    }
+
+    .program-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .start-menu-footer {
+        flex-direction: row;
+        padding: 8px;
+        gap: 8px;
+    }
+
+    .start-menu-footer .btn {
+        height: 44px;
+        font-size: 11px;
+    }
+
+    .start-menu-footer .btn img {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .start-menu {
+        max-height: 65vh;
+    }
+
+    .start-menu-header {
+        padding: 8px 12px;
+    }
+
+    .start-user-avatar {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+
+    .start-user-name {
+        font-size: 15px;
+    }
+
+    .start-menu-programs .start-menu-item {
+        padding: 9px 12px;
+        gap: 10px;
+    }
+
+    .menu-item-icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    .menu-item-title {
+        font-size: 12px;
+    }
+
+    .menu-item-desc {
+        font-size: 9px;
+    }
+
+    .all-programs-item {
+        padding: 9px 14px;
+        font-size: 11px;
+    }
+
+    .start-menu-footer .btn {
+        height: 40px;
+        font-size: 10px;
+        gap: 6px;
+    }
+}
+
+@media only screen and (max-width: 390px) {
+    .start-menu {
+        max-height: 60vh;
+    }
+
+    .start-menu-header {
+        padding: 8px 10px;
+        gap: 10px;
+    }
+
+    .start-user-avatar {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+    }
+
+    .start-user-name {
+        font-size: 14px;
+    }
+
+    .start-user-title {
+        font-size: 9px;
+    }
+
+    .start-menu-programs .start-menu-item {
+        padding: 8px 10px;
+        gap: 8px;
+    }
+
+    .menu-item-icon {
+        width: 26px;
+        height: 26px;
+    }
+
+    .menu-item-title {
+        font-size: 11px;
+    }
+
+    .menu-item-desc {
+        display: none; /* Hide descriptions on very small screens */
+    }
+
+    .start-menu-divider {
+        margin: 4px 6px;
+    }
+
+    .start-menu-footer {
+        padding: 6px;
+        gap: 6px;
+    }
+
+    .start-menu-footer .btn {
+        height: 38px;
+        padding: 0 8px;
+    }
+}
+
+@media only screen and (max-width: 360px) {
+    .start-menu {
+        bottom: 44px !important;
+        max-height: 55vh;
+    }
+
+    .start-menu-header {
+        padding: 6px 8px;
+        gap: 8px;
+    }
+
+    .start-user-avatar {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+    }
+
+    .start-user-name {
+        font-size: 13px;
+    }
+
+    .start-user-title {
+        font-size: 8px;
+    }
+
+    .start-menu-programs .start-menu-item {
+        padding: 7px 8px;
+        gap: 6px;
+        margin: 1px 4px;
+    }
+
+    .menu-item-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .menu-item-icon-small {
+        width: 18px;
+        height: 18px;
+    }
+
+    .menu-item-title {
+        font-size: 10px;
+    }
+
+    .all-programs-item {
+        padding: 7px 10px;
+        font-size: 10px;
+        gap: 8px;
+    }
+
+    .program-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .start-menu-footer .btn {
+        height: 36px;
+        font-size: 9px;
+    }
+
+    .start-menu-footer .btn img {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+/* Touch device improvements for start menu */
+@media (hover: none) and (pointer: coarse) {
+    .start-menu-programs .start-menu-item {
+        min-height: 44px;
+    }
+
+    .start-menu-programs .start-menu-item:active {
+        background: linear-gradient(90deg, #FFD060 0%, #FFE090 100%) !important;
+    }
+
+    .all-programs-item {
+        min-height: 40px;
+    }
+
+    .all-programs-item:active {
+        background: linear-gradient(90deg, #FFD060 0%, #FFE090 100%) !important;
+    }
+
+    .start-menu-footer .btn:active {
+        transform: scale(0.97);
+        opacity: 0.9;
+    }
+}

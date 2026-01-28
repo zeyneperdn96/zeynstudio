@@ -66,3 +66,27 @@
     object-position: center;
     background: #000000;
 }
+
+/* ========================================
+   BOOT SCREEN - MOBILE RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+    .boot-video {
+        object-fit: contain;
+    }
+}
+
+/* Landscape mode - keep video contained */
+@media (max-height: 500px) and (orientation: landscape) {
+    .boot-video {
+        object-fit: contain;
+    }
+}
+
+/* Safe area support for notched phones */
+@supports (padding: max(0px)) {
+    .boot-container {
+        padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+}
