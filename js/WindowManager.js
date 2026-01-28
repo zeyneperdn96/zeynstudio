@@ -483,6 +483,7 @@ class WindowManager {
 
     initializeFireboxWindow(windowEl) {
         const previewImg = windowEl.querySelector('#firebox-preview-img');
+        const previewVideo = windowEl.querySelector('#firebox-preview-video');
         const thumbs = windowEl.querySelectorAll('.firebox-thumb');
         const prevBtn = windowEl.querySelector('#firebox-prev');
         const nextBtn = windowEl.querySelector('#firebox-next');
@@ -499,13 +500,25 @@ class WindowManager {
 
             const targetThumb = thumbs[currentIndex];
             const imgSrc = targetThumb.dataset.img;
+            const videoSrc = targetThumb.dataset.video;
 
             // Update active thumb
             thumbs.forEach(t => t.classList.remove('active'));
             targetThumb.classList.add('active');
 
-            // Update preview image with fade
-            if (imgSrc && previewImg) {
+            if (videoSrc && previewVideo) {
+                // Show video, hide image
+                previewImg.style.display = 'none';
+                previewVideo.style.display = 'block';
+                previewVideo.src = videoSrc;
+                previewVideo.play();
+            } else if (imgSrc && previewImg) {
+                // Show image, hide video
+                if (previewVideo) {
+                    previewVideo.pause();
+                    previewVideo.style.display = 'none';
+                }
+                previewImg.style.display = 'block';
                 previewImg.style.opacity = '0';
                 setTimeout(() => {
                     previewImg.src = imgSrc;

@@ -402,6 +402,9 @@ const WindowTemplates = {
                     <div class="firebox-thumb" data-img="assets/projects/firebox/product.png" data-index="8">
                         <img src="assets/projects/firebox/product.png" alt="Product">
                     </div>
+                    <div class="firebox-thumb" data-video="assets/projects/firebox/render.mp4" data-index="9">
+                        <div style="width:100%;height:100%;background:#1a1a2e;display:flex;align-items:center;justify-content:center;font-size:24px;">▶</div>
+                    </div>
                 </div>
 
                 <!-- Main Area -->
@@ -418,8 +421,9 @@ const WindowTemplates = {
                         <div class="firebox-preview">
                             <button class="firebox-arrow firebox-arrow-left" id="firebox-prev" style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.9); border: 1px solid #ccc; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: all 0.15s;">❮</button>
                             <img src="assets/projects/firebox/hero.png" alt="FIREBOX" id="firebox-preview-img">
+                            <video id="firebox-preview-video" style="display:none; max-width:95%; max-height:95%; border-radius:4px;" controls loop></video>
                             <button class="firebox-arrow firebox-arrow-right" id="firebox-next" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.9); border: 1px solid #ccc; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: all 0.15s;">❯</button>
-                            <div class="firebox-counter" style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); color: #fff; padding: 4px 12px; border-radius: 12px; font-size: 11px;">1 / 9</div>
+                            <div class="firebox-counter" style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); color: #fff; padding: 4px 12px; border-radius: 12px; font-size: 11px;">1 / 10</div>
                         </div>
 
                         <!-- Info Panel - Scrollable Case Study -->
