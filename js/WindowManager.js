@@ -50,7 +50,8 @@ class WindowManager {
             showreel: { width: 400, height: 450 },
             metbic: { width: 820, height: 520 },
             firebox: { width: 820, height: 520 },
-            zeynshat: { width: 500, height: 700 }
+            zeynshat: { width: 500, height: 700 },
+            illustration: { width: 800, height: 600 }
         };
 
         const customSize = windowSizes[windowId] || {};
@@ -358,6 +359,11 @@ class WindowManager {
         if (windowId === 'firebox') {
             this.initializeFireboxWindow(windowEl);
         }
+
+        // Gallery lightbox
+        if (windowId === 'illustration') {
+            this.initializeGalleryWindow(windowEl);
+        }
     }
 
     openCaseStudyWindow(project, projectsManager) {
@@ -419,6 +425,23 @@ class WindowManager {
 
         setTimeout(() => windowEl.classList.remove('hidden'), 10);
         this.focusWindow(windowId);
+    }
+
+    initializeGalleryWindow(windowEl) {
+        const lightbox = windowEl.querySelector('#gallery-lightbox');
+        const lightboxImg = windowEl.querySelector('#gallery-lightbox-img');
+        const items = windowEl.querySelectorAll('.gallery-item');
+
+        items.forEach(item => {
+            item.addEventListener('click', () => {
+                lightboxImg.src = item.dataset.src;
+                lightbox.classList.add('active');
+            });
+        });
+
+        lightbox.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+        });
     }
 
     initializeMetbicWindow(windowEl) {

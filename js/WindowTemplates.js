@@ -77,20 +77,46 @@ const WindowTemplates = {
     // Illustration.exe
     illustration: () => `
         <div class="window-titlebar">
-            <span class="window-title">🎨 Illustration.exe - Gallery</span>
+            <span class="window-title">🎨 Gallery.exe - Project Gallery</span>
             <div class="window-controls">
                 <button class="win-btn win-minimize" data-action="minimize">_</button>
                 <button class="win-btn win-maximize" data-action="maximize">□</button>
                 <button class="win-btn win-close" data-action="close">×</button>
             </div>
         </div>
-        <div class="window-content">
-            <h3>Illustration Gallery</h3>
-            <p>A collection of digital art, character designs, and visual storytelling.</p>
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; margin-top: 16px;">
-                ${[1, 2, 3, 4, 5, 6].map(i => `
-                    <div style="aspect-ratio: 1; background: linear-gradient(135deg, #${Math.floor(Math.random() * 16777215).toString(16)} 0%, #${Math.floor(Math.random() * 16777215).toString(16)} 100%); border: 2px solid #808080;"></div>
+        <div class="window-content" style="overflow-y: auto;">
+            <style>
+                .gallery-section-title { font-size: 13px; font-weight: 700; color: #333; margin: 16px 0 8px; padding-bottom: 6px; border-bottom: 2px solid #0078d4; display: flex; align-items: center; gap: 6px; }
+                .gallery-section-title:first-child { margin-top: 0; }
+                .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+                .gallery-item { aspect-ratio: 4/3; border: 2px solid #c0c0c0; border-radius: 4px; overflow: hidden; cursor: pointer; transition: all 0.2s; background: #f0f0f0; }
+                .gallery-item:hover { border-color: #0078d4; transform: scale(1.03); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+                .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+                .gallery-lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 99999; align-items: center; justify-content: center; cursor: pointer; }
+                .gallery-lightbox.active { display: flex; }
+                .gallery-lightbox img { max-width: 90%; max-height: 90%; object-fit: contain; border-radius: 6px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
+            </style>
+
+            <div class="gallery-section-title">🧰 METBIC — Modular Bicycle Repair Kit</div>
+            <div class="gallery-grid">
+                ${['hero','render1','render2','render3','render4','render5','context','technical'].map(name => `
+                    <div class="gallery-item" data-src="assets/projects/metbic/${name}.png">
+                        <img src="assets/projects/metbic/${name}.png" alt="METBIC ${name}" loading="lazy">
+                    </div>
                 `).join('')}
+            </div>
+
+            <div class="gallery-section-title">🔥 FIREBOX — Portable Cooking Station</div>
+            <div class="gallery-grid">
+                ${['hero','technical','exploded','exploded-fire','details','inuse','context','carrying','product'].map(name => `
+                    <div class="gallery-item" data-src="assets/projects/firebox/${name}.png">
+                        <img src="assets/projects/firebox/${name}.png" alt="FIREBOX ${name}" loading="lazy">
+                    </div>
+                `).join('')}
+            </div>
+
+            <div class="gallery-lightbox" id="gallery-lightbox">
+                <img id="gallery-lightbox-img" src="" alt="Preview">
             </div>
         </div>
     `,
