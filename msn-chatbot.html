@@ -2444,6 +2444,52 @@
                 addMessage('system', null, currentLang === 'en' ? '🌐 Language changed to English!' : '🌐 Dil Türkçe olarak değiştirildi!', null, false);
             }
 
+            function applyLanguageToUI() {
+                document.querySelector('.wlm-titlebar-text').textContent = t('windowTitle');
+                btnSound.title = t('soundToggle');
+                btnMin.title = t('minimize');
+                document.getElementById('btnMax').title = t('maximize');
+                btnClose.title = t('close');
+                document.getElementById('zeynepStatusText').textContent = t('online');
+                document.getElementById('onlineSince').textContent = t('onlineSince');
+                document.querySelector('.wlm-personal-msg').textContent = t('personalMsg');
+                document.getElementById('visitorStatusText').textContent = t('online');
+                document.getElementById('zeynepAvatar').title = t('viewCard');
+                document.getElementById('visitorAvatar').title = t('changeStatus');
+                const visitorName = document.querySelector('.wlm-user-section.right .wlm-user-name');
+                visitorName.innerHTML = t('you') + ' <span class="wlm-status-indicator" id="visitorStatusDot"></span>';
+                document.getElementById('btnSendFile').title = t('fileTitle');
+                document.querySelector('#btnSendFile span:not(.tool-icon)').textContent = t('file');
+                document.getElementById('btnGames').title = t('gamesTitle');
+                document.querySelector('#btnGames span:not(.tool-icon)').textContent = t('games');
+                document.getElementById('btnBackground').title = t('themeTitle');
+                document.querySelector('#btnBackground span:not(.tool-icon)').textContent = t('theme');
+                document.getElementById('btnBlock').title = t('block');
+                inputBox.placeholder = t('placeholder');
+                btnSend.textContent = t('send');
+                btnEmoji.title = t('selectEmoji');
+                btnWink.title = t('sendWink');
+                btnNudge.title = t('sendNudge');
+                document.getElementById('btnFont').title = t('fontBtn');
+                document.getElementById('btnVoiceClip').title = t('voiceClip');
+                const pickerTabs = emojiPicker.querySelectorAll('.wlm-picker-tab');
+                pickerTabs[0].textContent = t('emojisTab');
+                pickerTabs[1].textContent = t('symbolsTab');
+                document.querySelector('.wlm-wink-picker-title').textContent = t('selectWink');
+                document.querySelector('.wlm-bg-picker-title').textContent = t('selectBg');
+                document.querySelector('.wlm-games-picker-title').textContent = t('selectGame');
+                const cardInfos = document.querySelectorAll('.wlm-card-info-label');
+                cardInfos[0].textContent = t('cardStatus');
+                cardInfos[1].textContent = t('cardJob');
+                cardInfos[2].textContent = t('cardListening');
+                cardInfos[3].textContent = t('cardWeb');
+                document.getElementById('cardBlock').textContent = t('cardBlock');
+                document.getElementById('cardMessage').textContent = t('cardMessage');
+                document.querySelector('.wlm-card-status').textContent = t('personalMsg');
+                document.getElementById('cardStatusValue').textContent = 'Online';
+                updateSaysCSS();
+            }
+
             function updateSaysCSS() {
                 let styleEl = document.getElementById('langStyle');
                 if (!styleEl) {
@@ -3087,7 +3133,7 @@
                 try { localStorage.removeItem('wlmChat5'); } catch(e) {}
                 buildEmojiPicker('smileys');
                 updateNowPlaying();
-                updateSaysCSS(); // Initialize CSS for current language
+                applyLanguageToUI(); // Apply English to all UI elements
                 setInterval(updateNowPlaying, 30000);
 
                 const hasHistory = loadChat();

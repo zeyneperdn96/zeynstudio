@@ -49,7 +49,8 @@ class WindowManager {
             work: { width: 700, height: 550 },
             showreel: { width: 400, height: 450 },
             metbic: { width: 820, height: 520 },
-            firebox: { width: 820, height: 520 }
+            firebox: { width: 820, height: 520 },
+            zeynshat: { width: 480, height: 650 }
         };
 
         const customSize = windowSizes[windowId] || {};
