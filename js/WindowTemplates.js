@@ -75,7 +75,27 @@ const WindowTemplates = {
     `,
 
     // Illustration.exe
-    illustration: () => `
+    illustration: () => {
+        const allImages = [
+            { src: 'assets/projects/metbic/hero.png', label: 'METBIC — Hero' },
+            { src: 'assets/projects/metbic/render1.png', label: 'METBIC — Render 1' },
+            { src: 'assets/projects/metbic/render2.png', label: 'METBIC — Render 2' },
+            { src: 'assets/projects/metbic/render3.png', label: 'METBIC — Render 3' },
+            { src: 'assets/projects/metbic/render4.png', label: 'METBIC — Render 4' },
+            { src: 'assets/projects/metbic/render5.png', label: 'METBIC — Render 5' },
+            { src: 'assets/projects/metbic/context.png', label: 'METBIC — Context' },
+            { src: 'assets/projects/metbic/technical.png', label: 'METBIC — Technical' },
+            { src: 'assets/projects/firebox/hero.png', label: 'FIREBOX — Hero' },
+            { src: 'assets/projects/firebox/technical.png', label: 'FIREBOX — Technical' },
+            { src: 'assets/projects/firebox/exploded.png', label: 'FIREBOX — Exploded' },
+            { src: 'assets/projects/firebox/exploded-fire.png', label: 'FIREBOX — Exploded Fire' },
+            { src: 'assets/projects/firebox/details.png', label: 'FIREBOX — Details' },
+            { src: 'assets/projects/firebox/inuse.png', label: 'FIREBOX — In Use' },
+            { src: 'assets/projects/firebox/context.png', label: 'FIREBOX — Context' },
+            { src: 'assets/projects/firebox/carrying.png', label: 'FIREBOX — Carrying' },
+            { src: 'assets/projects/firebox/product.png', label: 'FIREBOX — Product' },
+        ];
+        return `
         <div class="window-titlebar">
             <span class="window-title">🎨 Gallery.exe - Project Gallery</span>
             <div class="window-controls">
@@ -84,42 +104,50 @@ const WindowTemplates = {
                 <button class="win-btn win-close" data-action="close">×</button>
             </div>
         </div>
-        <div class="window-content" style="overflow-y: auto; padding: 16px;">
+        <div class="window-content" style="padding: 0; display: flex; flex-direction: column; height: 100%; overflow: hidden;">
             <style>
-                .gallery-section-title { font-size: 13px; font-weight: 700; color: #333; margin: 16px 0 8px; padding-bottom: 6px; border-bottom: 2px solid #0078d4; display: flex; align-items: center; gap: 6px; }
-                .gallery-section-title:first-child { margin-top: 0; }
-                .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-bottom: 16px; }
-                .gallery-item { min-height: 100px; border: 2px solid #c0c0c0; border-radius: 4px; overflow: hidden; cursor: pointer; transition: all 0.2s; background: #f0f0f0; }
-                .gallery-item:hover { border-color: #0078d4; transform: scale(1.03); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-                .gallery-item img { width: 100%; height: auto; display: block; object-fit: cover; }
-                .gallery-lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 99999; align-items: center; justify-content: center; cursor: pointer; }
-                .gallery-lightbox.active { display: flex; }
-                .gallery-lightbox img { max-width: 90%; max-height: 90%; object-fit: contain; border-radius: 6px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
+                .gal-viewer { flex: 1; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%); position: relative; min-height: 0; overflow: hidden; }
+                .gal-viewer img { max-width: 95%; max-height: 95%; object-fit: contain; transition: opacity 0.2s; }
+                .gal-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.85); border: 1px solid #aaa; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.3); transition: all 0.15s; }
+                .gal-arrow:hover { background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+                .gal-arrow-left { left: 12px; }
+                .gal-arrow-right { right: 12px; }
+                .gal-counter { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); color: #fff; padding: 4px 14px; border-radius: 12px; font-size: 11px; font-family: 'Segoe UI', Tahoma, sans-serif; }
+                .gal-label { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.55); color: #fff; padding: 4px 14px; border-radius: 12px; font-size: 11px; font-family: 'Segoe UI', Tahoma, sans-serif; white-space: nowrap; }
+                .gal-thumbstrip { height: 80px; min-height: 80px; background: #e8e8e8; border-top: 1px solid #a0a0a0; display: flex; align-items: center; gap: 6px; padding: 8px 12px; overflow-x: auto; overflow-y: hidden; }
+                .gal-thumb { width: 56px; height: 56px; min-width: 56px; border: 2px solid #c0c0c0; border-radius: 3px; overflow: hidden; cursor: pointer; transition: all 0.15s; background: #f0f0f0; }
+                .gal-thumb:hover { border-color: #0078d4; transform: scale(1.05); }
+                .gal-thumb.active { border-color: #0078d4; box-shadow: 0 0 0 2px rgba(0,120,212,0.4); }
+                .gal-thumb img { width: 100%; height: 100%; object-fit: cover; }
+                .gal-statusbar { padding: 4px 12px; background: linear-gradient(180deg, #e8e8e8 0%, #d0d0d0 100%); border-top: 1px solid #a0a0a0; display: flex; justify-content: space-between; font-size: 10px; color: #555; font-family: 'Segoe UI', Tahoma, sans-serif; }
             </style>
 
-            <div class="gallery-section-title">🧰 METBIC — Modular Bicycle Repair Kit</div>
-            <div class="gallery-grid">
-                ${['hero','render1','render2','render3','render4','render5','context','technical'].map(name => `
-                    <div class="gallery-item" data-src="assets/projects/metbic/${name}.png">
-                        <img src="assets/projects/metbic/${name}.png" alt="METBIC ${name}" loading="lazy">
+            <!-- Main Preview -->
+            <div class="gal-viewer">
+                <button class="gal-arrow gal-arrow-left" id="gal-prev">❮</button>
+                <img src="${allImages[0].src}" alt="${allImages[0].label}" id="gal-preview">
+                <button class="gal-arrow gal-arrow-right" id="gal-next">❯</button>
+                <div class="gal-label" id="gal-label">${allImages[0].label}</div>
+                <div class="gal-counter" id="gal-counter">1 / ${allImages.length}</div>
+            </div>
+
+            <!-- Thumbnail Strip -->
+            <div class="gal-thumbstrip" id="gal-thumbstrip">
+                ${allImages.map((img, i) => `
+                    <div class="gal-thumb${i === 0 ? ' active' : ''}" data-index="${i}" data-src="${img.src}" data-label="${img.label}">
+                        <img src="${img.src}" alt="${img.label}" loading="lazy">
                     </div>
                 `).join('')}
             </div>
 
-            <div class="gallery-section-title">🔥 FIREBOX — Portable Cooking Station</div>
-            <div class="gallery-grid">
-                ${['hero','technical','exploded','exploded-fire','details','inuse','context','carrying','product'].map(name => `
-                    <div class="gallery-item" data-src="assets/projects/firebox/${name}.png">
-                        <img src="assets/projects/firebox/${name}.png" alt="FIREBOX ${name}" loading="lazy">
-                    </div>
-                `).join('')}
-            </div>
-
-            <div class="gallery-lightbox" id="gallery-lightbox">
-                <img id="gallery-lightbox-img" src="" alt="Preview">
+            <!-- Status Bar -->
+            <div class="gal-statusbar">
+                <span>${allImages.length} images — METBIC & FIREBOX</span>
+                <span>Use ← → arrows to navigate</span>
             </div>
         </div>
-    `,
+    `;
+    },
 
     // IndustrialDesign.exe
     industrial: () => `

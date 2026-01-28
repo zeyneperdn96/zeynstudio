@@ -428,20 +428,48 @@ class WindowManager {
     }
 
     initializeGalleryWindow(windowEl) {
-        const lightbox = windowEl.querySelector('#gallery-lightbox');
-        const lightboxImg = windowEl.querySelector('#gallery-lightbox-img');
-        const items = windowEl.querySelectorAll('.gallery-item');
+        const preview = windowEl.querySelector('#gal-preview');
+        const label = windowEl.querySelector('#gal-label');
+        const counter = windowEl.querySelector('#gal-counter');
+        const prevBtn = windowEl.querySelector('#gal-prev');
+        const nextBtn = windowEl.querySelector('#gal-next');
+        const thumbstrip = windowEl.querySelector('#gal-thumbstrip');
+        const thumbs = windowEl.querySelectorAll('.gal-thumb');
+        const total = thumbs.length;
+        let currentIndex = 0;
 
-        items.forEach(item => {
-            item.addEventListener('click', () => {
-                lightboxImg.src = item.dataset.src;
-                lightbox.classList.add('active');
-            });
+        const goTo = (index) => {
+            if (index < 0) index = total - 1;
+            if (index >= total) index = 0;
+            currentIndex = index;
+            const thumb = thumbs[currentIndex];
+            preview.style.opacity = '0';
+            setTimeout(() => {
+                preview.src = thumb.dataset.src;
+                preview.alt = thumb.dataset.label;
+                preview.style.opacity = '1';
+            }, 100);
+            if (label) label.textContent = thumb.dataset.label;
+            if (counter) counter.textContent = `${currentIndex + 1} / ${total}`;
+            thumbs.forEach(t => t.classList.remove('active'));
+            thumb.classList.add('active');
+            thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        };
+
+        prevBtn.addEventListener('click', () => goTo(currentIndex - 1));
+        nextBtn.addEventListener('click', () => goTo(currentIndex + 1));
+
+        thumbs.forEach((thumb, i) => {
+            thumb.addEventListener('click', () => goTo(i));
         });
 
-        lightbox.addEventListener('click', () => {
-            lightbox.classList.remove('active');
+        // Keyboard navigation when window is focused
+        windowEl.setAttribute('tabindex', '0');
+        windowEl.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') { goTo(currentIndex - 1); e.preventDefault(); }
+            if (e.key === 'ArrowRight') { goTo(currentIndex + 1); e.preventDefault(); }
         });
+        windowEl.focus();
     }
 
     initializeMetbicWindow(windowEl) {
