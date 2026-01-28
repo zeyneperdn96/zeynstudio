@@ -380,6 +380,20 @@ class WindowManager {
             return;
         }
 
+        // Special handling for Illustration - open Gallery window starting at illustration images
+        if (project.title === 'Illustration') {
+            this.openWindow('illustration');
+            // Jump to first illustration image (index 17 = after METBIC 8 + FIREBOX 9)
+            setTimeout(() => {
+                const win = this.windows.get('illustration');
+                if (win) {
+                    const thumbs = win.element.querySelectorAll('.gal-thumb');
+                    if (thumbs[17]) thumbs[17].click();
+                }
+            }, 100);
+            return;
+        }
+
         const windowId = `casestudy-${project.id}`;
 
         // If already open, focus it

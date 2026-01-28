@@ -59,63 +59,14 @@ const projectsData = [
         }
     },
     {
-        id: 10,
-        title: 'Mobile Banking App',
-        category: 'ui-ux',
-        thumbnail: 'assets/projects/project-1.jpg',
-        description: 'Modern banking interface with intuitive UX',
-        featured: true
-    },
-    {
         id: 3,
-        title: 'Creative Studio Illustrations',
+        title: 'Illustration',
         category: 'illustration',
-        thumbnail: 'assets/projects/project-2.jpg',
-        description: 'Character designs and digital art',
-        featured: true
-    },
-    {
-        id: 4,
-        title: 'Smart Home Product',
-        category: 'industrial',
-        thumbnail: 'assets/projects/project-3.jpg',
-        description: 'IoT device industrial design',
-        featured: false
-    },
-    {
-        id: 5,
-        title: 'E-commerce Dashboard',
-        category: 'ui-ux',
-        thumbnail: 'assets/projects/project-4.jpg',
-        description: 'Analytics and admin interface'
-    },
-    {
-        id: 6,
-        title: 'Brand Identity System',
-        category: 'illustration',
-        thumbnail: 'assets/projects/project-5.jpg',
-        description: 'Logo and visual identity design'
-    },
-    {
-        id: 7,
-        title: 'Ergonomic Chair Design',
-        category: 'industrial',
-        thumbnail: 'assets/projects/project-6.jpg',
-        description: 'Modern furniture design concept'
-    },
-    {
-        id: 8,
-        title: 'Health Tracking App',
-        category: 'ui-ux',
-        thumbnail: 'assets/projects/project-7.jpg',
-        description: 'Wellness and fitness tracker UI'
-    },
-    {
-        id: 9,
-        title: 'Portable Speaker',
-        category: 'industrial',
-        thumbnail: 'assets/projects/project-8.jpg',
-        description: 'Bluetooth speaker product design'
+        thumbnail: 'assets/projects/illustration/pet-portrait.png',
+        description: 'Custom Illustrations & Digital Art',
+        featured: true,
+        year: '2025',
+        role: 'Illustrator (Digital Art, Character Design, Custom Portraits)'
     }
 ];
 
