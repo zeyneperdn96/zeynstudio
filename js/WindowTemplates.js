@@ -94,6 +94,16 @@ const WindowTemplates = {
             { src: 'assets/projects/firebox/context.png', label: 'FIREBOX — Context' },
             { src: 'assets/projects/firebox/carrying.png', label: 'FIREBOX — Carrying' },
             { src: 'assets/projects/firebox/product.png', label: 'FIREBOX — Product' },
+            { src: 'assets/projects/illustration/pet-portrait.png', label: 'Illustration — Pet Portrait' },
+            { src: 'assets/projects/illustration/character-expressions.png', label: 'Illustration — Character Expressions' },
+            { src: 'assets/projects/illustration/map-of-us.png', label: 'Illustration — Map of Us' },
+            { src: 'assets/projects/illustration/map-of-dreams.png', label: 'Illustration — Map of Our Dreams' },
+            { src: 'assets/projects/illustration/christmas-market.png', label: 'Illustration — Christmas Market' },
+            { src: 'assets/projects/illustration/christmas-postcard.png', label: 'Illustration — Christmas Postcard' },
+            { src: 'assets/projects/illustration/wedding-welcome.png', label: 'Illustration — Wedding Welcome' },
+            { src: 'assets/projects/illustration/wedding-vintage.png', label: 'Illustration — Wedding Vintage' },
+            { src: 'assets/projects/illustration/couple-portal.png', label: 'Illustration — Couple Portal' },
+            { src: 'assets/projects/illustration/valentines-day.png', label: 'Illustration — Valentine\'s Day' },
         ];
         return `
         <div class="window-titlebar">
@@ -142,7 +152,7 @@ const WindowTemplates = {
 
             <!-- Status Bar -->
             <div class="gal-statusbar">
-                <span>${allImages.length} images — METBIC & FIREBOX</span>
+                <span>${allImages.length} images — METBIC, FIREBOX & Illustration</span>
                 <span>Use ← → arrows to navigate</span>
             </div>
         </div>
