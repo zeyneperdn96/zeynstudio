@@ -47,7 +47,7 @@ class WindowManager {
         const windowSizes = {
             about: { width: 900, height: 700 },
             work: { width: 700, height: 550 },
-            showreel: { width: 400, height: 450 },
+            showreel: { width: 500, height: 580 },
             metbic: { width: 820, height: 520 },
             firebox: { width: 820, height: 520 },
             zeynshat: { width: 500, height: 700 },
@@ -94,6 +94,11 @@ class WindowManager {
         // Cleanup matrix animation
         if (windowId === 'terminal') {
             Terminal.cleanup(windowData.element);
+        }
+
+        // Cleanup media player
+        if (windowId === 'showreel' && windowData.mediaPlayer) {
+            windowData.mediaPlayer.destroy();
         }
 
         windowData.element.remove();

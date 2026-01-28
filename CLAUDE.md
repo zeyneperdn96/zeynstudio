@@ -4,6 +4,91 @@ Bu dosya, ZeynStudio XP projesinde yapılan tüm değişiklikleri kronolojik ola
 
 ---
 
+## 📅 29 Ocak 2026 - Media Player Windows Media Player 11 Teması
+
+### 🎵 Media Player → Windows Media Player 11 Görünümü
+- **Değişiklik**: Mevcut basit media player tamamen WMP 11 tarzında yeniden tasarlandı
+- **Amaç**: Nostaljik Windows Media Player 11 deneyimi sağlamak
+- **Değiştirilen Dosyalar**:
+  - `js/WindowTemplates.js` - WMP 11 layout: tab bar, canvas visualizer, seek bar, playlist tablosu
+  - `js/MediaPlayer.js` - Tamamen yeniden yazıldı: visualizer, shuffle, repeat, seek drag, stop
+  - `js/WindowManager.js` - Pencere boyutu 500x580, kapatma cleanup
+
+#### ✨ Yeni Özellikler:
+- ✅ Koyu mavi-siyah gradient arka plan (WMP 11 teması)
+- ✅ "Now Playing" / "Library" dekoratif tab bar
+- ✅ Canvas audio visualizer (Web Audio API AnalyserNode + frekans çubukları)
+- ✅ Idle visualizer (çalınmıyorken soluk çubuklar)
+- ✅ Seek bar drag desteği (mousedown + mousemove ile sürükleme)
+- ✅ Seek thumb hover'da görünür
+- ✅ Shuffle modu (🔀 toggle)
+- ✅ Repeat modu (off → all → one → off döngüsü: 🔁 / 🔂)
+- ✅ Stop butonu (⏹ - sıfırla ve durdur)
+- ✅ Parlak yuvarlak play butonu (glow efekti)
+- ✅ Volume icon tıklama ile mute/unmute
+- ✅ Aktif track playlist'te scroll into view
+- ✅ Playlist tablosu: #, Title, Duration sütunları
+- ✅ Track ve buton hover efektleri
+- ✅ Previous: 3 saniyeden sonraysa track'i yeniden başlat
+- ✅ Pencere kapatılınca audio + AudioContext cleanup
+- ✅ Pencere boyutu: 400x450 → 500x580
+
+#### 🎨 Tasarım Detayları:
+- Segoe UI / Tahoma font ailesi
+- Mavi/turkuaz renk paleti (#4a9eff, #2a6aaa, #8ab8e0)
+- Vista-tarzı parlak butonlar, hover efektleri
+- Gradient bar visualizer (mavi → turkuaz → açık mavi)
+
+---
+
+## 📅 28 Ocak 2026 - Galeri, İllüstrasyon ve Genel İyileştirmeler
+
+### 🖼️ Galeri Windows Photo Viewer Tarzına Dönüştürüldü
+- **Değişiklik**: Gallery penceresi Windows Photo Viewer tarzında yeniden tasarlandı
+- **Amaç**: Büyük önizleme alanı, ok navigasyonu ve thumbnail şeridi ile daha iyi görüntüleme deneyimi
+- **Değiştirilen Dosyalar**:
+  - `js/WindowTemplates.js` - Photo Viewer layout, thumbnail strip, sayaç
+  - `js/WindowManager.js` - Ok navigasyonu, klavye desteği, lightbox
+
+#### ✨ Özellikler:
+- ✅ Büyük önizleme alanı + sol/sağ ok navigasyonu
+- ✅ Alt kısımda thumbnail şeridi
+- ✅ Sayaç ve etiket göstergesi
+- ✅ Klavye ok tuşları desteği
+
+### 🔥 FIREBOX Render Video Eklendi
+- **Değişiklik**: FIREBOX galerisine render.mp4 video eklendi
+- **Dosyalar**:
+  - `assets/projects/firebox/render.mp4` - Render videosu
+  - `js/WindowTemplates.js` - Video thumbnail ve play ikonu
+  - `js/WindowManager.js` - Video oynatma kontrolü
+- ✅ Video galeri ilk sırada gösteriliyor ve otomatik oynatılıyor
+
+### 📸 METBIC ve FIREBOX Fotoğrafları Galeriye Eklendi
+- **Değişiklik**: Placeholder galeri yerine gerçek proje görselleri eklendi
+- **Dosyalar**: `js/WindowTemplates.js`, `js/WindowManager.js`
+- ✅ Grid layout + lightbox önizleme desteği
+
+### 🎨 İllüstrasyon Projesi Eklendi
+- **Değişiklik**: 10 illüstrasyon çalışması eklendi ve My Work bölümüne Illustration projesi eklendi
+- **Dosyalar**:
+  - `assets/projects/illustration/` - 10 görsel (pet portrait, character expressions, map designs, Christmas, wedding, Valentine's)
+  - `js/ProjectsData.js` - Illustration proje verisi (placeholder projeler kaldırıldı)
+  - `js/WindowManager.js` - Illustration tıklandığında galeri penceresini açma
+  - `js/WindowTemplates.js` - İllüstrasyon görselleri galeri entegrasyonu
+
+### 🔀 Gallery ve Illustration Ayrımı
+- **Değişiklik**: Gallery (masaüstü ikonu) tüm görselleri gösteriyor; My Work > Illustration sadece illüstrasyon görsellerini açıyor
+- **Dosyalar**: `js/WindowTemplates.js`, `js/WindowManager.js`, `js/ProjectsData.js`
+- ✅ Kapak görseli "Map of Us" olarak değiştirildi
+
+### 🐛 Düzeltmeler
+- **Proje penceresi z-index**: Açılan proje penceresi artık work penceresinin arkasında kalmıyor (`js/WindowManager.js` - click event propagation durduruldu)
+- **Galeri grid layout**: `min-height` kullanımı, `img height: auto` düzeltmesi
+- **About Me ok navigasyonu**: Trading cards için tıklanabilir sol/sağ ok butonları ve mouse wheel desteği eklendi (`trading-cards.html`)
+
+---
+
 ## 📅 27 Ocak 2026 - Kapsamlı Mobil Responsive Geliştirmesi
 
 ### 📱 Tam Mobil Uyumluluk - Tüm Ekran Boyutları

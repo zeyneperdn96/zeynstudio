@@ -248,49 +248,66 @@ const WindowTemplates = {
         </div>
     `,
 
-    // Media Player - Audio with Playlist
+    // Media Player - Windows Media Player 11 Style
     showreel: () => `
-        <div class="window-titlebar">
-            <span class="window-title">🎵 Media Player</span>
+        <div class="window-titlebar" style="background: linear-gradient(180deg, #1a2a4a 0%, #0d1a30 100%); border-bottom: 1px solid #2a4a7a;">
+            <span class="window-title" style="color: #c0d8f0;">▶ Windows Media Player</span>
             <div class="window-controls">
                 <button class="win-btn win-minimize" data-action="minimize">_</button>
                 <button class="win-btn win-maximize" data-action="maximize">□</button>
                 <button class="win-btn win-close" data-action="close">×</button>
             </div>
         </div>
-        <div class="window-content media-player-content" style="padding: 0; display: flex; flex-direction: column; background: #000;">
+        <div class="window-content media-player-content" style="padding: 0; display: flex; flex-direction: column; background: linear-gradient(180deg, #0c1929 0%, #0a1420 100%); overflow: hidden;">
+            <!-- Tab Bar -->
+            <div class="mp-tabbar" style="display: flex; background: linear-gradient(180deg, #1a2d4d 0%, #12233d 100%); border-bottom: 1px solid #2a4a7a; padding: 0;">
+                <div style="padding: 5px 14px; color: #8ec8ff; font-size: 11px; font-family: Segoe UI, Tahoma, sans-serif; border-bottom: 2px solid #4a9eff; background: rgba(74,158,255,0.1); cursor: default;">Now Playing</div>
+                <div style="padding: 5px 14px; color: #5a7a9a; font-size: 11px; font-family: Segoe UI, Tahoma, sans-serif; cursor: default;">Library</div>
+            </div>
             <!-- Visualization Area -->
-            <div class="mp-visual" style="background: linear-gradient(180deg, #0a0a2e 0%, #1a0a3e 100%); height: 120px; display: flex; align-items: center; justify-content: center; border-bottom: 2px solid #333;">
-                <div class="mp-now-playing" style="color: #0f0; font-family: 'Courier New', monospace; font-size: 13px; text-align: center; padding: 8px;">
-                    <div class="mp-track-name">No track loaded</div>
+            <div class="mp-visual" style="background: radial-gradient(ellipse at center, #0a1a2e 0%, #050d18 100%); height: 140px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; border-bottom: 1px solid #1a3050;">
+                <canvas class="mp-visualizer-canvas" width="300" height="80" style="width: 300px; height: 80px;"></canvas>
+                <div class="mp-now-playing" style="color: #6abaff; font-family: Segoe UI, Tahoma, sans-serif; font-size: 12px; text-align: center; padding: 6px 8px 0; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                    <span class="mp-track-name">No track loaded</span>
                 </div>
             </div>
-            <!-- Progress Bar -->
-            <div class="mp-progress-wrapper" style="padding: 6px 10px; background: #1a1a1a;">
-                <div class="mp-progress-bar" style="width: 100%; height: 8px; background: #333; border-radius: 4px; cursor: pointer; position: relative;">
-                    <div class="mp-progress-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, #4a9eff, #00d4ff); border-radius: 4px; transition: width 0.1s;"></div>
-                </div>
-                <div style="display: flex; justify-content: space-between; margin-top: 3px;">
-                    <span class="mp-time-current" style="color: #888; font-size: 10px;">0:00</span>
-                    <span class="mp-time-total" style="color: #888; font-size: 10px;">0:00</span>
+            <!-- Seek Bar -->
+            <div class="mp-progress-wrapper" style="padding: 6px 12px; background: linear-gradient(180deg, #0d1a2d 0%, #111d30 100%); border-bottom: 1px solid #1a3050;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span class="mp-time-current" style="color: #5a8abf; font-size: 10px; font-family: Segoe UI, Tahoma, sans-serif; min-width: 30px;">0:00</span>
+                    <div class="mp-progress-bar" style="flex: 1; height: 6px; background: #1a2a40; border-radius: 3px; cursor: pointer; position: relative; border: 1px solid #2a3a50;">
+                        <div class="mp-progress-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, #2a6aaa, #4a9eff); border-radius: 3px; position: relative;">
+                            <div class="mp-seek-thumb" style="position: absolute; right: -5px; top: -4px; width: 10px; height: 14px; background: linear-gradient(180deg, #c0d8f0 0%, #8ab0d0 100%); border-radius: 2px; border: 1px solid #4a7aaa; cursor: grab; display: none;"></div>
+                        </div>
+                    </div>
+                    <span class="mp-time-total" style="color: #5a8abf; font-size: 10px; font-family: Segoe UI, Tahoma, sans-serif; min-width: 30px; text-align: right;">0:00</span>
                 </div>
             </div>
             <!-- Controls -->
-            <div class="mp-controls" style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 8px; background: #2d2d2d; border-bottom: 1px solid #444;">
-                <button class="mp-btn mp-prev" title="Previous" style="background: none; border: none; color: #ccc; font-size: 16px; cursor: pointer; padding: 4px 8px;">⏮</button>
-                <button class="mp-btn mp-play" title="Play" style="background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; padding: 4px 10px;">▶</button>
-                <button class="mp-btn mp-next" title="Next" style="background: none; border: none; color: #ccc; font-size: 16px; cursor: pointer; padding: 4px 8px;">⏭</button>
-                <div style="margin-left: 16px; display: flex; align-items: center; gap: 4px;">
-                    <span style="color: #888; font-size: 12px;">🔊</span>
-                    <input type="range" class="mp-volume" min="0" max="100" value="80" style="width: 60px; cursor: pointer;">
+            <div class="mp-controls" style="display: flex; align-items: center; justify-content: center; gap: 4px; padding: 6px 10px; background: linear-gradient(180deg, #12223a 0%, #0e1a2e 100%); border-bottom: 1px solid #1a3050;">
+                <button class="mp-btn mp-shuffle" title="Shuffle" style="background: none; border: 1px solid transparent; color: #4a7aaa; font-size: 13px; cursor: pointer; padding: 3px 6px; border-radius: 3px; transition: all 0.15s;">🔀</button>
+                <button class="mp-btn mp-prev" title="Previous" style="background: none; border: 1px solid transparent; color: #8ab8e0; font-size: 15px; cursor: pointer; padding: 3px 6px; border-radius: 3px; transition: all 0.15s;">⏮</button>
+                <button class="mp-btn mp-play" title="Play" style="background: linear-gradient(180deg, #2a5a8a 0%, #1a3a5a 100%); border: 1px solid #3a7aba; color: #e0f0ff; font-size: 18px; cursor: pointer; padding: 5px 12px; border-radius: 50%; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; box-shadow: 0 0 8px rgba(74,158,255,0.3);">▶</button>
+                <button class="mp-btn mp-stop" title="Stop" style="background: none; border: 1px solid transparent; color: #8ab8e0; font-size: 14px; cursor: pointer; padding: 3px 6px; border-radius: 3px; transition: all 0.15s;">⏹</button>
+                <button class="mp-btn mp-next" title="Next" style="background: none; border: 1px solid transparent; color: #8ab8e0; font-size: 15px; cursor: pointer; padding: 3px 6px; border-radius: 3px; transition: all 0.15s;">⏭</button>
+                <button class="mp-btn mp-repeat" title="Repeat" style="background: none; border: 1px solid transparent; color: #4a7aaa; font-size: 13px; cursor: pointer; padding: 3px 6px; border-radius: 3px; transition: all 0.15s;">🔁</button>
+                <div style="margin-left: 12px; display: flex; align-items: center; gap: 4px;">
+                    <span class="mp-volume-icon" style="color: #5a8abf; font-size: 13px; cursor: pointer;">🔊</span>
+                    <input type="range" class="mp-volume" min="0" max="100" value="80" style="width: 70px; cursor: pointer; accent-color: #4a9eff;">
                 </div>
             </div>
             <!-- Playlist -->
-            <div class="mp-playlist" style="flex: 1; overflow-y: auto; background: #1e1e2e; max-height: 180px;">
+            <div class="mp-playlist-header" style="display: flex; padding: 4px 12px; background: linear-gradient(180deg, #152540 0%, #0f1d32 100%); border-bottom: 1px solid #1a3050; font-size: 10px; font-family: Segoe UI, Tahoma, sans-serif; color: #4a7aaa;">
+                <span style="width: 28px;">#</span>
+                <span style="flex: 1;">Title</span>
+                <span style="width: 50px; text-align: right;">Duration</span>
+            </div>
+            <div class="mp-playlist" style="flex: 1; overflow-y: auto; background: linear-gradient(180deg, #0c1929 0%, #0a1420 100%); max-height: 160px;">
                 ${(window.CONFIG.playlist || []).map((track, i) => `
-                    <div class="mp-track" data-index="${i}" style="padding: 6px 12px; color: #ccc; font-size: 11px; cursor: pointer; border-bottom: 1px solid #2a2a3a; display: flex; align-items: center; gap: 8px;">
-                        <span style="color: #666; font-size: 10px; width: 18px;">${i + 1}.</span>
-                        <span class="mp-track-title">${track.title}</span>
+                    <div class="mp-track" data-index="${i}" style="display: flex; align-items: center; padding: 5px 12px; color: #8ab8e0; font-size: 11px; font-family: Segoe UI, Tahoma, sans-serif; cursor: pointer; border-bottom: 1px solid rgba(26,48,80,0.5); transition: background 0.15s;">
+                        <span style="color: #4a7aaa; font-size: 10px; width: 28px;">${i + 1}</span>
+                        <span class="mp-track-title" style="flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${track.title}</span>
+                        <span class="mp-track-duration" style="width: 50px; text-align: right; color: #4a7aaa; font-size: 10px;">--:--</span>
                     </div>
                 `).join('')}
             </div>
