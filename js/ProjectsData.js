@@ -62,7 +62,7 @@ const projectsData = [
         id: 3,
         title: 'Illustration',
         category: 'illustration',
-        thumbnail: 'assets/projects/illustration/pet-portrait.png',
+        thumbnail: 'assets/projects/illustration/map-of-us.png',
         description: 'Custom Illustrations & Digital Art',
         featured: true,
         year: '2025',

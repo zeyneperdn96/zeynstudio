@@ -94,16 +94,16 @@ const WindowTemplates = {
             { src: 'assets/projects/firebox/context.png', label: 'FIREBOX — Context' },
             { src: 'assets/projects/firebox/carrying.png', label: 'FIREBOX — Carrying' },
             { src: 'assets/projects/firebox/product.png', label: 'FIREBOX — Product' },
-            { src: 'assets/projects/illustration/pet-portrait.png', label: 'Illustration — Pet Portrait' },
-            { src: 'assets/projects/illustration/character-expressions.png', label: 'Illustration — Character Expressions' },
-            { src: 'assets/projects/illustration/map-of-us.png', label: 'Illustration — Map of Us' },
-            { src: 'assets/projects/illustration/map-of-dreams.png', label: 'Illustration — Map of Our Dreams' },
-            { src: 'assets/projects/illustration/christmas-market.png', label: 'Illustration — Christmas Market' },
-            { src: 'assets/projects/illustration/christmas-postcard.png', label: 'Illustration — Christmas Postcard' },
-            { src: 'assets/projects/illustration/wedding-welcome.png', label: 'Illustration — Wedding Welcome' },
-            { src: 'assets/projects/illustration/wedding-vintage.png', label: 'Illustration — Wedding Vintage' },
-            { src: 'assets/projects/illustration/couple-portal.png', label: 'Illustration — Couple Portal' },
-            { src: 'assets/projects/illustration/valentines-day.png', label: 'Illustration — Valentine\'s Day' },
+            { src: 'assets/projects/illustration/map-of-us.png', label: 'Map of Us' },
+            { src: 'assets/projects/illustration/pet-portrait.png', label: 'Pet Portrait' },
+            { src: 'assets/projects/illustration/character-expressions.png', label: 'Character Expressions' },
+            { src: 'assets/projects/illustration/map-of-dreams.png', label: 'Map of Our Dreams' },
+            { src: 'assets/projects/illustration/christmas-market.png', label: 'Christmas Market' },
+            { src: 'assets/projects/illustration/christmas-postcard.png', label: 'Christmas Postcard' },
+            { src: 'assets/projects/illustration/wedding-welcome.png', label: 'Wedding Welcome' },
+            { src: 'assets/projects/illustration/wedding-vintage.png', label: 'Wedding Vintage' },
+            { src: 'assets/projects/illustration/couple-portal.png', label: 'Couple Portal' },
+            { src: 'assets/projects/illustration/valentines-day.png', label: 'Valentine\'s Day' },
         ];
         return `
         <div class="window-titlebar">
@@ -153,6 +153,71 @@ const WindowTemplates = {
             <!-- Status Bar -->
             <div class="gal-statusbar">
                 <span>${allImages.length} images — METBIC, FIREBOX & Illustration</span>
+                <span>Use ← → arrows to navigate</span>
+            </div>
+        </div>
+    `;
+    },
+
+    // Illustration Gallery (My Work version - illustration only)
+    illustrationWork: () => {
+        const allImages = [
+            { src: 'assets/projects/illustration/map-of-us.png', label: 'Map of Us' },
+            { src: 'assets/projects/illustration/pet-portrait.png', label: 'Pet Portrait' },
+            { src: 'assets/projects/illustration/character-expressions.png', label: 'Character Expressions' },
+            { src: 'assets/projects/illustration/map-of-dreams.png', label: 'Map of Our Dreams' },
+            { src: 'assets/projects/illustration/christmas-market.png', label: 'Christmas Market' },
+            { src: 'assets/projects/illustration/christmas-postcard.png', label: 'Christmas Postcard' },
+            { src: 'assets/projects/illustration/wedding-welcome.png', label: 'Wedding Welcome' },
+            { src: 'assets/projects/illustration/wedding-vintage.png', label: 'Wedding Vintage' },
+            { src: 'assets/projects/illustration/couple-portal.png', label: 'Couple Portal' },
+            { src: 'assets/projects/illustration/valentines-day.png', label: 'Valentine\'s Day' },
+        ];
+        return `
+        <div class="window-titlebar">
+            <span class="window-title">🎨 Illustration.exe - Custom Illustrations</span>
+            <div class="window-controls">
+                <button class="win-btn win-minimize" data-action="minimize">_</button>
+                <button class="win-btn win-maximize" data-action="maximize">□</button>
+                <button class="win-btn win-close" data-action="close">×</button>
+            </div>
+        </div>
+        <div class="window-content" style="padding: 0; display: flex; flex-direction: column; height: 100%; overflow: hidden;">
+            <style>
+                .gal-viewer { flex: 1; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%); position: relative; min-height: 0; overflow: hidden; }
+                .gal-viewer img { max-width: 95%; max-height: 95%; object-fit: contain; transition: opacity 0.2s; }
+                .gal-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.85); border: 1px solid #aaa; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.3); transition: all 0.15s; }
+                .gal-arrow:hover { background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+                .gal-arrow-left { left: 12px; }
+                .gal-arrow-right { right: 12px; }
+                .gal-counter { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); color: #fff; padding: 4px 14px; border-radius: 12px; font-size: 11px; font-family: 'Segoe UI', Tahoma, sans-serif; }
+                .gal-label { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.55); color: #fff; padding: 4px 14px; border-radius: 12px; font-size: 11px; font-family: 'Segoe UI', Tahoma, sans-serif; white-space: nowrap; }
+                .gal-thumbstrip { height: 80px; min-height: 80px; background: #e8e8e8; border-top: 1px solid #a0a0a0; display: flex; align-items: center; gap: 6px; padding: 8px 12px; overflow-x: auto; overflow-y: hidden; }
+                .gal-thumb { width: 56px; height: 56px; min-width: 56px; border: 2px solid #c0c0c0; border-radius: 3px; overflow: hidden; cursor: pointer; transition: all 0.15s; background: #f0f0f0; }
+                .gal-thumb:hover { border-color: #0078d4; transform: scale(1.05); }
+                .gal-thumb.active { border-color: #0078d4; box-shadow: 0 0 0 2px rgba(0,120,212,0.4); }
+                .gal-thumb img { width: 100%; height: 100%; object-fit: cover; }
+                .gal-statusbar { padding: 4px 12px; background: linear-gradient(180deg, #e8e8e8 0%, #d0d0d0 100%); border-top: 1px solid #a0a0a0; display: flex; justify-content: space-between; font-size: 10px; color: #555; font-family: 'Segoe UI', Tahoma, sans-serif; }
+            </style>
+
+            <div class="gal-viewer">
+                <button class="gal-arrow gal-arrow-left" id="gal-prev">❮</button>
+                <img src="${allImages[0].src}" alt="${allImages[0].label}" id="gal-preview">
+                <button class="gal-arrow gal-arrow-right" id="gal-next">❯</button>
+                <div class="gal-label" id="gal-label">${allImages[0].label}</div>
+                <div class="gal-counter" id="gal-counter">1 / ${allImages.length}</div>
+            </div>
+
+            <div class="gal-thumbstrip" id="gal-thumbstrip">
+                ${allImages.map((img, i) => `
+                    <div class="gal-thumb${i === 0 ? ' active' : ''}" data-index="${i}" data-src="${img.src}" data-label="${img.label}">
+                        <img src="${img.src}" alt="${img.label}" loading="lazy">
+                    </div>
+                `).join('')}
+            </div>
+
+            <div class="gal-statusbar">
+                <span>${allImages.length} images — Illustrations</span>
                 <span>Use ← → arrows to navigate</span>
             </div>
         </div>

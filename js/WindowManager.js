@@ -51,7 +51,8 @@ class WindowManager {
             metbic: { width: 820, height: 520 },
             firebox: { width: 820, height: 520 },
             zeynshat: { width: 500, height: 700 },
-            illustration: { width: 800, height: 600 }
+            illustration: { width: 800, height: 600 },
+            illustrationWork: { width: 800, height: 600 }
         };
 
         const customSize = windowSizes[windowId] || {};
@@ -362,7 +363,7 @@ class WindowManager {
         }
 
         // Gallery lightbox
-        if (windowId === 'illustration') {
+        if (windowId === 'illustration' || windowId === 'illustrationWork') {
             this.initializeGalleryWindow(windowEl);
         }
     }
@@ -380,17 +381,9 @@ class WindowManager {
             return;
         }
 
-        // Special handling for Illustration - open Gallery window starting at illustration images
+        // Special handling for Illustration - open illustration-only gallery
         if (project.title === 'Illustration') {
-            this.openWindow('illustration');
-            // Jump to first illustration image (index 17 = after METBIC 8 + FIREBOX 9)
-            setTimeout(() => {
-                const win = this.windows.get('illustration');
-                if (win) {
-                    const thumbs = win.element.querySelectorAll('.gal-thumb');
-                    if (thumbs[17]) thumbs[17].click();
-                }
-            }, 100);
+            this.openWindow('illustrationWork', { width: 800, height: 600 });
             return;
         }
 
