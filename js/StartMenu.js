@@ -86,17 +86,22 @@ class StartMenu {
         // Menu items
         const menuItems = this.menu.querySelectorAll('.start-menu-item:not(.all-programs)');
         menuItems.forEach(item => {
-            item.addEventListener('click', () => handleMenuItem(item));
+            let itemTouchHandled = false;
+
+            item.addEventListener('click', () => {
+                if (itemTouchHandled) {
+                    itemTouchHandled = false;
+                    return;
+                }
+                handleMenuItem(item);
+            });
 
             if (isTouchDevice) {
-                let itemTouchHandled = false;
                 item.addEventListener('touchend', (e) => {
                     e.preventDefault();
-                    if (!itemTouchHandled) {
-                        itemTouchHandled = true;
-                        handleMenuItem(item);
-                        setTimeout(() => { itemTouchHandled = false; }, 300);
-                    }
+                    itemTouchHandled = true;
+                    handleMenuItem(item);
+                    setTimeout(() => { itemTouchHandled = false; }, 400);
                 });
             }
         });

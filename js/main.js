@@ -173,8 +173,8 @@ function setupDesktopIcons() {
                 }
                 lastTap = currentTime;
 
-                // Reset touch handled flag after a short delay
-                setTimeout(() => { touchHandled = false; }, 100);
+                // Reset touch handled flag after enough delay to block click/dblclick
+                setTimeout(() => { touchHandled = false; }, 400);
             });
 
             icon.addEventListener('touchcancel', () => {
