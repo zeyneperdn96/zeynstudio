@@ -42,35 +42,72 @@ const WindowTemplates = {
         </div>
     `,
 
-    // Mail.exe - Contact form
-    contact: () => `
+    // Games.exe - Minesweeper & Snake
+    games: () => `
         <div class="window-titlebar">
-            <span class="window-title">📧 Mail.exe - New Message</span>
+            <span class="window-title">Games.exe</span>
             <div class="window-controls">
                 <button class="win-btn win-minimize" data-action="minimize">_</button>
                 <button class="win-btn win-maximize" data-action="maximize">□</button>
                 <button class="win-btn win-close" data-action="close">×</button>
             </div>
         </div>
-        <div class="window-content">
-            <form id="contact-form" style="max-width: 400px;">
-                <div class="form-group">
-                    <label>Name:</label>
-                    <input type="text" class="form-control" id="contact-name" required>
+        <div class="window-content" style="padding: 0; display: flex; flex-direction: column; height: 100%; overflow: hidden; font-family: 'Segoe UI', Tahoma, sans-serif;">
+            <style>
+                .games-tabs { display: flex; background: #ece9d8; border-bottom: 1px solid #aca899; padding: 2px 4px 0; }
+                .games-tab { padding: 4px 16px; font-size: 11px; cursor: pointer; background: #d6d2c2; border: 1px solid #aca899; border-bottom: none; border-radius: 3px 3px 0 0; margin-right: 2px; color: #444; }
+                .games-tab.active { background: #fff; color: #000; font-weight: 600; border-bottom: 1px solid #fff; margin-bottom: -1px; position: relative; z-index: 1; }
+                .games-tab:hover:not(.active) { background: #e8e4d8; }
+                .games-area { flex: 1; display: flex; align-items: center; justify-content: center; background: #c0c0c0; overflow: hidden; }
+
+                /* Minesweeper Styles */
+                .ms-container { display: flex; flex-direction: column; align-items: center; background: #c0c0c0; padding: 6px; border: 3px outset #e0e0e0; }
+                .ms-header { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 4px; margin-bottom: 6px; background: #c0c0c0; border: 2px inset #a0a0a0; }
+                .ms-counter { background: #000; color: #f00; font-family: 'Consolas', 'Courier New', monospace; font-size: 22px; font-weight: 700; padding: 2px 4px; min-width: 46px; text-align: center; border: 1px inset #808080; letter-spacing: 2px; }
+                .ms-face { width: 30px; height: 30px; font-size: 18px; cursor: pointer; border: 2px outset #e0e0e0; background: #c0c0c0; display: flex; align-items: center; justify-content: center; line-height: 1; }
+                .ms-face:active { border-style: inset; }
+                .ms-grid { display: grid; grid-template-columns: repeat(9, 22px); grid-template-rows: repeat(9, 22px); border: 3px inset #a0a0a0; }
+                .ms-cell { width: 22px; height: 22px; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; cursor: pointer; user-select: none; border: 2px outset #e0e0e0; background: #c0c0c0; font-family: 'Segoe UI', Tahoma, sans-serif; }
+                .ms-cell.revealed { border: 1px solid #808080; background: #bdbdbd; cursor: default; }
+                .ms-cell.mine-hit { background: #f00; }
+                .ms-cell.flagged::after { content: ''; }
+                .ms-cell[data-num="1"] { color: #0000ff; }
+                .ms-cell[data-num="2"] { color: #008000; }
+                .ms-cell[data-num="3"] { color: #ff0000; }
+                .ms-cell[data-num="4"] { color: #000080; }
+                .ms-cell[data-num="5"] { color: #800000; }
+                .ms-cell[data-num="6"] { color: #008080; }
+                .ms-cell[data-num="7"] { color: #000; }
+                .ms-cell[data-num="8"] { color: #808080; }
+
+                /* Snake Styles */
+                .snake-container { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+                .snake-header { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 4px 0; }
+                .snake-score { background: #000; color: #0f0; font-family: 'Consolas', 'Courier New', monospace; font-size: 16px; padding: 2px 8px; border: 1px inset #808080; min-width: 80px; text-align: center; }
+                .snake-canvas { border: 3px inset #a0a0a0; background: #000; image-rendering: pixelated; }
+                .snake-info { font-size: 10px; color: #555; text-align: center; }
+                .snake-btn { padding: 4px 12px; font-size: 11px; cursor: pointer; border: 2px outset #e0e0e0; background: #c0c0c0; font-family: 'Segoe UI', Tahoma, sans-serif; }
+                .snake-btn:active { border-style: inset; }
+            </style>
+
+            <!-- Tab Bar -->
+            <div class="games-tabs">
+                <div class="games-tab active" data-game="minesweeper">Minesweeper</div>
+                <div class="games-tab" data-game="snake">Snake</div>
+            </div>
+
+            <!-- Game Area -->
+            <div class="games-area" id="games-area">
+                <!-- Minesweeper (default) -->
+                <div class="ms-container" id="ms-container">
+                    <div class="ms-header">
+                        <div class="ms-counter" id="ms-mines">010</div>
+                        <div class="ms-face" id="ms-face">😊</div>
+                        <div class="ms-counter" id="ms-timer">000</div>
+                    </div>
+                    <div class="ms-grid" id="ms-grid"></div>
                 </div>
-                <div class="form-group" style="margin-top: 12px;">
-                    <label>Email:</label>
-                    <input type="email" class="form-control" id="contact-email" required>
-                </div>
-                <div class="form-group" style="margin-top: 12px;">
-                    <label>Message:</label>
-                    <textarea class="form-control" id="contact-message" rows="6" required></textarea>
-                </div>
-                <div style="margin-top: 16px; display: flex; gap: 8px;">
-                    <button type="submit" class="btn btn-primary">Send Message</button>
-                    <button type="reset" class="btn btn-secondary">Clear</button>
-                </div>
-            </form>
+            </div>
         </div>
     `,
 

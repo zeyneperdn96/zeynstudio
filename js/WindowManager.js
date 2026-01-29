@@ -83,6 +83,7 @@ class WindowManager {
             showreel: { width: 680, height: 440 },
             metbic: { width: 820, height: 520 },
             firebox: { width: 820, height: 520 },
+            games: { width: 420, height: 520 },
             zeynshat: { width: 500, height: 700 },
             illustration: { width: 800, height: 600 },
             illustrationWork: { width: 800, height: 600 }
@@ -146,6 +147,11 @@ class WindowManager {
         // Cleanup media player
         if (windowId === 'showreel' && windowData.mediaPlayer) {
             windowData.mediaPlayer.destroy();
+        }
+
+        // Cleanup games
+        if (windowId === 'games' && windowData.gamesCleanup) {
+            windowData.gamesCleanup();
         }
 
         windowData.element.remove();
@@ -421,14 +427,9 @@ class WindowManager {
             });
         }
 
-        // Contact form
-        if (windowId === 'contact') {
-            const form = windowEl.querySelector('#contact-form');
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                alert('Message sent! (Demo - integrate with your email service)');
-                form.reset();
-            });
+        // Games window
+        if (windowId === 'games') {
+            this.initializeGamesWindow(windowEl);
         }
 
         // METBIC.exe interactive window
@@ -690,6 +691,351 @@ class WindowManager {
         if (previewImg) {
             previewImg.style.transition = 'opacity 0.15s ease';
         }
+    }
+
+    initializeGamesWindow(windowEl) {
+        const windowData = this.windows.get('games');
+        const tabs = windowEl.querySelectorAll('.games-tab');
+        const gamesArea = windowEl.querySelector('#games-area');
+        let currentGame = 'minesweeper';
+        let msTimer = null;
+        let snakeInterval = null;
+        let snakeKeyHandler = null;
+
+        // Cleanup function
+        windowData.gamesCleanup = () => {
+            if (msTimer) clearInterval(msTimer);
+            if (snakeInterval) clearInterval(snakeInterval);
+            if (snakeKeyHandler) document.removeEventListener('keydown', snakeKeyHandler);
+        };
+
+        // Tab switching
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const game = tab.dataset.game;
+                if (game === currentGame) return;
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                // Cleanup previous game
+                if (msTimer) { clearInterval(msTimer); msTimer = null; }
+                if (snakeInterval) { clearInterval(snakeInterval); snakeInterval = null; }
+                if (snakeKeyHandler) { document.removeEventListener('keydown', snakeKeyHandler); snakeKeyHandler = null; }
+                currentGame = game;
+                if (game === 'minesweeper') initMinesweeper();
+                else initSnake();
+            });
+        });
+
+        // ===================== MINESWEEPER =====================
+        const ROWS = 9, COLS = 9, MINES = 10;
+        let msGrid, msRevealed, msFlags, msMines, msGameOver, msWon, msFirstClick, msTimerVal;
+
+        function initMinesweeper() {
+            gamesArea.innerHTML = `
+                <div class="ms-container" id="ms-container">
+                    <div class="ms-header">
+                        <div class="ms-counter" id="ms-mines">010</div>
+                        <div class="ms-face" id="ms-face">😊</div>
+                        <div class="ms-counter" id="ms-timer">000</div>
+                    </div>
+                    <div class="ms-grid" id="ms-grid"></div>
+                </div>`;
+            msGrid = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
+            msRevealed = Array.from({ length: ROWS }, () => Array(COLS).fill(false));
+            msFlags = Array.from({ length: ROWS }, () => Array(COLS).fill(false));
+            msMines = Array.from({ length: ROWS }, () => Array(COLS).fill(false));
+            msGameOver = false; msWon = false; msFirstClick = true; msTimerVal = 0;
+            if (msTimer) clearInterval(msTimer);
+            msTimer = null;
+            renderMsGrid();
+            const face = windowEl.querySelector('#ms-face');
+            if (face) face.addEventListener('click', initMinesweeper);
+        }
+
+        function placeMines(safeR, safeC) {
+            let placed = 0;
+            while (placed < MINES) {
+                const r = Math.floor(Math.random() * ROWS);
+                const c = Math.floor(Math.random() * COLS);
+                if (msMines[r][c]) continue;
+                if (Math.abs(r - safeR) <= 1 && Math.abs(c - safeC) <= 1) continue;
+                msMines[r][c] = true;
+                placed++;
+            }
+            // Calculate numbers
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    if (msMines[r][c]) { msGrid[r][c] = -1; continue; }
+                    let count = 0;
+                    for (let dr = -1; dr <= 1; dr++) {
+                        for (let dc = -1; dc <= 1; dc++) {
+                            const nr = r + dr, nc = c + dc;
+                            if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS && msMines[nr][nc]) count++;
+                        }
+                    }
+                    msGrid[r][c] = count;
+                }
+            }
+        }
+
+        function renderMsGrid() {
+            const gridEl = windowEl.querySelector('#ms-grid');
+            if (!gridEl) return;
+            gridEl.innerHTML = '';
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'ms-cell';
+                    cell.dataset.r = r;
+                    cell.dataset.c = c;
+                    if (msRevealed[r][c]) {
+                        cell.classList.add('revealed');
+                        if (msMines[r][c]) {
+                            cell.textContent = '💣';
+                        } else if (msGrid[r][c] > 0) {
+                            cell.textContent = msGrid[r][c];
+                            cell.dataset.num = msGrid[r][c];
+                        }
+                    } else if (msFlags[r][c]) {
+                        cell.textContent = '🚩';
+                    }
+                    cell.addEventListener('click', (e) => msLeftClick(r, c));
+                    cell.addEventListener('contextmenu', (e) => { e.preventDefault(); msRightClick(r, c); });
+                    cell.addEventListener('mousedown', () => { if (!msGameOver && !msWon) setFace('😮'); });
+                    cell.addEventListener('mouseup', () => { if (!msGameOver && !msWon) setFace('😊'); });
+                    gridEl.appendChild(cell);
+                }
+            }
+            updateMsCounter();
+        }
+
+        function setFace(emoji) {
+            const face = windowEl.querySelector('#ms-face');
+            if (face) face.textContent = emoji;
+        }
+
+        function updateMsCounter() {
+            const minesEl = windowEl.querySelector('#ms-mines');
+            let flagCount = 0;
+            for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) if (msFlags[r][c]) flagCount++;
+            if (minesEl) minesEl.textContent = String(MINES - flagCount).padStart(3, '0');
+        }
+
+        function startMsTimer() {
+            if (msTimer) return;
+            msTimerVal = 0;
+            msTimer = setInterval(() => {
+                msTimerVal++;
+                const timerEl = windowEl.querySelector('#ms-timer');
+                if (timerEl) timerEl.textContent = String(Math.min(msTimerVal, 999)).padStart(3, '0');
+            }, 1000);
+        }
+
+        function msLeftClick(r, c) {
+            if (msGameOver || msWon) return;
+            if (msFlags[r][c]) return;
+            if (msRevealed[r][c]) return;
+
+            if (msFirstClick) {
+                msFirstClick = false;
+                placeMines(r, c);
+                startMsTimer();
+            }
+
+            if (msMines[r][c]) {
+                // Game over
+                msGameOver = true;
+                if (msTimer) { clearInterval(msTimer); msTimer = null; }
+                // Reveal all mines
+                for (let rr = 0; rr < ROWS; rr++)
+                    for (let cc = 0; cc < COLS; cc++)
+                        if (msMines[rr][cc]) msRevealed[rr][cc] = true;
+                setFace('💀');
+                renderMsGrid();
+                // Mark the hit mine
+                const hitCell = windowEl.querySelector(`#ms-grid .ms-cell[data-r="${r}"][data-c="${c}"]`);
+                if (hitCell) hitCell.classList.add('mine-hit');
+                return;
+            }
+
+            // Flood fill reveal
+            floodReveal(r, c);
+            checkMsWin();
+            renderMsGrid();
+        }
+
+        function floodReveal(r, c) {
+            if (r < 0 || r >= ROWS || c < 0 || c >= COLS) return;
+            if (msRevealed[r][c] || msFlags[r][c] || msMines[r][c]) return;
+            msRevealed[r][c] = true;
+            if (msGrid[r][c] === 0) {
+                for (let dr = -1; dr <= 1; dr++)
+                    for (let dc = -1; dc <= 1; dc++)
+                        floodReveal(r + dr, c + dc);
+            }
+        }
+
+        function msRightClick(r, c) {
+            if (msGameOver || msWon) return;
+            if (msRevealed[r][c]) return;
+            msFlags[r][c] = !msFlags[r][c];
+            renderMsGrid();
+        }
+
+        function checkMsWin() {
+            let unrevealed = 0;
+            for (let r = 0; r < ROWS; r++)
+                for (let c = 0; c < COLS; c++)
+                    if (!msRevealed[r][c]) unrevealed++;
+            if (unrevealed === MINES) {
+                msWon = true;
+                if (msTimer) { clearInterval(msTimer); msTimer = null; }
+                setFace('😎');
+            }
+        }
+
+        // ===================== SNAKE =====================
+        const SNAKE_SIZE = 18;
+        const GRID_W = 20, GRID_H = 20;
+
+        function initSnake() {
+            gamesArea.innerHTML = `
+                <div class="snake-container">
+                    <div class="snake-header">
+                        <div class="snake-score" id="snake-score">Score: 0</div>
+                        <button class="snake-btn" id="snake-restart">New Game</button>
+                    </div>
+                    <canvas class="snake-canvas" id="snake-canvas" width="${GRID_W * SNAKE_SIZE}" height="${GRID_H * SNAKE_SIZE}"></canvas>
+                    <div class="snake-info">Arrow keys to move</div>
+                </div>`;
+
+            const canvas = windowEl.querySelector('#snake-canvas');
+            const ctx = canvas.getContext('2d');
+            let snake, dir, nextDir, food, score, gameOver;
+
+            function resetSnake() {
+                snake = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
+                dir = { x: 1, y: 0 };
+                nextDir = { x: 1, y: 0 };
+                score = 0;
+                gameOver = false;
+                placeFood();
+                updateScoreDisplay();
+            }
+
+            function placeFood() {
+                do {
+                    food = { x: Math.floor(Math.random() * GRID_W), y: Math.floor(Math.random() * GRID_H) };
+                } while (snake.some(s => s.x === food.x && s.y === food.y));
+            }
+
+            function updateScoreDisplay() {
+                const el = windowEl.querySelector('#snake-score');
+                if (el) el.textContent = `Score: ${score}`;
+            }
+
+            function drawSnake() {
+                // Background - dark green grid
+                ctx.fillStyle = '#1a2e1a';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                // Grid lines
+                ctx.strokeStyle = '#1f351f';
+                ctx.lineWidth = 0.5;
+                for (let x = 0; x <= GRID_W; x++) {
+                    ctx.beginPath(); ctx.moveTo(x * SNAKE_SIZE, 0); ctx.lineTo(x * SNAKE_SIZE, canvas.height); ctx.stroke();
+                }
+                for (let y = 0; y <= GRID_H; y++) {
+                    ctx.beginPath(); ctx.moveTo(0, y * SNAKE_SIZE); ctx.lineTo(canvas.width, y * SNAKE_SIZE); ctx.stroke();
+                }
+                // Food
+                ctx.fillStyle = '#ff3333';
+                ctx.fillRect(food.x * SNAKE_SIZE + 2, food.y * SNAKE_SIZE + 2, SNAKE_SIZE - 4, SNAKE_SIZE - 4);
+                // Snake
+                snake.forEach((seg, i) => {
+                    ctx.fillStyle = i === 0 ? '#4caf50' : '#388e3c';
+                    ctx.fillRect(seg.x * SNAKE_SIZE + 1, seg.y * SNAKE_SIZE + 1, SNAKE_SIZE - 2, SNAKE_SIZE - 2);
+                });
+                // Game over overlay
+                if (gameOver) {
+                    ctx.fillStyle = 'rgba(0,0,0,0.6)';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 20px Segoe UI, Tahoma, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 10);
+                    ctx.font = '13px Segoe UI, Tahoma, sans-serif';
+                    ctx.fillText(`Score: ${score}`, canvas.width / 2, canvas.height / 2 + 14);
+                    ctx.fillText('Press Space or click New Game', canvas.width / 2, canvas.height / 2 + 36);
+                }
+            }
+
+            function tick() {
+                if (gameOver) return;
+                dir = nextDir;
+                const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+                // Wall collision
+                if (head.x < 0 || head.x >= GRID_W || head.y < 0 || head.y >= GRID_H) {
+                    gameOver = true;
+                    drawSnake();
+                    return;
+                }
+                // Self collision
+                if (snake.some(s => s.x === head.x && s.y === head.y)) {
+                    gameOver = true;
+                    drawSnake();
+                    return;
+                }
+                snake.unshift(head);
+                if (head.x === food.x && head.y === food.y) {
+                    score += 10;
+                    updateScoreDisplay();
+                    placeFood();
+                } else {
+                    snake.pop();
+                }
+                drawSnake();
+            }
+
+            snakeKeyHandler = (e) => {
+                if (e.key === ' ' && gameOver) {
+                    resetSnake();
+                    drawSnake();
+                    if (snakeInterval) clearInterval(snakeInterval);
+                    snakeInterval = setInterval(tick, 150);
+                    return;
+                }
+                const keyMap = {
+                    'ArrowUp': { x: 0, y: -1 },
+                    'ArrowDown': { x: 0, y: 1 },
+                    'ArrowLeft': { x: -1, y: 0 },
+                    'ArrowRight': { x: 1, y: 0 }
+                };
+                const nd = keyMap[e.key];
+                if (nd) {
+                    // Prevent reversing
+                    if (nd.x !== -dir.x || nd.y !== -dir.y) {
+                        nextDir = nd;
+                    }
+                    e.preventDefault();
+                }
+            };
+            document.addEventListener('keydown', snakeKeyHandler);
+
+            const restartBtn = windowEl.querySelector('#snake-restart');
+            if (restartBtn) restartBtn.addEventListener('click', () => {
+                resetSnake();
+                drawSnake();
+                if (snakeInterval) clearInterval(snakeInterval);
+                snakeInterval = setInterval(tick, 150);
+            });
+
+            resetSnake();
+            drawSnake();
+            snakeInterval = setInterval(tick, 150);
+        }
+
+        // Start with Minesweeper
+        initMinesweeper();
     }
 }
 
