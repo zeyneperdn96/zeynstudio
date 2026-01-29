@@ -58,9 +58,6 @@
             border-radius: 0;
             box-shadow: none;
         }
-        body.embedded .wlm-titlebar {
-            display: none;
-        }
 
         /* Nudge Animation */
         @keyframes nudgeShake {
@@ -3132,13 +3129,29 @@
                 opt.addEventListener('click', () => changeStatus(opt.dataset.status));
             });
 
-            // Window controls
-            btnMin.addEventListener('click', () => chatWindow.style.display = 'none');
+            // Window controls - when embedded, control parent XP window
+            const isEmbedded = window.self !== window.top;
+            btnMin.addEventListener('click', () => {
+                if (isEmbedded) {
+                    try { window.parent.windowManager.minimizeWindow('zeynshat'); } catch(e) {}
+                } else {
+                    chatWindow.style.display = 'none';
+                }
+            });
             btnClose.addEventListener('click', () => {
-                chatWindow.style.transition = 'all 0.2s ease';
-                chatWindow.style.opacity = '0';
-                chatWindow.style.transform = 'scale(0.95)';
-                setTimeout(() => chatWindow.style.display = 'none', 200);
+                if (isEmbedded) {
+                    try { window.parent.windowManager.closeWindow('zeynshat'); } catch(e) {}
+                } else {
+                    chatWindow.style.transition = 'all 0.2s ease';
+                    chatWindow.style.opacity = '0';
+                    chatWindow.style.transform = 'scale(0.95)';
+                    setTimeout(() => chatWindow.style.display = 'none', 200);
+                }
+            });
+            document.getElementById('btnMax').addEventListener('click', () => {
+                if (isEmbedded) {
+                    try { window.parent.windowManager.maximizeWindow('zeynshat'); } catch(e) {}
+                }
             });
 
             // Close pickers

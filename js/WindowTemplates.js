@@ -653,19 +653,16 @@ const WindowTemplates = {
         </div>
     `,
 
-    // Zeyn Chat - MSN Messenger Style Chatbot
+    // Zeyn Chat - MSN Messenger Style Chatbot (frameless - MSN has its own chrome)
     zeynshat: () => `
-        <div class="window-titlebar">
-            <img src="assets/icons/zeyn-chat-logo.png" alt="Zeyn Chat" style="height: 16px; margin-right: 6px;">
-            <span class="window-title">Zeyn Chat</span>
-            <div class="window-controls">
-                <button class="win-btn win-minimize" data-action="minimize">_</button>
-                <button class="win-btn win-maximize" data-action="maximize">□</button>
+        <div class="window-titlebar" style="height: 30px; background: transparent; border: none; position: absolute; top: 0; left: 0; right: 0; z-index: 10; padding: 0;">
+            <span class="window-title" style="display: none;">Zeyn Chat</span>
+            <div class="window-controls" style="display: none;">
                 <button class="win-btn win-close" data-action="close">×</button>
             </div>
         </div>
-        <div class="window-content" style="padding: 0; overflow: hidden; flex: 1; display: flex;">
-            <iframe src="msn-chatbot.html" style="width: 100%; height: 100%; border: none; flex: 1;"></iframe>
+        <div class="window-content" style="padding: 0; overflow: hidden; flex: 1; display: flex; border: none; background: transparent;">
+            <iframe src="msn-chatbot.html" class="zeynshat-iframe" style="width: 100%; height: 100%; border: none; flex: 1;"></iframe>
         </div>
     `
 };

@@ -70,6 +70,15 @@ class WindowManager {
         windowEl.style.height = `${defaultPos.height}px`;
         windowEl.style.zIndex = this.zIndexCounter++;
 
+        // Frameless window for zeynshat (MSN has its own chrome)
+        if (windowId === 'zeynshat') {
+            windowEl.style.border = 'none';
+            windowEl.style.boxShadow = '0 8px 32px rgba(0,0,0,0.3)';
+            windowEl.style.borderRadius = '6px';
+            windowEl.style.overflow = 'hidden';
+            windowEl.style.background = 'transparent';
+        }
+
         this.container.appendChild(windowEl);
 
         this.windows.set(windowId, {
