@@ -655,9 +655,9 @@ const WindowTemplates = {
 
     // Zeyn Chat - MSN Messenger Style Chatbot (frameless - MSN has its own chrome)
     zeynshat: () => `
-        <div class="window-titlebar" style="height: 30px; background: transparent; border: none; position: absolute; top: 0; left: 0; right: 0; z-index: 10; padding: 0;">
-            <span class="window-title" style="display: none;">Zeyn Chat</span>
-            <div class="window-controls" style="display: none;">
+        <div class="window-titlebar" style="display: none;">
+            <span class="window-title">Zeyn Chat</span>
+            <div class="window-controls">
                 <button class="win-btn win-close" data-action="close">×</button>
             </div>
         </div>
