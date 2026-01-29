@@ -179,9 +179,9 @@ class MediaPlayer {
         // Shuffle toggle
         this.shuffleBtn.addEventListener('click', () => {
             this.isShuffle = !this.isShuffle;
-            this.shuffleBtn.style.color = this.isShuffle ? '#fff' : '#8ab8e0';
-            this.shuffleBtn.style.borderColor = this.isShuffle ? '#4a80b0' : 'transparent';
-            this.shuffleBtn.style.background = this.isShuffle ? 'rgba(255,255,255,0.15)' : 'none';
+            this.shuffleBtn.style.color = this.isShuffle ? '#0050a0' : '#4070a0';
+            this.shuffleBtn.style.borderColor = this.isShuffle ? '#0078d4' : 'transparent';
+            this.shuffleBtn.style.background = this.isShuffle ? 'rgba(0,120,212,0.12)' : 'none';
         });
 
         // Repeat toggle: off -> all -> one -> off
@@ -189,19 +189,19 @@ class MediaPlayer {
             this.repeatMode = (this.repeatMode + 1) % 3;
             if (this.repeatMode === 0) {
                 this.repeatBtn.textContent = '🔁';
-                this.repeatBtn.style.color = '#8ab8e0';
+                this.repeatBtn.style.color = '#4070a0';
                 this.repeatBtn.style.borderColor = 'transparent';
                 this.repeatBtn.style.background = 'none';
             } else if (this.repeatMode === 1) {
                 this.repeatBtn.textContent = '🔁';
-                this.repeatBtn.style.color = '#fff';
-                this.repeatBtn.style.borderColor = '#4a80b0';
-                this.repeatBtn.style.background = 'rgba(255,255,255,0.15)';
+                this.repeatBtn.style.color = '#0050a0';
+                this.repeatBtn.style.borderColor = '#0078d4';
+                this.repeatBtn.style.background = 'rgba(0,120,212,0.12)';
             } else {
                 this.repeatBtn.textContent = '🔂';
-                this.repeatBtn.style.color = '#fff';
-                this.repeatBtn.style.borderColor = '#4a80b0';
-                this.repeatBtn.style.background = 'rgba(255,255,255,0.2)';
+                this.repeatBtn.style.color = '#0050a0';
+                this.repeatBtn.style.borderColor = '#0078d4';
+                this.repeatBtn.style.background = 'rgba(0,120,212,0.18)';
             }
         });
 
@@ -304,62 +304,67 @@ class MediaPlayer {
                 this.play();
             });
 
-            // Hover effect (XP-style highlight)
+            // Hover effect (XP ListView hover)
             track.addEventListener('mouseenter', () => {
                 if (parseInt(track.dataset.index) !== this.currentIndex) {
-                    track.style.background = '#e8f0fa';
+                    track.style.background = '#e0e8f4';
                 }
             });
             track.addEventListener('mouseleave', () => {
-                if (parseInt(track.dataset.index) !== this.currentIndex) {
-                    track.style.background = 'transparent';
+                const idx = parseInt(track.dataset.index);
+                if (idx !== this.currentIndex) {
+                    track.style.background = idx % 2 === 1 ? '#f5f8fc' : 'transparent';
                 }
             });
         });
 
-        // Button hover effects (WMP9 metallic style)
+        // Button hover effects (XP classic raised button style)
         this.windowEl.querySelectorAll('.mp-btn').forEach(btn => {
             if (btn === this.playBtn) return;
             const isTransport = btn.classList.contains('mp-prev') || btn.classList.contains('mp-next') || btn.classList.contains('mp-stop');
             btn.addEventListener('mouseenter', () => {
                 if (isTransport) {
-                    btn.style.background = 'linear-gradient(180deg, #e8f0fa 0%, #c0d4e8 50%, #a8c0d8 100%)';
-                    btn.style.borderColor = '#5a80a8';
+                    btn.style.background = 'linear-gradient(180deg, #fff 0%, #f0ead8 100%)';
+                    btn.style.borderColor = '#0078d4';
                 } else if (!btn.classList.contains('mp-shuffle') && !btn.classList.contains('mp-repeat')) {
-                    btn.style.color = '#fff';
-                    btn.style.background = 'rgba(255,255,255,0.15)';
+                    btn.style.color = '#0050a0';
+                    btn.style.background = 'rgba(0,120,212,0.1)';
                 }
             });
             btn.addEventListener('mouseleave', () => {
                 if (isTransport) {
-                    btn.style.background = 'linear-gradient(180deg, #d8e4f0 0%, #a8bcd0 50%, #90a8c0 100%)';
-                    btn.style.borderColor = '#6a8aaa';
+                    btn.style.background = 'linear-gradient(180deg, #fff 0%, #ece9d8 100%)';
+                    btn.style.borderColor = '#aca899';
+                    btn.style.borderTopColor = '#fff';
+                    btn.style.borderLeftColor = '#fff';
                 } else if (!btn.classList.contains('mp-shuffle') && !btn.classList.contains('mp-repeat')) {
-                    btn.style.color = '#8ab8e0';
+                    btn.style.color = '#4070a0';
                     btn.style.borderColor = 'transparent';
                     btn.style.background = 'none';
                 }
                 if (btn.classList.contains('mp-shuffle') && !this.isShuffle) {
-                    btn.style.color = '#8ab8e0';
+                    btn.style.color = '#4070a0';
                     btn.style.borderColor = 'transparent';
                     btn.style.background = 'none';
                 }
                 if (btn.classList.contains('mp-repeat') && this.repeatMode === 0) {
-                    btn.style.color = '#8ab8e0';
+                    btn.style.color = '#4070a0';
                     btn.style.borderColor = 'transparent';
                     btn.style.background = 'none';
                 }
             });
         });
 
-        // Play button hover (metallic XP style)
+        // Play button hover (XP style)
         this.playBtn.addEventListener('mouseenter', () => {
-            this.playBtn.style.background = 'linear-gradient(180deg, #f0f6ff 0%, #c8daf0 50%, #a8c0d8 100%)';
-            this.playBtn.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3)';
+            this.playBtn.style.background = 'linear-gradient(180deg, #fff 0%, #f0ead8 100%)';
+            this.playBtn.style.borderColor = '#0078d4';
         });
         this.playBtn.addEventListener('mouseleave', () => {
-            this.playBtn.style.background = 'linear-gradient(180deg, #e8f0fa 0%, #b0c8e0 50%, #90aac8 100%)';
-            this.playBtn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.3)';
+            this.playBtn.style.background = 'linear-gradient(180deg, #fff 0%, #ece9d8 100%)';
+            this.playBtn.style.borderColor = '#aca899';
+            this.playBtn.style.borderTopColor = '#fff';
+            this.playBtn.style.borderLeftColor = '#fff';
         });
     }
 
@@ -380,10 +385,10 @@ class MediaPlayer {
         this.audio.src = track.src;
         this.trackName.textContent = track.title;
 
-        // Highlight active track
-        this.tracks.forEach(t => {
-            t.style.background = 'transparent';
-            t.style.color = '#1a3a60';
+        // Highlight active track (XP selection blue)
+        this.tracks.forEach((t, idx) => {
+            t.style.background = idx % 2 === 1 ? '#f5f8fc' : 'transparent';
+            t.style.color = '#000';
         });
         if (this.tracks[index]) {
             this.tracks[index].style.background = '#316ac5';

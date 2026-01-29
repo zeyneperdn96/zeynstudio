@@ -250,82 +250,97 @@ const WindowTemplates = {
 
     // Media Player - Windows Media Player 11 Style
     showreel: () => `
-        <div class="window-titlebar" style="background: linear-gradient(180deg, #3a6ea5 0%, #1f4e8a 50%, #15396d 100%); border-bottom: 1px solid #0d2a52;">
-            <span class="window-title" style="color: #fff; font-weight: 700; font-size: 12px; text-shadow: 1px 1px 2px rgba(0,0,0,0.4);">Windows Media Player</span>
+        <div class="window-titlebar" style="background: linear-gradient(180deg, #0058e6 0%, #3a80f0 8%, #2a6ad8 20%, #1a50b8 80%, #0a3a90 100%); border-bottom: none;">
+            <span class="window-title" style="color: #fff; font-weight: 700; font-size: 12px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Windows Media Player</span>
             <div class="window-controls">
                 <button class="win-btn win-minimize" data-action="minimize">_</button>
                 <button class="win-btn win-maximize" data-action="maximize">□</button>
                 <button class="win-btn win-close" data-action="close">×</button>
             </div>
         </div>
-        <div class="window-content media-player-content" style="padding: 0; display: flex; flex-direction: column; background: #2c5a8f; overflow: hidden; font-family: Tahoma, 'Segoe UI', sans-serif;">
-            <!-- WMP9 Feature Tab Bar -->
-            <div class="mp-tabbar" style="display: flex; align-items: flex-end; background: linear-gradient(180deg, #3568a0 0%, #2a5a90 100%); padding: 0 4px; gap: 1px; border-bottom: 1px solid #1a3d6d;">
-                <div style="padding: 3px 12px; color: #fff; font-size: 11px; font-weight: 700; background: linear-gradient(180deg, #e8edf4 0%, #c8d4e4 100%); color: #1a3a60; border-radius: 3px 3px 0 0; border: 1px solid #8aa8c8; border-bottom: none; cursor: default; margin-bottom: -1px; position: relative; z-index: 1;">Now Playing</div>
-                <div style="padding: 3px 10px; color: #c0d8f0; font-size: 11px; cursor: default; opacity: 0.8;">Media Guide</div>
-                <div style="padding: 3px 10px; color: #c0d8f0; font-size: 11px; cursor: default; opacity: 0.8;">Copy from CD</div>
-                <div style="padding: 3px 10px; color: #c0d8f0; font-size: 11px; cursor: default; opacity: 0.8;">Media Library</div>
-                <div style="padding: 3px 10px; color: #c0d8f0; font-size: 11px; cursor: default; opacity: 0.8;">Radio Tuner</div>
+        <div class="window-content media-player-content" style="padding: 0; display: flex; flex-direction: column; background: #d6dfe9; overflow: hidden; font-family: Tahoma, sans-serif; font-size: 11px;">
+            <!-- XP-style Menu Bar -->
+            <div style="display: flex; align-items: center; background: linear-gradient(180deg, #f6f8fb 0%, #e4e9f0 50%, #d6dde8 100%); padding: 1px 4px; border-bottom: 1px solid #a4b4c8; gap: 0;">
+                <div style="padding: 2px 8px; color: #1a3050; font-size: 11px; cursor: default;">File</div>
+                <div style="padding: 2px 8px; color: #1a3050; font-size: 11px; cursor: default;">View</div>
+                <div style="padding: 2px 8px; color: #1a3050; font-size: 11px; cursor: default;">Play</div>
+                <div style="padding: 2px 8px; color: #1a3050; font-size: 11px; cursor: default;">Tools</div>
+                <div style="padding: 2px 8px; color: #1a3050; font-size: 11px; cursor: default;">Help</div>
+            </div>
+            <!-- WMP9 Feature Tab Bar (XP style raised tabs) -->
+            <div class="mp-tabbar" style="display: flex; align-items: flex-end; background: linear-gradient(180deg, #6e96c8 0%, #4a78b0 50%, #3a68a0 100%); padding: 3px 4px 0; gap: 2px; border-bottom: none;">
+                <div style="padding: 3px 12px 4px; font-size: 11px; font-weight: 700; background: linear-gradient(180deg, #f8fafe 0%, #e0e8f2 60%, #d0daea 100%); color: #0a2040; border-radius: 4px 4px 0 0; border: 1px solid #8aa0c0; border-bottom: 1px solid #d0daea; cursor: default; margin-bottom: -1px; position: relative; z-index: 1;">Now Playing</div>
+                <div style="padding: 3px 10px 4px; color: #e0eaff; font-size: 11px; cursor: default; border-radius: 4px 4px 0 0; background: rgba(255,255,255,0.08);">Media Guide</div>
+                <div style="padding: 3px 10px 4px; color: #e0eaff; font-size: 11px; cursor: default; border-radius: 4px 4px 0 0; background: rgba(255,255,255,0.08);">Copy from CD</div>
+                <div style="padding: 3px 10px 4px; color: #e0eaff; font-size: 11px; cursor: default; border-radius: 4px 4px 0 0; background: rgba(255,255,255,0.08);">Media Library</div>
+                <div style="padding: 3px 10px 4px; color: #e0eaff; font-size: 11px; cursor: default; border-radius: 4px 4px 0 0; background: rgba(255,255,255,0.08);">Radio Tuner</div>
             </div>
             <!-- Main Area: Visualizer (left) + Playlist (right) -->
-            <div class="mp-main" style="display: flex; flex: 1; min-height: 0; overflow: hidden; border-top: 1px solid #4a80b8;">
+            <div class="mp-main" style="display: flex; flex: 1; min-height: 0; overflow: hidden; background: #d0daea; border: 1px solid #8aa0c0; border-top: none; margin: 0 3px;">
                 <!-- Left: Visualization -->
-                <div class="mp-visual" style="flex: 1; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; min-width: 0; overflow: hidden;">
-                    <canvas class="mp-visualizer-canvas" width="460" height="220" style="width: 100%; height: auto; padding: 4px;"></canvas>
-                    <div class="mp-now-playing" style="position: absolute; bottom: 24px; left: 0; right: 0; color: #8cc8ff; font-size: 12px; text-align: center; padding: 0 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 400; letter-spacing: 0.3px;">
+                <div class="mp-visual" style="flex: 1; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; min-width: 0; overflow: hidden; border: 2px inset #a0b0c0;">
+                    <canvas class="mp-visualizer-canvas" width="460" height="220" style="width: 100%; height: auto;"></canvas>
+                    <div class="mp-now-playing" style="position: absolute; bottom: 20px; left: 0; right: 0; color: #90d0ff; font-size: 11px; text-align: center; padding: 0 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                         <span class="mp-track-name">No track loaded</span>
                     </div>
-                    <div class="mp-track-artist" style="position: absolute; bottom: 8px; left: 0; right: 0; color: #5a90c0; font-size: 10px; text-align: center; padding: 0 12px;">
+                    <div class="mp-track-artist" style="position: absolute; bottom: 6px; left: 0; right: 0; color: #5090c0; font-size: 10px; text-align: center; padding: 0 12px;">
                         <span class="mp-artist-name"></span>
                     </div>
                 </div>
-                <!-- Right: Playlist -->
-                <div class="mp-playlist-panel" style="width: 200px; display: flex; flex-direction: column; background: #fff; border-left: 1px solid #7a9aba;">
-                    <div class="mp-playlist-header" style="padding: 4px 8px; background: linear-gradient(180deg, #e8eef6 0%, #c8d4e4 100%); border-bottom: 1px solid #a0b4c8; font-size: 10px; color: #1a3a60; display: flex; justify-content: space-between; align-items: center;">
-                        <span style="font-weight: 700;">Playlist</span>
+                <!-- Right: Playlist (XP ListView style) -->
+                <div class="mp-playlist-panel" style="width: 200px; display: flex; flex-direction: column; background: #fff; border-left: 2px solid #8aa0c0;">
+                    <div class="mp-playlist-header" style="padding: 3px 8px; background: linear-gradient(180deg, #fff 0%, #ece9d8 100%); border-bottom: 1px solid #aca899; font-size: 10px; color: #000; display: flex; align-items: center; gap: 4px;">
+                        <span style="font-weight: 400;">▶</span>
+                        <span style="font-weight: 700;">Now Playing List</span>
                     </div>
                     <div class="mp-playlist" style="flex: 1; overflow-y: auto; background: #fff;">
                         ${(window.CONFIG.playlist || []).map((track, i) => `
-                            <div class="mp-track" data-index="${i}" style="display: flex; align-items: center; padding: 3px 8px; color: #1a3a60; font-size: 11px; cursor: pointer; border-bottom: 1px solid #e0e8f0; transition: background 0.15s; gap: 6px;">
-                                <span style="color: #7a8a9a; font-size: 10px; width: 16px; flex-shrink: 0;">${i + 1}.</span>
+                            <div class="mp-track" data-index="${i}" style="display: flex; align-items: center; padding: 2px 6px; color: #000; font-size: 11px; cursor: pointer; border-bottom: 1px solid #f0f0f0; transition: background 0.1s; gap: 4px; ${i % 2 === 1 ? 'background: #f5f8fc;' : ''}">
+                                <span style="color: #808080; font-size: 10px; width: 16px; flex-shrink: 0; text-align: right;">${i + 1}</span>
+                                <span style="color: #808080; font-size: 10px; flex-shrink: 0;">♪</span>
                                 <span class="mp-track-title" style="flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${track.title}</span>
-                                <span class="mp-track-duration" style="color: #7a8a9a; font-size: 10px; flex-shrink: 0;">--:--</span>
+                                <span class="mp-track-duration" style="color: #808080; font-size: 10px; flex-shrink: 0;">--:--</span>
                             </div>
                         `).join('')}
                     </div>
                 </div>
             </div>
-            <!-- Bottom: Transport Controls (WMP9 style) -->
-            <div class="mp-bottom" style="background: linear-gradient(180deg, #3a6ea5 0%, #2a5690 50%, #1f4a80 100%); border-top: 1px solid #4a80b8; padding: 0;">
-                <!-- Seek Bar -->
-                <div class="mp-progress-wrapper" style="padding: 6px 10px 2px;">
+            <!-- Bottom: Transport Controls (XP WMP9 style) -->
+            <div class="mp-bottom" style="background: linear-gradient(180deg, #e8ecf2 0%, #d0d8e4 50%, #bcc8d8 100%); border-top: 1px solid #8aa0c0; padding: 0; margin: 0 3px 3px;">
+                <!-- Seek Bar (XP trackbar style) -->
+                <div class="mp-progress-wrapper" style="padding: 5px 8px 3px;">
                     <div style="display: flex; align-items: center; gap: 6px;">
-                        <span class="mp-time-current" style="color: #c0daf0; font-size: 10px; min-width: 30px; text-align: right;">0:00</span>
-                        <div class="mp-progress-bar" style="flex: 1; height: 8px; background: linear-gradient(180deg, #1a3050 0%, #2a4a70 100%); border-radius: 2px; cursor: pointer; position: relative; border: 1px solid #0d2040; box-shadow: inset 0 1px 2px rgba(0,0,0,0.4);">
-                            <div class="mp-progress-fill" style="width: 0%; height: 100%; background: linear-gradient(180deg, #6abaff 0%, #3a8ad0 100%); border-radius: 1px; position: relative;">
-                                <div class="mp-seek-thumb" style="position: absolute; right: -6px; top: -3px; width: 12px; height: 14px; background: linear-gradient(180deg, #f0f4fa 0%, #c0d0e0 50%, #a0b4c8 100%); border-radius: 2px; border: 1px solid #6080a0; cursor: grab; display: none; box-shadow: 0 1px 2px rgba(0,0,0,0.3);"></div>
+                        <span class="mp-time-current" style="color: #1a3050; font-size: 10px; min-width: 30px; text-align: right;">0:00</span>
+                        <div class="mp-progress-bar" style="flex: 1; height: 4px; background: #fff; border-radius: 0; cursor: pointer; position: relative; border: 1px solid #a0a0a0; box-shadow: inset 0 1px 1px rgba(0,0,0,0.15);">
+                            <div class="mp-progress-fill" style="width: 0%; height: 100%; background: linear-gradient(180deg, #3a80d0 0%, #2060b0 100%); position: relative;">
+                                <div class="mp-seek-thumb" style="position: absolute; right: -5px; top: -6px; width: 11px; height: 16px; background: linear-gradient(180deg, #f8f8f8 0%, #e8e8e8 40%, #c8c8c8 100%); border-radius: 2px; border: 1px solid #808080; cursor: grab; display: none; box-shadow: 0 1px 1px rgba(0,0,0,0.2);"></div>
                             </div>
                         </div>
-                        <span class="mp-time-total" style="color: #c0daf0; font-size: 10px; min-width: 30px;">0:00</span>
+                        <span class="mp-time-total" style="color: #1a3050; font-size: 10px; min-width: 30px;">0:00</span>
                     </div>
                 </div>
-                <!-- Controls Row -->
-                <div class="mp-controls" style="display: flex; align-items: center; padding: 2px 8px 6px; gap: 0;">
-                    <!-- Transport Controls (center-left) -->
-                    <div style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 2px;">
-                        <button class="mp-btn mp-shuffle" title="Shuffle" style="background: none; border: 1px solid transparent; color: #8ab8e0; font-size: 11px; cursor: pointer; padding: 2px 4px; border-radius: 3px; transition: all 0.15s;">🔀</button>
-                        <button class="mp-btn mp-prev" title="Previous" style="background: linear-gradient(180deg, #d8e4f0 0%, #a8bcd0 50%, #90a8c0 100%); border: 1px solid #6a8aaa; color: #1a3a5a; font-size: 12px; cursor: pointer; padding: 3px 6px; border-radius: 3px; transition: all 0.15s; box-shadow: 0 1px 1px rgba(0,0,0,0.2);">⏮</button>
-                        <button class="mp-btn mp-play" title="Play" style="background: linear-gradient(180deg, #e8f0fa 0%, #b0c8e0 50%, #90aac8 100%); border: 1px solid #5a80a8; color: #1a3a60; font-size: 16px; cursor: pointer; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; box-shadow: 0 1px 3px rgba(0,0,0,0.3);">▶</button>
-                        <button class="mp-btn mp-stop" title="Stop" style="background: linear-gradient(180deg, #d8e4f0 0%, #a8bcd0 50%, #90a8c0 100%); border: 1px solid #6a8aaa; color: #1a3a5a; font-size: 11px; cursor: pointer; padding: 3px 6px; border-radius: 3px; transition: all 0.15s; box-shadow: 0 1px 1px rgba(0,0,0,0.2);">⏹</button>
-                        <button class="mp-btn mp-next" title="Next" style="background: linear-gradient(180deg, #d8e4f0 0%, #a8bcd0 50%, #90a8c0 100%); border: 1px solid #6a8aaa; color: #1a3a5a; font-size: 12px; cursor: pointer; padding: 3px 6px; border-radius: 3px; transition: all 0.15s; box-shadow: 0 1px 1px rgba(0,0,0,0.2);">⏭</button>
-                        <button class="mp-btn mp-repeat" title="Repeat" style="background: none; border: 1px solid transparent; color: #8ab8e0; font-size: 11px; cursor: pointer; padding: 2px 4px; border-radius: 3px; transition: all 0.15s;">🔁</button>
+                <!-- Controls Row (XP raised buttons) -->
+                <div class="mp-controls" style="display: flex; align-items: center; padding: 1px 6px 5px; gap: 0;">
+                    <!-- Transport Controls -->
+                    <div style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 3px;">
+                        <button class="mp-btn mp-shuffle" title="Shuffle" style="background: none; border: 1px solid transparent; color: #4070a0; font-size: 11px; cursor: pointer; padding: 2px 4px; border-radius: 2px; transition: all 0.1s;">🔀</button>
+                        <button class="mp-btn mp-prev" title="Previous" style="background: linear-gradient(180deg, #fff 0%, #ece9d8 100%); border: 1px solid #aca899; border-top-color: #fff; border-left-color: #fff; color: #1a3050; font-size: 12px; cursor: pointer; padding: 3px 7px; border-radius: 0; transition: all 0.1s;">⏮</button>
+                        <button class="mp-btn mp-play" title="Play" style="background: linear-gradient(180deg, #fff 0%, #ece9d8 100%); border: 1px solid #aca899; border-top-color: #fff; border-left-color: #fff; color: #1a3050; font-size: 15px; cursor: pointer; border-radius: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; transition: all 0.1s;">▶</button>
+                        <button class="mp-btn mp-stop" title="Stop" style="background: linear-gradient(180deg, #fff 0%, #ece9d8 100%); border: 1px solid #aca899; border-top-color: #fff; border-left-color: #fff; color: #1a3050; font-size: 11px; cursor: pointer; padding: 3px 7px; border-radius: 0; transition: all 0.1s;">⏹</button>
+                        <button class="mp-btn mp-next" title="Next" style="background: linear-gradient(180deg, #fff 0%, #ece9d8 100%); border: 1px solid #aca899; border-top-color: #fff; border-left-color: #fff; color: #1a3050; font-size: 12px; cursor: pointer; padding: 3px 7px; border-radius: 0; transition: all 0.1s;">⏭</button>
+                        <button class="mp-btn mp-repeat" title="Repeat" style="background: none; border: 1px solid transparent; color: #4070a0; font-size: 11px; cursor: pointer; padding: 2px 4px; border-radius: 2px; transition: all 0.1s;">🔁</button>
                     </div>
                     <!-- Volume (right) -->
                     <div style="display: flex; align-items: center; gap: 3px; min-width: 80px; justify-content: flex-end;">
-                        <span class="mp-volume-icon" style="color: #c0daf0; font-size: 12px; cursor: pointer;">🔊</span>
-                        <input type="range" class="mp-volume" min="0" max="100" value="80" style="width: 60px; cursor: pointer; accent-color: #6abaff;">
+                        <span class="mp-volume-icon" style="color: #4070a0; font-size: 11px; cursor: pointer;">🔊</span>
+                        <input type="range" class="mp-volume" min="0" max="100" value="80" style="width: 55px; cursor: pointer; accent-color: #3a80d0;">
                     </div>
                 </div>
+            </div>
+            <!-- XP Status Bar -->
+            <div style="display: flex; align-items: center; background: linear-gradient(180deg, #ece9d8 0%, #d6d2c2 100%); border-top: 1px solid #fff; padding: 2px 8px; font-size: 10px; color: #444; margin: 0 3px 3px; border: 1px solid #a0a0a0; border-top: 1px solid #fff;">
+                <span style="flex: 1;">Ready</span>
+                <span style="border-left: 1px solid #a0a0a0; padding-left: 8px;">Windows Media Player 9 Series</span>
             </div>
         </div>
     `,
