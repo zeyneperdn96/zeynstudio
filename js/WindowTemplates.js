@@ -38,7 +38,7 @@ const WindowTemplates = {
             </div>
         </div>
         <div class="window-content" style="padding: 0; overflow: hidden; flex: 1; display: flex;">
-            <iframe src="trading-cards.html" style="width: 100%; border: none; flex: 1;"></iframe>
+            <iframe data-src="trading-cards.html" style="width: 100%; border: none; flex: 1;"></iframe>
         </div>
     `,
 
@@ -388,28 +388,28 @@ const WindowTemplates = {
                 <div class="metbic-gallery">
                     <div class="metbic-gallery-title">Gallery</div>
                     <div class="metbic-thumb active" data-img="assets/projects/metbic/hero.png" data-index="0">
-                        <img src="assets/projects/metbic/hero.png" alt="Hero">
+                        <img src="assets/projects/metbic/hero.png" alt="Hero" loading="lazy">
                     </div>
                     <div class="metbic-thumb" data-img="assets/projects/metbic/render1.png" data-index="1">
-                        <img src="assets/projects/metbic/render1.png" alt="Render 1">
+                        <img src="assets/projects/metbic/render1.png" alt="Render 1" loading="lazy">
                     </div>
                     <div class="metbic-thumb" data-img="assets/projects/metbic/render2.png" data-index="2">
-                        <img src="assets/projects/metbic/render2.png" alt="Render 2">
+                        <img src="assets/projects/metbic/render2.png" alt="Render 2" loading="lazy">
                     </div>
                     <div class="metbic-thumb" data-img="assets/projects/metbic/render3.png" data-index="3">
-                        <img src="assets/projects/metbic/render3.png" alt="Render 3">
+                        <img src="assets/projects/metbic/render3.png" alt="Render 3" loading="lazy">
                     </div>
                     <div class="metbic-thumb" data-img="assets/projects/metbic/render4.png" data-index="4">
-                        <img src="assets/projects/metbic/render4.png" alt="Render 4">
+                        <img src="assets/projects/metbic/render4.png" alt="Render 4" loading="lazy">
                     </div>
                     <div class="metbic-thumb" data-img="assets/projects/metbic/render5.png" data-index="5">
-                        <img src="assets/projects/metbic/render5.png" alt="Render 5">
+                        <img src="assets/projects/metbic/render5.png" alt="Render 5" loading="lazy">
                     </div>
                     <div class="metbic-thumb" data-img="assets/projects/metbic/context.png" data-index="6">
-                        <img src="assets/projects/metbic/context.png" alt="Context">
+                        <img src="assets/projects/metbic/context.png" alt="Context" loading="lazy">
                     </div>
                     <div class="metbic-thumb" data-img="assets/projects/metbic/technical.png" data-index="7">
-                        <img src="assets/projects/metbic/technical.png" alt="Technical">
+                        <img src="assets/projects/metbic/technical.png" alt="Technical" loading="lazy">
                     </div>
                 </div>
 
@@ -540,31 +540,31 @@ const WindowTemplates = {
                         <div style="width:100%;height:100%;background:#1a1a2e;display:flex;align-items:center;justify-content:center;font-size:24px;">▶</div>
                     </div>
                     <div class="firebox-thumb" data-img="assets/projects/firebox/hero.png" data-index="1">
-                        <img src="assets/projects/firebox/hero.png" alt="Hero">
+                        <img src="assets/projects/firebox/hero.png" alt="Hero" loading="lazy">
                     </div>
                     <div class="firebox-thumb" data-img="assets/projects/firebox/technical.png" data-index="2">
-                        <img src="assets/projects/firebox/technical.png" alt="Technical">
+                        <img src="assets/projects/firebox/technical.png" alt="Technical" loading="lazy">
                     </div>
                     <div class="firebox-thumb" data-img="assets/projects/firebox/exploded.png" data-index="3">
-                        <img src="assets/projects/firebox/exploded.png" alt="Exploded">
+                        <img src="assets/projects/firebox/exploded.png" alt="Exploded" loading="lazy">
                     </div>
                     <div class="firebox-thumb" data-img="assets/projects/firebox/exploded-fire.png" data-index="4">
-                        <img src="assets/projects/firebox/exploded-fire.png" alt="Exploded Fire">
+                        <img src="assets/projects/firebox/exploded-fire.png" alt="Exploded Fire" loading="lazy">
                     </div>
                     <div class="firebox-thumb" data-img="assets/projects/firebox/details.png" data-index="5">
-                        <img src="assets/projects/firebox/details.png" alt="Details">
+                        <img src="assets/projects/firebox/details.png" alt="Details" loading="lazy">
                     </div>
                     <div class="firebox-thumb" data-img="assets/projects/firebox/inuse.png" data-index="6">
-                        <img src="assets/projects/firebox/inuse.png" alt="In Use">
+                        <img src="assets/projects/firebox/inuse.png" alt="In Use" loading="lazy">
                     </div>
                     <div class="firebox-thumb" data-img="assets/projects/firebox/context.png" data-index="7">
-                        <img src="assets/projects/firebox/context.png" alt="Context">
+                        <img src="assets/projects/firebox/context.png" alt="Context" loading="lazy">
                     </div>
                     <div class="firebox-thumb" data-img="assets/projects/firebox/carrying.png" data-index="8">
-                        <img src="assets/projects/firebox/carrying.png" alt="Carrying">
+                        <img src="assets/projects/firebox/carrying.png" alt="Carrying" loading="lazy">
                     </div>
                     <div class="firebox-thumb" data-img="assets/projects/firebox/product.png" data-index="9">
-                        <img src="assets/projects/firebox/product.png" alt="Product">
+                        <img src="assets/projects/firebox/product.png" alt="Product" loading="lazy">
                     </div>
                 </div>
 
@@ -662,7 +662,7 @@ const WindowTemplates = {
             </div>
         </div>
         <div class="window-content" style="padding: 0; overflow: hidden; flex: 1; display: flex; border: none; background: transparent;">
-            <iframe src="msn-chatbot.html" class="zeynshat-iframe" style="width: 100%; height: 100%; border: none; flex: 1;"></iframe>
+            <iframe data-src="msn-chatbot.html" class="zeynshat-iframe" style="width: 100%; height: 100%; border: none; flex: 1;"></iframe>
         </div>
     `
 };

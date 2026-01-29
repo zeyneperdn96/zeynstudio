@@ -18,12 +18,11 @@ class WindowManager {
             offsetY: 0
         };
 
-        document.addEventListener('mousemove', (e) => this.handleDrag(e));
-        document.addEventListener('mouseup', () => this.stopDrag());
-
-        // Touch support for mobile
-        document.addEventListener('touchmove', (e) => this.handleDrag(e.touches[0]), { passive: false });
-        document.addEventListener('touchend', () => this.stopDrag());
+        // Bind once for reuse
+        this._onMouseMove = (e) => this.handleDrag(e);
+        this._onMouseUp = () => this.stopDrag();
+        this._onTouchMove = (e) => this.handleDrag(e.touches[0]);
+        this._onTouchEnd = () => this.stopDrag();
     }
 
     openWindow(windowId, options = {}) {
@@ -80,6 +79,11 @@ class WindowManager {
         }
 
         this.container.appendChild(windowEl);
+
+        // Lazy load iframes - set src from data-src when window opens
+        windowEl.querySelectorAll('iframe[data-src]').forEach(iframe => {
+            iframe.src = iframe.dataset.src;
+        });
 
         this.windows.set(windowId, {
             element: windowEl,
@@ -197,6 +201,12 @@ class WindowManager {
             };
             const windowId = windowEl.dataset.windowId;
             this.focusWindow(windowId);
+
+            // Attach move/up listeners only during drag
+            document.addEventListener('mousemove', this._onMouseMove);
+            document.addEventListener('mouseup', this._onMouseUp);
+            document.addEventListener('touchmove', this._onTouchMove, { passive: false });
+            document.addEventListener('touchend', this._onTouchEnd);
         };
 
         titlebar.addEventListener('mousedown', (e) => {
@@ -214,8 +224,6 @@ class WindowManager {
     }
 
     handleDrag(e) {
-        if (!this.dragState.isDragging) return;
-
         const win = this.dragState.currentWindow;
         const x = e.clientX - this.dragState.offsetX;
         const y = e.clientY - this.dragState.offsetY;
@@ -230,6 +238,12 @@ class WindowManager {
     stopDrag() {
         this.dragState.isDragging = false;
         this.dragState.currentWindow = null;
+
+        // Detach move/up listeners when drag ends
+        document.removeEventListener('mousemove', this._onMouseMove);
+        document.removeEventListener('mouseup', this._onMouseUp);
+        document.removeEventListener('touchmove', this._onTouchMove);
+        document.removeEventListener('touchend', this._onTouchEnd);
     }
 
     setupWindowControls(windowEl) {

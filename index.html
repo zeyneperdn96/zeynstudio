@@ -9,9 +9,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
     <title>Zeyn XP - Industrial Designer</title>
-    <link rel="stylesheet" href="https://demo.themesberg.com/windows-95-ui-kit/css/windows-95.min.css">
+    <!-- Critical: boot screen styles -->
     <link rel="stylesheet" href="css/boot.css">
     <link rel="stylesheet" href="css/login.css">
+    <!-- Deferred: desktop styles (loaded async, not needed for boot) -->
+    <link rel="stylesheet" href="https://demo.themesberg.com/windows-95-ui-kit/css/windows-95.min.css" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="css/boot-audio.css">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/icons.css">
@@ -23,7 +25,7 @@
 <body>
 
     <!-- XP Startup Sound -->
-    <audio id="xp-startup-sound" preload="auto">
+    <audio id="xp-startup-sound" preload="none">
         <source src="assets/audio/xp-startup.mp3" type="audio/mpeg">
     </audio>
 
