@@ -1515,7 +1515,7 @@
             <!-- Zeynep -->
             <div class="wlm-user-section">
                 <div class="wlm-avatar-frame" id="zeynepAvatar" title="View contact card">
-                    <div class="wlm-avatar-placeholder zeynep">Z</div>
+                    <img src="assets/icons/zeynep-avatar.jpg" alt="Zeynep" style="width: 100%; height: 100%; object-fit: cover; border-radius: 2px;">
                     <div class="wlm-avatar-status-gem online" id="zeynepStatusGem"></div>
                 </div>
                 <div class="wlm-user-info">
@@ -1536,7 +1536,7 @@
             <!-- Visitor -->
             <div class="wlm-user-section right" style="position: relative;">
                 <div class="wlm-avatar-frame user-avatar" id="visitorAvatar" title="Change status">
-                    <div class="wlm-avatar-placeholder visitor">?</div>
+                    <img src="assets/icons/visitor-avatar.jpg" alt="You" style="width: 100%; height: 100%; object-fit: cover; border-radius: 2px;">
                     <div class="wlm-avatar-status-gem online" id="visitorStatusGem"></div>
                 </div>
                 <div class="wlm-user-info">
@@ -2587,12 +2587,11 @@
                     div.className = 'wlm-message ' + (isZeynep ? 'from-zeynep' : 'from-user');
 
                     const convertedText = convertEmojis(text).replace(/\n/g, '<br>');
-                    const avatarClass = isZeynep ? 'zeynep' : 'visitor';
-                    const avatarLetter = isZeynep ? 'Z' : '?';
+                    const avatarSrc = isZeynep ? 'assets/icons/zeynep-avatar.jpg' : 'assets/icons/visitor-avatar.jpg';
 
                     div.innerHTML = `
                         <div class="wlm-msg-avatar">
-                            <div class="wlm-msg-avatar-placeholder ${avatarClass}">${avatarLetter}</div>
+                            <img src="${avatarSrc}" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 3px;">
                         </div>
                         <div class="wlm-msg-bubble">
                             <div class="wlm-msg-header">
