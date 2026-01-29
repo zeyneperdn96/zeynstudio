@@ -43,6 +43,25 @@
             position: relative;
         }
 
+        /* When embedded in iframe, fill entire space */
+        body.embedded {
+            background: none;
+            padding: 0;
+            min-height: 100vh;
+            align-items: stretch;
+            justify-content: stretch;
+        }
+        body.embedded .wlm-chat-window {
+            width: 100%;
+            height: 100vh;
+            max-width: none;
+            border-radius: 0;
+            box-shadow: none;
+        }
+        body.embedded .wlm-titlebar {
+            display: none;
+        }
+
         /* Nudge Animation */
         @keyframes nudgeShake {
             0%, 100% { transform: translate(0,0); }
@@ -1762,6 +1781,12 @@
         <span id="signinToastText">Zeynep oturum açtı</span>
     </div>
 
+    <script>
+        // Detect iframe mode
+        if (window.self !== window.top) {
+            document.body.classList.add('embedded');
+        }
+    </script>
     <script>
         /* ========================================
            WINDOWS LIVE MESSENGER CHATBOT v2.0
