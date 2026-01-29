@@ -41,6 +41,12 @@ const CONFIG = {
 
     // Media Player Playlist
     playlist: [
+        { title: "I'm Standing in the Mirror", src: 'assets/audio/playlist/im-standing-in-the-mirror.mp3' },
+        { title: 'NOISE IN MY HEAD', src: 'assets/audio/playlist/noise-in-my-head.mp3' },
+        { title: 'NOT OKAY (BUT I\'M TRYING)', src: 'assets/audio/playlist/not-okay-but-im-trying.mp3' },
+        { title: 'STATIC SKIN', src: 'assets/audio/playlist/static-skin.mp3' },
+        { title: 'WHY DO YOU CARE?', src: 'assets/audio/playlist/why-do-you-care.mp3' },
+        { title: 'BOŞLUK', src: 'assets/audio/playlist/bosluk.mp3' },
         { title: 'Electronic Rock - King Around Here', src: 'assets/audio/playlist/electronic-rock-king-around-here.mp3' },
         { title: 'Energetic Rock Music', src: 'assets/audio/playlist/energetic-rock-music.mp3' },
         { title: 'Free Rock', src: 'assets/audio/playlist/free-rock.mp3' },
