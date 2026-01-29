@@ -41,9 +41,12 @@ const CONFIG = {
 
     // Media Player Playlist
     playlist: [
-        { title: 'Track 1', src: 'assets/audio/playlist/track1.mp3' },
-        { title: 'Track 2', src: 'assets/audio/playlist/track2.mp3' },
-        { title: 'Track 3', src: 'assets/audio/playlist/track3.mp3' }
+        { title: 'Electronic Rock - King Around Here', src: 'assets/audio/playlist/electronic-rock-king-around-here.mp3' },
+        { title: 'Energetic Rock Music', src: 'assets/audio/playlist/energetic-rock-music.mp3' },
+        { title: 'Free Rock', src: 'assets/audio/playlist/free-rock.mp3' },
+        { title: 'Pop Punk Rock Music', src: 'assets/audio/playlist/pop-punk-rock-music.mp3' },
+        { title: 'Rock Free Music', src: 'assets/audio/playlist/rock-free-music.mp3' },
+        { title: 'Sandbreaker', src: 'assets/audio/playlist/sandbreaker.mp3' }
     ],
 
     // Terminal Easter Egg
