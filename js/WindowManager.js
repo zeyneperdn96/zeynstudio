@@ -23,6 +23,16 @@ class WindowManager {
         this._onMouseUp = () => this.stopDrag();
         this._onTouchMove = (e) => this.handleDrag(e.touches[0]);
         this._onTouchEnd = () => this.stopDrag();
+
+        // Listen for iframe postMessage (e.g. zeynshat controls)
+        window.addEventListener('message', (e) => {
+            if (e.data && e.data.type === 'zeynshat-control') {
+                const action = e.data.action;
+                if (action === 'close') this.closeWindow('zeynshat');
+                else if (action === 'minimize') this.minimizeWindow('zeynshat');
+                else if (action === 'maximize') this.maximizeWindow('zeynshat');
+            }
+        });
     }
 
     openWindow(windowId, options = {}) {

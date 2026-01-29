@@ -3129,18 +3129,25 @@
                 opt.addEventListener('click', () => changeStatus(opt.dataset.status));
             });
 
-            // Window controls - when embedded, control parent XP window
+            // Window controls - when embedded, send message to parent XP window
             const isEmbedded = window.self !== window.top;
+
+            function sendToParent(action) {
+                if (isEmbedded) {
+                    window.parent.postMessage({ type: 'zeynshat-control', action: action }, '*');
+                }
+            }
+
             btnMin.addEventListener('click', () => {
                 if (isEmbedded) {
-                    try { window.parent.windowManager.minimizeWindow('zeynshat'); } catch(e) {}
+                    sendToParent('minimize');
                 } else {
                     chatWindow.style.display = 'none';
                 }
             });
             btnClose.addEventListener('click', () => {
                 if (isEmbedded) {
-                    try { window.parent.windowManager.closeWindow('zeynshat'); } catch(e) {}
+                    sendToParent('close');
                 } else {
                     chatWindow.style.transition = 'all 0.2s ease';
                     chatWindow.style.opacity = '0';
@@ -3150,7 +3157,7 @@
             });
             document.getElementById('btnMax').addEventListener('click', () => {
                 if (isEmbedded) {
-                    try { window.parent.windowManager.maximizeWindow('zeynshat'); } catch(e) {}
+                    sendToParent('maximize');
                 }
             });
 
