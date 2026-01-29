@@ -3191,6 +3191,32 @@
                 controlParentWindow('maximize');
             });
 
+            // Drag support - send drag events to parent for window moving
+            if (isEmbedded) {
+                const titlebar = document.querySelector('.wlm-titlebar');
+                titlebar.style.cursor = 'move';
+
+                titlebar.addEventListener('mousedown', (e) => {
+                    if (e.target.closest('.wlm-window-controls')) return;
+                    e.preventDefault();
+                    window.parent.postMessage({
+                        type: 'zeynshat-drag-start',
+                        clientX: e.screenX,
+                        clientY: e.screenY
+                    }, '*');
+                });
+
+                titlebar.addEventListener('touchstart', (e) => {
+                    if (e.target.closest('.wlm-window-controls')) return;
+                    const touch = e.touches[0];
+                    window.parent.postMessage({
+                        type: 'zeynshat-drag-start',
+                        clientX: touch.screenX,
+                        clientY: touch.screenY
+                    }, '*');
+                }, { passive: true });
+            }
+
             // Close pickers
             document.addEventListener('click', (e) => {
                 if (!emojiPicker.contains(e.target) && e.target !== btnEmoji) emojiPicker.classList.remove('show');

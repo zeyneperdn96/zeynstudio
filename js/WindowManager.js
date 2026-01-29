@@ -32,6 +32,29 @@ class WindowManager {
                 else if (action === 'minimize') this.minimizeWindow('zeynshat');
                 else if (action === 'maximize') this.maximizeWindow('zeynshat');
             }
+            // Drag start from iframe titlebar
+            if (e.data && e.data.type === 'zeynshat-drag-start') {
+                const windowData = this.windows.get('zeynshat');
+                if (!windowData) return;
+                const windowEl = windowData.element;
+                const rect = windowEl.getBoundingClientRect();
+                // Use screenX/Y since iframe clientX/Y is relative to iframe
+                this.dragState = {
+                    isDragging: true,
+                    currentWindow: windowEl,
+                    offsetX: e.data.clientX - rect.left,
+                    offsetY: e.data.clientY - rect.top,
+                    useScreen: true
+                };
+                this.focusWindow('zeynshat');
+                // Disable pointer events on iframe so parent gets mousemove
+                const iframe = windowEl.querySelector('iframe');
+                if (iframe) iframe.style.pointerEvents = 'none';
+                document.addEventListener('mousemove', this._onMouseMove);
+                document.addEventListener('mouseup', this._onMouseUp);
+                document.addEventListener('touchmove', this._onTouchMove, { passive: false });
+                document.addEventListener('touchend', this._onTouchEnd);
+            }
         });
     }
 
@@ -235,8 +258,11 @@ class WindowManager {
 
     handleDrag(e) {
         const win = this.dragState.currentWindow;
-        const x = e.clientX - this.dragState.offsetX;
-        const y = e.clientY - this.dragState.offsetY;
+        // Use screenX/Y for iframe drag (screenX matches across frames)
+        const cx = this.dragState.useScreen ? e.screenX : e.clientX;
+        const cy = this.dragState.useScreen ? e.screenY : e.clientY;
+        const x = cx - this.dragState.offsetX;
+        const y = cy - this.dragState.offsetY;
 
         const maxX = window.innerWidth - 100;
         const maxY = window.innerHeight - 100;
@@ -246,8 +272,15 @@ class WindowManager {
     }
 
     stopDrag() {
+        // Restore pointer events on iframe if it was an iframe drag
+        if (this.dragState.currentWindow) {
+            const iframe = this.dragState.currentWindow.querySelector('iframe');
+            if (iframe) iframe.style.pointerEvents = '';
+        }
+
         this.dragState.isDragging = false;
         this.dragState.currentWindow = null;
+        this.dragState.useScreen = false;
 
         // Detach move/up listeners when drag ends
         document.removeEventListener('mousemove', this._onMouseMove);
