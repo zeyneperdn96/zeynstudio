@@ -37,13 +37,14 @@ class WindowManager {
                 const windowData = this.windows.get('zeynshat');
                 if (!windowData) return;
                 const windowEl = windowData.element;
-                const rect = windowEl.getBoundingClientRect();
-                // Use screenX/Y since iframe clientX/Y is relative to iframe
+                // Delta-based: store initial screen coords and window position
                 this.dragState = {
                     isDragging: true,
                     currentWindow: windowEl,
-                    offsetX: e.data.clientX - rect.left,
-                    offsetY: e.data.clientY - rect.top,
+                    startScreenX: e.data.clientX,
+                    startScreenY: e.data.clientY,
+                    startLeft: parseInt(windowEl.style.left) || 0,
+                    startTop: parseInt(windowEl.style.top) || 0,
                     useScreen: true
                 };
                 this.focusWindow('zeynshat');
@@ -258,11 +259,18 @@ class WindowManager {
 
     handleDrag(e) {
         const win = this.dragState.currentWindow;
-        // Use screenX/Y for iframe drag (screenX matches across frames)
-        const cx = this.dragState.useScreen ? e.screenX : e.clientX;
-        const cy = this.dragState.useScreen ? e.screenY : e.clientY;
-        const x = cx - this.dragState.offsetX;
-        const y = cy - this.dragState.offsetY;
+
+        let x, y;
+        if (this.dragState.useScreen) {
+            // Delta-based for iframe drag: initial position + mouse delta
+            const dx = e.screenX - this.dragState.startScreenX;
+            const dy = e.screenY - this.dragState.startScreenY;
+            x = this.dragState.startLeft + dx;
+            y = this.dragState.startTop + dy;
+        } else {
+            x = e.clientX - this.dragState.offsetX;
+            y = e.clientY - this.dragState.offsetY;
+        }
 
         const maxX = window.innerWidth - 100;
         const maxY = window.innerHeight - 100;
