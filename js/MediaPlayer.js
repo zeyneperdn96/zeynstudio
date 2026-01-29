@@ -61,17 +61,23 @@ class MediaPlayer {
         const ctx = this.canvasCtx;
         const w = this.canvas.width;
         const h = this.canvas.height;
+        const midY = h * 0.55;
         ctx.clearRect(0, 0, w, h);
 
-        const barCount = 28;
-        const barWidth = (w / barCount) * 0.7;
-        const gap = (w / barCount) * 0.3;
+        const barCount = 32;
+        const totalWidth = w * 0.85;
+        const startX = (w - totalWidth) / 2;
+        const barWidth = (totalWidth / barCount) * 0.75;
+        const gap = (totalWidth / barCount) * 0.25;
 
         for (let i = 0; i < barCount; i++) {
-            const barHeight = 3 + Math.random() * 4;
-            const x = i * (barWidth + gap) + gap / 2;
-            ctx.fillStyle = 'rgba(74, 158, 255, 0.25)';
-            ctx.fillRect(x, h - barHeight, barWidth, barHeight);
+            const barHeight = 2 + Math.random() * 5;
+            const x = startX + i * (barWidth + gap);
+            ctx.fillStyle = 'rgba(30, 90, 160, 0.35)';
+            ctx.fillRect(x, midY - barHeight, barWidth, barHeight);
+            // Reflection
+            ctx.fillStyle = 'rgba(30, 90, 160, 0.12)';
+            ctx.fillRect(x, midY + 1, barWidth, barHeight * 0.5);
         }
     }
 
@@ -81,6 +87,7 @@ class MediaPlayer {
         const ctx = this.canvasCtx;
         const w = this.canvas.width;
         const h = this.canvas.height;
+        const midY = h * 0.55;
         const bufferLength = this.analyser.frequencyBinCount;
         const dataArray = new Uint8Array(bufferLength);
 
@@ -91,27 +98,52 @@ class MediaPlayer {
             ctx.clearRect(0, 0, w, h);
 
             const barCount = bufferLength;
-            const barWidth = (w / barCount) * 0.7;
-            const gap = (w / barCount) * 0.3;
+            const totalWidth = w * 0.85;
+            const startX = (w - totalWidth) / 2;
+            const barWidth = (totalWidth / barCount) * 0.75;
+            const gap = (totalWidth / barCount) * 0.25;
+            const maxBarH = midY * 0.9;
 
             for (let i = 0; i < barCount; i++) {
                 const val = dataArray[i] / 255;
-                const barHeight = val * h * 0.9 + 2;
-                const x = i * (barWidth + gap) + gap / 2;
+                const barHeight = val * maxBarH + 2;
+                const x = startX + i * (barWidth + gap);
+                const barTop = midY - barHeight;
 
-                const gradient = ctx.createLinearGradient(x, h, x, h - barHeight);
-                gradient.addColorStop(0, 'rgba(42, 106, 170, 0.9)');
-                gradient.addColorStop(0.5, 'rgba(74, 158, 255, 0.9)');
-                gradient.addColorStop(1, 'rgba(100, 200, 255, 0.9)');
+                // Main bar gradient (bottom bright -> top white/cyan)
+                const gradient = ctx.createLinearGradient(x, midY, x, barTop);
+                gradient.addColorStop(0, 'rgba(20, 60, 140, 0.95)');
+                gradient.addColorStop(0.3, 'rgba(40, 120, 220, 0.95)');
+                gradient.addColorStop(0.7, 'rgba(80, 180, 255, 0.95)');
+                gradient.addColorStop(1, 'rgba(180, 230, 255, 0.98)');
                 ctx.fillStyle = gradient;
-                ctx.fillRect(x, h - barHeight, barWidth, barHeight);
+                ctx.fillRect(x, barTop, barWidth, barHeight);
 
-                // Glow on top
-                if (val > 0.1) {
-                    ctx.fillStyle = 'rgba(140, 210, 255, 0.6)';
-                    ctx.fillRect(x, h - barHeight, barWidth, 2);
+                // Glossy highlight on top portion
+                if (val > 0.05) {
+                    const highlightH = Math.min(barHeight * 0.3, 8);
+                    ctx.fillStyle = 'rgba(200, 240, 255, 0.4)';
+                    ctx.fillRect(x, barTop, barWidth, highlightH);
                 }
+
+                // Peak indicator (bright dot at top)
+                if (val > 0.15) {
+                    ctx.fillStyle = 'rgba(220, 245, 255, 0.9)';
+                    ctx.fillRect(x, barTop, barWidth, 2);
+                }
+
+                // Reflection below midline (flipped, faded)
+                const reflectH = barHeight * 0.4;
+                const reflectGrad = ctx.createLinearGradient(x, midY + 1, x, midY + 1 + reflectH);
+                reflectGrad.addColorStop(0, 'rgba(40, 120, 220, 0.25)');
+                reflectGrad.addColorStop(1, 'rgba(40, 120, 220, 0)');
+                ctx.fillStyle = reflectGrad;
+                ctx.fillRect(x, midY + 1, barWidth, reflectH);
             }
+
+            // Subtle midline
+            ctx.fillStyle = 'rgba(60, 140, 220, 0.15)';
+            ctx.fillRect(startX, midY, totalWidth, 1);
         };
 
         draw();

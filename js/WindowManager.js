@@ -47,7 +47,7 @@ class WindowManager {
         const windowSizes = {
             about: { width: 900, height: 700 },
             work: { width: 700, height: 550 },
-            showreel: { width: 500, height: 580 },
+            showreel: { width: 680, height: 440 },
             metbic: { width: 820, height: 520 },
             firebox: { width: 820, height: 520 },
             zeynshat: { width: 500, height: 700 },
