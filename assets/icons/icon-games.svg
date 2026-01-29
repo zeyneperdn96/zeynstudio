@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <!-- XP-style Games icon: Card + Minesweeper mine -->
+
+  <!-- Shadow -->
+  <ellipse cx="24" cy="45" rx="16" ry="3" fill="rgba(0,0,0,0.15)"/>
+
+  <!-- Playing card (background) - tilted -->
+  <g transform="rotate(-12, 24, 24)">
+    <rect x="10" y="6" width="22" height="30" rx="2" ry="2" fill="#fff" stroke="#808080" stroke-width="1"/>
+    <rect x="11" y="7" width="20" height="28" rx="1.5" ry="1.5" fill="url(#cardGrad)"/>
+    <!-- Heart symbol -->
+    <text x="14" y="16" font-family="serif" font-size="8" font-weight="bold" fill="#cc0000">A</text>
+    <text x="14" y="24" font-family="serif" font-size="10" fill="#cc0000">♥</text>
+  </g>
+
+  <!-- Second card - tilted other way -->
+  <g transform="rotate(8, 24, 24)">
+    <rect x="16" y="8" width="22" height="30" rx="2" ry="2" fill="#fff" stroke="#808080" stroke-width="1"/>
+    <rect x="17" y="9" width="20" height="28" rx="1.5" ry="1.5" fill="url(#cardGrad2)"/>
+    <!-- Spade symbol -->
+    <text x="20" y="18" font-family="serif" font-size="8" font-weight="bold" fill="#1a1a1a">K</text>
+    <text x="20" y="26" font-family="serif" font-size="10" fill="#1a1a1a">♠</text>
+  </g>
+
+  <!-- Minesweeper mine (foreground, bottom-right) -->
+  <g transform="translate(32, 34)">
+    <!-- Mine body -->
+    <circle cx="0" cy="0" r="6" fill="#333"/>
+    <circle cx="0" cy="0" r="5" fill="url(#mineGrad)"/>
+    <!-- Spikes -->
+    <line x1="0" y1="-7" x2="0" y2="7" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="-7" y1="0" x2="7" y2="0" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="-5" y1="-5" x2="5" y2="5" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="5" y1="-5" x2="-5" y2="5" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>
+    <!-- Highlight -->
+    <circle cx="-1.5" cy="-1.5" r="1.5" fill="rgba(255,255,255,0.5)"/>
+  </g>
+
+  <!-- Snake piece (top-right corner) -->
+  <g transform="translate(36, 8)">
+    <rect x="-2" y="0" width="5" height="5" rx="1" fill="#4caf50"/>
+    <rect x="3" y="0" width="5" height="5" rx="1" fill="#388e3c"/>
+    <rect x="-2" y="-5" width="5" height="5" rx="1" fill="#388e3c"/>
+    <!-- Eye -->
+    <circle cx="0.5" cy="-2.5" r="0.8" fill="#fff"/>
+    <circle cx="0.5" cy="-2.5" r="0.4" fill="#000"/>
+  </g>
+
+  <defs>
+    <linearGradient id="cardGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e8e8e8"/>
+    </linearGradient>
+    <linearGradient id="cardGrad2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f0f0f0"/>
+    </linearGradient>
+    <radialGradient id="mineGrad" cx="40%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#666"/>
+      <stop offset="100%" stop-color="#1a1a1a"/>
+    </radialGradient>
+  </defs>
+</svg>
