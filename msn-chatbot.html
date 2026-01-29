@@ -3132,33 +3132,44 @@
             // Window controls - when embedded, send message to parent XP window
             const isEmbedded = window.self !== window.top;
 
-            function sendToParent(action) {
-                if (isEmbedded) {
+            function controlParentWindow(action) {
+                if (!isEmbedded) return false;
+                // Try postMessage first
+                try {
                     window.parent.postMessage({ type: 'zeynshat-control', action: action }, '*');
-                }
+                    return true;
+                } catch(e) {}
+                // Fallback: direct access
+                try {
+                    const wm = window.parent.windowManager;
+                    if (wm) {
+                        if (action === 'close') wm.closeWindow('zeynshat');
+                        else if (action === 'minimize') wm.minimizeWindow('zeynshat');
+                        else if (action === 'maximize') wm.maximizeWindow('zeynshat');
+                        return true;
+                    }
+                } catch(e) {}
+                return false;
             }
 
-            btnMin.addEventListener('click', () => {
-                if (isEmbedded) {
-                    sendToParent('minimize');
-                } else {
+            btnMin.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (!controlParentWindow('minimize')) {
                     chatWindow.style.display = 'none';
                 }
             });
-            btnClose.addEventListener('click', () => {
-                if (isEmbedded) {
-                    sendToParent('close');
-                } else {
+            btnClose.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (!controlParentWindow('close')) {
                     chatWindow.style.transition = 'all 0.2s ease';
                     chatWindow.style.opacity = '0';
                     chatWindow.style.transform = 'scale(0.95)';
                     setTimeout(() => chatWindow.style.display = 'none', 200);
                 }
             });
-            document.getElementById('btnMax').addEventListener('click', () => {
-                if (isEmbedded) {
-                    sendToParent('maximize');
-                }
+            document.getElementById('btnMax').addEventListener('click', (e) => {
+                e.stopPropagation();
+                controlParentWindow('maximize');
             });
 
             // Close pickers
