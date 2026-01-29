@@ -2761,6 +2761,8 @@
             // ========================================
 
             // Tic Tac Toe
+            let tttContainer = null; // reference to current game board container
+
             function startTicTacToe() {
                 currentGame = 'ttt';
                 gameState = {
@@ -2769,24 +2771,38 @@
                     gameOver: false
                 };
 
+                // Disable previous board if exists
+                if (tttContainer) {
+                    tttContainer.querySelectorAll('.wlm-ttt-cell').forEach(cell => {
+                        cell.replaceWith(cell.cloneNode(true));
+                    });
+                    const oldBtn = tttContainer.querySelector('.wlm-game-btn');
+                    if (oldBtn) oldBtn.disabled = true;
+                }
+
                 const gameHtml = `
-                    <div class="wlm-game-container" id="tttGame">
+                    <div class="wlm-game-container wlm-ttt-container">
                         <div class="wlm-game-title">${t('tttTitle')}</div>
-                        <div class="wlm-ttt-board" id="tttBoard">
+                        <div class="wlm-ttt-board">
                             ${[0,1,2,3,4,5,6,7,8].map(i => `<div class="wlm-ttt-cell" data-index="${i}"></div>`).join('')}
                         </div>
-                        <div class="wlm-game-status" id="tttStatus">${t('tttYourTurn')}</div>
-                        <button class="wlm-game-btn" id="tttReset">${t('tttRestart')}</button>
+                        <div class="wlm-game-status">${t('tttYourTurn')}</div>
+                        <button class="wlm-game-btn wlm-ttt-reset">${t('tttRestart')}</button>
                     </div>
                 `;
 
                 addMessage('game', null, gameHtml, null, false);
 
                 setTimeout(() => {
-                    document.querySelectorAll('.wlm-ttt-cell').forEach(cell => {
+                    // Get the LAST (newest) ttt container
+                    const containers = document.querySelectorAll('.wlm-ttt-container');
+                    tttContainer = containers[containers.length - 1];
+                    if (!tttContainer) return;
+
+                    tttContainer.querySelectorAll('.wlm-ttt-cell').forEach(cell => {
                         cell.addEventListener('click', handleTTTClick);
                     });
-                    document.getElementById('tttReset')?.addEventListener('click', startTicTacToe);
+                    tttContainer.querySelector('.wlm-ttt-reset')?.addEventListener('click', startTicTacToe);
                 }, 100);
 
                 addMessage('zeynep', 'Zeynep', currentLang === 'en' ? 'Let\'s play! You\'re X, I\'m O 😊' : 'Hadi oynayalım! Sen X\'sin, ben O 😊');
@@ -2801,38 +2817,42 @@
                 e.target.textContent = 'X';
                 e.target.classList.add('x', 'taken');
 
+                const statusEl = tttContainer?.querySelector('.wlm-game-status');
+
                 if (checkTTTWin('X')) {
-                    document.getElementById('tttStatus').textContent = t('tttYouWin');
+                    if (statusEl) statusEl.textContent = t('tttYouWin');
                     gameState.gameOver = true;
                     addMessage('zeynep', 'Zeynep', currentLang === 'en' ? 'Congrats, you won! 🎉 Play again?' : 'Tebrikler kazandın! 🎉 Bir daha oynayalım mı?');
                     return;
                 }
 
                 if (gameState.board.every(c => c)) {
-                    document.getElementById('tttStatus').textContent = t('tttDraw');
+                    if (statusEl) statusEl.textContent = t('tttDraw');
                     gameState.gameOver = true;
                     return;
                 }
 
                 gameState.turn = 'O';
-                document.getElementById('tttStatus').textContent = t('tttThinking');
+                if (statusEl) statusEl.textContent = t('tttThinking');
 
                 setTimeout(() => {
                     const aiMove = getTTTAIMove();
                     gameState.board[aiMove] = 'O';
-                    const cells = document.querySelectorAll('.wlm-ttt-cell');
-                    cells[aiMove].textContent = 'O';
-                    cells[aiMove].classList.add('o', 'taken');
+                    const cells = tttContainer?.querySelectorAll('.wlm-ttt-cell');
+                    if (cells && cells[aiMove]) {
+                        cells[aiMove].textContent = 'O';
+                        cells[aiMove].classList.add('o', 'taken');
+                    }
 
                     if (checkTTTWin('O')) {
-                        document.getElementById('tttStatus').textContent = t('tttZeynepWins');
+                        if (statusEl) statusEl.textContent = t('tttZeynepWins');
                         gameState.gameOver = true;
                         addMessage('zeynep', 'Zeynep', currentLang === 'en' ? 'Yay I won! 😄 Try again?' : 'Yaay ben kazandım! 😄 Tekrar deneyelim mi?');
                         return;
                     }
 
                     gameState.turn = 'X';
-                    document.getElementById('tttStatus').textContent = t('tttYourTurn');
+                    if (statusEl) statusEl.textContent = t('tttYourTurn');
                 }, 600);
             }
 
