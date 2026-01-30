@@ -86,7 +86,7 @@ class BootSequence {
                 this.loginContainer.classList.add('active');
             }
 
-            // Auto-transition to desktop after 1.5 seconds
+            // Auto-proceed after 1.5 seconds
             setTimeout(() => {
                 this.handleLogin();
             }, 1500);
@@ -100,17 +100,22 @@ class BootSequence {
 
         console.log('Login hit area clicked...');
 
+        // Play XP startup sound right after login screen
+        const startupSound = document.getElementById('xp-startup-sound');
+        if (startupSound) {
+            startupSound.volume = 0.7;
+            startupSound.currentTime = 0;
+            startupSound.play().catch(() => {});
+        }
+
         // Add selected state
         if (this.loginHitArea) {
             this.loginHitArea.classList.add('selected');
         }
 
-        // Wait for selected state to be visible (200ms)
-        await this.wait(200);
-
         console.log('Transitioning to welcome screen...');
 
-        // Fade out login screen
+        // Fade out login screen quickly
         if (this.loginContainer) {
             this.loginContainer.classList.add('fade-out');
         }
@@ -121,32 +126,13 @@ class BootSequence {
                 this.loginContainer.classList.add('hidden');
             }
 
-            // Show welcome screen with music
+            // Show welcome screen
             this.showWelcomeScreen();
-        }, 500);
+        }, 300);
     }
 
     showWelcomeScreen() {
         console.log('Showing welcome screen...');
-
-        // Play XP startup sound with welcome screen
-        const startupSound = document.getElementById('xp-startup-sound');
-        if (startupSound) {
-            startupSound.volume = 0.7;
-            startupSound.currentTime = 0;
-            startupSound.play().catch(() => {
-                const playAudio = () => {
-                    startupSound.play().then(() => {
-                        document.removeEventListener('click', playAudio);
-                        document.removeEventListener('touchstart', playAudio);
-                        document.removeEventListener('keydown', playAudio);
-                    }).catch(() => {});
-                };
-                document.addEventListener('click', playAudio, { once: false });
-                document.addEventListener('touchstart', playAudio, { once: false });
-                document.addEventListener('keydown', playAudio, { once: false });
-            });
-        }
 
         // Show welcome container
         if (this.welcomeContainer) {
@@ -155,10 +141,10 @@ class BootSequence {
             this.welcomeContainer.classList.add('active');
         }
 
-        // Transition to desktop quickly
+        // Transition to desktop
         setTimeout(() => {
             this.showDesktop();
-        }, 1000);
+        }, 2000);
     }
 
     showDesktop() {
