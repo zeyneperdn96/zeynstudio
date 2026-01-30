@@ -129,13 +129,12 @@ class BootSequence {
     showWelcomeScreen() {
         console.log('Showing welcome screen...');
 
-        // Play XP startup sound IMMEDIATELY (before showing screen)
+        // Play XP startup sound with welcome screen
         const startupSound = document.getElementById('xp-startup-sound');
         if (startupSound) {
             startupSound.volume = 0.7;
             startupSound.currentTime = 0;
             startupSound.play().catch(() => {
-                // If autoplay blocked, retry on interaction
                 const playAudio = () => {
                     startupSound.play().then(() => {
                         document.removeEventListener('click', playAudio);
@@ -152,18 +151,21 @@ class BootSequence {
         // Show welcome container
         if (this.welcomeContainer) {
             this.welcomeContainer.classList.remove('hidden');
-            // Trigger reflow
             this.welcomeContainer.offsetHeight;
             this.welcomeContainer.classList.add('active');
         }
 
-        // Wait for music intro, then transition to desktop
+        // Transition to desktop quickly
         setTimeout(() => {
             this.showDesktop();
-        }, 3500);
+        }, 1000);
     }
 
     showDesktop() {
+        // Lazy-load desktop images
+        document.querySelectorAll('img[data-src]')
+            .forEach(img => { img.src = img.dataset.src; });
+
         console.log('Transitioning to desktop...');
 
         // Fade out welcome screen

@@ -215,14 +215,16 @@ class WindowManager {
         this.zIndexCounter++;
         windowData.element.style.zIndex = this.zIndexCounter;
 
-        this.windows.forEach((data, id) => {
-            const titlebar = data.element.querySelector('.window-titlebar');
-            if (id === windowId) {
-                titlebar.classList.remove('inactive');
-            } else {
-                titlebar.classList.add('inactive');
+        // Only update previous active + new active (avoid iterating all windows)
+        if (this.activeWindow && this.activeWindow !== windowId) {
+            const prev = this.windows.get(this.activeWindow);
+            if (prev) {
+                const prevTitlebar = prev.element.querySelector('.window-titlebar');
+                if (prevTitlebar) prevTitlebar.classList.add('inactive');
             }
-        });
+        }
+        const titlebar = windowData.element.querySelector('.window-titlebar');
+        if (titlebar) titlebar.classList.remove('inactive');
 
         this.activeWindow = windowId;
         this.updateTaskbarActive(windowId);
@@ -237,7 +239,9 @@ class WindowManager {
                 isDragging: true,
                 currentWindow: windowEl,
                 offsetX: clientX - rect.left,
-                offsetY: clientY - rect.top
+                offsetY: clientY - rect.top,
+                maxX: window.innerWidth - 100,
+                maxY: window.innerHeight - 100
             };
             const windowId = windowEl.dataset.windowId;
             this.focusWindow(windowId);
@@ -278,8 +282,8 @@ class WindowManager {
             y = e.clientY - this.dragState.offsetY;
         }
 
-        const maxX = window.innerWidth - 100;
-        const maxY = window.innerHeight - 100;
+        const maxX = this.dragState.maxX || (window.innerWidth - 100);
+        const maxY = this.dragState.maxY || (window.innerHeight - 100);
 
         win.style.left = Math.max(0, Math.min(x, maxX)) + 'px';
         win.style.top = Math.max(0, Math.min(y, maxY)) + 'px';
@@ -377,14 +381,10 @@ class WindowManager {
     }
 
     updateTaskbarActive(windowId) {
-        const buttons = this.taskbarWindows.querySelectorAll('.taskbar-window-btn');
-        buttons.forEach(btn => {
-            if (btn.dataset.taskbarWindow === windowId) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
+        if (this._activeTaskbarBtn) this._activeTaskbarBtn.classList.remove('active');
+        const btn = this.taskbarWindows.querySelector(`[data-taskbar-window="${windowId}"]`);
+        if (btn) btn.classList.add('active');
+        this._activeTaskbarBtn = btn;
     }
 
     initializeWindowContent(windowId, windowEl) {
@@ -905,8 +905,8 @@ class WindowManager {
                         <div class="snake-score" id="snake-score">Score: 0</div>
                         <button class="snake-btn" id="snake-restart">New Game</button>
                     </div>
-                    <canvas class="snake-canvas" id="snake-canvas" width="${GRID_W * SNAKE_SIZE}" height="${GRID_H * SNAKE_SIZE}"></canvas>
-                    <div class="snake-info">Arrow keys to move</div>
+                    <canvas class="snake-canvas" id="snake-canvas" width="${GRID_W * SNAKE_SIZE}" height="${GRID_H * SNAKE_SIZE}" style="touch-action:none"></canvas>
+                    <div class="snake-info">Arrow keys or swipe to move</div>
                 </div>`;
 
             const canvas = windowEl.querySelector('#snake-canvas');
@@ -965,7 +965,7 @@ class WindowManager {
                     ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 10);
                     ctx.font = '13px Segoe UI, Tahoma, sans-serif';
                     ctx.fillText(`Score: ${score}`, canvas.width / 2, canvas.height / 2 + 14);
-                    ctx.fillText('Press Space or click New Game', canvas.width / 2, canvas.height / 2 + 36);
+                    ctx.fillText('Press Space, tap, or click New Game', canvas.width / 2, canvas.height / 2 + 36);
                 }
             }
 
@@ -1020,6 +1020,46 @@ class WindowManager {
                 }
             };
             document.addEventListener('keydown', snakeKeyHandler);
+
+            // Touch swipe controls
+            let touchStartX = null, touchStartY = null;
+
+            canvas.addEventListener('touchstart', (e) => {
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+                e.preventDefault();
+                e.stopPropagation();
+            }, { passive: false });
+
+            canvas.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (touchStartX === null) return;
+                const dx = e.changedTouches[0].clientX - touchStartX;
+                const dy = e.changedTouches[0].clientY - touchStartY;
+                const minSwipe = 20;
+
+                if (gameOver && Math.abs(dx) < minSwipe && Math.abs(dy) < minSwipe) {
+                    resetSnake(); drawSnake();
+                    if (snakeInterval) clearInterval(snakeInterval);
+                    snakeInterval = setInterval(tick, 150);
+                    touchStartX = null; return;
+                }
+
+                if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) >= minSwipe) {
+                    const nd = dx > 0 ? {x:1,y:0} : {x:-1,y:0};
+                    if (nd.x !== -dir.x || nd.y !== -dir.y) nextDir = nd;
+                } else if (Math.abs(dy) >= minSwipe) {
+                    const nd = dy > 0 ? {x:0,y:1} : {x:0,y:-1};
+                    if (nd.x !== -dir.x || nd.y !== -dir.y) nextDir = nd;
+                }
+                touchStartX = null; touchStartY = null;
+            }, { passive: false });
+
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            }, { passive: false });
 
             const restartBtn = windowEl.querySelector('#snake-restart');
             if (restartBtn) restartBtn.addEventListener('click', () => {

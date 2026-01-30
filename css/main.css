@@ -3,6 +3,16 @@
    Extends Themesberg Windows 95 UI Kit
    ======================================== */
 
+/* Global overflow & overscroll prevention */
+html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
+html {
+    overscroll-behavior: none;
+}
+
 /* Desktop Container */
 .desktop-container {
     position: fixed;
@@ -481,21 +491,41 @@
         width: 100%;
     }
 
-    /* Desktop Container - keep full screen */
+    /* Desktop Container - flex column for mobile flow */
     .desktop-container {
         width: 100vw;
         height: 100vh;
         overflow: hidden;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
     }
 
     /* Desktop Icons - horizontal grid at top */
     .desktop-icons {
-        top: 12px !important;
-        left: 10px !important;
-        right: 10px !important;
+        position: static !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
         gap: 8px !important;
+        display: flex !important;
         flex-direction: row !important;
         flex-wrap: wrap !important;
+        padding: 8px 10px 0 10px !important;
+        width: 100% !important;
+    }
+
+    .desktop-icons-left,
+    .desktop-icons-right {
+        position: static !important;
+        left: auto !important;
+        right: auto !important;
+        top: auto !important;
+        width: 100% !important;
+    }
+
+    .desktop-icons-left {
+        margin-bottom: 0 !important;
     }
 
     .desktop-icon {
@@ -1454,8 +1484,8 @@
     }
 
     .win-btn {
-        min-width: 32px;
-        min-height: 32px;
+        min-width: 44px;
+        min-height: 44px;
     }
 
     .start-menu-item {
