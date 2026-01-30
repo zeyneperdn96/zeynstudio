@@ -12,14 +12,16 @@
     <!-- Critical: boot screen styles -->
     <link rel="stylesheet" href="css/boot.css">
     <link rel="stylesheet" href="css/login.css">
+    <!-- Critical inline: hidden class needed before main.css loads -->
+    <style>.hidden{display:none!important}.desktop-container.hidden{display:none!important}</style>
     <!-- Deferred: desktop styles (loaded async, not needed for boot) -->
     <link rel="stylesheet" href="https://demo.themesberg.com/windows-95-ui-kit/css/windows-95.min.css" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="css/boot-audio.css">
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/icons.css">
-    <link rel="stylesheet" href="css/start-menu.css">
-    <link rel="stylesheet" href="css/icon-system.css">
-    <link rel="stylesheet" href="css/desktop-xp.css">
+    <link rel="stylesheet" href="css/boot-audio.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="css/main.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="css/icons.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="css/start-menu.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="css/icon-system.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="css/desktop-xp.css" media="print" onload="this.media='all'">
 </head>
 
 <body>
@@ -40,7 +42,7 @@
     </div>
 
     <!-- LOGIN SCREEN - Image Based -->
-    <div id="login-container" class="login-container hidden">
+    <div id="login-container" class="login-container hidden" style="cursor:pointer">
         <img src="assets/boot/login3.png" alt="Login" class="login-image">
     </div>
 
@@ -56,25 +58,25 @@
         <div class="desktop-icons desktop-icons-left">
             <div class="desktop-icon" data-window="work">
                 <div class="icon-image">
-                    <img src="assets/icons/my-project.png" alt="Work">
+                    <img data-src="assets/icons/my-project.png" src="" alt="Work">
                 </div>
                 <span class="icon-label">My Work</span>
             </div>
             <div class="desktop-icon" data-window="zeynshat">
                 <div class="icon-image">
-                    <img src="assets/icons/zeyn-chat-logo.png" alt="Zeyn Chat">
+                    <img data-src="assets/icons/zeyn-chat-logo.png" src="" alt="Zeyn Chat">
                 </div>
                 <span class="icon-label">Zeyn Chat</span>
             </div>
             <div class="desktop-icon" data-window="about">
                 <div class="icon-image">
-                    <img src="assets/icons/about-me.png" alt="About">
+                    <img data-src="assets/icons/about-me.png" src="" alt="About">
                 </div>
                 <span class="icon-label">About Me</span>
             </div>
             <div class="desktop-icon" data-window="games">
                 <div class="icon-image">
-                    <img src="assets/icons/icon-games.svg" alt="Games">
+                    <img data-src="assets/icons/icon-games.svg" src="" alt="Games">
                 </div>
                 <span class="icon-label">Games</span>
             </div>
@@ -84,13 +86,13 @@
         <div class="desktop-icons desktop-icons-right">
             <div class="desktop-icon" data-window="illustration">
                 <div class="icon-image">
-                    <img src="assets/icons/my-gallery.png" alt="Gallery">
+                    <img data-src="assets/icons/my-gallery.png" src="" alt="Gallery">
                 </div>
                 <span class="icon-label">Gallery</span>
             </div>
             <div class="desktop-icon" data-window="showreel">
                 <div class="icon-image">
-                    <img src="assets/icons/icon-mediaplayer.svg" alt="Media Player">
+                    <img data-src="assets/icons/icon-mediaplayer.svg" src="" alt="Media Player">
                 </div>
                 <span class="icon-label">Media Player</span>
             </div>
@@ -117,7 +119,7 @@
 
             <!-- HEADER -->
             <div class="start-menu-header">
-                <div class="start-user-avatar"><img src="assets/icons/zeyn-avatar.png" alt="Zeyn" style="width: 100%; height: 100%; object-fit: cover; border-radius: inherit;"></div>
+                <div class="start-user-avatar"><img data-src="assets/icons/zeyn-avatar.png" src="" alt="Zeyn" style="width: 100%; height: 100%; object-fit: cover; border-radius: inherit;"></div>
                 <div class="start-user-info">
                     <div class="start-user-name">Zeyn XP</div>
                     <div class="start-user-title">Industrial Designer</div>
@@ -128,7 +130,7 @@
             <div class="start-menu-body">
                 <div class="start-menu-programs">
                     <div class="start-menu-item" data-action="window" data-window="work">
-                        <img src="assets/icons/my-project.png" class="menu-item-icon" alt="">
+                        <img data-src="assets/icons/my-project.png" src="" class="menu-item-icon" alt="">
                         <div class="menu-item-text">
                             <div class="menu-item-title">My Projects</div>
                             <div class="menu-item-desc">View my work</div>
@@ -136,7 +138,7 @@
                     </div>
 
                     <div class="start-menu-item" data-action="window" data-window="showreel">
-                        <img src="assets/icons/icon-mediaplayer.svg" class="menu-item-icon" alt="">
+                        <img data-src="assets/icons/icon-mediaplayer.svg" src="" class="menu-item-icon" alt="">
                         <div class="menu-item-text">
                             <div class="menu-item-title">Media Player</div>
                             <div class="menu-item-desc">Music</div>
@@ -144,7 +146,7 @@
                     </div>
 
                     <div class="start-menu-item" data-action="window" data-window="terminal">
-                        <img src="assets/icons/icon-cmd.svg" class="menu-item-icon" alt="">
+                        <img data-src="assets/icons/icon-cmd.svg" src="" class="menu-item-icon" alt="">
                         <div class="menu-item-text">
                             <div class="menu-item-title">Command Prompt</div>
                             <div class="menu-item-desc">Terminal</div>
@@ -152,7 +154,7 @@
                     </div>
 
                     <div class="start-menu-item" data-action="window" data-window="zeynshat">
-                        <img src="assets/icons/zeyn-chat-logo.png" class="menu-item-icon" alt="">
+                        <img data-src="assets/icons/zeyn-chat-logo.png" src="" class="menu-item-icon" alt="">
                         <div class="menu-item-text">
                             <div class="menu-item-title">Zeyn Chat</div>
                             <div class="menu-item-desc">Chat with me!</div>
@@ -162,14 +164,14 @@
                     <div class="start-menu-divider"></div>
 
                     <div class="start-menu-item" data-action="link" data-link="github">
-                        <img src="assets/icons/icon-github.svg" class="menu-item-icon" alt="">
+                        <img data-src="assets/icons/icon-github.svg" src="" class="menu-item-icon" alt="">
                         <div class="menu-item-text">
                             <div class="menu-item-title">Github</div>
                         </div>
                     </div>
 
                     <div class="start-menu-item" data-action="link" data-link="linkedin">
-                        <img src="assets/icons/icon-linkedin.svg" class="menu-item-icon" alt="">
+                        <img data-src="assets/icons/icon-linkedin.svg" src="" class="menu-item-icon" alt="">
                         <div class="menu-item-text">
                             <div class="menu-item-title">LinkedIn</div>
                         </div>
@@ -178,7 +180,7 @@
                     <div class="start-menu-divider"></div>
 
                     <div class="start-menu-item all-programs" id="all-programs-btn">
-                        <img src="assets/icons/All Programs.png" class="menu-item-icon-small" alt="">
+                        <img data-src="assets/icons/All Programs.png" src="" class="menu-item-icon-small" alt="">
                         <span style="flex: 1; font-size: 12px;">All Programs</span>
                         <span class="arrow">►</span>
                     </div>
@@ -188,31 +190,31 @@
             <!-- ALL PROGRAMS SUBMENU (opens to the right) -->
             <div class="all-programs-submenu hidden" id="all-programs-submenu">
                 <div class="all-programs-item" data-program="figma">
-                    <img src="assets/icons/icon-figma.png" class="program-icon" alt="">
+                    <img data-src="assets/icons/icon-figma.png" src="" class="program-icon" alt="">
                     <span>Figma</span>
                 </div>
                 <div class="all-programs-item" data-program="photoshop">
-                    <img src="assets/icons/icon-photoshop.png" class="program-icon" alt="">
+                    <img data-src="assets/icons/icon-photoshop.png" src="" class="program-icon" alt="">
                     <span>Adobe Photoshop 2026</span>
                 </div>
                 <div class="all-programs-item" data-program="illustrator">
-                    <img src="assets/icons/icon-illustrator.png" class="program-icon" alt="">
+                    <img data-src="assets/icons/icon-illustrator.png" src="" class="program-icon" alt="">
                     <span>Adobe Illustrator 2026</span>
                 </div>
                 <div class="all-programs-item" data-program="aftereffects">
-                    <img src="assets/icons/icon-aftereffects.png" class="program-icon" alt="">
+                    <img data-src="assets/icons/icon-aftereffects.png" src="" class="program-icon" alt="">
                     <span>Adobe After Effects</span>
                 </div>
                 <div class="all-programs-item" data-program="blender">
-                    <img src="assets/icons/icon-blender.png" class="program-icon" alt="">
+                    <img data-src="assets/icons/icon-blender.png" src="" class="program-icon" alt="">
                     <span>Blender</span>
                 </div>
                 <div class="all-programs-item" data-program="rhino">
-                    <img src="assets/icons/icon-rhino.png" class="program-icon" alt="">
+                    <img data-src="assets/icons/icon-rhino.png" src="" class="program-icon" alt="">
                     <span>Rhino - Rhinoceros 3D</span>
                 </div>
                 <div class="all-programs-item" data-program="3dsmax">
-                    <img src="assets/icons/icon-3dsmax.png" class="program-icon" alt="">
+                    <img data-src="assets/icons/icon-3dsmax.png" src="" class="program-icon" alt="">
                     <span>Autodesk 3ds Max</span>
                 </div>
             </div>
@@ -220,11 +222,11 @@
             <!-- FOOTER -->
             <div class="start-menu-footer">
                 <button class="btn btn-warning" id="logoff-btn">
-                    <img src="assets/icons/icon-logoff.svg" alt="">
+                    <img data-src="assets/icons/icon-logoff.svg" src="" alt="">
                     Log Off
                 </button>
                 <button class="btn btn-danger" id="shutdown-btn">
-                    <img src="assets/icons/icon-shutdown.svg" alt="">
+                    <img data-src="assets/icons/icon-shutdown.svg" src="" alt="">
                     Shut Down
                 </button>
             </div>
@@ -237,7 +239,7 @@
         <!-- XP Header Bar -->
         <div class="mobile-xp-header">
             <div class="mobile-xp-header-left">
-                <img src="assets/icons/about-me.png" alt="Zeyn" class="mobile-xp-avatar">
+                <img data-src="assets/icons/about-me.png" src="" alt="Zeyn" class="mobile-xp-avatar">
                 <span class="mobile-xp-logo">Zeyn XP</span>
             </div>
         </div>
@@ -255,7 +257,7 @@
                     </div>
                 </div>
                 <div class="mobile-xp-window-body mobile-profile">
-                    <img src="assets/icons/about-me.png" alt="About Me" class="mobile-profile-icon">
+                    <img data-src="assets/icons/about-me.png" src="" alt="About Me" class="mobile-profile-icon">
                     <h2 class="mobile-profile-name">Zeyn</h2>
                     <p class="mobile-profile-title">Industrial Designer</p>
                     <p id="mobile-bio" class="mobile-profile-bio">Industrial designer passionate about creating meaningful experiences.</p>
@@ -274,27 +276,27 @@
                 </div>
                 <div class="mobile-xp-window-body mobile-skills">
                     <div class="mobile-skill-item">
-                        <img src="assets/icons/icon-figma.png" alt="Figma">
+                        <img data-src="assets/icons/icon-figma.png" src="" alt="Figma">
                         <span>Figma</span>
                     </div>
                     <div class="mobile-skill-item">
-                        <img src="assets/icons/icon-photoshop.png" alt="Photoshop">
+                        <img data-src="assets/icons/icon-photoshop.png" src="" alt="Photoshop">
                         <span>Photoshop</span>
                     </div>
                     <div class="mobile-skill-item">
-                        <img src="assets/icons/icon-illustrator.png" alt="Illustrator">
+                        <img data-src="assets/icons/icon-illustrator.png" src="" alt="Illustrator">
                         <span>Illustrator</span>
                     </div>
                     <div class="mobile-skill-item">
-                        <img src="assets/icons/icon-blender.png" alt="Blender">
+                        <img data-src="assets/icons/icon-blender.png" src="" alt="Blender">
                         <span>Blender</span>
                     </div>
                     <div class="mobile-skill-item">
-                        <img src="assets/icons/icon-rhino.png" alt="Rhino">
+                        <img data-src="assets/icons/icon-rhino.png" src="" alt="Rhino">
                         <span>Rhino</span>
                     </div>
                     <div class="mobile-skill-item">
-                        <img src="assets/icons/icon-3dsmax.png" alt="3ds Max">
+                        <img data-src="assets/icons/icon-3dsmax.png" src="" alt="3ds Max">
                         <span>3ds Max</span>
                     </div>
                 </div>
@@ -312,11 +314,11 @@
                 </div>
                 <div class="mobile-xp-window-body mobile-links">
                     <a href="#" id="mobile-linkedin" class="mobile-xp-button" target="_blank">
-                        <img src="assets/icons/icon-linkedin.svg" alt="LinkedIn">
+                        <img data-src="assets/icons/icon-linkedin.svg" src="" alt="LinkedIn">
                         <span>LinkedIn</span>
                     </a>
                     <a href="#" id="mobile-github" class="mobile-xp-button" target="_blank">
-                        <img src="assets/icons/icon-github.svg" alt="GitHub">
+                        <img data-src="assets/icons/icon-github.svg" src="" alt="GitHub">
                         <span>GitHub</span>
                     </a>
                 </div>
@@ -333,7 +335,7 @@
                     </div>
                 </div>
                 <div class="mobile-xp-window-body mobile-contact">
-                    <img src="assets/icons/contact-me.png" alt="Contact" class="mobile-contact-icon">
+                    <img data-src="assets/icons/contact-me.png" src="" alt="Contact" class="mobile-contact-icon">
                     <p>Get in touch for collaborations.</p>
                     <a href="mailto:hello@zeynstudio.com" class="mobile-xp-button mobile-xp-button-primary">
                         <span>Email Me</span>
