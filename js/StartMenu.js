@@ -63,21 +63,52 @@ class StartMenu {
         // All Programs submenu toggle
         const allProgramsBtn = document.getElementById('all-programs-btn');
         const allProgramsSubmenu = document.getElementById('all-programs-submenu');
+        const allProgramsBack = document.getElementById('all-programs-back');
+        const isMobileWidth = () => window.innerWidth <= 768;
 
         if (allProgramsBtn && allProgramsSubmenu) {
+            // On mobile, move submenu inside menu body for overlay effect
+            const menuBody = this.menu.querySelector('.start-menu-body');
+            if (menuBody && isMobileWidth()) {
+                menuBody.appendChild(allProgramsSubmenu);
+            }
+
             let allProgsLastTouch = 0;
+
+            const toggleAllPrograms = () => {
+                allProgramsSubmenu.classList.toggle('hidden');
+                // Show/hide back button on mobile
+                if (allProgramsBack && isMobileWidth()) {
+                    allProgramsBack.classList.toggle('hidden', allProgramsSubmenu.classList.contains('hidden'));
+                }
+            };
 
             allProgramsBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 if (Date.now() - allProgsLastTouch < 500) return;
-                allProgramsSubmenu.classList.toggle('hidden');
+                toggleAllPrograms();
             });
 
             if (isTouchDevice) {
                 this._addTouchWithScrollDetect(allProgramsBtn, () => {
                     allProgsLastTouch = Date.now();
-                    allProgramsSubmenu.classList.toggle('hidden');
+                    toggleAllPrograms();
                 });
+            }
+
+            // Back button closes submenu on mobile
+            if (allProgramsBack) {
+                allProgramsBack.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    allProgramsSubmenu.classList.add('hidden');
+                    allProgramsBack.classList.add('hidden');
+                });
+                if (isTouchDevice) {
+                    this._addTouchWithScrollDetect(allProgramsBack, () => {
+                        allProgramsSubmenu.classList.add('hidden');
+                        allProgramsBack.classList.add('hidden');
+                    });
+                }
             }
 
             // Submenu item clicks

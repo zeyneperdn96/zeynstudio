@@ -207,6 +207,11 @@
     display: none;
 }
 
+/* Back button hidden on desktop */
+.all-programs-submenu-header {
+    display: none;
+}
+
 .all-programs-item {
     display: flex;
     align-items: center;
@@ -279,6 +284,7 @@ img.program-icon {
         -webkit-overflow-scrolling: touch;
         overscroll-behavior: contain;
         min-height: 0;
+        position: relative;
     }
 
     .start-menu-programs .start-menu-item {
@@ -305,24 +311,47 @@ img.program-icon {
         font-size: 10px;
     }
 
-    /* All Programs Submenu - inline below instead of right panel */
+    /* All Programs Submenu - overlay that replaces menu body on mobile */
     .all-programs-submenu {
-        position: static !important;
-        width: 100% !important;
+        position: absolute !important;
+        top: 0 !important;
         left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
         border: none !important;
-        border-top: 1px solid #D4D0C8 !important;
         border-radius: 0 !important;
         box-shadow: none !important;
-        max-height: none !important;
-        overflow-y: visible !important;
-        background: #f0f0f0 !important;
+        background: #fff !important;
+        z-index: 10 !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        padding-top: 0 !important;
+        padding-bottom: 8px !important;
+    }
+
+    /* Back button header for All Programs on mobile */
+    .all-programs-submenu-header {
+        display: flex !important;
+        align-items: center;
+        padding: 12px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #0053EE;
+        border-bottom: 1px solid #D4D0C8;
+        cursor: pointer;
+        min-height: 44px;
+        box-sizing: border-box;
+        background: #f4f4f4;
+    }
+
+    .all-programs-submenu-header:active {
+        background: #e8e8e8;
     }
 
     .all-programs-item {
         padding: 12px 16px;
-        font-size: 12px;
-        min-height: 44px;
+        font-size: 13px;
+        min-height: 48px;
         box-sizing: border-box;
     }
 
