@@ -1009,6 +1009,333 @@ html {
     }
 
     /* ========================================
+       FUNCART Window - Mobile Layout
+       ======================================== */
+    .funcart-container {
+        flex-direction: column !important;
+    }
+
+    .funcart-gallery {
+        width: 100% !important;
+        flex-direction: row !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        padding: 8px !important;
+        gap: 8px !important;
+        border-right: none !important;
+        border-bottom: 1px solid #a0a0a0 !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .funcart-gallery-title {
+        display: none !important;
+    }
+
+    .funcart-thumb {
+        width: 60px !important;
+        min-width: 60px !important;
+        aspect-ratio: 1 !important;
+    }
+
+    .funcart-main {
+        min-height: 0 !important;
+    }
+
+    .funcart-header {
+        padding: 10px 12px !important;
+    }
+
+    .funcart-header h2 {
+        font-size: 13px !important;
+    }
+
+    .funcart-header p {
+        font-size: 10px !important;
+    }
+
+    .funcart-content {
+        flex-direction: column !important;
+        padding: 10px !important;
+        gap: 10px !important;
+        overflow-y: auto !important;
+    }
+
+    .funcart-preview {
+        width: 100% !important;
+        min-height: 200px !important;
+        max-height: 250px !important;
+    }
+
+    .funcart-preview img {
+        max-width: 90% !important;
+        max-height: 90% !important;
+    }
+
+    .funcart-arrow {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 16px !important;
+    }
+
+    .funcart-counter {
+        font-size: 10px !important;
+        padding: 3px 10px !important;
+    }
+
+    .funcart-info {
+        width: 100% !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        overflow-y: visible !important;
+    }
+
+    .funcart-info-box {
+        flex: 1 1 calc(50% - 4px) !important;
+        min-width: 140px !important;
+        padding: 10px !important;
+    }
+
+    .funcart-info-title {
+        font-size: 8px !important;
+        margin-bottom: 6px !important;
+    }
+
+    .funcart-info-text {
+        font-size: 10px !important;
+        line-height: 1.4 !important;
+    }
+
+    .funcart-statusbar {
+        padding: 6px 10px !important;
+        font-size: 9px !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+
+    /* ========================================
+       GUSTO Window - Mobile Layout
+       ======================================== */
+    .gusto-container {
+        flex-direction: column !important;
+    }
+
+    .gusto-gallery {
+        width: 100% !important;
+        flex-direction: row !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        padding: 8px !important;
+        gap: 8px !important;
+        border-right: none !important;
+        border-bottom: 1px solid #a0a0a0 !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .gusto-gallery-title {
+        display: none !important;
+    }
+
+    .gusto-thumb {
+        width: 60px !important;
+        min-width: 60px !important;
+        aspect-ratio: 1 !important;
+    }
+
+    .gusto-main {
+        min-height: 0 !important;
+    }
+
+    .gusto-header {
+        padding: 10px 12px !important;
+    }
+
+    .gusto-header h2 {
+        font-size: 13px !important;
+    }
+
+    .gusto-header p {
+        font-size: 10px !important;
+    }
+
+    .gusto-content {
+        flex-direction: column !important;
+        padding: 10px !important;
+        gap: 10px !important;
+        overflow-y: auto !important;
+    }
+
+    .gusto-preview {
+        width: 100% !important;
+        min-height: 200px !important;
+        max-height: 250px !important;
+    }
+
+    .gusto-preview img {
+        max-width: 90% !important;
+        max-height: 90% !important;
+    }
+
+    .gusto-arrow {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 16px !important;
+    }
+
+    .gusto-counter {
+        font-size: 10px !important;
+        padding: 3px 10px !important;
+    }
+
+    .gusto-info {
+        width: 100% !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        overflow-y: visible !important;
+    }
+
+    .gusto-info-box {
+        flex: 1 1 calc(50% - 4px) !important;
+        min-width: 140px !important;
+        padding: 10px !important;
+    }
+
+    .gusto-info-title {
+        font-size: 8px !important;
+        margin-bottom: 6px !important;
+    }
+
+    .gusto-info-text {
+        font-size: 10px !important;
+        line-height: 1.4 !important;
+    }
+
+    .gusto-statusbar {
+        padding: 6px 10px !important;
+        font-size: 9px !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+
+    /* ========================================
+       MARINESENTRY Window - Mobile Layout
+       ======================================== */
+    .msentry-container {
+        flex-direction: column !important;
+    }
+
+    .msentry-gallery {
+        width: 100% !important;
+        flex-direction: row !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        padding: 8px !important;
+        gap: 8px !important;
+        border-right: none !important;
+        border-bottom: 1px solid #a0a0a0 !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .msentry-gallery-title {
+        display: none !important;
+    }
+
+    .msentry-thumb {
+        width: 60px !important;
+        min-width: 60px !important;
+        aspect-ratio: 1 !important;
+    }
+
+    .msentry-main {
+        min-height: 0 !important;
+    }
+
+    .msentry-header {
+        padding: 10px 12px !important;
+    }
+
+    .msentry-header h2 {
+        font-size: 13px !important;
+    }
+
+    .msentry-header p {
+        font-size: 10px !important;
+    }
+
+    .msentry-content {
+        flex-direction: column !important;
+        padding: 10px !important;
+        gap: 10px !important;
+        overflow-y: auto !important;
+    }
+
+    .msentry-preview {
+        width: 100% !important;
+        min-height: 200px !important;
+        max-height: 250px !important;
+    }
+
+    .msentry-preview img,
+    .msentry-preview video {
+        max-width: 90% !important;
+        max-height: 90% !important;
+    }
+
+    .msentry-arrow {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 16px !important;
+    }
+
+    .msentry-counter {
+        font-size: 10px !important;
+        padding: 3px 10px !important;
+    }
+
+    .msentry-info {
+        width: 100% !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        overflow-y: visible !important;
+    }
+
+    .msentry-info-box {
+        flex: 1 1 calc(50% - 4px) !important;
+        min-width: 140px !important;
+        padding: 10px !important;
+    }
+
+    .msentry-info-title {
+        font-size: 8px !important;
+        margin-bottom: 6px !important;
+    }
+
+    .msentry-info-text {
+        font-size: 10px !important;
+        line-height: 1.4 !important;
+    }
+
+    .msentry-statusbar {
+        padding: 6px 10px !important;
+        font-size: 9px !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+
+    /* ========================================
+       LIGHTBOX - Mobile
+       ======================================== */
+    .project-lightbox-close {
+        top: 12px !important;
+        right: 12px !important;
+        width: 44px !important;
+        height: 44px !important;
+        font-size: 24px !important;
+    }
+
+    /* ========================================
        Projects Grid - Mobile
        ======================================== */
     .projects-grid {
@@ -1134,6 +1461,33 @@ html {
         font-size: 12px !important;
     }
 
+    /* FUNCART/GUSTO/MSENTRY adjustments for small screens */
+    .funcart-thumb,
+    .gusto-thumb,
+    .msentry-thumb {
+        width: 50px !important;
+        min-width: 50px !important;
+    }
+
+    .funcart-preview,
+    .gusto-preview,
+    .msentry-preview {
+        min-height: 180px !important;
+        max-height: 200px !important;
+    }
+
+    .funcart-info-box,
+    .gusto-info-box,
+    .msentry-info-box {
+        flex: 1 1 100% !important;
+    }
+
+    .funcart-header h2,
+    .gusto-header h2,
+    .msentry-header h2 {
+        font-size: 12px !important;
+    }
+
     /* Projects grid - single column on very small */
     .projects-grid {
         grid-template-columns: 1fr !important;
@@ -1209,23 +1563,35 @@ html {
 
     /* METBIC/FIREBOX preview sizing */
     .metbic-preview,
-    .firebox-preview {
+    .firebox-preview,
+    .funcart-preview,
+    .gusto-preview,
+    .msentry-preview {
         min-height: 170px !important;
         max-height: 200px !important;
     }
 
     .metbic-info-box,
-    .firebox-info-box {
+    .firebox-info-box,
+    .funcart-info-box,
+    .gusto-info-box,
+    .msentry-info-box {
         padding: 8px !important;
     }
 
     .metbic-info-title,
-    .firebox-info-title {
+    .firebox-info-title,
+    .funcart-info-title,
+    .gusto-info-title,
+    .msentry-info-title {
         font-size: 7px !important;
     }
 
     .metbic-info-text,
-    .firebox-info-text {
+    .firebox-info-text,
+    .funcart-info-text,
+    .gusto-info-text,
+    .msentry-info-text {
         font-size: 9px !important;
     }
 }
@@ -1299,25 +1665,37 @@ html {
         gap: 8px !important;
     }
 
-    /* METBIC/FIREBOX adjustments */
+    /* METBIC/FIREBOX/FUNCART/GUSTO/MSENTRY adjustments */
     .metbic-header h2,
-    .firebox-header h2 {
+    .firebox-header h2,
+    .funcart-header h2,
+    .gusto-header h2,
+    .msentry-header h2 {
         font-size: 11px !important;
     }
 
     .metbic-header p,
-    .firebox-header p {
+    .firebox-header p,
+    .funcart-header p,
+    .gusto-header p,
+    .msentry-header p {
         font-size: 9px !important;
     }
 
     .metbic-thumb,
-    .firebox-thumb {
+    .firebox-thumb,
+    .funcart-thumb,
+    .gusto-thumb,
+    .msentry-thumb {
         width: 48px !important;
         min-width: 48px !important;
     }
 
     .metbic-arrow,
-    .firebox-arrow {
+    .firebox-arrow,
+    .funcart-arrow,
+    .gusto-arrow,
+    .msentry-arrow {
         width: 28px !important;
         height: 28px !important;
         font-size: 14px !important;
@@ -1464,56 +1842,83 @@ html {
         font-size: 10px !important;
     }
 
-    /* METBIC/FIREBOX minimal */
+    /* METBIC/FIREBOX/FUNCART/GUSTO/MSENTRY minimal */
     .metbic-gallery,
-    .firebox-gallery {
+    .firebox-gallery,
+    .funcart-gallery,
+    .gusto-gallery,
+    .msentry-gallery {
         padding: 6px !important;
         gap: 6px !important;
     }
 
     .metbic-thumb,
-    .firebox-thumb {
+    .firebox-thumb,
+    .funcart-thumb,
+    .gusto-thumb,
+    .msentry-thumb {
         width: 44px !important;
         min-width: 44px !important;
     }
 
     .metbic-preview,
-    .firebox-preview {
+    .firebox-preview,
+    .funcart-preview,
+    .gusto-preview,
+    .msentry-preview {
         min-height: 150px !important;
         max-height: 170px !important;
     }
 
     .metbic-content,
-    .firebox-content {
+    .firebox-content,
+    .funcart-content,
+    .gusto-content,
+    .msentry-content {
         padding: 8px !important;
         gap: 8px !important;
     }
 
     .metbic-info,
-    .firebox-info {
+    .firebox-info,
+    .funcart-info,
+    .gusto-info,
+    .msentry-info {
         gap: 6px !important;
     }
 
     .metbic-info-box,
-    .firebox-info-box {
+    .firebox-info-box,
+    .funcart-info-box,
+    .gusto-info-box,
+    .msentry-info-box {
         padding: 6px !important;
         min-width: 100% !important;
     }
 
     .metbic-info-title,
-    .firebox-info-title {
+    .firebox-info-title,
+    .funcart-info-title,
+    .gusto-info-title,
+    .msentry-info-title {
         font-size: 6px !important;
         margin-bottom: 4px !important;
     }
 
     .metbic-info-text,
-    .firebox-info-text {
+    .firebox-info-text,
+    .funcart-info-text,
+    .gusto-info-text,
+    .msentry-info-text {
         font-size: 8px !important;
         line-height: 1.3 !important;
     }
 
     .metbic-statusbar,
-    .firebox-statusbar {
+    .firebox-statusbar,
+    .funcart-statusbar,
+    .gusto-statusbar,
+    .msentry-statusbar {
         padding: 5px 8px !important;
         font-size: 8px !important;
     }
@@ -1580,13 +1985,19 @@ html {
     }
 
     .metbic-thumb,
-    .firebox-thumb {
+    .firebox-thumb,
+    .funcart-thumb,
+    .gusto-thumb,
+    .msentry-thumb {
         min-width: 50px !important;
         min-height: 50px !important;
     }
 
     .metbic-arrow,
-    .firebox-arrow {
+    .firebox-arrow,
+    .funcart-arrow,
+    .gusto-arrow,
+    .msentry-arrow {
         min-width: 36px !important;
         min-height: 36px !important;
     }
@@ -1620,12 +2031,18 @@ html {
 
     /* Smooth scrolling for galleries */
     .metbic-gallery,
-    .firebox-gallery {
+    .firebox-gallery,
+    .funcart-gallery,
+    .gusto-gallery,
+    .msentry-gallery {
         scroll-snap-type: x mandatory;
     }
 
     .metbic-thumb,
-    .firebox-thumb {
+    .firebox-thumb,
+    .funcart-thumb,
+    .gusto-thumb,
+    .msentry-thumb {
         scroll-snap-align: start;
     }
 }
@@ -1711,20 +2128,29 @@ html {
         bottom: 40px !important;
     }
 
-    /* METBIC/FIREBOX horizontal layout in landscape */
+    /* METBIC/FIREBOX/FUNCART/GUSTO/MSENTRY horizontal layout in landscape */
     .metbic-content,
-    .firebox-content {
+    .firebox-content,
+    .funcart-content,
+    .gusto-content,
+    .msentry-content {
         flex-direction: row !important;
     }
 
     .metbic-preview,
-    .firebox-preview {
+    .firebox-preview,
+    .funcart-preview,
+    .gusto-preview,
+    .msentry-preview {
         width: 50% !important;
         max-height: none !important;
     }
 
     .metbic-info,
-    .firebox-info {
+    .firebox-info,
+    .funcart-info,
+    .gusto-info,
+    .msentry-info {
         width: 50% !important;
         overflow-y: auto !important;
     }

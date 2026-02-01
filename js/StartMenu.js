@@ -191,6 +191,11 @@ class StartMenu {
         if (confirm('Log off Zeyn XP?')) {
             this.close();
 
+            // Close all windows
+            this.windowManager.windows.forEach((data, id) => {
+                this.windowManager.closeWindow(id);
+            });
+
             // Fade out desktop
             const desktop = document.getElementById('desktop-container');
             desktop.style.transition = 'opacity 0.5s';
@@ -201,17 +206,25 @@ class StartMenu {
                 desktop.style.opacity = '1';
 
                 // Show login screen
-                const bootContainer = document.getElementById('boot-container');
-                const loginStage = document.getElementById('boot-login');
+                const loginContainer = document.getElementById('login-container');
+                if (loginContainer) {
+                    loginContainer.classList.remove('hidden', 'fade-out');
+                    loginContainer.offsetHeight;
+                    loginContainer.classList.add('active');
 
-                bootContainer.classList.remove('hidden');
-                bootContainer.style.opacity = '1';
-                loginStage.classList.add('active');
+                    // Click to log back in
+                    const loginHandler = () => {
+                        loginContainer.removeEventListener('click', loginHandler);
+                        loginContainer.classList.add('fade-out');
 
-                // Close all windows
-                this.windowManager.windows.forEach((data, id) => {
-                    this.windowManager.closeWindow(id);
-                });
+                        setTimeout(() => {
+                            loginContainer.classList.add('hidden');
+                            loginContainer.classList.remove('active', 'fade-out');
+                            desktop.classList.remove('hidden');
+                        }, 300);
+                    };
+                    loginContainer.addEventListener('click', loginHandler);
+                }
             }, 500);
         }
     }

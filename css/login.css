@@ -74,8 +74,8 @@
 
 @media (max-width: 768px) {
     .login-image {
-        object-fit: contain;
-        background: #2952A3;
+        object-fit: cover;
+        object-position: center center;
     }
 
     .login-hit-area {
@@ -86,8 +86,8 @@
     }
 
     .welcome-image {
-        object-fit: contain;
-        background: #1a3180;
+        object-fit: cover;
+        object-position: center center;
     }
 }
 
@@ -126,7 +126,7 @@
 /* Landscape mode adjustments */
 @media (max-height: 500px) and (orientation: landscape) {
     .login-image {
-        object-fit: contain;
+        object-fit: cover;
     }
 
     .login-hit-area {
@@ -140,7 +140,7 @@
 /* Safe area support for notched phones */
 @supports (padding: max(0px)) {
     .login-container {
-        padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        padding: 0;
     }
 }
 
@@ -187,8 +187,8 @@
 /* Welcome screen responsive */
 @media (max-width: 768px) {
     .welcome-image {
-        object-fit: contain;
-        background: #1a3180;
+        object-fit: cover;
+        object-position: center center;
     }
 }
 
@@ -201,6 +201,6 @@
 /* Safe area for welcome screen */
 @supports (padding: max(0px)) {
     .welcome-container {
-        padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        padding: 0;
     }
 }
