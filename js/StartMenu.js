@@ -67,19 +67,30 @@ class StartMenu {
         const isMobileWidth = () => window.innerWidth <= 768;
 
         if (allProgramsBtn && allProgramsSubmenu) {
-            // On mobile, move submenu inside menu body for overlay effect
             const menuBody = this.menu.querySelector('.start-menu-body');
-            if (menuBody && isMobileWidth()) {
-                menuBody.appendChild(allProgramsSubmenu);
-            }
+            let movedToBody = false;
+
+            // Move submenu inside menu body for overlay on mobile
+            const ensureSubmenuPosition = () => {
+                if (isMobileWidth() && menuBody && !movedToBody) {
+                    menuBody.appendChild(allProgramsSubmenu);
+                    movedToBody = true;
+                }
+            };
 
             let allProgsLastTouch = 0;
 
             const toggleAllPrograms = () => {
-                allProgramsSubmenu.classList.toggle('hidden');
-                // Show/hide back button on mobile
-                if (allProgramsBack && isMobileWidth()) {
-                    allProgramsBack.classList.toggle('hidden', allProgramsSubmenu.classList.contains('hidden'));
+                ensureSubmenuPosition();
+                const isHidden = allProgramsSubmenu.classList.contains('hidden');
+                if (isHidden) {
+                    // Opening
+                    allProgramsSubmenu.classList.remove('hidden');
+                    if (allProgramsBack) allProgramsBack.classList.remove('hidden');
+                } else {
+                    // Closing
+                    allProgramsSubmenu.classList.add('hidden');
+                    if (allProgramsBack) allProgramsBack.classList.add('hidden');
                 }
             };
 
