@@ -105,7 +105,19 @@ class BootSequence {
         if (startupSound) {
             startupSound.volume = 0.7;
             startupSound.currentTime = 0;
-            startupSound.play().catch(() => {});
+            startupSound.play().catch(() => {
+                // Browser blocked autoplay - play on first user interaction
+                const playAudio = () => {
+                    startupSound.play().then(() => {
+                        document.removeEventListener('click', playAudio);
+                        document.removeEventListener('touchstart', playAudio);
+                        document.removeEventListener('keydown', playAudio);
+                    }).catch(() => {});
+                };
+                document.addEventListener('click', playAudio, { once: false });
+                document.addEventListener('touchstart', playAudio, { once: false });
+                document.addEventListener('keydown', playAudio, { once: false });
+            });
         }
 
         // Add selected state
