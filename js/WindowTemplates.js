@@ -18,8 +18,8 @@ const WindowTemplates = {
             <div class="explorer-toolbar" style="margin: -16px -16px 16px -16px; padding: 8px; background: #C0C0C0; border-bottom: 2px solid #808080;">
                 <button class="btn btn-sm btn-primary active" data-filter="all">All Projects</button>
                 <button class="btn btn-sm btn-secondary" data-filter="ui-ux">UI/UX</button>
-                <button class="btn btn-sm btn-secondary" data-filter="illustration">Illustration</button>
                 <button class="btn btn-sm btn-secondary" data-filter="industrial">Industrial Design</button>
+                <button class="btn btn-sm btn-secondary" data-filter="illustration">Illustration</button>
             </div>
             <div class="projects-grid" id="projects-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px;">
                 <!-- Projects rendered here -->
@@ -88,12 +88,35 @@ const WindowTemplates = {
                 .snake-info { font-size: 10px; color: #555; text-align: center; }
                 .snake-btn { padding: 4px 12px; font-size: 11px; cursor: pointer; border: 2px outset #e0e0e0; background: #c0c0c0; font-family: 'Segoe UI', Tahoma, sans-serif; }
                 .snake-btn:active { border-style: inset; }
+
+                /* Tetris Styles */
+                .tetris-container { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+                .tetris-header { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 4px 0; }
+                .tetris-stat { background: #000; color: #0ff; font-family: 'Consolas', 'Courier New', monospace; font-size: 13px; padding: 2px 8px; border: 1px inset #808080; min-width: 80px; text-align: center; }
+                .tetris-canvas { border: 3px inset #a0a0a0; background: #000; image-rendering: pixelated; }
+                .tetris-info { font-size: 10px; color: #555; text-align: center; }
+                .tetris-btn { padding: 4px 12px; font-size: 11px; cursor: pointer; border: 2px outset #e0e0e0; background: #c0c0c0; font-family: 'Segoe UI', Tahoma, sans-serif; }
+                .tetris-btn:active { border-style: inset; }
+                .tetris-side { display: flex; flex-direction: column; align-items: center; gap: 6px; margin-left: 10px; }
+                .tetris-next-canvas { border: 2px inset #808080; background: #111; }
+                .tetris-label { font-size: 10px; color: #555; font-weight: 600; }
+
+                /* Pong Styles */
+                .pong-container { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+                .pong-header { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 4px 0; }
+                .pong-score { background: #000; color: #fff; font-family: 'Consolas', 'Courier New', monospace; font-size: 16px; padding: 2px 8px; border: 1px inset #808080; min-width: 100px; text-align: center; }
+                .pong-canvas { border: 3px inset #a0a0a0; background: #000; }
+                .pong-info { font-size: 10px; color: #555; text-align: center; }
+                .pong-btn { padding: 4px 12px; font-size: 11px; cursor: pointer; border: 2px outset #e0e0e0; background: #c0c0c0; font-family: 'Segoe UI', Tahoma, sans-serif; }
+                .pong-btn:active { border-style: inset; }
             </style>
 
             <!-- Tab Bar -->
             <div class="games-tabs">
                 <div class="games-tab active" data-game="minesweeper">Minesweeper</div>
                 <div class="games-tab" data-game="snake">Snake</div>
+                <div class="games-tab" data-game="tetris">Tetris</div>
+                <div class="games-tab" data-game="pong">Pong</div>
             </div>
 
             <!-- Game Area -->
@@ -131,6 +154,20 @@ const WindowTemplates = {
             { src: 'assets/projects/firebox/context.png', label: 'FIREBOX — Context' },
             { src: 'assets/projects/firebox/carrying.png', label: 'FIREBOX — Carrying' },
             { src: 'assets/projects/firebox/product.png', label: 'FIREBOX — Product' },
+            { src: 'assets/projects/funcart/hero.png', label: 'FuncArt — Hero' },
+            { src: 'assets/projects/funcart/workflex.png', label: 'FuncArt — WorkFlex' },
+            { src: 'assets/projects/funcart/liftrack.png', label: 'FuncArt — LiftRack' },
+            { src: 'assets/projects/funcart/mobsit.png', label: 'FuncArt — MobSit' },
+            { src: 'assets/projects/funcart/workflow.png', label: 'FuncArt — Workflow' },
+            { src: 'assets/projects/funcart/features.png', label: 'FuncArt — Features' },
+            { src: 'assets/projects/funcart/workshop.png', label: 'FuncArt — Workshop' },
+            { src: 'assets/projects/gusto/hero.png', label: 'GUSTO — Hero' },
+            { src: 'assets/projects/gusto/context.png', label: 'GUSTO — Context' },
+            { src: 'assets/projects/gusto/colors.png', label: 'GUSTO — Colors' },
+            { src: 'assets/projects/gusto/technical.png', label: 'GUSTO — Technical' },
+            { src: 'assets/projects/gusto/design.png', label: 'GUSTO — Design' },
+            { src: 'assets/projects/gusto/overview.png', label: 'GUSTO — Overview' },
+            { src: 'assets/projects/gusto/exploded.png', label: 'GUSTO — Exploded' },
             { src: 'assets/projects/illustration/map-of-us.png', label: 'Map of Us' },
             { src: 'assets/projects/illustration/pet-portrait.png', label: 'Pet Portrait' },
             { src: 'assets/projects/illustration/character-expressions.png', label: 'Character Expressions' },
@@ -141,6 +178,7 @@ const WindowTemplates = {
             { src: 'assets/projects/illustration/wedding-vintage.png', label: 'Wedding Vintage' },
             { src: 'assets/projects/illustration/couple-portal.png', label: 'Couple Portal' },
             { src: 'assets/projects/illustration/valentines-day.png', label: 'Valentine\'s Day' },
+            { src: 'assets/projects/illustration/crispy-magic.png', label: 'Crispy Magic' },
         ];
         return `
         <div class="window-titlebar">
@@ -209,6 +247,7 @@ const WindowTemplates = {
             { src: 'assets/projects/illustration/wedding-vintage.png', label: 'Wedding Vintage' },
             { src: 'assets/projects/illustration/couple-portal.png', label: 'Couple Portal' },
             { src: 'assets/projects/illustration/valentines-day.png', label: 'Valentine\'s Day' },
+            { src: 'assets/projects/illustration/crispy-magic.png', label: 'Crispy Magic' },
         ];
         return `
         <div class="window-titlebar">
@@ -706,6 +745,316 @@ const WindowTemplates = {
         </div>
     `,
 
+    // FUNCART.exe - Modular Ceramic Studio System
+    funcart: () => `
+        <div class="window-titlebar">
+            <span class="window-title">🎨 FuncArt.exe — Modular Ceramic Studio System</span>
+            <div class="window-controls">
+                <button class="win-btn win-minimize" data-action="minimize">_</button>
+                <button class="win-btn win-maximize" data-action="maximize">□</button>
+                <button class="win-btn win-close" data-action="close">×</button>
+            </div>
+        </div>
+        <div class="window-content" style="padding: 0; display: flex; flex-direction: column; height: 100%; font-family: 'Segoe UI', Tahoma, sans-serif; font-size: 11px;">
+            <style>
+                .funcart-container { display: flex; flex: 1; min-height: 0; }
+                .funcart-gallery { width: 100px; background: #f0f0f0; border-right: 1px solid #a0a0a0; display: flex; flex-direction: column; padding: 8px; gap: 8px; overflow-y: auto; }
+                .funcart-gallery-title { font-size: 9px; font-weight: bold; color: #666; text-transform: uppercase; letter-spacing: 0.5px; padding-bottom: 6px; border-bottom: 1px solid #ccc; margin-bottom: 4px; }
+                .funcart-thumb { width: 100%; aspect-ratio: 1; background: #fff; border: 2px solid #c0c0c0; border-radius: 3px; cursor: pointer; overflow: hidden; transition: all 0.15s; }
+                .funcart-thumb:hover { border-color: #6b8e5a; transform: scale(1.02); }
+                .funcart-thumb.active { border-color: #6b8e5a; box-shadow: 0 0 0 2px rgba(107,142,90,0.3); }
+                .funcart-thumb img { width: 100%; height: 100%; object-fit: cover; }
+                .funcart-main { flex: 1; display: flex; flex-direction: column; background: #fff; min-width: 0; }
+                .funcart-header { padding: 12px 16px; background: linear-gradient(180deg, #6b8e5a 0%, #4a6e3a 100%); color: #fff; }
+                .funcart-header h2 { margin: 0; font-size: 14px; font-weight: 600; }
+                .funcart-header p { margin: 4px 0 0; font-size: 11px; opacity: 0.9; }
+                .funcart-content { flex: 1; display: flex; padding: 16px; gap: 16px; overflow: hidden; }
+                .funcart-preview { flex: 1; background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%); border: 2px solid #808080; border-radius: 4px; display: flex; align-items: center; justify-content: center; min-width: 0; position: relative; }
+                .funcart-preview img { max-width: 95%; max-height: 95%; object-fit: contain; border-radius: 4px; }
+                .funcart-info { width: 220px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; }
+                .funcart-info-box { background: #f4f8f2; border: 1px solid #c5d9b8; border-radius: 4px; padding: 12px; }
+                .funcart-info-title { font-size: 9px; font-weight: bold; color: #4a6e3a; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+                .funcart-info-text { font-size: 11px; color: #444; line-height: 1.6; }
+                .funcart-statusbar { padding: 6px 12px; background: linear-gradient(180deg, #e8e8e8 0%, #d0d0d0 100%); border-top: 1px solid #a0a0a0; display: flex; justify-content: space-between; font-size: 10px; color: #555; }
+                .funcart-status-item { display: flex; align-items: center; gap: 6px; }
+                .funcart-status-led { width: 8px; height: 8px; border-radius: 50%; background: #6b8e5a; box-shadow: 0 0 4px #6b8e5a; }
+            </style>
+
+            <div class="funcart-container">
+                <!-- Gallery Sidebar -->
+                <div class="funcart-gallery">
+                    <div class="funcart-gallery-title">Gallery</div>
+                    <div class="funcart-thumb active" data-img="assets/projects/funcart/hero.png" data-index="0">
+                        <img src="assets/projects/funcart/hero.png" alt="Hero" loading="lazy">
+                    </div>
+                    <div class="funcart-thumb" data-img="assets/projects/funcart/workflex.png" data-index="1">
+                        <img src="assets/projects/funcart/workflex.png" alt="WorkFlex" loading="lazy">
+                    </div>
+                    <div class="funcart-thumb" data-img="assets/projects/funcart/liftrack.png" data-index="2">
+                        <img src="assets/projects/funcart/liftrack.png" alt="LiftRack" loading="lazy">
+                    </div>
+                    <div class="funcart-thumb" data-img="assets/projects/funcart/mobsit.png" data-index="3">
+                        <img src="assets/projects/funcart/mobsit.png" alt="MobSit" loading="lazy">
+                    </div>
+                    <div class="funcart-thumb" data-img="assets/projects/funcart/workflow.png" data-index="4">
+                        <img src="assets/projects/funcart/workflow.png" alt="Workflow" loading="lazy">
+                    </div>
+                    <div class="funcart-thumb" data-img="assets/projects/funcart/features.png" data-index="5">
+                        <img src="assets/projects/funcart/features.png" alt="Features" loading="lazy">
+                    </div>
+                    <div class="funcart-thumb" data-img="assets/projects/funcart/workshop.png" data-index="6">
+                        <img src="assets/projects/funcart/workshop.png" alt="Workshop" loading="lazy">
+                    </div>
+                </div>
+
+                <!-- Main Area -->
+                <div class="funcart-main">
+                    <!-- Header -->
+                    <div class="funcart-header">
+                        <h2>FuncArt — Modular Ceramic Studio System</h2>
+                        <p>Adaptable furniture system for ceramic workshops • 2026 • Product Design</p>
+                    </div>
+
+                    <!-- Content Area -->
+                    <div class="funcart-content">
+                        <!-- Preview with Arrow Navigation -->
+                        <div class="funcart-preview">
+                            <button class="funcart-arrow funcart-arrow-left" id="funcart-prev" style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.9); border: 1px solid #ccc; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: all 0.15s;">❮</button>
+                            <img src="assets/projects/funcart/hero.png" alt="FuncArt" id="funcart-preview-img">
+                            <button class="funcart-arrow funcart-arrow-right" id="funcart-next" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.9); border: 1px solid #ccc; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: all 0.15s;">❯</button>
+                            <div class="funcart-counter" style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); color: #fff; padding: 4px 12px; border-radius: 12px; font-size: 11px;">1 / 7</div>
+                        </div>
+
+                        <!-- Info Panel - Scrollable Case Study -->
+                        <div class="funcart-info">
+                            <div class="funcart-info-box">
+                                <div class="funcart-info-title">Project Overview</div>
+                                <div class="funcart-info-text">
+                                    FuncArt is a modular furniture system designed for ceramic artists. It provides adaptable workstations that transform to support different stages of the creative process.
+                                </div>
+                            </div>
+
+                            <div class="funcart-info-box">
+                                <div class="funcart-info-title">The Challenge</div>
+                                <div class="funcart-info-text">
+                                    Ceramic artists work across multiple stages — wedging, throwing, trimming, glazing — each requiring different surfaces and heights. Traditional furniture forces a choice between specialized stations or generic tables.
+                                </div>
+                            </div>
+
+                            <div class="funcart-info-box">
+                                <div class="funcart-info-title">My Role</div>
+                                <div class="funcart-info-text">
+                                    <strong>Product Designer</strong><br>
+                                    User Research, Concept Development, Sketching, 3D Modeling (Rhino), Prototyping
+                                </div>
+                            </div>
+
+                            <div class="funcart-info-box">
+                                <div class="funcart-info-title">Key Features</div>
+                                <div class="funcart-info-text">
+                                    • Modular interlocking system<br>
+                                    • Water & glaze resistant surfaces<br>
+                                    • Sustainable materials (birch + steel)<br>
+                                    • Tool-free height adjustment<br>
+                                    • Lockable casters on all modules<br>
+                                    • Compact nested storage
+                                </div>
+                            </div>
+
+                            <div class="funcart-info-box">
+                                <div class="funcart-info-title">System Components</div>
+                                <div class="funcart-info-text">
+                                    <strong>WorkFlex:</strong> Adjustable worktable<br>
+                                    <strong>LiftRack:</strong> Drying/storage rack<br>
+                                    <strong>MobSit:</strong> Ergonomic mobile seat
+                                </div>
+                            </div>
+
+                            <div class="funcart-info-box">
+                                <div class="funcart-info-title">Specifications</div>
+                                <div class="funcart-info-text">
+                                    <strong>Material:</strong> Birch Plywood + Recycled Steel<br>
+                                    <strong>WorkFlex:</strong> 120×80cm<br>
+                                    <strong>LiftRack:</strong> 60×40cm<br>
+                                    <strong>Components:</strong> 3 modules
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status Bar -->
+                    <div class="funcart-statusbar">
+                        <div class="funcart-status-item">
+                            <div class="funcart-status-led"></div>
+                            <span>Industrial Design Project</span>
+                        </div>
+                        <div class="funcart-status-item">
+                            <span>Zeynep Erden • 2026</span>
+                        </div>
+                        <div class="funcart-status-item">
+                            <span>7 Renders</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `,
+
+    // GUSTO.exe - Personal Air Management Device
+    gusto: () => `
+        <div class="window-titlebar">
+            <span class="window-title">🌬️ GUSTO.exe — Personal Air Management Device</span>
+            <div class="window-controls">
+                <button class="win-btn win-minimize" data-action="minimize">_</button>
+                <button class="win-btn win-maximize" data-action="maximize">□</button>
+                <button class="win-btn win-close" data-action="close">×</button>
+            </div>
+        </div>
+        <div class="window-content" style="padding: 0; display: flex; flex-direction: column; height: 100%; font-family: 'Segoe UI', Tahoma, sans-serif; font-size: 11px;">
+            <style>
+                .gusto-container { display: flex; flex: 1; min-height: 0; }
+                .gusto-gallery { width: 100px; background: #f0f0f0; border-right: 1px solid #a0a0a0; display: flex; flex-direction: column; padding: 8px; gap: 8px; overflow-y: auto; }
+                .gusto-gallery-title { font-size: 9px; font-weight: bold; color: #666; text-transform: uppercase; letter-spacing: 0.5px; padding-bottom: 6px; border-bottom: 1px solid #ccc; margin-bottom: 4px; }
+                .gusto-thumb { width: 100%; aspect-ratio: 1; background: #fff; border: 2px solid #c0c0c0; border-radius: 3px; cursor: pointer; overflow: hidden; transition: all 0.15s; }
+                .gusto-thumb:hover { border-color: #6b3a3a; transform: scale(1.02); }
+                .gusto-thumb.active { border-color: #6b3a3a; box-shadow: 0 0 0 2px rgba(107,58,58,0.3); }
+                .gusto-thumb img { width: 100%; height: 100%; object-fit: cover; }
+                .gusto-main { flex: 1; display: flex; flex-direction: column; background: #fff; min-width: 0; }
+                .gusto-header { padding: 12px 16px; background: linear-gradient(180deg, #6b3a3a 0%, #4a2828 100%); color: #fff; }
+                .gusto-header h2 { margin: 0; font-size: 14px; font-weight: 600; }
+                .gusto-header p { margin: 4px 0 0; font-size: 11px; opacity: 0.9; }
+                .gusto-content { flex: 1; display: flex; padding: 16px; gap: 16px; overflow: hidden; }
+                .gusto-preview { flex: 1; background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%); border: 2px solid #808080; border-radius: 4px; display: flex; align-items: center; justify-content: center; min-width: 0; position: relative; }
+                .gusto-preview img { max-width: 95%; max-height: 95%; object-fit: contain; border-radius: 4px; }
+                .gusto-info { width: 220px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; }
+                .gusto-info-box { background: #f8f2f2; border: 1px solid #d9c0c0; border-radius: 4px; padding: 12px; }
+                .gusto-info-title { font-size: 9px; font-weight: bold; color: #6b3a3a; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+                .gusto-info-text { font-size: 11px; color: #444; line-height: 1.6; }
+                .gusto-statusbar { padding: 6px 12px; background: linear-gradient(180deg, #e8e8e8 0%, #d0d0d0 100%); border-top: 1px solid #a0a0a0; display: flex; justify-content: space-between; font-size: 10px; color: #555; }
+                .gusto-status-item { display: flex; align-items: center; gap: 6px; }
+                .gusto-status-led { width: 8px; height: 8px; border-radius: 50%; background: #6b3a3a; box-shadow: 0 0 4px #6b3a3a; }
+            </style>
+
+            <div class="gusto-container">
+                <!-- Gallery Sidebar -->
+                <div class="gusto-gallery">
+                    <div class="gusto-gallery-title">Gallery</div>
+                    <div class="gusto-thumb active" data-img="assets/projects/gusto/hero.png" data-index="0">
+                        <img src="assets/projects/gusto/hero.png" alt="Hero" loading="lazy">
+                    </div>
+                    <div class="gusto-thumb" data-img="assets/projects/gusto/context.png" data-index="1">
+                        <img src="assets/projects/gusto/context.png" alt="Context" loading="lazy">
+                    </div>
+                    <div class="gusto-thumb" data-img="assets/projects/gusto/colors.png" data-index="2">
+                        <img src="assets/projects/gusto/colors.png" alt="Colors" loading="lazy">
+                    </div>
+                    <div class="gusto-thumb" data-img="assets/projects/gusto/technical.png" data-index="3">
+                        <img src="assets/projects/gusto/technical.png" alt="Technical" loading="lazy">
+                    </div>
+                    <div class="gusto-thumb" data-img="assets/projects/gusto/design.png" data-index="4">
+                        <img src="assets/projects/gusto/design.png" alt="Design" loading="lazy">
+                    </div>
+                    <div class="gusto-thumb" data-img="assets/projects/gusto/overview.png" data-index="5">
+                        <img src="assets/projects/gusto/overview.png" alt="Overview" loading="lazy">
+                    </div>
+                    <div class="gusto-thumb" data-img="assets/projects/gusto/exploded.png" data-index="6">
+                        <img src="assets/projects/gusto/exploded.png" alt="Exploded" loading="lazy">
+                    </div>
+                </div>
+
+                <!-- Main Area -->
+                <div class="gusto-main">
+                    <!-- Header -->
+                    <div class="gusto-header">
+                        <h2>GUSTO — Personal Air Management Device</h2>
+                        <p>Compact air management for professional kitchens • 2026 • Product Design</p>
+                    </div>
+
+                    <!-- Content Area -->
+                    <div class="gusto-content">
+                        <!-- Preview with Arrow Navigation -->
+                        <div class="gusto-preview">
+                            <button id="gusto-prev" style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.9); border: 1px solid #ccc; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: all 0.15s;">❮</button>
+                            <img src="assets/projects/gusto/hero.png" alt="GUSTO" id="gusto-preview-img">
+                            <button id="gusto-next" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.9); border: 1px solid #ccc; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: all 0.15s;">❯</button>
+                            <div class="gusto-counter" style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); color: #fff; padding: 4px 12px; border-radius: 12px; font-size: 11px;">1 / 7</div>
+                        </div>
+
+                        <!-- Info Panel -->
+                        <div class="gusto-info">
+                            <div class="gusto-info-box">
+                                <div class="gusto-info-title">Project Overview</div>
+                                <div class="gusto-info-text">
+                                    A compact, personal air management solution for chefs in intense professional kitchens. Filters polluted air, neutralizes odors, circulates clean airflow, and diffuses calming aromas.
+                                </div>
+                            </div>
+
+                            <div class="gusto-info-box">
+                                <div class="gusto-info-title">The Challenge</div>
+                                <div class="gusto-info-text">
+                                    Professional kitchens are closed, hot, and poorly ventilated. Chefs face smoke, oil particles, heavy odors, and mental fatigue. Existing systems focus on the space, not the individual.
+                                </div>
+                            </div>
+
+                            <div class="gusto-info-box">
+                                <div class="gusto-info-title">My Role</div>
+                                <div class="gusto-info-text">
+                                    <strong>Product Designer</strong><br>
+                                    User Research, Persona Development, Concept Development, Sketching, 3D Modeling, Usage Scenario Design
+                                </div>
+                            </div>
+
+                            <div class="gusto-info-box">
+                                <div class="gusto-info-title">Key Features</div>
+                                <div class="gusto-info-text">
+                                    • Personal air filtering system<br>
+                                    • Odor neutralization & clean airflow<br>
+                                    • Integrated aroma diffusion<br>
+                                    • Compact, portable countertop form<br>
+                                    • Quiet fan for pro kitchens<br>
+                                    • Type-C charging & rechargeable<br>
+                                    • Soft-touch ergonomic surface<br>
+                                    • Multiple color variations
+                                </div>
+                            </div>
+
+                            <div class="gusto-info-box">
+                                <div class="gusto-info-title">Design Approach</div>
+                                <div class="gusto-info-text">
+                                    Organic, protective forms follow airflow logic. The device acts as a personal breathing zone, supporting focus and comfort without disrupting workflow.
+                                </div>
+                            </div>
+
+                            <div class="gusto-info-box">
+                                <div class="gusto-info-title">Specifications</div>
+                                <div class="gusto-info-text">
+                                    <strong>Material:</strong> ABS + Soft-Touch Coating<br>
+                                    <strong>Size:</strong> 110mm (H) × 95mm (W)<br>
+                                    <strong>Charging:</strong> USB Type-C<br>
+                                    <strong>Colors:</strong> Deep Burgundy, Muted Purple, Midnight Blue
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status Bar -->
+                    <div class="gusto-statusbar">
+                        <div class="gusto-status-item">
+                            <div class="gusto-status-led"></div>
+                            <span>Industrial Design Project</span>
+                        </div>
+                        <div class="gusto-status-item">
+                            <span>Zeynep Erden • 2026</span>
+                        </div>
+                        <div class="gusto-status-item">
+                            <span>7 Renders</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `,
+
     // Zeyn Chat - MSN Messenger Style Chatbot (frameless - MSN has its own chrome)
     zeynshat: () => `
         <div class="window-titlebar" style="display: none;">
@@ -716,6 +1065,97 @@ const WindowTemplates = {
         </div>
         <div class="window-content" style="padding: 0; overflow: hidden; flex: 1; display: flex; border: none; background: transparent;">
             <iframe data-src="msn-chatbot.html" class="zeynshat-iframe" style="width: 100%; height: 100%; border: none; flex: 1;"></iframe>
+        </div>
+    `
+,
+
+    // Paint - MS Paint style drawing app
+    paint: () => `
+        <div class="window-titlebar">
+            <span class="window-title">🎨 Paint</span>
+            <div class="window-controls">
+                <button class="win-btn win-minimize" data-action="minimize">_</button>
+                <button class="win-btn win-maximize" data-action="maximize">□</button>
+                <button class="win-btn win-close" data-action="close">×</button>
+            </div>
+        </div>
+        <div class="window-content" style="padding: 0; display: flex; flex-direction: column; height: 100%; overflow: hidden; font-family: 'Segoe UI', Tahoma, sans-serif;">
+            <style>
+                .paint-menubar { display: flex; gap: 2px; padding: 1px 4px; background: #ece9d8; border-bottom: 1px solid #aca899; font-size: 11px; }
+                .paint-menu-item { padding: 2px 6px; cursor: pointer; color: #000; }
+                .paint-menu-item:hover { background: #316ac5; color: #fff; }
+                .paint-toolbar { display: flex; align-items: center; gap: 2px; padding: 2px 4px; background: #ece9d8; border-bottom: 1px solid #aca899; flex-wrap: wrap; }
+                .paint-tool { width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid transparent; font-size: 14px; border-radius: 2px; background: none; padding: 0; }
+                .paint-tool:hover { border-color: #c0c0c0; background: #e8e8e8; }
+                .paint-tool.active { border: 1px inset #808080; background: #d0d0d0; }
+                .paint-tool-sep { width: 1px; height: 22px; background: #aca899; margin: 0 2px; }
+                .paint-size-group { display: flex; align-items: center; gap: 4px; margin-left: 4px; font-size: 10px; color: #333; }
+                .paint-size-input { width: 36px; height: 18px; font-size: 10px; text-align: center; border: 1px inset #808080; }
+                .paint-body { flex: 1; display: flex; overflow: hidden; }
+                .paint-canvas-wrap { flex: 1; overflow: auto; background: #808080; display: flex; align-items: flex-start; justify-content: flex-start; padding: 4px; }
+                .paint-canvas { background: #fff; cursor: crosshair; border: 1px solid #000; }
+                .paint-colors { display: flex; align-items: center; gap: 1px; padding: 3px 4px; background: #ece9d8; border-top: 1px solid #aca899; }
+                .paint-color-current { display: flex; align-items: center; gap: 2px; margin-right: 6px; }
+                .paint-fg { width: 18px; height: 18px; border: 1px solid #808080; position: relative; z-index: 2; }
+                .paint-bg { width: 18px; height: 18px; border: 1px solid #808080; margin-left: -8px; margin-top: 6px; }
+                .paint-palette { display: flex; flex-wrap: wrap; gap: 1px; max-width: 340px; }
+                .paint-swatch { width: 14px; height: 14px; border: 1px solid #808080; cursor: pointer; }
+                .paint-swatch:hover { border-color: #fff; }
+                .paint-statusbar { font-size: 10px; color: #444; padding: 2px 6px; background: #ece9d8; border-top: 1px solid #aca899; display: flex; justify-content: space-between; }
+            </style>
+
+            <!-- Menu Bar -->
+            <div class="paint-menubar">
+                <div class="paint-menu-item" id="paint-file">File</div>
+                <div class="paint-menu-item" id="paint-edit">Edit</div>
+                <div class="paint-menu-item" id="paint-view">View</div>
+            </div>
+
+            <!-- Toolbar -->
+            <div class="paint-toolbar">
+                <button class="paint-tool active" data-tool="pencil" title="Pencil">✏️</button>
+                <button class="paint-tool" data-tool="brush" title="Brush">🖌️</button>
+                <button class="paint-tool" data-tool="eraser" title="Eraser">🧹</button>
+                <div class="paint-tool-sep"></div>
+                <button class="paint-tool" data-tool="line" title="Line">╱</button>
+                <button class="paint-tool" data-tool="rect" title="Rectangle">▢</button>
+                <button class="paint-tool" data-tool="circle" title="Ellipse">◯</button>
+                <button class="paint-tool" data-tool="fill" title="Fill">🪣</button>
+                <div class="paint-tool-sep"></div>
+                <button class="paint-tool" data-tool="text" title="Text">A</button>
+                <button class="paint-tool" data-tool="picker" title="Color Picker">💉</button>
+                <div class="paint-tool-sep"></div>
+                <div class="paint-size-group">
+                    Size: <input type="number" class="paint-size-input" id="paint-brush-size" value="2" min="1" max="50">
+                </div>
+                <div class="paint-tool-sep"></div>
+                <button class="paint-tool" id="paint-undo" title="Undo">↩</button>
+                <button class="paint-tool" id="paint-clear" title="Clear">🗑️</button>
+            </div>
+
+            <!-- Canvas -->
+            <div class="paint-body">
+                <div class="paint-canvas-wrap" id="paint-canvas-wrap">
+                    <canvas class="paint-canvas" id="paint-canvas" width="640" height="400"></canvas>
+                </div>
+            </div>
+
+            <!-- Color Palette -->
+            <div class="paint-colors">
+                <div class="paint-color-current">
+                    <div>
+                        <div class="paint-fg" id="paint-fg" style="background:#000"></div>
+                        <div class="paint-bg" id="paint-bg" style="background:#fff"></div>
+                    </div>
+                </div>
+                <div class="paint-palette" id="paint-palette"></div>
+            </div>
+
+            <!-- Status Bar -->
+            <div class="paint-statusbar">
+                <span id="paint-pos">0, 0</span>
+                <span id="paint-tool-name">Pencil</span>
+            </div>
         </div>
     `
 };

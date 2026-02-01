@@ -59,14 +59,24 @@ const projectsData = [
         }
     },
     {
-        id: 3,
-        title: 'Illustration',
-        category: 'illustration',
-        thumbnail: 'assets/projects/illustration/map-of-us.png',
-        description: 'Custom Illustrations & Digital Art',
+        id: 5,
+        title: 'GUSTO',
+        category: 'industrial',
+        thumbnail: 'assets/projects/gusto/hero.png',
+        description: 'Personal Air Management Device',
         featured: true,
-        year: '2025',
-        role: 'Illustrator (Digital Art, Character Design, Custom Portraits)'
+        year: '2026',
+        role: 'Product Designer (Research, Concept Development, 3D Modeling)'
+    },
+    {
+        id: 4,
+        title: 'FuncArt',
+        category: 'industrial',
+        thumbnail: 'assets/projects/funcart/hero.png',
+        description: 'Modular Ceramic Studio System',
+        featured: true,
+        year: '2026',
+        role: 'Product Designer (Research, Concept Development, 3D Modeling)'
     }
 ];
 
