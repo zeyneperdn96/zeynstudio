@@ -13,6 +13,32 @@ class StartMenu {
         this.setupEventListeners();
     }
 
+    // Helper: wrap touch handler with scroll detection
+    _addTouchWithScrollDetect(el, handler) {
+        let startX = 0, startY = 0, moved = false;
+
+        el.addEventListener('touchstart', (e) => {
+            const t = e.touches[0];
+            startX = t.clientX;
+            startY = t.clientY;
+            moved = false;
+        }, { passive: true });
+
+        el.addEventListener('touchmove', (e) => {
+            const t = e.touches[0];
+            if (Math.abs(t.clientX - startX) > 10 || Math.abs(t.clientY - startY) > 10) {
+                moved = true;
+            }
+        }, { passive: true });
+
+        el.addEventListener('touchend', (e) => {
+            if (moved) return; // was scrolling, ignore
+            e.preventDefault();
+            e.stopPropagation();
+            handler(e);
+        });
+    }
+
     setupEventListeners() {
         const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
@@ -25,9 +51,7 @@ class StartMenu {
         // Start button toggle - touch (for faster response on mobile)
         if (isTouchDevice) {
             let startTouchHandled = false;
-            this.startBtn.addEventListener('touchend', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
+            this._addTouchWithScrollDetect(this.startBtn, () => {
                 if (!startTouchHandled) {
                     startTouchHandled = true;
                     this.toggle();
@@ -45,17 +69,16 @@ class StartMenu {
 
             allProgramsBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                // Skip click if a touch just happened (prevents double-fire)
                 if (Date.now() - allProgsLastTouch < 500) return;
                 allProgramsSubmenu.classList.toggle('hidden');
             });
 
-            allProgramsBtn.addEventListener('touchend', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                allProgsLastTouch = Date.now();
-                allProgramsSubmenu.classList.toggle('hidden');
-            });
+            if (isTouchDevice) {
+                this._addTouchWithScrollDetect(allProgramsBtn, () => {
+                    allProgsLastTouch = Date.now();
+                    allProgramsSubmenu.classList.toggle('hidden');
+                });
+            }
 
             // Submenu item clicks
             allProgramsSubmenu.querySelectorAll('.all-programs-item').forEach(item => {
@@ -64,11 +87,12 @@ class StartMenu {
                     if (Date.now() - itemLastTouch < 500) return;
                     this.close();
                 });
-                item.addEventListener('touchend', (e) => {
-                    e.preventDefault();
-                    itemLastTouch = Date.now();
-                    this.close();
-                });
+                if (isTouchDevice) {
+                    this._addTouchWithScrollDetect(item, () => {
+                        itemLastTouch = Date.now();
+                        this.close();
+                    });
+                }
             });
         }
 
@@ -97,11 +121,12 @@ class StartMenu {
                 handleMenuItem(item);
             });
 
-            item.addEventListener('touchend', (e) => {
-                e.preventDefault();
-                lastTouch = Date.now();
-                handleMenuItem(item);
-            });
+            if (isTouchDevice) {
+                this._addTouchWithScrollDetect(item, () => {
+                    lastTouch = Date.now();
+                    handleMenuItem(item);
+                });
+            }
         });
 
         // Log Off / Shut Down
@@ -118,16 +143,16 @@ class StartMenu {
             this.handleShutDown();
         });
 
-        logoffBtn.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            logoffLastTouch = Date.now();
-            this.handleLogOff();
-        });
-        shutdownBtn.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            shutdownLastTouch = Date.now();
-            this.handleShutDown();
-        });
+        if (isTouchDevice) {
+            this._addTouchWithScrollDetect(logoffBtn, () => {
+                logoffLastTouch = Date.now();
+                this.handleLogOff();
+            });
+            this._addTouchWithScrollDetect(shutdownBtn, () => {
+                shutdownLastTouch = Date.now();
+                this.handleShutDown();
+            });
+        }
 
         // Click outside to close
         document.addEventListener('click', (e) => {

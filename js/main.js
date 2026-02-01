@@ -127,19 +127,50 @@ function setupDesktopIcons() {
             }
         });
 
-        // Touch support - improved for mobile
+        // Touch support - improved for mobile with scroll detection
         if (isTouchDevice) {
+            let touchStartX = 0;
+            let touchStartY = 0;
+            let touchMoved = false;
+
             icon.addEventListener('touchstart', (e) => {
                 // Clear any pending timeout
                 if (touchTimeout) {
                     clearTimeout(touchTimeout);
                     touchTimeout = null;
                 }
+                // Track start position for scroll detection
+                const touch = e.touches[0];
+                touchStartX = touch.clientX;
+                touchStartY = touch.clientY;
+                touchMoved = false;
                 // Add visual feedback
                 icon.classList.add('selected');
             }, { passive: true });
 
+            icon.addEventListener('touchmove', (e) => {
+                // If finger moved more than 10px, it's a scroll not a tap
+                const touch = e.touches[0];
+                const dx = Math.abs(touch.clientX - touchStartX);
+                const dy = Math.abs(touch.clientY - touchStartY);
+                if (dx > 10 || dy > 10) {
+                    touchMoved = true;
+                    icon.classList.remove('selected');
+                    if (touchTimeout) {
+                        clearTimeout(touchTimeout);
+                        touchTimeout = null;
+                    }
+                }
+            }, { passive: true });
+
             icon.addEventListener('touchend', (e) => {
+                // If user was scrolling, don't open anything
+                if (touchMoved) {
+                    touchMoved = false;
+                    icon.classList.remove('selected');
+                    return;
+                }
+
                 const currentTime = new Date().getTime();
                 const tapLength = currentTime - lastTap;
                 touchHandled = true;
@@ -161,14 +192,13 @@ function setupDesktopIcons() {
                     const windowId = icon.dataset.window;
                     window.windowManager.openWindow(windowId);
                 } else {
-                    // Single tap on mobile - open after brief delay
-                    // This allows for double-tap detection
+                    // Single tap on mobile - open after delay
                     if (isMobileWidth()) {
                         touchTimeout = setTimeout(() => {
                             const windowId = icon.dataset.window;
                             window.windowManager.openWindow(windowId);
                             touchTimeout = null;
-                        }, 250);
+                        }, 350);
                     }
                 }
                 lastTap = currentTime;
@@ -178,6 +208,8 @@ function setupDesktopIcons() {
             });
 
             icon.addEventListener('touchcancel', () => {
+                touchMoved = false;
+                icon.classList.remove('selected');
                 if (touchTimeout) {
                     clearTimeout(touchTimeout);
                     touchTimeout = null;
