@@ -672,6 +672,7 @@
             align-items: center;
             justify-content: center;
             background: #000;
+            min-height: 0;
         }
 
         .skill-video {
@@ -1229,6 +1230,29 @@
                 padding: 14px;
             }
 
+            /* Skill card - fix overlap on mobile */
+            .skill-row {
+                gap: 8px;
+            }
+
+            .skill-name {
+                font-size: 13px;
+                width: 75px;
+            }
+
+            .skill-bar {
+                height: 14px;
+            }
+
+            .skill-percent {
+                font-size: 8px;
+                width: 34px;
+            }
+
+            .skill-video-container {
+                margin-top: -80px;
+            }
+
             .passive {
                 padding: 10px;
                 gap: 10px;
@@ -1255,6 +1279,35 @@
             }
         }
 
+        @media (max-width: 390px) {
+            .card-wrapper {
+                flex: 0 0 260px;
+                height: 420px;
+            }
+
+            .skill-name {
+                font-size: 12px;
+                width: 65px;
+            }
+
+            .skill-bar {
+                height: 12px;
+            }
+
+            .skill-percent {
+                font-size: 7px;
+                width: 30px;
+            }
+
+            .skill-video-container {
+                margin-top: -60px;
+            }
+
+            .skills {
+                gap: 10px;
+            }
+        }
+
         /* Iframe/Embedded Mode - smaller header/footer */
         body.embedded .page-header {
             padding: 20px 20px 10px;
@@ -1276,6 +1329,27 @@
         body.embedded .page-footer {
             padding: 15px;
             font-size: 14px;
+        }
+
+        /* Embedded mobile - smaller cards for iframe */
+        @media (max-width: 480px) {
+            body.embedded .card-deck {
+                padding: 10px 20px 40px;
+                gap: 20px;
+            }
+
+            body.embedded .card-wrapper {
+                flex: 0 0 250px;
+                height: 400px;
+            }
+
+            body.embedded .skill-video-container {
+                margin-top: -50px;
+            }
+
+            body.embedded .page-header {
+                padding: 10px 10px 5px;
+            }
         }
     </style>
 </head>

@@ -74,8 +74,8 @@
 
 @media (max-width: 768px) {
     .login-image {
-        object-fit: cover;
-        object-position: center center;
+        object-fit: contain;
+        background: #2952A3;
     }
 
     .login-hit-area {
@@ -86,8 +86,8 @@
     }
 
     .welcome-image {
-        object-fit: cover;
-        object-position: center center;
+        object-fit: contain;
+        background: #1a3180;
     }
 }
 
@@ -126,7 +126,7 @@
 /* Landscape mode adjustments */
 @media (max-height: 500px) and (orientation: landscape) {
     .login-image {
-        object-fit: cover;
+        object-fit: contain;
     }
 
     .login-hit-area {
@@ -187,8 +187,8 @@
 /* Welcome screen responsive */
 @media (max-width: 768px) {
     .welcome-image {
-        object-fit: cover;
-        object-position: center center;
+        object-fit: contain;
+        background: #1a3180;
     }
 }
 
