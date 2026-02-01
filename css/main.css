@@ -3,6 +3,87 @@
    Extends Themesberg Windows 95 UI Kit
    ======================================== */
 
+/* ========================================
+   PROJECT LIGHTBOX
+   ======================================== */
+.project-lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.92);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.project-lightbox.active {
+    opacity: 1;
+}
+
+.project-lightbox img {
+    max-width: 92vw;
+    max-height: 92vh;
+    object-fit: contain;
+    border-radius: 4px;
+    cursor: default;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+.project-lightbox-close {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+}
+
+.project-lightbox-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* ========================================
+   PROJECT WINDOW MAXIMIZE IMPROVEMENTS
+   ======================================== */
+.window.maximized .metbic-info,
+.window.maximized .firebox-info,
+.window.maximized .funcart-info,
+.window.maximized .gusto-info,
+.window.maximized .msentry-info {
+    width: 280px;
+}
+
+.window.maximized .metbic-gallery,
+.window.maximized .firebox-gallery,
+.window.maximized .funcart-gallery,
+.window.maximized .gusto-gallery,
+.window.maximized .msentry-gallery {
+    width: 120px;
+}
+
+.window.maximized .metbic-thumb,
+.window.maximized .firebox-thumb,
+.window.maximized .funcart-thumb,
+.window.maximized .gusto-thumb,
+.window.maximized .msentry-thumb {
+    width: 100%;
+}
+
 /* Global overflow & overscroll prevention */
 html, body {
     overflow-x: hidden;

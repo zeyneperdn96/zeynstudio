@@ -501,11 +501,6 @@ class WindowManager {
             this.initializeMarinesentryWindow(windowEl);
         }
 
-        // MARINESENTRY.exe interactive window
-        if (windowId === 'marinesentry') {
-            this.initializeMarinesentryWindow(windowEl);
-        }
-
         // Gallery lightbox
         if (windowId === 'illustration' || windowId === 'illustrationWork') {
             this.initializeGalleryWindow(windowEl);
@@ -706,6 +701,9 @@ class WindowManager {
         if (previewImg) {
             previewImg.style.transition = 'opacity 0.15s ease';
         }
+
+        this.addProjectLightbox(windowEl, '#metbic-preview-img');
+        this.addProjectKeyboard(windowEl, updateGallery, () => currentIndex, () => totalImages);
     }
 
     initializeFireboxWindow(windowEl) {
@@ -779,58 +777,9 @@ class WindowManager {
         if (previewImg) {
             previewImg.style.transition = 'opacity 0.15s ease';
         }
-    }
 
-    initializeMarinesentryWindow(windowEl) {
-        const previewImg = windowEl.querySelector('#msentry-preview-img');
-        const thumbs = windowEl.querySelectorAll('.msentry-thumb');
-        const prevBtn = windowEl.querySelector('#msentry-prev');
-        const nextBtn = windowEl.querySelector('#msentry-next');
-        const counter = windowEl.querySelector('.msentry-counter');
-
-        let currentIndex = 0;
-        const totalImages = thumbs.length;
-
-        const updateGallery = (index) => {
-            currentIndex = index;
-            if (currentIndex < 0) currentIndex = totalImages - 1;
-            if (currentIndex >= totalImages) currentIndex = 0;
-
-            const targetThumb = thumbs[currentIndex];
-            const imgSrc = targetThumb.dataset.img;
-
-            thumbs.forEach(t => t.classList.remove('active'));
-            targetThumb.classList.add('active');
-
-            if (imgSrc && previewImg) {
-                previewImg.style.opacity = '0';
-                setTimeout(() => {
-                    previewImg.src = imgSrc;
-                    previewImg.style.opacity = '1';
-                }, 150);
-            }
-
-            if (counter) {
-                counter.textContent = `${currentIndex + 1} / ${totalImages}`;
-            }
-
-            targetThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        };
-
-        if (prevBtn) {
-            prevBtn.addEventListener('click', () => updateGallery(currentIndex - 1));
-        }
-        if (nextBtn) {
-            nextBtn.addEventListener('click', () => updateGallery(currentIndex + 1));
-        }
-
-        thumbs.forEach((thumb, index) => {
-            thumb.addEventListener('click', () => updateGallery(index));
-        });
-
-        if (previewImg) {
-            previewImg.style.transition = 'opacity 0.15s ease';
-        }
+        this.addProjectLightbox(windowEl, '#firebox-preview-img');
+        this.addProjectKeyboard(windowEl, updateGallery, () => currentIndex, () => totalImages);
     }
 
     initializeMarinesentryWindow(windowEl) {
@@ -885,6 +834,9 @@ class WindowManager {
         if (nextBtn) nextBtn.addEventListener('click', () => updateGallery(currentIndex + 1));
         thumbs.forEach((thumb, index) => thumb.addEventListener('click', () => updateGallery(index)));
         if (previewImg) previewImg.style.transition = 'opacity 0.15s ease';
+
+        this.addProjectLightbox(windowEl, '#msentry-preview-img');
+        this.addProjectKeyboard(windowEl, updateGallery, () => currentIndex, () => totalImages);
     }
 
     initializeGustoWindow(windowEl) {
@@ -937,6 +889,9 @@ class WindowManager {
         if (previewImg) {
             previewImg.style.transition = 'opacity 0.15s ease';
         }
+
+        this.addProjectLightbox(windowEl, '#gusto-preview-img');
+        this.addProjectKeyboard(windowEl, updateGallery, () => currentIndex, () => totalImages);
     }
 
     initializeFuncartWindow(windowEl) {
@@ -988,6 +943,50 @@ class WindowManager {
 
         if (previewImg) {
             previewImg.style.transition = 'opacity 0.15s ease';
+        }
+
+        this.addProjectLightbox(windowEl, '#funcart-preview-img');
+        this.addProjectKeyboard(windowEl, updateGallery, () => currentIndex, () => totalImages);
+    }
+
+    // ========== SHARED: Lightbox + Keyboard for project windows ==========
+    openLightbox(src) {
+        if (!src || src.endsWith('.mp4')) return;
+        const overlay = document.createElement('div');
+        overlay.className = 'project-lightbox';
+        overlay.innerHTML = `
+            <button class="project-lightbox-close">&times;</button>
+            <img src="${src}" alt="Preview">
+        `;
+        document.body.appendChild(overlay);
+        requestAnimationFrame(() => overlay.classList.add('active'));
+
+        const close = () => {
+            overlay.classList.remove('active');
+            setTimeout(() => overlay.remove(), 200);
+            document.removeEventListener('keydown', escHandler);
+        };
+        const escHandler = (e) => { if (e.key === 'Escape') close(); };
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay || e.target.classList.contains('project-lightbox-close')) close();
+        });
+        document.addEventListener('keydown', escHandler);
+    }
+
+    addProjectKeyboard(windowEl, updateGalleryFn, getCurrentIndex, getTotal) {
+        windowEl.setAttribute('tabindex', '0');
+        windowEl.focus();
+        windowEl.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') { e.preventDefault(); updateGalleryFn(getCurrentIndex() - 1); }
+            if (e.key === 'ArrowRight') { e.preventDefault(); updateGalleryFn(getCurrentIndex() + 1); }
+        });
+    }
+
+    addProjectLightbox(windowEl, previewImgSelector) {
+        const img = windowEl.querySelector(previewImgSelector);
+        if (img) {
+            img.style.cursor = 'zoom-in';
+            img.addEventListener('click', () => this.openLightbox(img.src));
         }
     }
 
