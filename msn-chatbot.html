@@ -416,7 +416,7 @@
 
         .wlm-conversation {
             background: #fff;
-            height: 220px;
+            height: 320px;
             overflow-y: auto;
             padding: 10px 12px;
             font-size: 12px;
@@ -1421,7 +1421,7 @@
             }
 
             .wlm-conversation {
-                height: 180px;
+                height: 260px;
             }
 
             .wlm-toolbar {
@@ -1458,7 +1458,7 @@
             }
 
             .wlm-conversation {
-                height: 150px;
+                height: 220px;
                 font-size: 11px;
             }
 
@@ -1602,7 +1602,7 @@
 
         <!-- Wink Overlay -->
         <div class="wlm-wink-overlay" id="winkOverlay">
-            <div class="wlm-wink-content" id="winkContent">😘</div>
+            <div class="wlm-wink-content" id="winkContent">😄</div>
         </div>
 
         <!-- Input Section -->
@@ -1628,9 +1628,9 @@
             <div class="wlm-wink-picker" id="winkPicker">
                 <div class="wlm-wink-picker-title">Choose a Wink</div>
                 <div class="wlm-wink-grid">
-                    <div class="wlm-wink-item" data-wink="😘" data-name="Kiss" data-anim="heartbeat">
-                        😘
-                        <div class="wlm-wink-item-label">Kiss</div>
+                    <div class="wlm-wink-item" data-wink="😄" data-name="Smile" data-anim="heartbeat">
+                        😄
+                        <div class="wlm-wink-item-label">Smile</div>
                     </div>
                     <div class="wlm-wink-item" data-wink="😍" data-name="In Love" data-anim="heartbeat">
                         😍
@@ -1664,9 +1664,9 @@
                         🦋
                         <div class="wlm-wink-item-label">Butterfly</div>
                     </div>
-                    <div class="wlm-wink-item" data-wink="💋" data-name="Lips" data-anim="heartbeat">
-                        💋
-                        <div class="wlm-wink-item-label">Lips</div>
+                    <div class="wlm-wink-item" data-wink="😂" data-name="Laugh" data-anim="dancing">
+                        😂
+                        <div class="wlm-wink-item-label">Laugh</div>
                     </div>
                     <div class="wlm-wink-item" data-wink="🎸" data-name="Guitar" data-anim="dancing">
                         🎸
@@ -1724,11 +1724,7 @@
             </div>
         </div>
 
-        <!-- Status Bar -->
-        <div class="wlm-statusbar">
-            <span>Last activity: <span id="lastActivity">now</span></span>
-            <a href="https://zeynstudio.com" target="_blank">zeynstudio.com</a>
-        </div>
+        <!-- Status Bar removed -->
 
         <!-- Contact Card -->
         <div class="wlm-contact-card" id="contactCard">
@@ -1827,7 +1823,7 @@
             const visitorAvatar = document.getElementById('visitorAvatar');
             const statusDropdown = document.getElementById('statusDropdown');
             const nowPlayingText = document.getElementById('nowPlayingText');
-            const lastActivity = document.getElementById('lastActivity');
+            const lastActivity = document.getElementById('lastActivity'); // may be null if statusbar removed
 
             // Sound elements
             const sndMessage = document.getElementById('sndMessage');
@@ -1910,7 +1906,7 @@
                     gameGuess: 'Sayı Tahmin',
 
                     // Wink labels
-                    winkKiss: 'Öpücük',
+                    winkKiss: 'Gülümse',
                     winkLove: 'Aşık',
                     winkParty: 'Parti',
                     winkRose: 'Gül',
@@ -1919,7 +1915,7 @@
                     winkFire: 'Ateş',
                     winkStar: 'Yıldız',
                     winkButterfly: 'Kelebek',
-                    winkLips: 'Dudak',
+                    winkLips: 'Kahkaha',
                     winkGuitar: 'Gitar',
                     winkRainbow: 'Gökkuşağı',
 
@@ -2042,7 +2038,7 @@
                     gameGuess: 'Number Guess',
 
                     // Wink labels
-                    winkKiss: 'Kiss',
+                    winkKiss: 'Smile',
                     winkLove: 'In Love',
                     winkParty: 'Party',
                     winkRose: 'Rose',
@@ -2051,7 +2047,7 @@
                     winkFire: 'Fire',
                     winkStar: 'Star',
                     winkButterfly: 'Butterfly',
-                    winkLips: 'Lips',
+                    winkLips: 'Laugh',
                     winkGuitar: 'Guitar',
                     winkRainbow: 'Rainbow',
 
@@ -2108,11 +2104,11 @@
                     guessLower: 'Lower! ⬇️',
 
                     // Bot responses
-                    welcome: 'Hi! Welcome to my portfolio 👋\n\n🎮 Play games using the Games button!\n📳 Send nudges and winks!',
+                    welcome: 'Hi! Welcome to my portfolio 👋\n\n🎮 Try the Games button in the toolbar!\n📳 You can also send nudges and animations!',
                     fallbacks: [
-                        'I didn\'t quite understand 🙂 Try "projects" or "game"!',
-                        'Hmm? 🤔 Want to play a game?',
-                        'Didn\'t get that but no worries! Send a wink or nudge 😉'
+                        'I didn\'t quite catch that 🙂 Try asking about "projects" or "games"!',
+                        'Hmm? 🤔 Would you like to play a game?',
+                        'Not sure I follow, but no worries! Try exploring the toolbar features 🙂'
                     ]
                 }
             };
@@ -2124,7 +2120,7 @@
                     responses: [
                         'I\'m Zeynep Erden 🙋‍♀️\nI work on UI/UX design, digital products and creative experiences.',
                         'Zeynep here 🙋‍♀️\nI specialize in interface design and user experience.',
-                        'I\'m Zeynep! ✨\nI tell stories through digital design.'
+                        'I\'m Zeynep! ✨\nI bring ideas to life through digital design.'
                     ]
                 },
                 {
@@ -2152,7 +2148,7 @@
                     keywords: ['thank', 'thanks'],
                     responses: [
                         'You\'re welcome! 😄',
-                        'No problem! I\'m always here 🙂'
+                        'No problem! Happy to help 🙂'
                     ]
                 },
                 {
@@ -2173,8 +2169,8 @@
                 {
                     keywords: ['nice', 'great', 'cool', 'awesome'],
                     responses: [
-                        'Thanks! 🥰',
-                        'Yaay! Glad you like it 😊'
+                        'Thanks! Appreciate it 😊',
+                        'Glad you like it! 😊'
                     ]
                 }
             ];
@@ -2216,7 +2212,7 @@
                 { code: ':)', emoji: '😊' }, { code: ':D', emoji: '😄' },
                 { code: ';)', emoji: '😉' }, { code: ':P', emoji: '😛' },
                 { code: ':(', emoji: '😢' }, { code: ':O', emoji: '😮' },
-                { code: '<3', emoji: '❤️' }, { code: ':*', emoji: '😘' },
+                { code: '<3', emoji: '❤️' }, { code: ':*', emoji: '😄' },
                 { code: 'B)', emoji: '😎' }, { code: ':|', emoji: '😐' },
                 { code: ':S', emoji: '😖' }, { code: '^_^', emoji: '😁' },
                 { code: 'xD', emoji: '🤣' }, { code: '-_-', emoji: '😑' },
@@ -2230,7 +2226,7 @@
             const symbols = [
                 { code: '(Y)', emoji: '👍' }, { code: '(N)', emoji: '👎' },
                 { code: '(H)', emoji: '🌞' }, { code: '(F)', emoji: '🌸' },
-                { code: '(K)', emoji: '💋' }, { code: '(G)', emoji: '🎁' },
+                { code: '(K)', emoji: '😂' }, { code: '(G)', emoji: '🎁' },
                 { code: '(^)', emoji: '🎂' }, { code: '(I)', emoji: '💡' },
                 { code: '(C)', emoji: '☕' }, { code: '(B)', emoji: '🍺' },
                 { code: '(D)', emoji: '🍸' }, { code: '(X)', emoji: '👧' },
@@ -2348,7 +2344,7 @@
             }
 
             function updateLastActivity() {
-                lastActivity.textContent = getTime();
+                if (lastActivity) lastActivity.textContent = getTime();
             }
 
             function updateNowPlaying() {
@@ -2449,8 +2445,9 @@
                 gameOptions[1].innerHTML = '<span>✊✋✌️</span> ' + t('gameRPS');
                 gameOptions[2].innerHTML = '<span>🔢</span> ' + t('gameGuess');
 
-                // Update status bar
-                document.querySelector('.wlm-statusbar span').innerHTML = t('lastActivity') + ' <span id="lastActivity">' + t('now') + '</span>';
+                // Update status bar (removed)
+                const statusbarSpan = document.querySelector('.wlm-statusbar span');
+                if (statusbarSpan) statusbarSpan.innerHTML = t('lastActivity') + ' <span id="lastActivity">' + t('now') + '</span>';
 
                 // Update contact card
                 const cardInfos = document.querySelectorAll('.wlm-card-info-label');
@@ -2726,7 +2723,7 @@
                     chatWindow.classList.add('nudge');
                     playSound('sndNudge');
                     setTimeout(() => chatWindow.classList.remove('nudge'), 400);
-                    const nudgeResponse = currentLang === 'en' ? 'Ooh a nudge! xD What\'s up?' : 'Aaa titreşim! xD Ne var ne yok?';
+                    const nudgeResponse = currentLang === 'en' ? 'A nudge! Classic move 😄 What\'s on your mind?' : 'Aaa titreşim! xD Ne var ne yok?';
                     const nudgeNotif = currentLang === 'en' ? 'Zeynep sent you a nudge!' : 'Zeynep sana bir titreşim gönderdi!';
                     addMessage('zeynep', 'Zeynep', nudgeResponse);
                     showNotification(nudgeNotif);
@@ -2747,14 +2744,14 @@
                 addMessage('wink', null, winkMsg);
 
                 setTimeout(() => {
-                    const responseWinks = ['😘', '🥰', '💕', '😊'];
+                    const responseWinks = ['😄', '🥰', '✨', '😊'];
                     winkContent.textContent = responseWinks[Math.floor(Math.random() * responseWinks.length)];
                     winkContent.className = 'wlm-wink-content heartbeat';
                     winkOverlay.classList.add('show');
                     playSound('sndMessage');
                     setTimeout(() => winkOverlay.classList.remove('show'), 1500);
 
-                    addMessage('zeynep', 'Zeynep', currentLang === 'en' ? 'Aww what a cute wink! 😘 That\'s the MSN spirit!' : 'Aww ne tatlı bir wink! 😘 İşte bu MSN ruhu!');
+                    addMessage('zeynep', 'Zeynep', currentLang === 'en' ? 'Nice one! That\'s the MSN spirit! ✨' : 'Aww ne tatlı bir wink! 😄 İşte bu MSN ruhu!');
                 }, 2200);
             }
 
