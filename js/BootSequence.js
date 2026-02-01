@@ -43,6 +43,24 @@ class BootSequence {
             this.clickCatcher.classList.add('hidden');
         }
 
+        // Pre-load startup sound and try to play early
+        this.startupSound = document.getElementById('xp-startup-sound');
+        this.soundPlayed = false;
+        this._tryPlaySound();
+
+        // On mobile: queue sound for first user interaction
+        if (!this.soundPlayed) {
+            const playOnInteraction = () => {
+                this._tryPlaySound();
+                document.removeEventListener('click', playOnInteraction);
+                document.removeEventListener('touchstart', playOnInteraction);
+                document.removeEventListener('touchend', playOnInteraction);
+            };
+            document.addEventListener('click', playOnInteraction);
+            document.addEventListener('touchstart', playOnInteraction);
+            document.addEventListener('touchend', playOnInteraction);
+        }
+
         // Play boot video
         if (this.bootVideo) {
             try {
@@ -66,6 +84,18 @@ class BootSequence {
                 this.showLoginScreen();
             }
         }
+    }
+
+    _tryPlaySound() {
+        if (this.soundPlayed || !this.startupSound) return;
+        this.startupSound.volume = 0.7;
+        this.startupSound.currentTime = 0;
+        this.startupSound.play().then(() => {
+            this.soundPlayed = true;
+            console.log('Startup sound playing');
+        }).catch(() => {
+            console.log('Sound autoplay blocked, waiting for interaction');
+        });
     }
 
     showLoginScreen() {
@@ -100,25 +130,8 @@ class BootSequence {
 
         console.log('Login hit area clicked...');
 
-        // Play XP startup sound right after login screen
-        const startupSound = document.getElementById('xp-startup-sound');
-        if (startupSound) {
-            startupSound.volume = 0.7;
-            startupSound.currentTime = 0;
-            startupSound.play().catch(() => {
-                // Browser blocked autoplay - play on first user interaction
-                const playAudio = () => {
-                    startupSound.play().then(() => {
-                        document.removeEventListener('click', playAudio);
-                        document.removeEventListener('touchstart', playAudio);
-                        document.removeEventListener('keydown', playAudio);
-                    }).catch(() => {});
-                };
-                document.addEventListener('click', playAudio, { once: false });
-                document.addEventListener('touchstart', playAudio, { once: false });
-                document.addEventListener('keydown', playAudio, { once: false });
-            });
-        }
+        // Try to play sound if not yet played
+        this._tryPlaySound();
 
         // Add selected state
         if (this.loginHitArea) {
