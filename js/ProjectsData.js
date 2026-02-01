@@ -69,6 +69,16 @@ const projectsData = [
         role: 'Product Designer (Research, Concept Development, 3D Modeling)'
     },
     {
+        id: 6,
+        title: 'MarineSentry',
+        category: 'industrial',
+        thumbnail: 'assets/projects/marinesentry/hero.png',
+        description: 'Decision-Support Underwater Drone',
+        featured: true,
+        year: '2026',
+        role: 'Product Designer (Research, Concept Development, 3D Modeling)'
+    },
+    {
         id: 4,
         title: 'FuncArt',
         category: 'industrial',

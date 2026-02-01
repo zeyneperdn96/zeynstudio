@@ -168,6 +168,11 @@ const WindowTemplates = {
             { src: 'assets/projects/gusto/design.png', label: 'GUSTO — Design' },
             { src: 'assets/projects/gusto/overview.png', label: 'GUSTO — Overview' },
             { src: 'assets/projects/gusto/exploded.png', label: 'GUSTO — Exploded' },
+            { src: 'assets/projects/marinesentry/hero.png', label: 'MarineSentry — Hero' },
+            { src: 'assets/projects/marinesentry/render.png', label: 'MarineSentry — Render' },
+            { src: 'assets/projects/marinesentry/exploded.png', label: 'MarineSentry — Exploded' },
+            { src: 'assets/projects/marinesentry/board.png', label: 'MarineSentry — Board' },
+            { src: 'assets/projects/marinesentry/components.png', label: 'MarineSentry — Components' },
             { src: 'assets/projects/illustration/map-of-us.png', label: 'Map of Us' },
             { src: 'assets/projects/illustration/pet-portrait.png', label: 'Pet Portrait' },
             { src: 'assets/projects/illustration/character-expressions.png', label: 'Character Expressions' },
@@ -893,6 +898,142 @@ const WindowTemplates = {
                         </div>
                         <div class="funcart-status-item">
                             <span>7 Renders</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `,
+
+    // MARINESENTRY.exe - Decision-Support Underwater Drone
+    marinesentry: () => `
+        <div class="window-titlebar">
+            <span class="window-title">🌊 MarineSentry.exe — Underwater Drone</span>
+            <div class="window-controls">
+                <button class="win-btn win-minimize" data-action="minimize">_</button>
+                <button class="win-btn win-maximize" data-action="maximize">□</button>
+                <button class="win-btn win-close" data-action="close">×</button>
+            </div>
+        </div>
+        <div class="window-content" style="padding: 0; display: flex; flex-direction: column; height: 100%; font-family: 'Segoe UI', Tahoma, sans-serif; font-size: 11px;">
+            <style>
+                .msentry-container { display: flex; flex: 1; min-height: 0; }
+                .msentry-gallery { width: 100px; background: #f0f0f0; border-right: 1px solid #a0a0a0; display: flex; flex-direction: column; padding: 8px; gap: 8px; overflow-y: auto; }
+                .msentry-gallery-title { font-size: 9px; font-weight: bold; color: #666; text-transform: uppercase; letter-spacing: 0.5px; padding-bottom: 6px; border-bottom: 1px solid #ccc; margin-bottom: 4px; }
+                .msentry-thumb { width: 100%; aspect-ratio: 1; background: #fff; border: 2px solid #c0c0c0; border-radius: 3px; cursor: pointer; overflow: hidden; transition: all 0.15s; }
+                .msentry-thumb:hover { border-color: #e07020; transform: scale(1.02); }
+                .msentry-thumb.active { border-color: #e07020; box-shadow: 0 0 0 2px rgba(224,112,32,0.3); }
+                .msentry-thumb img { width: 100%; height: 100%; object-fit: cover; }
+                .msentry-main { flex: 1; display: flex; flex-direction: column; background: #fff; min-width: 0; }
+                .msentry-header { padding: 12px 16px; background: linear-gradient(180deg, #2a3a4a 0%, #1a2a3a 100%); color: #fff; }
+                .msentry-header h2 { margin: 0; font-size: 14px; font-weight: 600; }
+                .msentry-header p { margin: 4px 0 0; font-size: 11px; opacity: 0.9; }
+                .msentry-content { flex: 1; display: flex; padding: 16px; gap: 16px; overflow: hidden; }
+                .msentry-preview { flex: 1; background: linear-gradient(135deg, #0a1520 0%, #1a2a3a 100%); border: 2px solid #808080; border-radius: 4px; display: flex; align-items: center; justify-content: center; min-width: 0; position: relative; }
+                .msentry-preview img { max-width: 95%; max-height: 95%; object-fit: contain; border-radius: 4px; }
+                .msentry-info { width: 220px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; }
+                .msentry-info-box { background: #f0f5fa; border: 1px solid #b8d0e8; border-radius: 4px; padding: 12px; }
+                .msentry-info-title { font-size: 9px; font-weight: bold; color: #2a5a8a; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+                .msentry-info-text { font-size: 11px; color: #444; line-height: 1.6; }
+                .msentry-statusbar { padding: 6px 12px; background: linear-gradient(180deg, #e8e8e8 0%, #d0d0d0 100%); border-top: 1px solid #a0a0a0; display: flex; justify-content: space-between; font-size: 10px; color: #555; }
+                .msentry-status-item { display: flex; align-items: center; gap: 6px; }
+                .msentry-status-led { width: 8px; height: 8px; border-radius: 50%; background: #e07020; box-shadow: 0 0 4px #e07020; }
+            </style>
+
+            <div class="msentry-container">
+                <div class="msentry-gallery">
+                    <div class="msentry-gallery-title">Gallery</div>
+                    <div class="msentry-thumb active" data-video="assets/projects/marinesentry/video.mp4" data-index="0">
+                        <div style="width:100%;height:100%;background:#1a2a3a;display:flex;align-items:center;justify-content:center;color:#e07020;font-size:24px;">&#9654;</div>
+                    </div>
+                    <div class="msentry-thumb" data-img="assets/projects/marinesentry/hero.png" data-index="1">
+                        <img src="assets/projects/marinesentry/hero.png" alt="Hero" loading="lazy">
+                    </div>
+                    <div class="msentry-thumb" data-img="assets/projects/marinesentry/render.png" data-index="2">
+                        <img src="assets/projects/marinesentry/render.png" alt="Render" loading="lazy">
+                    </div>
+                    <div class="msentry-thumb" data-img="assets/projects/marinesentry/exploded.png" data-index="3">
+                        <img src="assets/projects/marinesentry/exploded.png" alt="Exploded" loading="lazy">
+                    </div>
+                    <div class="msentry-thumb" data-img="assets/projects/marinesentry/board.png" data-index="4">
+                        <img src="assets/projects/marinesentry/board.png" alt="Board" loading="lazy">
+                    </div>
+                    <div class="msentry-thumb" data-img="assets/projects/marinesentry/components.png" data-index="5">
+                        <img src="assets/projects/marinesentry/components.png" alt="Components" loading="lazy">
+                    </div>
+                </div>
+
+                <div class="msentry-main">
+                    <div class="msentry-header">
+                        <h2>MarineSentry — Decision-Support Underwater Drone</h2>
+                        <p>Compact underwater drone for rescue & inspection • 2026 • Product Design</p>
+                    </div>
+
+                    <div class="msentry-content">
+                        <div class="msentry-preview">
+                            <button id="msentry-prev" style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.9); border: 1px solid #ccc; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: all 0.15s;">❮</button>
+                            <video src="assets/projects/marinesentry/video.mp4" id="msentry-preview-video" controls autoplay style="max-width:95%;max-height:95%;border-radius:4px;"></video>
+                            <img src="assets/projects/marinesentry/hero.png" alt="MarineSentry" id="msentry-preview-img" style="display:none;">
+                            <button id="msentry-next" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.9); border: 1px solid #ccc; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: all 0.15s;">❯</button>
+                            <div class="msentry-counter" style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); color: #fff; padding: 4px 12px; border-radius: 12px; font-size: 11px;">1 / 6</div>
+                        </div>
+
+                        <div class="msentry-info">
+                            <div class="msentry-info-box">
+                                <div class="msentry-info-title">Project Overview</div>
+                                <div class="msentry-info-text">
+                                    A compact, decision-support underwater drone for low-visibility rescue and inspection. Provides sonar and thermal data before human entry, enabling safer rescue decisions.
+                                </div>
+                            </div>
+
+                            <div class="msentry-info-box">
+                                <div class="msentry-info-title">The Challenge</div>
+                                <div class="msentry-info-text">
+                                    Underwater rescue operations take place in zero-visibility conditions. Divers enter blindly, increasing risk, response time, and uncertainty during critical moments.
+                                </div>
+                            </div>
+
+                            <div class="msentry-info-box">
+                                <div class="msentry-info-title">My Role</div>
+                                <div class="msentry-info-text">
+                                    <strong>Product Designer</strong><br>
+                                    User Research, Problem Definition, Concept Development, Industrial Design, System Logic, 3D Modeling, Visual Storytelling
+                                </div>
+                            </div>
+
+                            <div class="msentry-info-box">
+                                <div class="msentry-info-title">Key Features</div>
+                                <div class="msentry-info-text">
+                                    • Sonar-based zero-visibility detection<br>
+                                    • Thermal heat signature sensing<br>
+                                    • Human-centered decision workflow<br>
+                                    • Compact deploy-before-dive system<br>
+                                    • Guidance without replacing judgment
+                                </div>
+                            </div>
+
+                            <div class="msentry-info-box">
+                                <div class="msentry-info-title">Specifications</div>
+                                <div class="msentry-info-text">
+                                    <strong>Material:</strong> Polycarbonate + PU Foam<br>
+                                    <strong>Propulsion:</strong> Dual thrusters<br>
+                                    <strong>Sensors:</strong> Sonar, Thermal camera<br>
+                                    <strong>Colors:</strong> Black, Dark Grey, Orange
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="msentry-statusbar">
+                        <div class="msentry-status-item">
+                            <div class="msentry-status-led"></div>
+                            <span>Industrial Design Project</span>
+                        </div>
+                        <div class="msentry-status-item">
+                            <span>Zeynep Erden • 2026</span>
+                        </div>
+                        <div class="msentry-status-item">
+                            <span>6 Items</span>
                         </div>
                     </div>
                 </div>

@@ -496,6 +496,16 @@ class WindowManager {
             this.initializeGustoWindow(windowEl);
         }
 
+        // MARINESENTRY.exe interactive window
+        if (windowId === 'marinesentry') {
+            this.initializeMarinesentryWindow(windowEl);
+        }
+
+        // MARINESENTRY.exe interactive window
+        if (windowId === 'marinesentry') {
+            this.initializeMarinesentryWindow(windowEl);
+        }
+
         // Gallery lightbox
         if (windowId === 'illustration' || windowId === 'illustrationWork') {
             this.initializeGalleryWindow(windowEl);
@@ -517,6 +527,18 @@ class WindowManager {
         // Special handling for FIREBOX - open XP-style window
         if (project.title === 'FIREBOX') {
             this.openWindow('firebox', { width: 820, height: 520 });
+            return;
+        }
+
+        // Special handling for MarineSentry - open XP-style window
+        if (project.title === 'MarineSentry') {
+            this.openWindow('marinesentry', { width: 820, height: 520 });
+            return;
+        }
+
+        // Special handling for MarineSentry - open XP-style window
+        if (project.title === 'MarineSentry') {
+            this.openWindow('marinesentry', { width: 820, height: 520 });
             return;
         }
 
@@ -757,6 +779,112 @@ class WindowManager {
         if (previewImg) {
             previewImg.style.transition = 'opacity 0.15s ease';
         }
+    }
+
+    initializeMarinesentryWindow(windowEl) {
+        const previewImg = windowEl.querySelector('#msentry-preview-img');
+        const thumbs = windowEl.querySelectorAll('.msentry-thumb');
+        const prevBtn = windowEl.querySelector('#msentry-prev');
+        const nextBtn = windowEl.querySelector('#msentry-next');
+        const counter = windowEl.querySelector('.msentry-counter');
+
+        let currentIndex = 0;
+        const totalImages = thumbs.length;
+
+        const updateGallery = (index) => {
+            currentIndex = index;
+            if (currentIndex < 0) currentIndex = totalImages - 1;
+            if (currentIndex >= totalImages) currentIndex = 0;
+
+            const targetThumb = thumbs[currentIndex];
+            const imgSrc = targetThumb.dataset.img;
+
+            thumbs.forEach(t => t.classList.remove('active'));
+            targetThumb.classList.add('active');
+
+            if (imgSrc && previewImg) {
+                previewImg.style.opacity = '0';
+                setTimeout(() => {
+                    previewImg.src = imgSrc;
+                    previewImg.style.opacity = '1';
+                }, 150);
+            }
+
+            if (counter) {
+                counter.textContent = `${currentIndex + 1} / ${totalImages}`;
+            }
+
+            targetThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        };
+
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => updateGallery(currentIndex - 1));
+        }
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => updateGallery(currentIndex + 1));
+        }
+
+        thumbs.forEach((thumb, index) => {
+            thumb.addEventListener('click', () => updateGallery(index));
+        });
+
+        if (previewImg) {
+            previewImg.style.transition = 'opacity 0.15s ease';
+        }
+    }
+
+    initializeMarinesentryWindow(windowEl) {
+        const previewImg = windowEl.querySelector('#msentry-preview-img');
+        const previewVideo = windowEl.querySelector('#msentry-preview-video');
+        const thumbs = windowEl.querySelectorAll('.msentry-thumb');
+        const prevBtn = windowEl.querySelector('#msentry-prev');
+        const nextBtn = windowEl.querySelector('#msentry-next');
+        const counter = windowEl.querySelector('.msentry-counter');
+
+        let currentIndex = 0;
+        const totalImages = thumbs.length;
+
+        const updateGallery = (index) => {
+            currentIndex = index;
+            if (currentIndex < 0) currentIndex = totalImages - 1;
+            if (currentIndex >= totalImages) currentIndex = 0;
+
+            const targetThumb = thumbs[currentIndex];
+            const imgSrc = targetThumb.dataset.img;
+            const videoSrc = targetThumb.dataset.video;
+
+            thumbs.forEach(t => t.classList.remove('active'));
+            targetThumb.classList.add('active');
+
+            if (videoSrc && previewVideo) {
+                previewImg.style.display = 'none';
+                previewVideo.style.display = 'block';
+                previewVideo.src = videoSrc;
+                previewVideo.play();
+            } else if (imgSrc && previewImg) {
+                if (previewVideo) {
+                    previewVideo.pause();
+                    previewVideo.style.display = 'none';
+                }
+                previewImg.style.display = 'block';
+                previewImg.style.opacity = '0';
+                setTimeout(() => {
+                    previewImg.src = imgSrc;
+                    previewImg.style.opacity = '1';
+                }, 150);
+            }
+
+            if (counter) {
+                counter.textContent = `${currentIndex + 1} / ${totalImages}`;
+            }
+
+            targetThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        };
+
+        if (prevBtn) prevBtn.addEventListener('click', () => updateGallery(currentIndex - 1));
+        if (nextBtn) nextBtn.addEventListener('click', () => updateGallery(currentIndex + 1));
+        thumbs.forEach((thumb, index) => thumb.addEventListener('click', () => updateGallery(index)));
+        if (previewImg) previewImg.style.transition = 'opacity 0.15s ease';
     }
 
     initializeGustoWindow(windowEl) {
