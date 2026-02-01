@@ -67,14 +67,14 @@ class StartMenu {
         const isMobileWidth = () => window.innerWidth <= 768;
 
         if (allProgramsBtn && allProgramsSubmenu) {
-            const menuPrograms = this.menu.querySelector('.start-menu-programs');
+            const menuPrograms = document.getElementById('start-menu-programs');
 
             let allProgsLastTouch = 0;
 
             const openAllPrograms = () => {
                 if (isMobileWidth()) {
                     // On mobile: hide main menu, show submenu in its place
-                    if (menuPrograms) menuPrograms.style.display = 'none';
+                    if (menuPrograms) menuPrograms.classList.add('hidden');
                     allProgramsSubmenu.classList.remove('hidden');
                     if (allProgramsBack) allProgramsBack.classList.remove('hidden');
                 } else {
@@ -85,7 +85,7 @@ class StartMenu {
             const closeAllPrograms = () => {
                 allProgramsSubmenu.classList.add('hidden');
                 if (allProgramsBack) allProgramsBack.classList.add('hidden');
-                if (menuPrograms) menuPrograms.style.display = '';
+                if (menuPrograms) menuPrograms.classList.remove('hidden');
             };
 
             this._closeAllPrograms = closeAllPrograms;
@@ -231,10 +231,10 @@ class StartMenu {
     resetAllPrograms() {
         const submenu = document.getElementById('all-programs-submenu');
         const back = document.getElementById('all-programs-back');
-        const menuPrograms = this.menu.querySelector('.start-menu-programs');
+        const menuPrograms = document.getElementById('start-menu-programs');
         if (submenu) submenu.classList.add('hidden');
         if (back) back.classList.add('hidden');
-        if (menuPrograms) menuPrograms.style.display = '';
+        if (menuPrograms) menuPrograms.classList.remove('hidden');
     }
 
     handleLink(linkType) {

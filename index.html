@@ -142,7 +142,8 @@
 
             <!-- SINGLE COLUMN BODY -->
             <div class="start-menu-body">
-                <div class="start-menu-programs">
+                <!-- Main menu items -->
+                <div class="start-menu-programs" id="start-menu-programs">
                     <div class="start-menu-item" data-action="window" data-window="work">
                         <img src="assets/icons/my-project.png" class="menu-item-icon" alt="">
                         <div class="menu-item-text">
@@ -207,49 +208,49 @@
                         <span class="arrow">►</span>
                     </div>
                 </div>
-            </div>
 
-            <!-- ALL PROGRAMS SUBMENU (opens to the right on desktop, overlay on mobile) -->
-            <div class="all-programs-submenu hidden" id="all-programs-submenu">
-                <div class="all-programs-submenu-header hidden" id="all-programs-back">
-                    <span>All Programs</span>
-                    <span class="all-programs-close">✕</span>
-                </div>
-                <div class="all-programs-item" data-program="figma">
-                    <img src="assets/icons/icon-figma.png" class="program-icon" alt="">
-                    <span>Figma</span>
-                </div>
-                <div class="all-programs-item" data-program="photoshop">
-                    <img src="assets/icons/icon-photoshop.png" class="program-icon" alt="">
-                    <span>Adobe Photoshop 2026</span>
-                </div>
-                <div class="all-programs-item" data-program="illustrator">
-                    <img src="assets/icons/icon-illustrator.png" class="program-icon" alt="">
-                    <span>Adobe Illustrator 2026</span>
-                </div>
-                <div class="all-programs-item" data-program="aftereffects">
-                    <img src="assets/icons/icon-aftereffects.png" class="program-icon" alt="">
-                    <span>Adobe After Effects</span>
-                </div>
-                <div class="all-programs-item" data-program="blender">
-                    <img src="assets/icons/icon-blender.png" class="program-icon" alt="">
-                    <span>Blender</span>
-                </div>
-                <div class="all-programs-item" data-program="rhino">
-                    <img src="assets/icons/icon-rhino.png" class="program-icon" alt="">
-                    <span>Rhino - Rhinoceros 3D</span>
-                </div>
-                <div class="all-programs-item" data-program="3dsmax">
-                    <img src="assets/icons/icon-3dsmax.png" class="program-icon" alt="">
-                    <span>Autodesk 3ds Max</span>
-                </div>
-                <div class="all-programs-item" data-program="keyshot">
-                    <img src="assets/icons/icon-keyshot.png" class="program-icon" alt="">
-                    <span>KeyShot</span>
-                </div>
-                <div class="all-programs-item" data-program="procreate">
-                    <img src="assets/icons/icon-procreate.png" class="program-icon" alt="">
-                    <span>Procreate</span>
+                <!-- All Programs submenu (inside body so it replaces programs on mobile) -->
+                <div class="all-programs-submenu hidden" id="all-programs-submenu">
+                    <div class="all-programs-submenu-header hidden" id="all-programs-back">
+                        <span>All Programs</span>
+                        <span class="all-programs-close">✕</span>
+                    </div>
+                    <div class="all-programs-item" data-program="figma">
+                        <img src="assets/icons/icon-figma.png" class="program-icon" alt="">
+                        <span>Figma</span>
+                    </div>
+                    <div class="all-programs-item" data-program="photoshop">
+                        <img src="assets/icons/icon-photoshop.png" class="program-icon" alt="">
+                        <span>Adobe Photoshop 2026</span>
+                    </div>
+                    <div class="all-programs-item" data-program="illustrator">
+                        <img src="assets/icons/icon-illustrator.png" class="program-icon" alt="">
+                        <span>Adobe Illustrator 2026</span>
+                    </div>
+                    <div class="all-programs-item" data-program="aftereffects">
+                        <img src="assets/icons/icon-aftereffects.png" class="program-icon" alt="">
+                        <span>Adobe After Effects</span>
+                    </div>
+                    <div class="all-programs-item" data-program="blender">
+                        <img src="assets/icons/icon-blender.png" class="program-icon" alt="">
+                        <span>Blender</span>
+                    </div>
+                    <div class="all-programs-item" data-program="rhino">
+                        <img src="assets/icons/icon-rhino.png" class="program-icon" alt="">
+                        <span>Rhino - Rhinoceros 3D</span>
+                    </div>
+                    <div class="all-programs-item" data-program="3dsmax">
+                        <img src="assets/icons/icon-3dsmax.png" class="program-icon" alt="">
+                        <span>Autodesk 3ds Max</span>
+                    </div>
+                    <div class="all-programs-item" data-program="keyshot">
+                        <img src="assets/icons/icon-keyshot.png" class="program-icon" alt="">
+                        <span>KeyShot</span>
+                    </div>
+                    <div class="all-programs-item" data-program="procreate">
+                        <img src="assets/icons/icon-procreate.png" class="program-icon" alt="">
+                        <span>Procreate</span>
+                    </div>
                 </div>
             </div>
 
