@@ -288,7 +288,6 @@ img.program-icon {
         -webkit-overflow-scrolling: touch;
         overscroll-behavior: contain;
         min-height: 0;
-        position: relative;
     }
 
     .start-menu-programs .start-menu-item {
@@ -315,58 +314,49 @@ img.program-icon {
         font-size: 10px;
     }
 
-    /* All Programs Submenu - overlay that replaces menu body on mobile */
+    /* All Programs Submenu - replaces main menu on mobile */
     .all-programs-submenu {
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
+        position: static !important;
         width: 100% !important;
-        height: 100% !important;
         border: none !important;
         border-radius: 0 !important;
         box-shadow: none !important;
         background: #fff !important;
-        z-index: 10 !important;
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch;
-        padding-top: 0 !important;
-        padding-bottom: 8px !important;
+        overflow-y: visible !important;
+        padding: 0 !important;
     }
 
-    /* Header bar for All Programs on mobile */
+    /* Header bar with close button for All Programs on mobile */
     .all-programs-submenu-header {
         display: flex !important;
         align-items: center;
         justify-content: space-between;
-        padding: 12px 14px;
+        padding: 10px 14px;
         font-size: 13px;
         font-weight: 600;
         color: #333;
         border-bottom: 1px solid #D4D0C8;
         min-height: 44px;
         box-sizing: border-box;
-        background: linear-gradient(180deg, #f8f8f8 0%, #e8e8e8 100%);
-        position: sticky;
-        top: 0;
-        z-index: 1;
+        background: linear-gradient(180deg, #4882E0 0%, #2F6FE0 100%);
+        color: #fff;
     }
 
     .all-programs-close {
-        width: 32px;
-        height: 32px;
+        width: 36px;
+        height: 36px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 18px;
-        color: #666;
-        background: #ddd;
+        font-size: 20px;
+        color: #fff;
+        background: rgba(255,255,255,0.2);
         border-radius: 4px;
         cursor: pointer;
     }
 
     .all-programs-close:active {
         background: #c00;
-        color: #fff;
     }
 
     .all-programs-item {

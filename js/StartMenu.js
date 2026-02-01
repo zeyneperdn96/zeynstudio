@@ -67,57 +67,51 @@ class StartMenu {
         const isMobileWidth = () => window.innerWidth <= 768;
 
         if (allProgramsBtn && allProgramsSubmenu) {
-            const menuBody = this.menu.querySelector('.start-menu-body');
-            let movedToBody = false;
-
-            // Move submenu inside menu body for overlay on mobile
-            const ensureSubmenuPosition = () => {
-                if (isMobileWidth() && menuBody && !movedToBody) {
-                    menuBody.appendChild(allProgramsSubmenu);
-                    movedToBody = true;
-                }
-            };
+            const menuPrograms = this.menu.querySelector('.start-menu-programs');
 
             let allProgsLastTouch = 0;
 
-            const toggleAllPrograms = () => {
-                ensureSubmenuPosition();
-                const isHidden = allProgramsSubmenu.classList.contains('hidden');
-                if (isHidden) {
-                    // Opening
+            const openAllPrograms = () => {
+                if (isMobileWidth()) {
+                    // On mobile: hide main menu, show submenu in its place
+                    if (menuPrograms) menuPrograms.style.display = 'none';
                     allProgramsSubmenu.classList.remove('hidden');
                     if (allProgramsBack) allProgramsBack.classList.remove('hidden');
                 } else {
-                    // Closing
-                    allProgramsSubmenu.classList.add('hidden');
-                    if (allProgramsBack) allProgramsBack.classList.add('hidden');
+                    allProgramsSubmenu.classList.toggle('hidden');
                 }
             };
+
+            const closeAllPrograms = () => {
+                allProgramsSubmenu.classList.add('hidden');
+                if (allProgramsBack) allProgramsBack.classList.add('hidden');
+                if (menuPrograms) menuPrograms.style.display = '';
+            };
+
+            this._closeAllPrograms = closeAllPrograms;
 
             allProgramsBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 if (Date.now() - allProgsLastTouch < 500) return;
-                toggleAllPrograms();
+                openAllPrograms();
             });
 
             if (isTouchDevice) {
                 this._addTouchWithScrollDetect(allProgramsBtn, () => {
                     allProgsLastTouch = Date.now();
-                    toggleAllPrograms();
+                    openAllPrograms();
                 });
             }
 
-            // Back button closes submenu on mobile
+            // Back/close button closes submenu on mobile
             if (allProgramsBack) {
                 allProgramsBack.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    allProgramsSubmenu.classList.add('hidden');
-                    allProgramsBack.classList.add('hidden');
+                    closeAllPrograms();
                 });
                 if (isTouchDevice) {
                     this._addTouchWithScrollDetect(allProgramsBack, () => {
-                        allProgramsSubmenu.classList.add('hidden');
-                        allProgramsBack.classList.add('hidden');
+                        closeAllPrograms();
                     });
                 }
             }
@@ -236,7 +230,11 @@ class StartMenu {
 
     resetAllPrograms() {
         const submenu = document.getElementById('all-programs-submenu');
+        const back = document.getElementById('all-programs-back');
+        const menuPrograms = this.menu.querySelector('.start-menu-programs');
         if (submenu) submenu.classList.add('hidden');
+        if (back) back.classList.add('hidden');
+        if (menuPrograms) menuPrograms.style.display = '';
     }
 
     handleLink(linkType) {
