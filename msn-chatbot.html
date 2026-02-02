@@ -57,6 +57,7 @@
         body.embedded .wlm-chat-window {
             width: 100%;
             height: 100vh;
+            height: 100dvh;
             max-width: none;
             border-radius: 0;
             box-shadow: none;
@@ -1399,17 +1400,8 @@
 
             .wlm-header-panel {
                 padding: 8px;
-                flex-direction: column;
-                gap: 8px;
-            }
-
-            .wlm-user-section.right {
                 flex-direction: row;
-                text-align: left;
-            }
-
-            .wlm-user-section.right .wlm-user-name {
-                justify-content: flex-start;
+                gap: 8px;
             }
 
             .wlm-avatar-frame {
@@ -1418,8 +1410,13 @@
             }
 
             .wlm-personal-msg,
-            .wlm-now-playing {
+            .wlm-now-playing,
+            .wlm-online-since {
                 display: none;
+            }
+
+            .wlm-input-section {
+                padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
             }
 
             .wlm-conversation {
