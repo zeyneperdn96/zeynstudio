@@ -40,47 +40,24 @@
     display: block;
 }
 
-/* Clickable hit area - positioned on avatar (right side of panel) */
-.login-hit-area {
+/* Click to enter hint */
+@keyframes hintFade {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+.login-click-hint {
     position: absolute;
-    top: 38%;
-    left: 73%;
-    transform: translate(-50%, -50%);
-    width: 140px;
-    height: 140px;
-    cursor: pointer;
-    border: 3px solid transparent;
-    border-radius: 8px;
-    transition: all 0.15s ease;
-    /* Subtle hint that it's clickable */
-    background: rgba(255, 255, 255, 0.02);
-}
-
-/* Pulse hint animation */
-@keyframes loginPulse {
-    0%, 100% { box-shadow: 0 0 0 rgba(255, 179, 71, 0); border-color: transparent; }
-    50% { box-shadow: 0 0 16px rgba(255, 179, 71, 0.4); border-color: rgba(255, 179, 71, 0.5); }
-}
-
-.login-hit-area {
-    animation: loginPulse 2.5s ease-in-out infinite;
-}
-
-/* Hover state - tight around content */
-.login-hit-area:hover {
-    animation: none;
-    background: rgba(51, 153, 255, 0.2);
-    border: 3px solid #FFB347;
-    box-shadow: 0 0 12px rgba(255, 179, 71, 0.4);
-    transform: translate(-50%, -50%) scale(1.01);
-}
-
-/* Selected state */
-.login-hit-area.selected {
-    background: rgba(51, 153, 255, 0.35);
-    border: 3px solid #FFB347;
-    box-shadow: 0 0 16px rgba(255, 179, 71, 0.6);
-    transform: scale(0.99);
+    bottom: 8%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+    animation: hintFade 2s ease-in-out infinite;
+    pointer-events: none;
 }
 
 @media (max-width: 768px) {
@@ -89,48 +66,9 @@
         background: #2952A3;
     }
 
-    .login-hit-area {
-        left: 73%;
-        top: 40%;
-        width: 100px;
-        height: 100px;
-    }
-
     .welcome-image {
         object-fit: contain;
         background: #1a3180;
-    }
-}
-
-@media (max-width: 480px) {
-    .login-hit-area {
-        left: 70%;
-        top: 42%;
-        width: 80px;
-        height: 80px;
-    }
-}
-
-@media (max-width: 390px) {
-    .login-hit-area {
-        left: 68%;
-        top: 43%;
-        width: 70px;
-        height: 70px;
-    }
-}
-
-@media (max-width: 360px) {
-    .login-hit-area {
-        left: 66%;
-        top: 44%;
-        width: 60px;
-        height: 60px;
-        border-width: 2px;
-    }
-
-    .login-hit-area:hover {
-        border-width: 2px;
     }
 }
 
@@ -138,13 +76,6 @@
 @media (max-height: 500px) and (orientation: landscape) {
     .login-image {
         object-fit: contain;
-    }
-
-    .login-hit-area {
-        left: 73%;
-        top: 45%;
-        width: 90px;
-        height: 90px;
     }
 }
 

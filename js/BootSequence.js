@@ -10,7 +10,6 @@ class BootSequence {
         this.bootVideo = document.getElementById('boot-video');
 
         this.loginContainer = document.getElementById('login-container');
-        this.loginHitArea = document.getElementById('login-hit-area');
         this.welcomeContainer = document.getElementById('welcome-container');
         this.desktopContainer = document.getElementById('desktop-container');
 
@@ -82,11 +81,7 @@ class BootSequence {
                 this.loginContainer.classList.add('active');
             }
 
-            // Wait for user click on login hit area (needed for audio permission)
-            if (this.loginHitArea) {
-                this.loginHitArea.addEventListener('click', () => this.handleLogin());
-            }
-            // Also allow clicking anywhere on login screen
+            // Wait for user click to proceed (needed for audio permission)
             this.loginContainer.addEventListener('click', () => this.handleLogin());
         }, 500);
     }
