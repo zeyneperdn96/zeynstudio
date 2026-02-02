@@ -1973,9 +1973,11 @@
                     // Bot responses
                     welcome: 'Selam! Portfolyoma hoş geldin 👋\n\n🎮 Oyunlar butonuyla oyun oynayabilirsin!\n📳 Titreşim ve wink gönderebilirsin!',
                     fallbacks: [
-                        'Tam anlayamadım 🙂 "projeler" veya "oyun" dene!',
-                        'Hmm? 🤔 Bir oyun oynamak ister misin?',
-                        'Anlamadım ama sorun değil! Wink ya da nudge gönder 😉'
+                        'Tam anlayamadım 🙂 Projelerim, yeteneklerim veya oyun hakkında sorabilirsin!',
+                        'Hmm? 🤔 "Neden seni işe almalıyım?" diye sormayı dene!',
+                        'Anlamadım ama sorun değil! 😊 Bana projelerim veya tasarım sürecim hakkında sorabilirsin.',
+                        'İlginç! 🤔 Ben daha çok tasarım ve projeler konusunda yardımcı olabilirim.',
+                        'O konuda bir şey diyemiyorum 🙂 Ama bir oyun oynayabiliriz! 🎮'
                     ]
                 },
                 en: {
@@ -2105,9 +2107,11 @@
                     // Bot responses
                     welcome: 'Hi! Welcome to my portfolio 👋\n\n🎮 Try the Games button in the toolbar!\n📳 You can also send nudges and animations!',
                     fallbacks: [
-                        'I didn\'t quite catch that 🙂 Try asking about "projects" or "games"!',
-                        'Hmm? 🤔 Would you like to play a game?',
-                        'Not sure I follow, but no worries! Try exploring the toolbar features 🙂'
+                        'I didn\'t quite catch that 🙂 Try asking about my projects, skills, or "why hire you"!',
+                        'Hmm? 🤔 Try asking "why should I hire you?" — I have a good answer!',
+                        'Not sure I follow! 😊 You can ask about my projects, design process, or we can play a game.',
+                        'Interesting! 🤔 I\'m better at talking about design and projects though.',
+                        'I\'m not sure about that 🙂 But we can play a game! 🎮'
                     ]
                 }
             };
@@ -2115,61 +2119,171 @@
             // English bot responses
             const botResponsesEN = [
                 {
-                    keywords: ['who are you', 'about you', 'introduce', 'yourself'],
+                    keywords: ['who are you', 'about you', 'introduce', 'yourself', 'who is zeynep'],
                     responses: [
-                        'I\'m Zeynep Erden 🙋‍♀️\nI work on UI/UX design, digital products and creative experiences.',
-                        'Zeynep here 🙋‍♀️\nI specialize in interface design and user experience.',
-                        'I\'m Zeynep! ✨\nI bring ideas to life through digital design.'
+                        'I\'m Zeynep Erden 🙋‍♀️\nIndustrial designer & UI/UX enthusiast.\nI design physical products and digital experiences.',
+                        'Zeynep here! ✨ I\'m an industrial designer who also loves digital design.\nFrom laptop stands to interactive websites — I do it all.',
+                        'I\'m Zeynep! 🙋‍♀️\nI blend industrial design with digital creativity.\nThis whole XP portfolio? I built it from scratch!'
                     ]
                 },
                 {
-                    keywords: ['project', 'portfolio', 'work', 'case'],
+                    keywords: ['hire', 'why should i', 'why you', 'what makes you', 'why hire', 'convince me', 'stand out'],
                     responses: [
-                        'My portfolio has UI/UX case studies.\nClick on "My Work" icon on the desktop! 🎨',
-                        'I have UI/UX and interactive web projects.\nWhich one interests you?'
+                        'Great question! Here\'s why:\n✅ I design both physical & digital products\n✅ I think in systems, not just screens\n✅ I built this entire XP portfolio from scratch\n✅ I turn coffee waste into laptop stands 😄\nI bring creativity that goes beyond the screen.',
+                        'Why me? 🤔\n1. I\'m an industrial designer who codes\n2. I think about materials, ergonomics AND pixels\n3. I prototype fast — from sketches to 3D to web\n4. This portfolio itself is proof of my attention to detail ✨',
+                        'I don\'t just design interfaces — I design experiences.\nFrom sustainable product design (CoffeeForm ♻️) to this nostalgic XP world you\'re exploring right now.\nI bring a unique perspective that bridges physical and digital. 🌉'
                     ]
                 },
                 {
-                    keywords: ['game', 'play', 'bored'],
+                    keywords: ['skill', 'what can you do', 'tools', 'software', 'program', 'abilities', 'experience'],
                     responses: [
-                        'Want to play a game? 🎮\nClick the Games button in the toolbar!',
-                        'Let\'s play! Tic Tac Toe or Rock Paper Scissors? 🎮'
+                        'My toolkit 🛠️\n• Industrial Design: Rhino, Fusion 360, sketching\n• Digital: Figma, HTML/CSS/JS\n• 3D: Keyshot, Blender\n• Research: User interviews, personas, testing\nI\'m a hybrid designer who connects physical and digital worlds.',
+                        'I work across disciplines:\n🎨 Product Design — concept to prototype\n💻 UI/UX — wireframes to interactive demos\n🔧 Prototyping — 3D printing, mockups, code\n📊 Research — user-centered design process'
                     ]
                 },
                 {
-                    keywords: ['contact', 'mail', 'email', 'reach'],
+                    keywords: ['project', 'portfolio', 'work', 'case', 'what did you make', 'show me'],
                     responses: [
-                        'Check the Contact section on the site to get in touch 📬',
-                        'Click on the "Contact" icon on the desktop! 😊'
+                        'Check out my projects! 🎨\n• METBIC — modular bike repair kit\n• FIREBOX — portable camping station\n• CoffeeForm — sustainable laptop stand\n• + more in My Work on the desktop!',
+                        'I\'ve got industrial design case studies and interactive web projects.\nClick "My Work" on the desktop to explore! 🖥️\nEach one has a full case study with process shots.',
+                        'My portfolio spans product design to web experiences.\nFun fact: this entire Windows XP site IS one of my projects 😄\nOpen "My Work" to see the rest!'
                     ]
                 },
                 {
-                    keywords: ['thank', 'thanks'],
+                    keywords: ['coffeeform', 'coffee', 'laptop stand', 'sustainable', 'eco'],
                     responses: [
-                        'You\'re welcome! 😄',
-                        'No problem! Happy to help 🙂'
+                        'CoffeeForm! ☕ One of my favorites.\nIt\'s a laptop stand made from recycled coffee grounds.\nFlat-pack, tool-free assembly, biodegradable.\nCheck it out in My Work → CoffeeForm!',
+                        'CoffeeForm is a circular design project ♻️\nUsed coffee grounds → dried → mixed with natural binders → hot-pressed into rigid panels.\nThe result? A beautiful, functional laptop stand from waste. 🌱'
                     ]
                 },
                 {
-                    keywords: ['hi', 'hello', 'hey', 'what\'s up', 'how are you'],
+                    keywords: ['metbic', 'bike', 'bicycle', 'repair'],
                     responses: [
-                        'Hey! 👋 How can I help you?',
-                        'Hello! 😊 Ready to explore my portfolio?',
-                        'Hey there! 🙋‍♀️ What would you like to know?'
+                        'METBIC is a pocket-sized repair kit for mountain bikers! 🚲\n90×60mm but packs everything: tire lever, wrench, file, 6 screwdriver bits.\nOpen My Work → METBIC for the full case study!',
+                        'METBIC 🧰 — my compact modular bike toolkit.\nDesigned for trail emergencies. Fits in your pocket, works like a full workshop.\nCheck it out on the desktop!'
                     ]
                 },
                 {
-                    keywords: ['music', 'song', 'listen', 'what are you listening'],
+                    keywords: ['firebox', 'camp', 'fire', 'grill', 'outdoor'],
                     responses: [
-                        'Currently listening to ' + 'Daft Punk - Digital Love' + ' 🎵',
-                        'Playing some nostalgic tracks today 🎧'
+                        'FIREBOX 🔥 is a foldable camping fire pit & cooking station.\nFolds into a briefcase, unfolds into a full grill.\nPerfect for camping, tailgating, backyard hangouts!',
+                        'FIREBOX! My portable fire pit design 🏕️\nStainless steel, folds flat, has an ash drawer for easy cleanup.\nYou can see the 3D renders in My Work!'
                     ]
                 },
                 {
-                    keywords: ['nice', 'great', 'cool', 'awesome'],
+                    keywords: ['this site', 'this website', 'xp', 'windows', 'how did you', 'how you made'],
                     responses: [
-                        'Thanks! Appreciate it 😊',
-                        'Glad you like it! 😊'
+                        'This whole site is built with vanilla HTML, CSS & JavaScript! 🖥️\nNo React, no frameworks — just pure code.\nThe Windows XP aesthetic is a love letter to the early 2000s ✨',
+                        'I designed & coded this entire XP experience from scratch 💻\nEvery window, animation, and interaction.\nIt\'s my way of showing that portfolios don\'t have to be boring templates.',
+                        'This site IS one of my projects! 😄\nI wanted something unique for my portfolio.\nWhat better than a fully interactive Windows XP desktop?'
+                    ]
+                },
+                {
+                    keywords: ['game', 'play', 'bored', 'fun'],
+                    responses: [
+                        'Want to play? 🎮\nWe\'ve got Tic Tac Toe, Rock Paper Scissors, and more!\nClick the Games button in the toolbar!',
+                        'Let\'s play something! 🎮\nRock Paper Scissors? (I\'ll warn you, I\'m... not great at it 😅)',
+                        'Feeling playful? 😄\nTry the Games button up top!\nOr just type "rock paper scissors" and let\'s go ✊✋✌️'
+                    ]
+                },
+                {
+                    keywords: ['contact', 'mail', 'email', 'reach', 'get in touch'],
+                    responses: [
+                        'You can reach me through the Contact icon on the desktop! 📬\nI\'d love to hear from you.',
+                        'Click the "Contact" icon on the desktop! 😊\nOr find me on LinkedIn — always happy to connect.',
+                        'Want to work together? 🤝\nHit the Contact icon on the desktop and drop me a message!'
+                    ]
+                },
+                {
+                    keywords: ['thank', 'thanks', 'thx'],
+                    responses: [
+                        'You\'re welcome! 😄 Happy to chat.',
+                        'No problem! Let me know if you need anything else 🙂',
+                        'Anytime! 😊 Enjoy exploring the portfolio!'
+                    ]
+                },
+                {
+                    keywords: ['hi', 'hello', 'hey', 'what\'s up', 'how are you', 'sup', 'yo'],
+                    responses: [
+                        'Hey! 👋 Welcome to ZeynStudio XP!\nFeel free to ask me anything or explore the desktop.',
+                        'Hello! 😊 Nice to have you here.\nYou can ask about my projects, skills, or we can just chat!',
+                        'Hey there! 🙋‍♀️ What brings you to my little XP world?',
+                        'Hi! 👋 Grab a coffee ☕ and explore around.\nAsk me anything — I don\'t bite!'
+                    ]
+                },
+                {
+                    keywords: ['music', 'song', 'listen', 'what are you listening', 'playlist'],
+                    responses: [
+                        'Currently vibing to Daft Punk - Digital Love 🎵\nYou can check the media player on the desktop!',
+                        'Playing some nostalgic tracks today 🎧\nOpen the Media Player for the full playlist!',
+                        'I\'ve got a solid playlist going 🎵\nDaft Punk, Gorillaz, Arctic Monkeys...\nClick the Media Player icon to listen along!'
+                    ]
+                },
+                {
+                    keywords: ['nice', 'great', 'cool', 'awesome', 'amazing', 'love it', 'impressive', 'wow'],
+                    responses: [
+                        'Thanks! That means a lot 😊',
+                        'Glad you like it! I put a lot of love into this ✨',
+                        'Appreciate that! 🙏 Feel free to explore more!',
+                        'Yaay! 🎉 That makes my day. Check out the rest too!'
+                    ]
+                },
+                {
+                    keywords: ['bye', 'goodbye', 'see you', 'gotta go', 'leaving', 'cya'],
+                    responses: [
+                        'Bye! 👋 Thanks for visiting ZeynStudio!\nCome back anytime 😊',
+                        'See you later! ✨ Don\'t forget to check out My Work before you go!',
+                        'Take care! 🙋‍♀️ Hope you enjoyed the XP experience!'
+                    ]
+                },
+                {
+                    keywords: ['funny', 'joke', 'haha', 'lol', 'laugh', 'humor'],
+                    responses: [
+                        'Why did the designer cross the road?\nTo get to the other grid 😄',
+                        'A UX designer walks into a bar...\n...and walks right back out because the door wasn\'t intuitive 🚪😂',
+                        'My code has no bugs, only unexpected features ✨😄'
+                    ]
+                },
+                {
+                    keywords: ['design process', 'how do you design', 'workflow', 'approach', 'method'],
+                    responses: [
+                        'My process:\n1️⃣ Research & understand the problem\n2️⃣ Sketch & ideate (lots of paper!)\n3️⃣ Prototype & test\n4️⃣ Iterate based on feedback\n5️⃣ Final design & presentation\nAlways user-centered, always iterative.',
+                        'I start with "why" before "what" 🤔\nResearch → Sketching → 3D Modeling → Prototyping → Testing.\nEvery project in My Work follows this flow!'
+                    ]
+                },
+                {
+                    keywords: ['education', 'school', 'university', 'study', 'degree', 'where did you study'],
+                    responses: [
+                        'I studied Industrial Design 🎓\nMy education gave me a strong foundation in form, function, and user-centered thinking.\nBut honestly, I learn the most from doing! 💪',
+                        'Industrial Design background! 📐\nIt taught me to think about materials, ergonomics, and manufacturing.\nNow I apply that same rigor to digital design too.'
+                    ]
+                },
+                {
+                    keywords: ['hobby', 'free time', 'hobbies', 'what do you do for fun', 'outside work', 'interests'],
+                    responses: [
+                        'When I\'m not designing:\n🎨 I illustrate (check My Work → Illustration!)\n🎵 I listen to way too much music\n☕ I drink coffee (which inspired CoffeeForm!)\n🎮 I game a little — hence this XP theme 😄',
+                        'I love illustration, music, and exploring creative ideas! 🎨\nThis whole XP portfolio started as a "what if" hobby project that became my actual site 😄'
+                    ]
+                },
+                {
+                    keywords: ['illustration', 'draw', 'drawing', 'art', 'illustrat'],
+                    responses: [
+                        'I love illustration! 🎨\nWedding cards, character designs, maps, postcards...\nCheck My Work → Illustration for my collection!',
+                        'Drawing is where I relax and get creative 🖌️\nI\'ve done wedding illustrations, pet portraits, even Christmas postcards.\nOpen "My Work" to see them!'
+                    ]
+                },
+                {
+                    keywords: ['favorite', 'best project', 'proudest', 'which project'],
+                    responses: [
+                        'Hard to pick! But CoffeeForm has a special place ☕\nTurning coffee waste into a real product felt like true design impact.\nMETBIC is a close second — that modular mechanism was tricky! 🧰',
+                        'This website might be my favorite honestly 😄\nIt pushed me to learn web dev deeply.\nBut design-wise, CoffeeForm\'s sustainability story is really meaningful to me ♻️'
+                    ]
+                },
+                {
+                    keywords: ['available', 'freelance', 'job', 'open to', 'looking for', 'position', 'opportunity'],
+                    responses: [
+                        'I\'m always open to exciting opportunities! 🚀\nWhether it\'s industrial design, UI/UX, or creative projects.\nReach out through the Contact icon on the desktop!',
+                        'Yes! I\'m open to new projects and collaborations 🤝\nIf you have something interesting in mind, let\'s talk!\nClick Contact on the desktop to get in touch.'
                     ]
                 }
             ];
@@ -2250,67 +2364,178 @@
                 {
                     keywords: ['kimsin', 'sen kimsin', 'hakkında', 'kim', 'kendini tanıt'],
                     responses: [
-                        'Ben Zeynep Erden 🙋‍♀️\nUI/UX tasarımı, dijital ürünler ve yaratıcı deneyimler üzerine çalışıyorum.',
-                        'Zeynep burada 🙋‍♀️\nArayüz tasarımı ve kullanıcı deneyimi ile uğraşıyorum.',
-                        'Ben Zeynep! ✨\nDijital tasarım dünyasında hikayeler anlatıyorum.'
+                        'Ben Zeynep Erden 🙋‍♀️\nEndüstriyel tasarımcıyım, dijital deneyimler de tasarlıyorum.\nFiziksel ürünlerden web sitelerine kadar geniş bir yelpazeyle çalışıyorum.',
+                        'Zeynep burada! ✨ Endüstriyel tasarım kökenli bir tasarımcıyım.\nKahve atığından laptop standı yapıp, bir de XP temalı portfolyo sitesi kodladım 😄',
+                        'Ben Zeynep! 🙋‍♀️\nÜrün tasarımı, UI/UX ve yaratıcı deneyimler üzerine çalışıyorum.\nBu XP dünyasının tamamını ben tasarladım!'
                     ]
                 },
                 {
-                    keywords: ['proje', 'portfolyo', 'işler', 'case', 'çalışma', 'work'],
+                    keywords: ['neden seni', 'niye seni', 'işe al', 'neden seçeyim', 'farkın ne', 'seni özel yapan', 'ikna et'],
                     responses: [
-                        'Portfolyomda UI/UX case study\'ler var.\nMasaüstündeki "My Work" ikonuna tıklayabilirsin! 🎨',
-                        'UI/UX, interaktif web projelerim var.\nHangisini merak ediyorsun?'
+                        'Güzel soru! İşte birkaç neden:\n✅ Hem fiziksel hem dijital ürün tasarlıyorum\n✅ Sadece ekran değil, sistem düşünürüm\n✅ Bu XP portfolyosunu sıfırdan kodladım\n✅ Kahve atığından laptop standı yaptım 😄\nEkranın ötesine geçen bir yaratıcılık sunuyorum.',
+                        'Neden ben? 🤔\n1. Endüstriyel tasarımcıyım ama kod da yazıyorum\n2. Malzeme, ergonomi VE piksel düşünürüm\n3. Eskizden 3D\'ye, prototipten web\'e hızlı geçerim\n4. Bu portfolyo detaycılığımın kanıtı ✨',
+                        'Ben sadece arayüz tasarlamıyorum — deneyim tasarlıyorum.\nSürdürülebilir ürün tasarımından (CoffeeForm ♻️) şu an keşfettiğin bu nostaljik XP dünyasına kadar.\nFiziksel ve dijitali birleştiren benzersiz bir bakış açısı sunuyorum. 🌉'
                     ]
                 },
                 {
-                    keywords: ['oyun', 'game', 'oyna', 'sıkıldım'],
+                    keywords: ['yetenek', 'ne yapabilirsin', 'araç', 'program', 'yazılım', 'beceri', 'deneyim'],
                     responses: [
-                        'Oyun oynamak ister misin? 🎮\nAraç çubuğundaki Oyunlar butonuna tıkla!',
-                        'Hadi bir oyun oynayalım! Tic Tac Toe veya Taş Kağıt Makas? 🎮'
+                        'Araç çantam 🛠️\n• Endüstriyel Tasarım: Rhino, Fusion 360, eskiz\n• Dijital: Figma, HTML/CSS/JS\n• 3D: Keyshot, Blender\n• Araştırma: Kullanıcı görüşmeleri, persona, test\nFiziksel ve dijital dünyaları birleştiren hibrit bir tasarımcıyım.',
+                        'Disiplinler arası çalışıyorum:\n🎨 Ürün Tasarımı — konseptten prototipe\n💻 UI/UX — wireframe\'den interaktif demoya\n🔧 Prototipleme — 3D baskı, maket, kod\n📊 Araştırma — kullanıcı odaklı tasarım süreci'
                     ]
                 },
                 {
-                    keywords: ['iletişim', 'mail', 'email', 'ulaş', 'contact'],
+                    keywords: ['proje', 'portfolyo', 'işler', 'case', 'çalışma', 'work', 'ne yaptın'],
                     responses: [
-                        'Benimle iletişime geçmek için sitedeki Contact bölümüne bakabilirsin 📬',
-                        'Masaüstündeki "Contact" ikonuna tıkla! 😊'
+                        'Projelerime göz at! 🎨\n• METBIC — modüler bisiklet tamir kiti\n• FIREBOX — taşınabilir kamp ocağı\n• CoffeeForm — sürdürülebilir laptop standı\n• + daha fazlası masaüstünde My Work\'te!',
+                        'Endüstriyel tasarım case study\'lerim ve interaktif web projelerim var.\nMasaüstünde "My Work" a tıkla! 🖥️\nHer birinin detaylı süreç görselleri var.',
+                        'Portfolyom ürün tasarımından web deneyimlerine uzanıyor.\nEğlenceli bilgi: bu Windows XP sitesinin kendisi de projelerimden biri 😄\nGeri kalanı görmek için "My Work"ü aç!'
+                    ]
+                },
+                {
+                    keywords: ['coffeeform', 'kahve', 'laptop stand', 'sürdürülebilir', 'eko', 'geri dönüşüm'],
+                    responses: [
+                        'CoffeeForm! ☕ En sevdiğim projelerimden.\nGeri dönüştürülmüş kahve telvesinden yapılmış bir laptop standı.\nKatlanır, aletsiz montaj, biyobozunur.\nMy Work → CoffeeForm\'dan bak!',
+                        'CoffeeForm döngüsel bir tasarım projesi ♻️\nKullanılmış kahve telveleri → kurutulur → doğal bağlayıcılarla karıştırılır → sıcak preslenir.\nSonuç? Atıktan güzel, fonksiyonel bir laptop standı. 🌱'
+                    ]
+                },
+                {
+                    keywords: ['metbic', 'bisiklet', 'tamir', 'bike'],
+                    responses: [
+                        'METBIC cep boyutunda bir bisiklet tamir kiti! 🚲\n90×60mm ama her şey var: lastik levyesi, anahtar, eğe, 6 tornavida ucu.\nMy Work → METBIC\'ten detaylara bak!',
+                        'METBIC 🧰 — kompakt modüler bisiklet aracım.\nParkurda acil durumlar için tasarladım. Cebine sığar, tam bir atölye gibi çalışır.'
+                    ]
+                },
+                {
+                    keywords: ['firebox', 'kamp', 'ateş', 'ızgara', 'outdoor'],
+                    responses: [
+                        'FIREBOX 🔥 katlanır kamp ateş çukuru ve pişirme istasyonu.\nÇanta gibi katlanır, tam bir ızgaraya dönüşür.\nKamp, barbekü, bahçe partileri için mükemmel!',
+                        'FIREBOX! Taşınabilir ateş çukuru tasarımım 🏕️\nPaslanmaz çelik, düz katlanır, kolay temizlik için kül çekmecesi var.'
+                    ]
+                },
+                {
+                    keywords: ['bu site', 'web site', 'xp', 'windows', 'nasıl yaptın', 'bunu sen mi'],
+                    responses: [
+                        'Bu sitenin tamamı saf HTML, CSS ve JavaScript! 🖥️\nReact yok, framework yok — sadece kod.\nWindows XP estetiği 2000\'lere bir aşk mektubu ✨',
+                        'Bu XP deneyiminin tamamını sıfırdan tasarlayıp kodladım 💻\nHer pencere, animasyon ve etkileşim.\nPortfolyo sıkıcı template\'ler olmak zorunda değil diye göstermek istedim.',
+                        'Bu site projelerimden biri aslında! 😄\nPortfolyom için benzersiz bir şey istedim.\nTam interaktif bir Windows XP masaüstünden daha iyi ne olabilir?'
+                    ]
+                },
+                {
+                    keywords: ['oyun', 'game', 'oyna', 'sıkıldım', 'eğlence'],
+                    responses: [
+                        'Oynamak ister misin? 🎮\nTic Tac Toe, Taş Kağıt Makas var!\nAraç çubuğundaki Oyunlar butonuna tıkla!',
+                        'Hadi bir şey oynayalım! 🎮\nTaş Kağıt Makas? (Uyarayım, pek iyi değilim 😅)',
+                        'Eğlenmek mi istiyorsun? 😄\nYukardaki Oyunlar butonunu dene!\nYa da direkt "taş kağıt makas" yaz başlayalım ✊✋✌️'
+                    ]
+                },
+                {
+                    keywords: ['iletişim', 'mail', 'email', 'ulaş', 'contact', 'bağlan'],
+                    responses: [
+                        'Masaüstündeki Contact ikonundan bana ulaşabilirsin! 📬\nSenden haber almak isterim.',
+                        '"Contact" ikonuna tıkla masaüstünde! 😊\nLinkedIn\'den de bağlanabiliriz.',
+                        'Birlikte çalışmak ister misin? 🤝\nMasaüstündeki Contact ikonuna tıkla ve mesaj bırak!'
                     ]
                 },
                 {
                     keywords: ['teşekkür', 'sağ ol', 'thanks', 'eyvallah'],
                     responses: [
-                        'Rica ederim! 😄',
-                        'Ne demek! Her zaman buradayım 🙂'
+                        'Rica ederim! 😄 Sohbet etmek güzel.',
+                        'Ne demek! Başka sorun varsa buradayım 🙂',
+                        'Her zaman! 😊 Portfolyoyu keşfetmeye devam et!'
                     ]
                 },
                 {
-                    keywords: ['selam', 'merhaba', 'hey', 'hi', 'hello', 'naber', 'nasılsın'],
+                    keywords: ['selam', 'merhaba', 'hey', 'hi', 'hello', 'naber', 'nasılsın', 'nbr'],
                     responses: [
-                        'Selamm! 👋 Nasıl yardımcı olabilirim?',
-                        'Merhaba! 😊 Portfolyomu keşfetmeye hazır mısın?',
-                        'Hey! 🙋‍♀️ Ne sormak istersin?'
+                        'Selamm! 👋 ZeynStudio XP\'ye hoş geldin!\nİstediğini sorabilir ya da masaüstünü keşfedebilirsin.',
+                        'Merhaba! 😊 Burada olman güzel.\nProjelerim, yeteneklerim hakkında sorabilir ya da sadece sohbet edebiliriz!',
+                        'Heyyy! 🙋‍♀️ Benim küçük XP dünyama ne getirdi seni?',
+                        'Selam! 👋 Bir kahve al ☕ ve etrafı keşfet.\nİstediğini sor — ısırmam! 😄'
                     ]
                 },
                 {
-                    keywords: ['müzik', 'şarkı', 'dinle', 'ne dinliyorsun'],
+                    keywords: ['müzik', 'şarkı', 'dinle', 'ne dinliyorsun', 'playlist'],
                     responses: [
-                        'Şu an ' + playlist[0] + ' dinliyorum 🎵',
-                        'Bugün biraz nostaljik parçalar açtım 🎧'
+                        'Şu an Daft Punk - Digital Love dinliyorum 🎵\nMasaüstündeki Media Player\'dan playlist\'e bakabilirsin!',
+                        'Bugün nostaljik parçalar açtım 🎧\nDaft Punk, Gorillaz, Arctic Monkeys...\nMedia Player ikonuna tıkla birlikte dinleyelim!'
                     ]
                 },
                 {
-                    keywords: ['güzel', 'harika', 'süper', 'cool'],
+                    keywords: ['güzel', 'harika', 'süper', 'cool', 'muhteşem', 'bayıldım', 'çok iyi', 'beğendim'],
                     responses: [
-                        'Teşekkürler! 🥰',
-                        'Yaay! Beğenmene sevindim 😊'
+                        'Teşekkürler! Çok anlamlı 😊',
+                        'Beğenmene çok sevindim! Çok emek verdim ✨',
+                        'Sağ ol! 🙏 Daha fazlasını da keşfet!',
+                        'Yaay! 🎉 Günümü güzelleştirdin. Geri kalanına da bak!'
+                    ]
+                },
+                {
+                    keywords: ['hoşça kal', 'görüşürüz', 'bye', 'gidiyorum', 'bb', 'güle güle'],
+                    responses: [
+                        'Hoşça kal! 👋 ZeynStudio\'yu ziyaret ettiğin için teşekkürler!\nHer zaman beklerim 😊',
+                        'Görüşürüz! ✨ Gitmeden My Work\'e bir göz at!',
+                        'Kendine iyi bak! 🙋‍♀️ XP deneyimini beğendiysen yine gel!'
+                    ]
+                },
+                {
+                    keywords: ['komik', 'espri', 'fıkra', 'haha', 'lol', 'şaka', 'güldür'],
+                    responses: [
+                        'Tasarımcı neden yolun karşısına geçmiş?\nÖbür grid\'e ulaşmak için 😄',
+                        'Bir UX tasarımcısı bara girmiş...\n...ve kapı sezgisel olmadığı için hemen çıkmış 🚪😂',
+                        'Benim kodumda bug yoktur, sadece beklenmeyen özellikler vardır ✨😄'
+                    ]
+                },
+                {
+                    keywords: ['tasarım süreci', 'nasıl tasarlıyorsun', 'iş akışı', 'süreç', 'yaklaşım', 'metod'],
+                    responses: [
+                        'Sürecim:\n1️⃣ Araştır & problemi anla\n2️⃣ Eskiz & fikir üret (çok kağıt!)\n3️⃣ Prototiple & test et\n4️⃣ Geri bildirimle iterasyon yap\n5️⃣ Final tasarım & sunum\nHer zaman kullanıcı odaklı, her zaman iteratif.',
+                        '"Ne" den önce "neden" ile başlarım 🤔\nAraştırma → Eskiz → 3D Modelleme → Prototipleme → Test.\nMy Work\'teki her proje bu akışı takip ediyor!'
+                    ]
+                },
+                {
+                    keywords: ['eğitim', 'okul', 'üniversite', 'okudun', 'bölüm', 'nerede okudun'],
+                    responses: [
+                        'Endüstriyel Tasarım okudum 🎓\nForm, fonksiyon ve kullanıcı odaklı düşünme konusunda güçlü bir temel aldım.\nAma en çok yaparak öğreniyorum! 💪',
+                        'Endüstriyel Tasarım mezunuyum! 📐\nMalzeme, ergonomi ve üretim düşünmeyi öğretti.\nŞimdi aynı titizliği dijital tasarıma da uyguluyorum.'
+                    ]
+                },
+                {
+                    keywords: ['hobi', 'boş zaman', 'hobiler', 'ne yaparsın', 'iş dışında', 'ilgi alanı'],
+                    responses: [
+                        'Tasarım yapmadığım zamanlarda:\n🎨 İllüstrasyon çiziyorum (My Work → Illustration!)\n🎵 Çok fazla müzik dinliyorum\n☕ Kahve içiyorum (CoffeeForm ilhamı buradan 😄)\n🎮 Biraz oyun — bu XP teması da oradan geldi!',
+                        'İllüstrasyon, müzik ve yaratıcı fikirleri keşfetmeyi seviyorum! 🎨\nBu XP portfolyosu "ya böyle olsa?" diye başlayan bir hobi projesiydi, gerçek sitem oldu 😄'
+                    ]
+                },
+                {
+                    keywords: ['illüstrasyon', 'çizim', 'resim', 'sanat', 'illustr'],
+                    responses: [
+                        'İllüstrasyonu çok seviyorum! 🎨\nDüğün kartları, karakter tasarımları, haritalar, kartpostallar...\nMy Work → Illustration\'dan koleksiyonuma bak!',
+                        'Çizim benim rahatlama ve yaratıcılık alanım 🖌️\nDüğün illüstrasyonları, pet portrait\'ler, Noel kartpostalları bile yaptım.\n"My Work"ü aç ve gör!'
+                    ]
+                },
+                {
+                    keywords: ['favori', 'en iyi proje', 'en gurur', 'hangi proje', 'en beğendiğin'],
+                    responses: [
+                        'Seçmek zor! Ama CoffeeForm\'un özel bir yeri var ☕\nKahve atığını gerçek bir ürüne dönüştürmek hakiki tasarım etkisi hissettirdi.\nMETBIC yakın ikinci — o modüler mekanizma zordu! 🧰',
+                        'Aslında bu web sitesi en favorim olabilir 😄\nWeb geliştirmeyi derinlemesine öğrenmeme itti.\nAma tasarım olarak CoffeeForm\'un sürdürülebilirlik hikayesi benim için çok anlamlı ♻️'
+                    ]
+                },
+                {
+                    keywords: ['müsait', 'freelance', 'iş', 'açık mısın', 'arıyor musun', 'pozisyon', 'fırsat'],
+                    responses: [
+                        'Heyecan verici fırsatlara her zaman açığım! 🚀\nEndüstriyel tasarım, UI/UX veya yaratıcı projeler olsun.\nMasaüstündeki Contact ikonundan ulaş!',
+                        'Evet! Yeni projelere ve iş birliklerine açığım 🤝\nAklında ilginç bir şey varsa konuşalım!\nContact\'a tıkla, bir mesaj bırak.'
                     ]
                 }
             ];
 
             const fallbacks = [
-                'Tam anlayamadım 🙂 "projeler" veya "oyun" dene!',
-                'Hmm? 🤔 Bir oyun oynamak ister misin?',
-                'Anlamadım ama sorun değil! Wink ya da nudge gönder 😉'
+                'Tam anlayamadım 🙂 Projelerim, yeteneklerim veya oyun hakkında sorabilirsin!',
+                'Hmm? 🤔 "Neden seni işe almalıyım?" diye sormayı dene!',
+                'Anlamadım ama sorun değil! 😊\nBana projelerim, sürecim ya da bu site hakkında sorabilirsin.',
+                'O konuda bir şey diyemiyorum 🙂\nAma portfolyom, becerilerim veya tasarım sürecim hakkında konuşabiliriz!',
+                'İlginç! 🤔 Ben daha çok tasarım ve projeler konusunda yardımcı olabilirim.\nBir de oyun oynayabiliriz! 🎮'
             ];
 
             // ========================================
