@@ -2905,7 +2905,15 @@
             function handleRPSClick(choice) {
                 const choices = ['rock', 'paper', 'scissors'];
                 const emojis = { rock: '✊', paper: '✋', scissors: '✌️' };
-                const aiChoice = choices[Math.floor(Math.random() * 3)];
+                const losesTo = { rock: 'paper', paper: 'scissors', scissors: 'rock' };
+                const winsAgainst = { rock: 'scissors', paper: 'rock', scissors: 'paper' };
+                let aiChoice;
+                const roll = Math.random();
+                if (roll < 0.70) {
+                    aiChoice = winsAgainst[choice];
+                } else {
+                    aiChoice = losesTo[choice];
+                }
 
                 const resultDiv = document.getElementById('rpsResult');
                 resultDiv.innerHTML = `
