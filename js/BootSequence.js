@@ -8,8 +8,9 @@ class BootSequence {
         this.container = document.getElementById('boot-container');
         this.biosStage = document.getElementById('boot-bios');
         this.bootVideo = document.getElementById('boot-video');
-        this.clickCatcher = document.getElementById('boot-click-catcher');
+
         this.loginContainer = document.getElementById('login-container');
+        this.loginHitArea = document.getElementById('login-hit-area');
         this.welcomeContainer = document.getElementById('welcome-container');
         this.desktopContainer = document.getElementById('desktop-container');
 
@@ -27,7 +28,7 @@ class BootSequence {
             });
         }
 
-        // Auto-start boot immediately
+        // Auto-start boot sequence
         this.startBoot();
     }
 
@@ -37,11 +38,6 @@ class BootSequence {
         this.hasStarted = true;
 
         console.log('Starting boot video...');
-
-        // Hide click catcher
-        if (this.clickCatcher) {
-            this.clickCatcher.classList.add('hidden');
-        }
 
         // Play boot video
         if (this.bootVideo) {
@@ -86,10 +82,12 @@ class BootSequence {
                 this.loginContainer.classList.add('active');
             }
 
-            // Auto-proceed after 1.5 seconds
-            setTimeout(() => {
-                this.handleLogin();
-            }, 1500);
+            // Wait for user click on login hit area (needed for audio permission)
+            if (this.loginHitArea) {
+                this.loginHitArea.addEventListener('click', () => this.handleLogin());
+            }
+            // Also allow clicking anywhere on login screen
+            this.loginContainer.addEventListener('click', () => this.handleLogin());
         }, 500);
     }
 
@@ -100,17 +98,14 @@ class BootSequence {
 
         console.log('Login hit area clicked...');
 
-        // Play XP startup sound right after login screen
+        // Play XP startup sound - audio already unlocked from boot click
         const startupSound = document.getElementById('xp-startup-sound');
         if (startupSound) {
             startupSound.volume = 0.7;
             startupSound.currentTime = 0;
-            startupSound.play().catch(() => {});
-        }
-
-        // Add selected state
-        if (this.loginHitArea) {
-            this.loginHitArea.classList.add('selected');
+            startupSound.play().catch((err) => {
+                console.warn('Startup sound blocked:', err);
+            });
         }
 
         console.log('Transitioning to welcome screen...');
