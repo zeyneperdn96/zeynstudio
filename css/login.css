@@ -60,6 +60,13 @@
     pointer-events: none;
 }
 
+.hint-mobile { display: none; }
+
+@media (max-width: 768px) {
+    .hint-desktop { display: none; }
+    .hint-mobile { display: inline; }
+}
+
 @media (max-width: 768px) {
     .login-image {
         object-fit: contain;

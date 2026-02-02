@@ -81,8 +81,12 @@ class BootSequence {
                 this.loginContainer.classList.add('active');
             }
 
-            // Wait for user click to proceed (needed for audio permission)
+            // Mobile: tap to proceed, Desktop: Enter key
             this.loginContainer.addEventListener('click', () => this.handleLogin());
+            this._loginKeyHandler = (e) => {
+                if (e.key === 'Enter') this.handleLogin();
+            };
+            document.addEventListener('keydown', this._loginKeyHandler);
         }, 500);
     }
 
@@ -91,9 +95,12 @@ class BootSequence {
         if (this.hasLoggedIn) return;
         this.hasLoggedIn = true;
 
-        console.log('Login hit area clicked...');
+        // Remove Enter key listener
+        if (this._loginKeyHandler) {
+            document.removeEventListener('keydown', this._loginKeyHandler);
+        }
 
-        // Play XP startup sound - audio already unlocked from boot click
+        // Play XP startup sound
         const startupSound = document.getElementById('xp-startup-sound');
         if (startupSound) {
             startupSound.volume = 0.7;
