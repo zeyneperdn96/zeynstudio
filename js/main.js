@@ -3,38 +3,15 @@
    Initialize desktop environment
    ======================================== */
 
-// Mobile detection disabled - desktop XP experience on all devices
-function isMobile() {
-    return false;
+// Set real viewport height for mobile (accounts for browser chrome)
+function setVH() {
+    document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
 }
+setVH();
+window.addEventListener('resize', setVH);
 
 // Initialize application
 document.addEventListener('DOMContentLoaded', () => {
-
-    // Mobile check
-    if (isMobile()) {
-        document.getElementById('boot-container').classList.add('hidden');
-        document.getElementById('desktop-container').classList.add('hidden');
-        document.getElementById('mobile-view').classList.remove('hidden');
-
-        // Update mobile content from config
-        document.getElementById('mobile-bio').textContent = CONFIG.personal.bio;
-        document.getElementById('mobile-github').href = CONFIG.social.github;
-        document.getElementById('mobile-linkedin').href = CONFIG.social.linkedin;
-
-        // Mobile clock
-        function updateMobileClock() {
-            var now = new Date();
-            var h = now.getHours();
-            var m = now.getMinutes();
-            document.getElementById('mobile-clock').textContent =
-                (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m;
-        }
-        updateMobileClock();
-        setInterval(updateMobileClock, 30000);
-
-        return;
-    }
 
     // Desktop initialization
     const bootSequence = new BootSequence();
@@ -236,29 +213,6 @@ function setupDesktopIcons() {
         }, { passive: true });
     }
 }
-
-// Handle window resize
-let resizeTimeout;
-window.addEventListener('resize', () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
-        const mobile = isMobile();
-        const mobileView = document.getElementById('mobile-view');
-        const desktopContainer = document.getElementById('desktop-container');
-        const bootContainer = document.getElementById('boot-container');
-
-        if (mobile) {
-            bootContainer.classList.add('hidden');
-            desktopContainer.classList.add('hidden');
-            mobileView.classList.remove('hidden');
-        } else {
-            if (bootContainer.classList.contains('hidden')) {
-                mobileView.classList.add('hidden');
-                desktopContainer.classList.remove('hidden');
-            }
-        }
-    }, 250);
-});
 
 // F11 fullscreen toggle
 document.addEventListener('keydown', (e) => {
