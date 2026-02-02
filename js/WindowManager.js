@@ -83,6 +83,7 @@ class WindowManager {
             showreel: { width: 680, height: 440 },
             metbic: { width: 820, height: 520 },
             firebox: { width: 820, height: 520 },
+            coffeeform: { width: 820, height: 520 },
             games: { width: 420, height: 520 },
             zeynshat: { width: 500, height: 700 },
             illustration: { width: 800, height: 600 },
@@ -501,6 +502,11 @@ class WindowManager {
             this.initializeMarinesentryWindow(windowEl);
         }
 
+        // COFFEEFORM.exe interactive window
+        if (windowId === 'coffeeform') {
+            this.initializeCoffeeformWindow(windowEl);
+        }
+
         // Gallery lightbox
         if (windowId === 'illustration' || windowId === 'illustrationWork') {
             this.initializeGalleryWindow(windowEl);
@@ -546,6 +552,12 @@ class WindowManager {
         // Special handling for FuncArt - open XP-style window
         if (project.title === 'FuncArt') {
             this.openWindow('funcart', { width: 820, height: 520 });
+            return;
+        }
+
+        // Special handling for CoffeeForm - open XP-style window
+        if (project.title === 'CoffeeForm') {
+            this.openWindow('coffeeform', { width: 820, height: 520 });
             return;
         }
 
@@ -703,6 +715,61 @@ class WindowManager {
         }
 
         this.addProjectLightbox(windowEl, '#metbic-preview-img');
+        this.addProjectKeyboard(windowEl, updateGallery, () => currentIndex, () => totalImages);
+    }
+
+    initializeCoffeeformWindow(windowEl) {
+        const previewImg = windowEl.querySelector('#coffeeform-preview-img');
+        const thumbs = windowEl.querySelectorAll('.coffeeform-thumb');
+        const prevBtn = windowEl.querySelector('#coffeeform-prev');
+        const nextBtn = windowEl.querySelector('#coffeeform-next');
+        const counter = windowEl.querySelector('.coffeeform-counter');
+
+        let currentIndex = 0;
+        const totalImages = thumbs.length;
+
+        const updateGallery = (index) => {
+            currentIndex = index;
+            if (currentIndex < 0) currentIndex = totalImages - 1;
+            if (currentIndex >= totalImages) currentIndex = 0;
+
+            const targetThumb = thumbs[currentIndex];
+            const imgSrc = targetThumb.dataset.img;
+
+            thumbs.forEach(t => t.classList.remove('active'));
+            targetThumb.classList.add('active');
+
+            if (imgSrc && previewImg) {
+                previewImg.style.opacity = '0';
+                setTimeout(() => {
+                    previewImg.src = imgSrc;
+                    previewImg.style.opacity = '1';
+                }, 150);
+            }
+
+            if (counter) {
+                counter.textContent = `${currentIndex + 1} / ${totalImages}`;
+            }
+
+            targetThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        };
+
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => updateGallery(currentIndex - 1));
+        }
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => updateGallery(currentIndex + 1));
+        }
+
+        thumbs.forEach((thumb, index) => {
+            thumb.addEventListener('click', () => updateGallery(index));
+        });
+
+        if (previewImg) {
+            previewImg.style.transition = 'opacity 0.15s ease';
+        }
+
+        this.addProjectLightbox(windowEl, '#coffeeform-preview-img');
         this.addProjectKeyboard(windowEl, updateGallery, () => currentIndex, () => totalImages);
     }
 

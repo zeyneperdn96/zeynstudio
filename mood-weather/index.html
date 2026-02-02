@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood Weather - Ruh Hali Takibi</title>
+    <meta name="description" content="Ruh halinizi hava durumu gibi takip edin">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">
+                    <span class="logo-icon">☁️</span>
+                    Mood Weather
+                </h1>
+                <div class="header-actions">
+                    <button class="icon-btn" id="historyBtn" title="Geçmiş">
+                        📊
+                    </button>
+                    <button class="icon-btn" id="settingsBtn" title="Ayarlar">
+                        ⚙️
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Current Mood Display -->
+            <section class="mood-display">
+                <div class="weather-scene" id="weatherScene">
+                    <div class="weather-icon" id="weatherIcon">🌤️</div>
+                    <div class="weather-particles" id="weatherParticles"></div>
+                </div>
+                <div class="mood-info">
+                    <h2 class="mood-title" id="moodTitle">Bugün Nasılsın?</h2>
+                    <p class="mood-description" id="moodDescription">Ruh halini seç ve günlük takibini başlat</p>
+                    <div class="mood-meta">
+                        <span class="current-date" id="currentDate"></span>
+                        <span class="mood-streak" id="moodStreak">🔥 0 gün</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Mood Selector -->
+            <section class="mood-selector">
+                <h3 class="section-title">Ruh Halini Seç</h3>
+                <div class="mood-grid">
+                    <button class="mood-card" data-mood="amazing" data-weather="☀️" data-title="Harika"
+                        data-desc="Güneşli ve parlak!">
+                        <div class="mood-card-icon">☀️</div>
+                        <div class="mood-card-label">Harika</div>
+                        <div class="mood-card-glow"></div>
+                    </button>
+                    <button class="mood-card" data-mood="good" data-weather="🌤️" data-title="İyi"
+                        data-desc="Parçalı bulutlu">
+                        <div class="mood-card-icon">🌤️</div>
+                        <div class="mood-card-label">İyi</div>
+                        <div class="mood-card-glow"></div>
+                    </button>
+                    <button class="mood-card" data-mood="okay" data-weather="⛅" data-title="İdare Eder"
+                        data-desc="Bulutlu ama fena değil">
+                        <div class="mood-card-icon">⛅</div>
+                        <div class="mood-card-label">İdare Eder</div>
+                        <div class="mood-card-glow"></div>
+                    </button>
+                    <button class="mood-card" data-mood="meh" data-weather="☁️" data-title="Eh İşte"
+                        data-desc="Kapalı hava">
+                        <div class="mood-card-icon">☁️</div>
+                        <div class="mood-card-label">Eh İşte</div>
+                        <div class="mood-card-glow"></div>
+                    </button>
+                    <button class="mood-card" data-mood="bad" data-weather="🌧️" data-title="Kötü"
+                        data-desc="Yağmurlu gün">
+                        <div class="mood-card-icon">🌧️</div>
+                        <div class="mood-card-label">Kötü</div>
+                        <div class="mood-card-glow"></div>
+                    </button>
+                    <button class="mood-card" data-mood="terrible" data-weather="⛈️" data-title="Berbat"
+                        data-desc="Fırtınalı hava">
+                        <div class="mood-card-icon">⛈️</div>
+                        <div class="mood-card-label">Berbat</div>
+                        <div class="mood-card-glow"></div>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Quick Note -->
+            <section class="note-section" id="noteSection" style="display: none;">
+                <h3 class="section-title">Not Ekle (İsteğe Bağlı)</h3>
+                <div class="note-input-wrapper">
+                    <textarea id="moodNote" class="note-input" placeholder="Bugün neler oldu? Nasıl hissediyorsun?"
+                        maxlength="500"></textarea>
+                    <div class="note-actions">
+                        <span class="char-count" id="charCount">0/500</span>
+                        <button class="btn btn-primary" id="saveMoodBtn">
+                            <span class="btn-icon">💾</span>
+                            Kaydet
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Weekly Overview -->
+            <section class="weekly-overview">
+                <div class="section-header">
+                    <h3 class="section-title">Bu Hafta</h3>
+                    <button class="btn-text" id="viewAllBtn">Tümünü Gör →</button>
+                </div>
+                <div class="week-grid" id="weekGrid">
+                    <!-- Will be populated by JS -->
+                </div>
+            </section>
+        </main>
+
+        <!-- History Modal -->
+        <div class="modal" id="historyModal">
+            <div class="modal-overlay" id="historyModalOverlay"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Ruh Hali Geçmişi</h2>
+                    <button class="modal-close" id="closeHistoryModal">✕</button>
+                </div>
+                <div class="modal-body">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">📅</div>
+                            <div class="stat-value" id="totalDays">0</div>
+                            <div class="stat-label">Toplam Gün</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🔥</div>
+                            <div class="stat-value" id="currentStreak">0</div>
+                            <div class="stat-label">Güncel Seri</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⭐</div>
+                            <div class="stat-value" id="bestMood">-</div>
+                            <div class="stat-label">En İyi Gün</div>
+                        </div>
+                    </div>
+                    <div class="history-list" id="historyList">
+                        <!-- Will be populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

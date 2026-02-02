@@ -4,6 +4,35 @@ Bu dosya, ZeynStudio XP projesinde yapılan tüm değişiklikleri kronolojik ola
 
 ---
 
+## 📅 2 Şubat 2026 - Zeyn Chat Güncellemesi & Boot Sequence Düzeltmesi
+
+### 💬 Zeyn Chat (msn-chatbot.html) Güncellemesi
+- **Değişiklik**: Chat arayüzünde statusbar kaldırıldı, chat alanı genişletildi, öpücük emojileri değiştirildi
+- **Amaç**: Daha temiz chat deneyimi, öpücük/kiss emojilerinin kaldırılması
+- **Değiştirilen Dosyalar**:
+  - `msn-chatbot.html` - Tüm değişiklikler tek dosyada (inline CSS + JS + HTML)
+
+#### ✨ Değişiklikler:
+- ✅ "Last activity" statusbar tamamen kaldırıldı
+- ✅ Chat alanı genişletildi (Desktop: 220px → 320px, Mobil 480px: 180px → 260px, Mobil 360px: 150px → 220px)
+- ✅ Wink picker'da 😘 Kiss → 😄 Smile olarak değiştirildi
+- ✅ Wink picker'da 💋 Lips → 😂 Laugh olarak değiştirildi
+- ✅ Zeynep'in wink yanıt emojileri: `['😘', '🥰', '💕', '😊']` → `['😄', '🥰', '✨', '😊']`
+- ✅ Zeynep'in Türkçe wink yanıt mesajındaki 😘 → 😄
+- ✅ Wink overlay varsayılan emoji: 😘 → 😄
+- ✅ Emoticon kısayolları: `:*` → 😄 (eskiden 😘), `(K)` → 😂 (eskiden 💋)
+- ✅ Çeviri etiketleri: TR: Öpücük → Gülümse, Dudak → Kahkaha / EN: Kiss → Smile, Lips → Laugh
+- ✅ JS'deki lastActivity referansları null-guard eklendi (hata önleme)
+
+### 🔧 Boot Sequence - Stabil Versiyona Geri Dönüş
+- **Değişiklik**: BootSequence.js git commit `814496c` versiyonuna geri döndürüldü
+- **Sebep**: Müzik zamanlaması ve geçiş değişiklikleri beyaz ekran/takılma sorunlarına yol açtı
+- **Dosya**: `js/BootSequence.js`
+- ✅ Müzik handleLogin'de çalıyor (welcome ekranına geçerken)
+- ✅ Geçişler orijinal haliyle: Boot → fade → Login → fade → Welcome → fade → Desktop
+
+---
+
 ## 📅 29 Ocak 2026 - Media Player Windows Media Player 11 Teması
 
 ### 🎵 Media Player → Windows Media Player 11 Görünümü

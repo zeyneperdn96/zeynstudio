@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chinese Sushi Express – Punch Card</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Roboto', sans-serif;
+            background: #FFFFFF;
+            color: #1A1A1A;
+            overflow-x: hidden;
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* Mobile Container */
+        .mobile-container {
+            max-width: 390px;
+            height: 844px;
+            margin: 0 auto;
+            background: #FFFFFF;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Screen Base */
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            background: #FFFFFF;
+        }
+
+        .screen.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* Home Screen */
+        .home-screen {
+            padding: 60px 20px 20px;
+        }
+
+        .app-header {
+            margin-bottom: 32px;
+        }
+
+        .app-logo {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1A1A1A;
+            letter-spacing: -0.3px;
+        }
+
+        /* Loyalty Card Component */
+        .loyalty-card {
+            background: #FFFFFF;
+            border: 1px solid #E5E5E5;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            cursor: pointer;
+            transition: box-shadow 0.2s ease;
+            user-select: none;
+        }
+
+        .loyalty-card:active {
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1A1A1A;
+            letter-spacing: -0.2px;
+        }
+
+        .card-count {
+            font-size: 14px;
+            font-weight: 500;
+            color: #666666;
+        }
+
+        .punch-slots {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .punch-slot {
+            flex: 1;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: #FFFFFF;
+            border: 2px solid #E5E5E5;
+            transition: all 0.2s ease;
+        }
+
+        .punch-slot.filled {
+            background: #DC2626;
+            border-color: #DC2626;
+        }
+
+        .card-status {
+            font-size: 14px;
+            font-weight: 500;
+            color: #666666;
+        }
+
+        /* Punch Card Screen */
+        .punch-screen {
+            display: flex;
+            flex-direction: column;
+            padding: 60px 20px 20px;
+        }
+
+        .punch-header {
+            margin-bottom: 40px;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            font-size: 16px;
+            color: #DC2626;
+            cursor: pointer;
+            padding: 8px 0;
+            font-weight: 500;
+        }
+
+        .punch-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .punch-card-large {
+            background: #FFFFFF;
+            border: 1px solid #E5E5E5;
+            border-radius: 16px;
+            padding: 32px 24px;
+            width: 100%;
+            max-width: 340px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .punch-card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1A1A1A;
+            margin-bottom: 24px;
+            text-align: center;
+            letter-spacing: -0.3px;
+        }
+
+        .punch-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .punch-circle {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: #FFFFFF;
+            border: 2px solid #E5E5E5;
+            transition: all 0.2s ease;
+        }
+
+        .punch-circle.filled {
+            background: #DC2626;
+            border-color: #DC2626;
+        }
+
+        .punch-circle.animate {
+            animation: fillPunch 0.3s ease;
+        }
+
+        @keyframes fillPunch {
+            0% {
+                transform: scale(0.9);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .punch-progress {
+            font-size: 15px;
+            font-weight: 500;
+            color: #666666;
+            text-align: center;
+        }
+
+        .punch-footer {
+            padding: 20px;
+        }
+
+        .cta-button {
+            width: 100%;
+            padding: 16px;
+            background: #DC2626;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            letter-spacing: -0.2px;
+        }
+
+        .cta-button:active {
+            background: #B91C1C;
+        }
+
+        .cta-button.secondary {
+            background: #FFFFFF;
+            color: #DC2626;
+            border: 1px solid #DC2626;
+        }
+
+        .cta-button.secondary:active {
+            background: #FEF2F2;
+        }
+
+        /* Bottom Sheet */
+        .bottom-sheet {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #FFFFFF;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            padding: 24px 20px;
+            box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            z-index: 200;
+        }
+
+        .bottom-sheet.active {
+            transform: translateY(0);
+        }
+
+        .sheet-content {
+            text-align: center;
+        }
+
+        .sheet-message {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1A1A1A;
+            margin-bottom: 4px;
+        }
+
+        .sheet-submessage {
+            font-size: 14px;
+            font-weight: 500;
+            color: #666666;
+        }
+
+        /* Reward State */
+        .reward-message {
+            background: #FEF2F2;
+            border: 1px solid #FCA5A5;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .reward-text {
+            font-size: 15px;
+            font-weight: 600;
+            color: #DC2626;
+            letter-spacing: -0.2px;
+        }
+
+        /* Responsive */
+        @media (max-height: 844px) {
+            .mobile-container {
+                height: 100vh;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="mobile-container">
+        <!-- Home Screen -->
+        <div class="screen home-screen active" id="homeScreen">
+            <div class="app-header">
+                <div class="app-logo">Chinese Sushi Express</div>
+            </div>
+
+            <div class="loyalty-card" id="loyaltyCard">
+                <div class="card-header">
+                    <div class="card-title">Punch Card</div>
+                    <div class="card-count" id="homeCount">5 / 8</div>
+                </div>
+                <div class="punch-slots" id="homePunchSlots">
+                    <!-- Generated by JS -->
+                </div>
+                <div class="card-status" id="homeStatus">
+                    3 orders left
+                </div>
+            </div>
+        </div>
+
+        <!-- Punch Card Screen -->
+        <div class="screen punch-screen" id="punchScreen">
+            <div class="punch-header">
+                <button class="back-button" id="backButton">← Back</button>
+            </div>
+
+            <div class="punch-content">
+                <div class="punch-card-large">
+                    <div class="punch-card-title">Punch Card</div>
+
+                    <div id="rewardMessage" class="reward-message" style="display: none;">
+                        <div class="reward-text">Reward unlocked: Free Noodle</div>
+                    </div>
+
+                    <div class="punch-grid" id="punchGrid">
+                        <!-- Generated by JS -->
+                    </div>
+                    <div class="punch-progress" id="punchProgress">
+                        5 / 8 completed
+                    </div>
+                </div>
+            </div>
+
+            <div class="punch-footer">
+                <button class="cta-button" id="ctaButton">Order Now</button>
+            </div>
+        </div>
+
+        <!-- Bottom Sheet -->
+        <div class="bottom-sheet" id="bottomSheet">
+            <div class="sheet-content">
+                <div class="sheet-message">+1 Punch added</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let punchCount = 5;
+        const totalPunches = 8;
+        let isRewarded = false;
+
+        // Elements
+        const screens = {
+            home: document.getElementById('homeScreen'),
+            punch: document.getElementById('punchScreen')
+        };
+
+        const bottomSheet = document.getElementById('bottomSheet');
+        const rewardMessage = document.getElementById('rewardMessage');
+        const ctaButton = document.getElementById('ctaButton');
+
+        // Initialize
+        function init() {
+            renderHome();
+            renderPunchScreen();
+            attachEventListeners();
+        }
+
+        // Render home screen
+        function renderHome() {
+            const slotsContainer = document.getElementById('homePunchSlots');
+            slotsContainer.innerHTML = '';
+
+            for (let i = 0; i < totalPunches; i++) {
+                const slot = document.createElement('div');
+                slot.className = `punch-slot ${i < punchCount ? 'filled' : ''}`;
+                slotsContainer.appendChild(slot);
+            }
+
+            const remaining = totalPunches - punchCount;
+            document.getElementById('homeCount').textContent = `${punchCount} / ${totalPunches}`;
+            document.getElementById('homeStatus').textContent =
+                remaining > 0 ? `${remaining} orders left` : 'Reward ready';
+        }
+
+        // Render punch screen
+        function renderPunchScreen() {
+            const gridContainer = document.getElementById('punchGrid');
+            gridContainer.innerHTML = '';
+
+            for (let i = 0; i < totalPunches; i++) {
+                const circle = document.createElement('div');
+                circle.className = `punch-circle ${i < punchCount ? 'filled' : ''}`;
+                circle.dataset.index = i;
+                gridContainer.appendChild(circle);
+            }
+
+            document.getElementById('punchProgress').textContent =
+                `${punchCount} / ${totalPunches} completed`;
+
+            // Update reward state
+            if (punchCount >= totalPunches) {
+                rewardMessage.style.display = 'block';
+                ctaButton.textContent = 'Use Reward';
+                ctaButton.className = 'cta-button';
+                isRewarded = true;
+            } else {
+                rewardMessage.style.display = 'none';
+                ctaButton.textContent = 'Order Now';
+                ctaButton.className = 'cta-button';
+                isRewarded = false;
+            }
+        }
+
+        // Navigate to screen
+        function navigateTo(screenName) {
+            Object.values(screens).forEach(screen => screen.classList.remove('active'));
+            screens[screenName].classList.add('active');
+        }
+
+        // Add punch
+        function addPunch() {
+            if (punchCount < totalPunches) {
+                punchCount++;
+
+                // Update punch screen with animation
+                const circles = document.querySelectorAll('.punch-circle');
+                const newCircle = circles[punchCount - 1];
+                newCircle.classList.add('filled', 'animate');
+
+                // Show bottom sheet
+                bottomSheet.classList.add('active');
+
+                // Update progress
+                document.getElementById('punchProgress').textContent =
+                    `${punchCount} / ${totalPunches} completed`;
+
+                // Auto dismiss
+                setTimeout(() => {
+                    bottomSheet.classList.remove('active');
+
+                    // Check if reward unlocked
+                    if (punchCount >= totalPunches) {
+                        rewardMessage.style.display = 'block';
+                        ctaButton.textContent = 'Use Reward';
+                        isRewarded = true;
+                    }
+
+                    // Update home screen
+                    renderHome();
+                }, 1500);
+            }
+        }
+
+        // Use reward
+        function useReward() {
+            punchCount = 0;
+            isRewarded = false;
+            renderHome();
+            renderPunchScreen();
+            navigateTo('home');
+        }
+
+        // Event listeners
+        function attachEventListeners() {
+            document.getElementById('loyaltyCard').addEventListener('click', () => {
+                navigateTo('punch');
+            });
+
+            document.getElementById('backButton').addEventListener('click', () => {
+                navigateTo('home');
+            });
+
+            ctaButton.addEventListener('click', () => {
+                if (isRewarded) {
+                    useReward();
+                } else {
+                    addPunch();
+                }
+            });
+        }
+
+        // Start
+        init();
+    </script>
+</body>
+
+</html>

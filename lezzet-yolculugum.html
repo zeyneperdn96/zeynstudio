@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lezzet Yolculuğum – Chinese Sushi Express</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Roboto', sans-serif;
+            background: #F9FAFB;
+            color: #1F2937;
+            overflow-x: hidden;
+        }
+
+        /* Mobile Container */
+        .mobile-container {
+            max-width: 390px;
+            height: 844px;
+            margin: 0 auto;
+            background: #F9FAFB;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Status Bar */
+        .status-bar {
+            height: 24px;
+            background: #DC2626;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            font-size: 12px;
+            color: #FFFFFF;
+        }
+
+        /* Header */
+        .header {
+            height: 56px;
+            background: #DC2626;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: #FFFFFF;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+            margin-right: 12px;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #FFFFFF;
+            letter-spacing: -0.3px;
+        }
+
+        /* Content */
+        .content {
+            padding: 24px 16px;
+            overflow-y: auto;
+            height: calc(844px - 80px);
+        }
+
+        /* Journey Progress Container */
+        .journey-container {
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 32px 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Metro Line */
+        .metro-line {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            padding: 0 8px;
+        }
+
+        .metro-track {
+            position: absolute;
+            top: 50%;
+            left: 8px;
+            right: 8px;
+            height: 3px;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .track-completed {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background: #DC2626;
+            transition: width 0.4s ease;
+        }
+
+        .track-remaining {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: #E5E7EB;
+        }
+
+        .metro-nodes {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .node {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            border: 3px solid #E5E7EB;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s ease;
+            font-size: 12px;
+        }
+
+        .node.completed {
+            background: #DC2626;
+            border-color: #DC2626;
+        }
+
+        .node.animate {
+            animation: nodeFill 0.4s ease;
+        }
+
+        @keyframes nodeFill {
+            0% {
+                transform: scale(0.8);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .node.start {
+            background: #DC2626;
+            border-color: #DC2626;
+        }
+
+        .node.start::after {
+            content: '✓';
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .node.reward {
+            background: #FFFFFF;
+            border-color: #E5E7EB;
+            font-size: 16px;
+        }
+
+        .node.reward.unlocked {
+            background: #10B981;
+            border-color: #10B981;
+        }
+
+        /* Status Message */
+        .status-message {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .primary-message {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 4px;
+            letter-spacing: -0.3px;
+        }
+
+        .secondary-message {
+            font-size: 14px;
+            font-weight: 400;
+            color: #6B7280;
+        }
+
+        /* Info Card */
+        .info-card {
+            background: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .info-icon {
+            width: 20px;
+            height: 20px;
+            background: #DC2626;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            font-size: 12px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .info-text {
+            font-size: 13px;
+            font-weight: 400;
+            color: #6B7280;
+            line-height: 1.5;
+        }
+
+        /* Reward Buttons */
+        .reward-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            letter-spacing: -0.2px;
+        }
+
+        .btn-primary {
+            background: #DC2626;
+            color: #FFFFFF;
+        }
+
+        .btn-primary:active {
+            background: #B91C1C;
+        }
+
+        .btn-secondary {
+            background: #FFFFFF;
+            color: #DC2626;
+            border: 2px solid #DC2626;
+        }
+
+        .btn-secondary:active {
+            background: #FEF2F2;
+        }
+
+        /* Simulate Order Button (for demo) */
+        .demo-button {
+            background: #FFFFFF;
+            border: 2px solid #DC2626;
+            color: #DC2626;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 16px;
+        }
+
+        .demo-button:active {
+            background: #FEF2F2;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1F2937;
+            color: #FFFFFF;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            max-width: 320px;
+            text-align: center;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Hidden */
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-height: 844px) {
+            .mobile-container {
+                height: 100vh;
+            }
+
+            .content {
+                height: calc(100vh - 80px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="mobile-container">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span>9:41</span>
+            <span>●●●●</span>
+        </div>
+
+        <!-- Header -->
+        <div class="header">
+            <button class="back-button" onclick="history.back()">←</button>
+            <div class="header-title">Lezzet Yolculuğum</div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Journey Progress -->
+            <div class="journey-container">
+                <!-- Metro Line -->
+                <div class="metro-line">
+                    <div class="metro-track">
+                        <div class="track-remaining"></div>
+                        <div class="track-completed" id="trackCompleted"></div>
+                    </div>
+                    <div class="metro-nodes" id="metroNodes">
+                        <!-- Generated by JS -->
+                    </div>
+                </div>
+
+                <!-- Status Message -->
+                <div class="status-message">
+                    <div class="primary-message" id="primaryMessage">3 sipariş kaldı</div>
+                    <div class="secondary-message" id="secondaryMessage">Ücretsiz noodle için</div>
+                </div>
+
+                <!-- Reward Buttons (hidden by default) -->
+                <div class="reward-buttons hidden" id="rewardButtons">
+                    <button class="btn btn-primary" id="useRewardBtn">Ödülü Kullan</button>
+                    <button class="btn btn-secondary" id="useLaterBtn">Sonra Kullan</button>
+                </div>
+            </div>
+
+            <!-- Info Card -->
+            <div class="info-card">
+                <div class="info-icon">i</div>
+                <div class="info-text">
+                    750 TL ve üzeri her sipariş yolculukta 1 adım ilerletir.
+                </div>
+            </div>
+
+            <!-- Demo Button (for testing) -->
+            <button class="demo-button" id="simulateOrderBtn">
+                📦 Sipariş Simüle Et (Test)
+            </button>
+        </div>
+
+        <!-- Toast -->
+        <div class="toast" id="toast">
+            Lezzet yolunda 1 adım ilerledin
+        </div>
+    </div>
+
+    <script>
+        // State
+        let currentStep = 3; // 0-6
+        const totalSteps = 6;
+        let isRewarded = false;
+
+        // Elements
+        const metroNodes = document.getElementById('metroNodes');
+        const trackCompleted = document.getElementById('trackCompleted');
+        const primaryMessage = document.getElementById('primaryMessage');
+        const secondaryMessage = document.getElementById('secondaryMessage');
+        const rewardButtons = document.getElementById('rewardButtons');
+        const toast = document.getElementById('toast');
+        const simulateOrderBtn = document.getElementById('simulateOrderBtn');
+        const useRewardBtn = document.getElementById('useRewardBtn');
+        const useLaterBtn = document.getElementById('useLaterBtn');
+
+        // Initialize
+        function init() {
+            renderJourney();
+            updateMessages();
+            attachEventListeners();
+        }
+
+        // Render journey nodes
+        function renderJourney() {
+            metroNodes.innerHTML = '';
+
+            // Start node
+            const startNode = document.createElement('div');
+            startNode.className = 'node start';
+            metroNodes.appendChild(startNode);
+
+            // Progress nodes
+            for (let i = 0; i < totalSteps; i++) {
+                const node = document.createElement('div');
+                node.className = `node ${i < currentStep ? 'completed' : ''}`;
+                node.dataset.index = i;
+                metroNodes.appendChild(node);
+            }
+
+            // Reward node
+            const rewardNode = document.createElement('div');
+            rewardNode.className = `node reward ${currentStep >= totalSteps ? 'unlocked' : ''}`;
+            rewardNode.textContent = currentStep >= totalSteps ? '🎁' : '🏁';
+            metroNodes.appendChild(rewardNode);
+
+            // Update track
+            const progress = (currentStep / totalSteps) * 100;
+            trackCompleted.style.width = `${progress}%`;
+        }
+
+        // Update messages
+        function updateMessages() {
+            if (currentStep === 0) {
+                primaryMessage.textContent = 'Lezzet yolculuğuna başla';
+                secondaryMessage.textContent = 'İlk siparişinle ilerle';
+                rewardButtons.classList.add('hidden');
+                simulateOrderBtn.classList.remove('hidden');
+            } else if (currentStep < totalSteps) {
+                const remaining = totalSteps - currentStep;
+                primaryMessage.textContent = `${remaining} sipariş kaldı`;
+                secondaryMessage.textContent = 'Ücretsiz noodle için';
+                rewardButtons.classList.add('hidden');
+                simulateOrderBtn.classList.remove('hidden');
+            } else {
+                primaryMessage.textContent = 'Yolculuk tamamlandı';
+                secondaryMessage.textContent = 'Ücretsiz Noodle kazandın';
+                rewardButtons.classList.remove('hidden');
+                simulateOrderBtn.classList.add('hidden');
+                isRewarded = true;
+            }
+        }
+
+        // Simulate order
+        function simulateOrder() {
+            if (currentStep < totalSteps) {
+                currentStep++;
+
+                // Animate new node
+                const nodes = document.querySelectorAll('.node');
+                const newNode = nodes[currentStep]; // +1 because of start node
+                newNode.classList.add('completed', 'animate');
+
+                // Update track
+                const progress = (currentStep / totalSteps) * 100;
+                trackCompleted.style.width = `${progress}%`;
+
+                // Show toast
+                showToast('Lezzet yolunda 1 adım ilerledin');
+
+                // Update messages after animation
+                setTimeout(() => {
+                    updateMessages();
+
+                    // Update reward node if completed
+                    if (currentStep >= totalSteps) {
+                        const rewardNode = nodes[nodes.length - 1];
+                        rewardNode.classList.add('unlocked');
+                        rewardNode.textContent = '🎁';
+                    }
+                }, 400);
+            }
+        }
+
+        // Show toast
+        function showToast(message) {
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // Use reward
+        function useReward() {
+            // Reset journey
+            currentStep = 0;
+            isRewarded = false;
+
+            // Show toast
+            showToast('Yeni yolculuk başladı');
+
+            // Update UI
+            setTimeout(() => {
+                renderJourney();
+                updateMessages();
+            }, 300);
+        }
+
+        // Event listeners
+        function attachEventListeners() {
+            simulateOrderBtn.addEventListener('click', simulateOrder);
+            useRewardBtn.addEventListener('click', useReward);
+            useLaterBtn.addEventListener('click', useReward);
+        }
+
+        // Start
+        init();
+    </script>
+</body>
+
+</html>

@@ -87,6 +87,33 @@ const projectsData = [
         featured: true,
         year: '2026',
         role: 'Product Designer (Research, Concept Development, 3D Modeling)'
+    },
+    {
+        id: 7,
+        title: 'CoffeeForm',
+        category: 'industrial',
+        thumbnail: 'assets/projects/coffeeform/hero.png',
+        description: 'Sustainable Laptop Stand from Coffee Waste',
+        featured: true,
+        year: '2026',
+        role: 'Product Designer (Concept Development, Material Research, Prototyping, 3D Modeling)',
+        caseStudy: {
+            hero: 'assets/projects/coffeeform/hero.png',
+            intro: 'CoffeeForm is an ergonomic laptop stand made primarily from recycled coffee grounds. Designed as a foldable, flat-pack product, it transforms from a compact surface into a stable stand through tool-free assembly — using only material logic and form.',
+            challenge: 'The product was developed as part of a circular design concept for coffee brands. Coffee waste collected from daily consumption is transformed into a long-lasting object, encouraging users to rethink waste, material value, and everyday sustainability.',
+            solution: 'CoffeeForm features a foldable, flat-pack structure with tool-free assembly. The user opens the flat surface, removes the rear support piece, inserts it through the front slot, and instantly transforms the product into a stable stand — no instructions, no fasteners needed. The integrated surface provides space for mouse use, and the ergonomic elevation reaches up to 25 cm.',
+            specs: {
+                material: 'Recycled Coffee Grounds + Wood Chip Composite',
+                size: '54.7cm (L) × 22.5cm (W), up to 25cm elevation',
+                components: 'Main Body Panel, Rear Leg Piece, Integrated Mouse Surface'
+            },
+            images: {
+                context: 'assets/projects/coffeeform/context.png',
+                render1: 'assets/projects/coffeeform/render1.png',
+                render2: 'assets/projects/coffeeform/render2.png',
+                technical: 'assets/projects/coffeeform/technical.png'
+            }
+        }
     }
 ];
 

@@ -1298,6 +1298,159 @@ const WindowTemplates = {
                 <span id="paint-tool-name">Pencil</span>
             </div>
         </div>
+    `,
+
+    // CoffeeForm.exe - Sustainable Laptop Stand
+    coffeeform: () => `
+        <div class="window-titlebar">
+            <span class="window-title">☕ CoffeeForm.exe — Sustainable Laptop Stand</span>
+            <div class="window-controls">
+                <button class="win-btn win-minimize" data-action="minimize">_</button>
+                <button class="win-btn win-maximize" data-action="maximize">□</button>
+                <button class="win-btn win-close" data-action="close">×</button>
+            </div>
+        </div>
+        <div class="window-content" style="padding: 0; display: flex; flex-direction: column; height: 100%; font-family: 'Segoe UI', Tahoma, sans-serif; font-size: 11px;">
+            <style>
+                .coffeeform-container { display: flex; flex: 1; min-height: 0; }
+                .coffeeform-gallery { width: 100px; background: #f0f0f0; border-right: 1px solid #a0a0a0; display: flex; flex-direction: column; padding: 8px; gap: 8px; overflow-y: auto; }
+                .coffeeform-gallery-title { font-size: 9px; font-weight: bold; color: #666; text-transform: uppercase; letter-spacing: 0.5px; padding-bottom: 6px; border-bottom: 1px solid #ccc; margin-bottom: 4px; }
+                .coffeeform-thumb { width: 100%; aspect-ratio: 1; background: #fff; border: 2px solid #c0c0c0; border-radius: 3px; cursor: pointer; overflow: hidden; transition: all 0.15s; }
+                .coffeeform-thumb:hover { border-color: #8B6914; transform: scale(1.02); }
+                .coffeeform-thumb.active { border-color: #8B6914; box-shadow: 0 0 0 2px rgba(139,105,20,0.3); }
+                .coffeeform-thumb img { width: 100%; height: 100%; object-fit: cover; }
+                .coffeeform-main { flex: 1; display: flex; flex-direction: column; background: #fff; min-width: 0; }
+                .coffeeform-header { padding: 12px 16px; background: linear-gradient(180deg, #8B6914 0%, #6B4F10 100%); color: #fff; }
+                .coffeeform-header h2 { margin: 0; font-size: 14px; font-weight: 600; }
+                .coffeeform-header p { margin: 4px 0 0; font-size: 11px; opacity: 0.9; }
+                .coffeeform-content { flex: 1; display: flex; padding: 16px; gap: 16px; overflow: hidden; }
+                .coffeeform-preview { flex: 1; background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%); border: 2px solid #808080; border-radius: 4px; display: flex; align-items: center; justify-content: center; min-width: 0; position: relative; }
+                .coffeeform-preview img { max-width: 95%; max-height: 95%; object-fit: contain; border-radius: 4px; }
+                .coffeeform-info { width: 220px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; }
+                .coffeeform-info-box { background: #faf6f0; border: 1px solid #dbc9a0; border-radius: 4px; padding: 12px; }
+                .coffeeform-info-title { font-size: 9px; font-weight: bold; color: #8B6914; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+                .coffeeform-info-text { font-size: 11px; color: #444; line-height: 1.6; }
+                .coffeeform-statusbar { padding: 6px 12px; background: linear-gradient(180deg, #e8e8e8 0%, #d0d0d0 100%); border-top: 1px solid #a0a0a0; display: flex; justify-content: space-between; font-size: 10px; color: #555; }
+                .coffeeform-status-item { display: flex; align-items: center; gap: 6px; }
+                .coffeeform-status-led { width: 8px; height: 8px; border-radius: 50%; background: #8B6914; box-shadow: 0 0 4px #8B6914; }
+            </style>
+
+            <div class="coffeeform-container">
+                <!-- Gallery Sidebar -->
+                <div class="coffeeform-gallery">
+                    <div class="coffeeform-gallery-title">Gallery</div>
+                    <div class="coffeeform-thumb active" data-img="assets/projects/coffeeform/hero.png" data-index="0">
+                        <img src="assets/projects/coffeeform/hero.png" alt="Hero" loading="lazy">
+                    </div>
+                    <div class="coffeeform-thumb" data-img="assets/projects/coffeeform/context.png" data-index="1">
+                        <img src="assets/projects/coffeeform/context.png" alt="Context" loading="lazy">
+                    </div>
+                    <div class="coffeeform-thumb" data-img="assets/projects/coffeeform/technical.png" data-index="2">
+                        <img src="assets/projects/coffeeform/technical.png" alt="Technical" loading="lazy">
+                    </div>
+                    <div class="coffeeform-thumb" data-img="assets/projects/coffeeform/exploded.png" data-index="3">
+                        <img src="assets/projects/coffeeform/exploded.png" alt="Exploded View" loading="lazy">
+                    </div>
+                </div>
+
+                <!-- Main Area -->
+                <div class="coffeeform-main">
+                    <!-- Header -->
+                    <div class="coffeeform-header">
+                        <h2>CoffeeForm — Sustainable Laptop Stand</h2>
+                        <p>Recycled coffee ground composite • 2026 • Product Design</p>
+                    </div>
+
+                    <!-- Content Area -->
+                    <div class="coffeeform-content">
+                        <!-- Preview with Arrow Navigation -->
+                        <div class="coffeeform-preview">
+                            <button id="coffeeform-prev" style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.9); border: 1px solid #ccc; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: all 0.15s;">❮</button>
+                            <img src="assets/projects/coffeeform/hero.png" alt="CoffeeForm" id="coffeeform-preview-img">
+                            <button id="coffeeform-next" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.9); border: 1px solid #ccc; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: all 0.15s;">❯</button>
+                            <div class="coffeeform-counter" style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); color: #fff; padding: 4px 12px; border-radius: 12px; font-size: 11px;">1 / 8</div>
+                        </div>
+
+                        <!-- Info Panel -->
+                        <div class="coffeeform-info">
+                            <div class="coffeeform-info-box">
+                                <div class="coffeeform-info-title">Project Overview</div>
+                                <div class="coffeeform-info-text">
+                                    CoffeeForm is an ergonomic laptop stand made primarily from recycled coffee grounds. A foldable, flat-pack product that transforms into a stable stand through tool-free assembly — using only material logic and form.
+                                </div>
+                            </div>
+
+                            <div class="coffeeform-info-box">
+                                <div class="coffeeform-info-title">Material & Sustainability</div>
+                                <div class="coffeeform-info-text">
+                                    The primary material is recycled coffee grounds collected from coffee shops, dried & cleaned, mixed with natural binders and wood particles, then hot-pressed into rigid panels. The result is a durable, biodegradable composite with a natural matte finish.
+                                </div>
+                            </div>
+
+                            <div class="coffeeform-info-box">
+                                <div class="coffeeform-info-title">Key Features</div>
+                                <div class="coffeeform-info-text">
+                                    • Recycled coffee ground material<br>
+                                    • Foldable, flat-pack structure<br>
+                                    • Tool-free assembly<br>
+                                    • Ergonomic elevation up to 25 cm<br>
+                                    • Integrated mouse surface<br>
+                                    • Lightweight and portable<br>
+                                    • Biodegradable composite
+                                </div>
+                            </div>
+
+                            <div class="coffeeform-info-box">
+                                <div class="coffeeform-info-title">User Experience</div>
+                                <div class="coffeeform-info-text">
+                                    Designed for immediate understanding: open the flat surface, remove the rear support piece, insert it through the front slot — instantly transforms into a stable stand. No instructions, no fasteners.
+                                </div>
+                            </div>
+
+                            <div class="coffeeform-info-box">
+                                <div class="coffeeform-info-title">Circular Design</div>
+                                <div class="coffeeform-info-text">
+                                    Developed as a circular design concept for coffee brands. Coffee waste from daily consumption is transformed into a long-lasting object, encouraging users to rethink waste, material value, and everyday sustainability.
+                                </div>
+                            </div>
+
+                            <div class="coffeeform-info-box">
+                                <div class="coffeeform-info-title">My Role</div>
+                                <div class="coffeeform-info-text">
+                                    <strong>Product Designer</strong><br>
+                                    Concept Development, Material Research (coffee-based composites), Sketching & Ideation, Prototyping, 3D Modeling, Product Storytelling & Presentation
+                                </div>
+                            </div>
+
+                            <div class="coffeeform-info-box">
+                                <div class="coffeeform-info-title">Specifications</div>
+                                <div class="coffeeform-info-text">
+                                    <strong>Open Length:</strong> 54.7 cm<br>
+                                    <strong>Width:</strong> 22.5 cm<br>
+                                    <strong>Max Height:</strong> 25 cm<br>
+                                    <strong>Material:</strong> Coffee + Wood Chip Composite<br>
+                                    <strong>Binder:</strong> 100% Natural Resin
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status Bar -->
+                    <div class="coffeeform-statusbar">
+                        <div class="coffeeform-status-item">
+                            <div class="coffeeform-status-led"></div>
+                            <span>Industrial Design Project</span>
+                        </div>
+                        <div class="coffeeform-status-item">
+                            <span>Zeynep Erden • 2026</span>
+                        </div>
+                        <div class="coffeeform-status-item">
+                            <span>4 Images</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     `
 };
 
