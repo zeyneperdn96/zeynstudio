@@ -32,6 +32,9 @@ class WindowManager {
                 else if (action === 'minimize') this.minimizeWindow('zeynshat');
                 else if (action === 'maximize') this.maximizeWindow('zeynshat');
             }
+            if (e.data && e.data.type === 'zeynshat-open-window') {
+                this.openWindow(e.data.windowId);
+            }
             // Drag start from iframe titlebar
             if (e.data && e.data.type === 'zeynshat-drag-start') {
                 const windowData = this.windows.get('zeynshat');
