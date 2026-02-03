@@ -292,6 +292,14 @@ html {
     text-align: center;
 }
 
+.copyright {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 9px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+    margin-right: 8px;
+    white-space: nowrap;
+}
+
 /* ========================================
    TWO-COLUMN START MENU
    ======================================== */
@@ -658,6 +666,10 @@ html {
         height: 36px;
         padding: 0 6px;
         gap: 6px;
+    }
+
+    .copyright {
+        display: none;
     }
 
     .tray-icon {
