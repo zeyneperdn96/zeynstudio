@@ -3,6 +3,22 @@
    Extends Themesberg Windows 95 UI Kit
    ======================================== */
 
+/* Content Protection - Disable text/image selection */
+* {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Allow selection in input fields */
+input, textarea {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
 /* ========================================
    PROJECT LIGHTBOX
    ======================================== */

@@ -289,6 +289,24 @@
     <script src="js/MediaPlayer.js"></script>
     <script src="js/Terminal.js"></script>
     <script src="js/main.js"></script>
+
+    <!-- Content Protection -->
+    <script>
+        // Disable right-click context menu
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
+        // Disable common screenshot/save shortcuts
+        document.addEventListener('keydown', e => {
+            // PrintScreen
+            if (e.key === 'PrintScreen') e.preventDefault();
+            // Ctrl+S (save), Ctrl+U (view source), Ctrl+Shift+I (dev tools)
+            if (e.ctrlKey && (e.key === 's' || e.key === 'u' || (e.shiftKey && e.key === 'I'))) {
+                e.preventDefault();
+            }
+            // F12 (dev tools)
+            if (e.key === 'F12') e.preventDefault();
+        });
+    </script>
 </body>
 
 </html>
