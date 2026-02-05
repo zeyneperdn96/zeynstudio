@@ -91,7 +91,8 @@ class WindowManager {
             zeynshat: { width: 500, height: 700 },
             illustration: { width: 800, height: 600 },
             illustrationWork: { width: 800, height: 600 },
-            paint: { width: 750, height: 550 }
+            paint: { width: 750, height: 550 },
+            cv: { width: 720, height: 560 }
         };
 
         const customSize = windowSizes[windowId] || {};
@@ -116,6 +117,20 @@ class WindowManager {
             windowEl.style.borderRadius = '6px';
             windowEl.style.overflow = 'hidden';
             windowEl.style.background = 'transparent';
+        }
+
+        // CV skill bar animation
+        if (windowId === 'cv') {
+            setTimeout(() => {
+                const skillBars = windowEl.querySelectorAll('.cv-skill-fill');
+                skillBars.forEach((bar, i) => {
+                    const targetWidth = bar.style.width;
+                    bar.style.setProperty('width', '0', 'important');
+                    setTimeout(() => {
+                        bar.style.setProperty('width', targetWidth, 'important');
+                    }, 100 + (i * 150));
+                });
+            }, 200);
         }
 
         this.container.appendChild(windowEl);

@@ -1308,33 +1308,32 @@
             }
         }
 
-        /* Iframe/Embedded Mode - smaller header/footer */
+        /* Iframe/Embedded Mode - optimized for iframe height */
+        body.embedded {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-height: 0;
+        }
+
         body.embedded .page-header {
-            padding: 20px 20px 10px;
-        }
-
-        body.embedded .page-title {
-            font-size: clamp(8px, 2.5vw, 14px);
-        }
-
-        body.embedded .page-subtitle {
-            font-size: 16px;
-            margin-top: 8px;
-        }
-
-        body.embedded .card-deck {
-            padding: 20px 40px 50px;
+            display: none;
         }
 
         body.embedded .page-footer {
-            padding: 15px;
-            font-size: 14px;
+            display: none;
+        }
+
+        body.embedded .card-deck {
+            flex: 1;
+            align-items: center;
+            padding: 10px 40px 20px;
         }
 
         /* Embedded mobile - smaller cards for iframe */
         @media (max-width: 480px) {
             body.embedded .card-deck {
-                padding: 10px 20px 40px;
+                padding: 10px 20px 20px;
                 gap: 20px;
             }
 
@@ -1345,10 +1344,6 @@
 
             body.embedded .skill-video-container {
                 margin-top: -50px;
-            }
-
-            body.embedded .page-header {
-                padding: 10px 10px 5px;
             }
         }
     </style>

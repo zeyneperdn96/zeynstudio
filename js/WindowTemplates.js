@@ -1451,6 +1451,559 @@ const WindowTemplates = {
                 </div>
             </div>
         </div>
+    `,
+
+    // Resume.exe - CV / Resume Window
+    cv: () => `
+        <div class="window-titlebar">
+            <span class="window-title">📄 Resume.exe</span>
+            <div class="window-controls">
+                <button class="win-btn win-minimize" data-action="minimize">_</button>
+                <button class="win-btn win-maximize" data-action="maximize">□</button>
+                <button class="win-btn win-close" data-action="close">×</button>
+            </div>
+        </div>
+        <div class="window-content" style="padding: 0; display: flex; flex-direction: column; height: 100%; font-family: 'Segoe UI', Tahoma, sans-serif; font-size: 11px;">
+            <style>
+                .cv-container {
+                    flex: 1;
+                    display: flex;
+                    overflow: hidden;
+                    min-height: 0;
+                    background: linear-gradient(135deg, #f2b8d0 0%, #c8b8e8 30%, #a8d0f0 60%, #90d8e0 100%);
+                }
+
+                /* === LEFT COLUMN === */
+                .cv-left {
+                    width: 200px;
+                    min-width: 200px;
+                    padding: 16px 14px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 12px;
+                    overflow-y: auto;
+                    background: rgba(255,255,255,0.15);
+                    border-right: 1px solid rgba(255,255,255,0.3);
+                }
+
+                .cv-left-label {
+                    font-size: 9px;
+                    font-weight: 700;
+                    color: #555;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                    align-self: flex-start;
+                }
+
+                .cv-avatar {
+                    width: 100px;
+                    height: 100px;
+                    border-radius: 8px;
+                    border: 3px solid #fff;
+                    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+                    object-fit: cover;
+                    cursor: pointer;
+                    transition: transform 0.15s, box-shadow 0.15s;
+                }
+
+                .cv-avatar:hover {
+                    transform: scale(1.05);
+                    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+                }
+
+                /* XP-style Lightbox */
+                .cv-lightbox {
+                    display: none;
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0,0,0,0.7);
+                    z-index: 99999;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .cv-lightbox.active {
+                    display: flex;
+                }
+
+                .cv-lightbox-window {
+                    background: #ece9d8;
+                    border: 2px solid #0054e3;
+                    border-radius: 8px 8px 0 0;
+                    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+                    max-width: 90%;
+                    max-height: 90%;
+                    overflow: hidden;
+                }
+
+                .cv-lightbox-titlebar {
+                    background: linear-gradient(180deg, #0a246a 0%, #0054e3 8%, #0054e3 92%, #0a246a 100%);
+                    padding: 4px 6px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    border-radius: 6px 6px 0 0;
+                }
+
+                .cv-lightbox-title {
+                    color: #fff;
+                    font-size: 11px;
+                    font-weight: 700;
+                    text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+                }
+
+                .cv-lightbox-close {
+                    width: 21px;
+                    height: 21px;
+                    background: linear-gradient(180deg, #c83c28 0%, #b02818 50%, #9c2010 100%);
+                    border: 1px solid #fff;
+                    border-radius: 3px;
+                    color: #fff;
+                    font-size: 13px;
+                    font-weight: bold;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    line-height: 1;
+                }
+
+                .cv-lightbox-close:hover {
+                    background: linear-gradient(180deg, #e04830 0%, #c83020 50%, #b02818 100%);
+                }
+
+                .cv-lightbox-content {
+                    padding: 12px;
+                    background: #fff;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .cv-lightbox-img {
+                    max-width: 400px;
+                    max-height: 500px;
+                    border: 1px solid #808080;
+                    box-shadow: inset 1px 1px 0 #fff, 2px 2px 4px rgba(0,0,0,0.2);
+                }
+
+                .cv-name {
+                    font-size: 14px;
+                    font-weight: 700;
+                    color: #2c2c2c;
+                    text-align: center;
+                    margin: 0;
+                    line-height: 1.2;
+                }
+
+                .cv-title {
+                    font-size: 10px;
+                    color: #555;
+                    text-align: center;
+                    margin-top: -6px;
+                }
+
+                .cv-skills {
+                    width: 100%;
+                }
+
+                .cv-skills-header {
+                    font-size: 9px;
+                    font-weight: 700;
+                    color: #555;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                    margin-bottom: 8px;
+                    padding-bottom: 4px;
+                    border-bottom: 1px solid rgba(0,0,0,0.1);
+                }
+
+                .cv-skill {
+                    margin-bottom: 8px;
+                }
+
+                .cv-skill-label {
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 10px;
+                    color: #333;
+                    margin-bottom: 3px;
+                }
+
+                .cv-skill-bar {
+                    height: 14px;
+                    background: rgba(255,255,255,0.6);
+                    border: 1px solid rgba(0,0,0,0.15);
+                    border-radius: 2px;
+                    overflow: hidden;
+                    position: relative;
+                }
+
+                .cv-skill-fill {
+                    height: 100%;
+                    position: relative;
+                    border-radius: 1px;
+                }
+
+                .cv-skill-fill.sk-blue {
+                    background: linear-gradient(180deg, #6ab4f7 0%, #3d8be0 100%);
+                }
+                .cv-skill-fill.sk-pink {
+                    background: linear-gradient(180deg, #f0829a 0%, #d85a78 100%);
+                }
+                .cv-skill-fill.sk-purple {
+                    background: linear-gradient(180deg, #b088e0 0%, #8a5cc0 100%);
+                }
+                .cv-skill-fill.sk-teal {
+                    background: linear-gradient(180deg, #60c8b8 0%, #3aa898 100%);
+                }
+                .cv-skill-fill.sk-orange {
+                    background: linear-gradient(180deg, #f0a060 0%, #d88040 100%);
+                }
+
+                /* Skill bar animation */
+                .cv-skill-fill {
+                    transition: width 0.8s ease-out;
+                }
+
+                /* XP segmented look */
+                .cv-skill-fill::after {
+                    content: '';
+                    position: absolute;
+                    top: 0; left: 0; right: 0; bottom: 0;
+                    background: repeating-linear-gradient(90deg, transparent, transparent 7px, rgba(0,0,0,0.1) 7px, rgba(0,0,0,0.1) 9px);
+                }
+
+                .cv-contact {
+                    width: 100%;
+                    margin-top: auto;
+                    padding-top: 8px;
+                    border-top: 1px solid rgba(0,0,0,0.1);
+                }
+
+                .cv-contact-item {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    font-size: 10px;
+                    color: #444;
+                    padding: 2px 0;
+                }
+
+                .cv-contact-item span:first-child {
+                    font-size: 11px;
+                    width: 16px;
+                    text-align: center;
+                }
+
+                .cv-contact-item a {
+                    color: #2a5a8a;
+                    text-decoration: none;
+                }
+
+                .cv-contact-item a:hover {
+                    text-decoration: underline;
+                }
+
+                /* === RIGHT COLUMN === */
+                .cv-right {
+                    flex: 1;
+                    padding: 12px 16px;
+                    overflow-y: auto;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    min-height: 0;
+                }
+
+                .cv-right::-webkit-scrollbar {
+                    width: 8px;
+                }
+                .cv-right::-webkit-scrollbar-track {
+                    background: rgba(0,0,0,0.05);
+                }
+                .cv-right::-webkit-scrollbar-thumb {
+                    background: rgba(0,0,0,0.15);
+                    border-radius: 4px;
+                }
+                .cv-right::-webkit-scrollbar-thumb:hover {
+                    background: rgba(0,0,0,0.25);
+                }
+
+                .cv-file {
+                    background: rgba(255,255,255,0.82);
+                    border: 1px solid rgba(0,0,0,0.1);
+                    border-radius: 4px;
+                    overflow: hidden;
+                    border-left: 4px solid #aaa;
+                    flex-shrink: 0;
+                    transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+                }
+
+                .cv-file:hover {
+                    transform: translateX(3px);
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+                    background: rgba(255,255,255,0.95);
+                }
+
+                .cv-file.accent-blue { border-left-color: #5a9ee0; }
+                .cv-file.accent-blue:hover { border-left-color: #3080d0; }
+                .cv-file.accent-pink { border-left-color: #e070a0; }
+                .cv-file.accent-pink:hover { border-left-color: #d05080; }
+                .cv-file.accent-green { border-left-color: #50b898; }
+                .cv-file.accent-green:hover { border-left-color: #30a078; }
+                .cv-file.accent-purple { border-left-color: #9070c8; }
+                .cv-file.accent-purple:hover { border-left-color: #7050b0; }
+                .cv-file.accent-orange { border-left-color: #e09050; }
+                .cv-file.accent-orange:hover { border-left-color: #d07030; }
+                .cv-file.accent-teal { border-left-color: #40b0c0; }
+                .cv-file.accent-teal:hover { border-left-color: #2090a0; }
+
+                .cv-file-header {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    padding: 5px 10px;
+                    background: rgba(255,255,255,0.5);
+                    border-bottom: 1px solid rgba(0,0,0,0.06);
+                    font-size: 11px;
+                    font-weight: 600;
+                    color: #333;
+                }
+
+                .cv-file-icon {
+                    font-size: 12px;
+                }
+
+                .cv-file-path {
+                    font-family: 'Consolas', 'Courier New', monospace;
+                    color: #0066cc;
+                    font-size: 10px;
+                    font-weight: 400;
+                }
+
+                .cv-file-body {
+                    padding: 8px 10px;
+                    font-size: 11px;
+                    color: #2c2c2c;
+                    line-height: 1.55;
+                }
+
+                .cv-file-body p {
+                    margin: 0 0 4px 0;
+                }
+
+                .cv-file-body p:last-child {
+                    margin-bottom: 0;
+                }
+
+                .cv-comment {
+                    color: #888;
+                    font-style: italic;
+                    font-size: 10px;
+                }
+
+                .cv-key {
+                    color: #2a5a8a;
+                    font-weight: 600;
+                }
+
+                /* === STATUS BAR === */
+                .cv-statusbar {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 4px 10px;
+                    background: linear-gradient(180deg, #ece9d8 0%, #d6d2c2 100%);
+                    border-top: 1px solid #fff;
+                    font-size: 10px;
+                    color: #444;
+                    flex-shrink: 0;
+                }
+
+                .cv-status-left {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                }
+
+                .cv-status-led {
+                    width: 7px;
+                    height: 7px;
+                    border-radius: 50%;
+                    background: #4caf50;
+                    box-shadow: 0 0 3px rgba(76,175,80,0.5);
+                }
+            </style>
+
+            <div class="cv-container">
+                <!-- LEFT: Profile + Skills -->
+                <div class="cv-left">
+                    <div class="cv-left-label">Identity Card</div>
+                    <img class="cv-avatar" src="assets/icons/zeynep-avatar.jpg" alt="Zeynep Erden" onclick="this.closest('.window-content').querySelector('.cv-lightbox').classList.add('active')">
+                    <div class="cv-name">Zeynep Erden</div>
+                    <div class="cv-title">Industrial Designer</div>
+
+                    <div class="cv-skills">
+                        <div class="cv-skills-header">Installed Skills</div>
+
+                        <div class="cv-skill">
+                            <div class="cv-skill-label"><span>Industrial Design</span><span>95%</span></div>
+                            <div class="cv-skill-bar"><div class="cv-skill-fill sk-blue" style="width: 95%"></div></div>
+                        </div>
+
+                        <div class="cv-skill">
+                            <div class="cv-skill-label"><span>3D Modeling</span><span>90%</span></div>
+                            <div class="cv-skill-bar"><div class="cv-skill-fill sk-purple" style="width: 90%"></div></div>
+                        </div>
+
+                        <div class="cv-skill">
+                            <div class="cv-skill-label"><span>Graphic Design</span><span>85%</span></div>
+                            <div class="cv-skill-bar"><div class="cv-skill-fill sk-pink" style="width: 85%"></div></div>
+                        </div>
+
+                        <div class="cv-skill">
+                            <div class="cv-skill-label"><span>Motion</span><span>85%</span></div>
+                            <div class="cv-skill-bar"><div class="cv-skill-fill sk-orange" style="width: 85%"></div></div>
+                        </div>
+
+                        <div class="cv-skill">
+                            <div class="cv-skill-label"><span>UI/UX</span><span>75%</span></div>
+                            <div class="cv-skill-bar"><div class="cv-skill-fill sk-teal" style="width: 75%"></div></div>
+                        </div>
+                    </div>
+
+                    <div class="cv-contact">
+                        <div class="cv-contact-item"><span>📍</span> Istanbul, Turkey</div>
+                        <div class="cv-contact-item"><span>🔗</span> <a href="https://www.linkedin.com/in/zeyneperden/" target="_blank">LinkedIn</a></div>
+                        <div class="cv-contact-item"><span>🗣️</span> Turkish, English</div>
+                    </div>
+                </div>
+
+                <!-- RIGHT: File sections -->
+                <div class="cv-right">
+                    <!-- experience.log -->
+                    <div class="cv-file accent-blue">
+                        <div class="cv-file-header">
+                            <span class="cv-file-icon">💼</span>
+                            <span class="cv-file-path">C:\\Zeynep\\experience.log</span>
+                        </div>
+                        <div class="cv-file-body">
+                            <p class="cv-comment">// Professional experience (newest first)</p>
+                            <p><span class="cv-key">CoTech</span> — UI/UX & Product Designer, Istanbul (2025 - Present)</p>
+                            <p style="margin-left: 12px; color: #555;">Figma wireframes, mobile UI design, UI component development.</p>
+                            <p><span class="cv-key">Chinese & Sushi Express</span> — Graphic Designer, Istanbul (2022)</p>
+                            <p style="margin-left: 12px; color: #555;">BNS — Marketing visuals, menus & promotional materials.</p>
+                            <p><span class="cv-key">SushiCo</span> — Graphic Designer & Social Media, Istanbul (Nov 2021)</p>
+                            <p style="margin-left: 12px; color: #555;">BNS — Daily content, data-driven optimization, motion graphics.</p>
+                            <p><span class="cv-key">ITU VAKFI</span> — Graphic Designer, Istanbul (2 months, Freelance)</p>
+                            <p><span class="cv-key">Animanya</span> — 3D Modeler, Ankara (1.5 years)</p>
+                            <p style="margin-left: 12px; color: #555;">Started as intern, then hired full-time. 2D/3D animation assets, rendering.</p>
+                        </div>
+                    </div>
+
+                    <!-- education.txt -->
+                    <div class="cv-file accent-purple">
+                        <div class="cv-file-header">
+                            <span class="cv-file-icon">🎓</span>
+                            <span class="cv-file-path">C:\\Zeynep\\education.txt</span>
+                        </div>
+                        <div class="cv-file-body">
+                            <p><span class="cv-key">Beykent University</span> — Industrial Products Design, Licence</p>
+                            <p><span class="cv-key">Anadolu University</span> — Cooking, Associate Degree</p>
+                        </div>
+                    </div>
+
+                    <!-- tools.ini -->
+                    <div class="cv-file accent-pink">
+                        <div class="cv-file-header">
+                            <span class="cv-file-icon">🔧</span>
+                            <span class="cv-file-path">C:\\Zeynep\\tools.ini</span>
+                        </div>
+                        <div class="cv-file-body">
+                            <p class="cv-comment">; Primary design & modeling tools</p>
+                            <p><span class="cv-key">3D_Modeling</span> = Rhino, Blender, 3ds Max</p>
+                            <p><span class="cv-key">Rendering</span> = KeyShot</p>
+                            <p><span class="cv-key">2D_Design</span> = Photoshop, Illustrator, Sketch, Canva</p>
+                            <p><span class="cv-key">Motion</span> = After Effects</p>
+                            <p><span class="cv-key">Illustration</span> = Procreate</p>
+                            <p><span class="cv-key">Other</span> = Unity, AutoCAD</p>
+                        </div>
+                    </div>
+
+                    <!-- awards.txt -->
+                    <div class="cv-file accent-orange">
+                        <div class="cv-file-header">
+                            <span class="cv-file-icon">🏆</span>
+                            <span class="cv-file-path">C:\\Zeynep\\awards.txt</span>
+                        </div>
+                        <div class="cv-file-body">
+                            <p><span class="cv-key">(BSH) FRANCIS Frugal Innovation Challenge</span></p>
+                            <p>Semi-final honorable mention — April 2023</p>
+                        </div>
+                    </div>
+
+                    <!-- community.log -->
+                    <div class="cv-file accent-green">
+                        <div class="cv-file-header">
+                            <span class="cv-file-icon">🤝</span>
+                            <span class="cv-file-path">C:\\Zeynep\\community.log</span>
+                        </div>
+                        <div class="cv-file-body">
+                            <p class="cv-comment">// Organizations & volunteering</p>
+                            <p><span class="cv-key">AIESEC</span> — Team Leader, Global Volunteer - Germany</p>
+                            <p><span class="cv-key">LOSEV</span> — Volunteer, Ankara</p>
+                            <p><span class="cv-key">Sea Turtles Conservation</span> — Volunteer, Mersin</p>
+                        </div>
+                    </div>
+
+                    <!-- certificates.txt -->
+                    <div class="cv-file accent-teal">
+                        <div class="cv-file-header">
+                            <span class="cv-file-icon">📜</span>
+                            <span class="cv-file-path">C:\\Zeynep\\certificates.txt</span>
+                        </div>
+                        <div class="cv-file-body">
+                            <p><span class="cv-key">Google Game & App Academy</span> — Trainee (10 months)</p>
+                            <p style="margin-left: 12px; color: #555;">Game Development, Project Management, Unity</p>
+                            <p><span class="cv-key">Wireframe Training for UI/UX Designers</span> — Udemy</p>
+                            <p><span class="cv-key">Practical Figma Training</span> — Userspots</p>
+                            <p><span class="cv-key">UX Research Training</span> — Userspots</p>
+                            <p><span class="cv-key">CMF Applications in Industrial Design</span> — Beykent University</p>
+                            <p><span class="cv-key">Intellectual and Industrial Property Rights</span> — ETMK Istanbul</p>
+                            <p><span class="cv-key">Project Management Fundamentals</span> — Coursera</p>
+                            <p><span class="cv-key">Initiating the Project: Starting Successfully</span> — Coursera</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- XP-style Lightbox for Avatar -->
+            <div class="cv-lightbox" onclick="if(event.target === this) this.classList.remove('active')">
+                <div class="cv-lightbox-window">
+                    <div class="cv-lightbox-titlebar">
+                        <span class="cv-lightbox-title">📷 zeynep_erden.jpg - Windows Picture Viewer</span>
+                        <button class="cv-lightbox-close" onclick="this.closest('.cv-lightbox').classList.remove('active')">×</button>
+                    </div>
+                    <div class="cv-lightbox-content">
+                        <img class="cv-lightbox-img" src="assets/icons/zeynep-avatar.jpg" alt="Zeynep Erden">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Bar -->
+            <div class="cv-statusbar">
+                <div class="cv-status-left">
+                    <div class="cv-status-led"></div>
+                    <span>Ready</span>
+                </div>
+                <span>Build: ZeynStudio v1.0</span>
+            </div>
+        </div>
     `
 };
 
