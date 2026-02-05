@@ -1352,6 +1352,59 @@ html {
     }
 
     /* ========================================
+       CV / ABOUT_ME Window - Mobile Layout
+       ======================================== */
+    .cv-container {
+        flex-direction: column !important;
+    }
+
+    .cv-left {
+        width: 100% !important;
+        min-width: 0 !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        padding: 12px !important;
+        gap: 10px !important;
+        border-right: none !important;
+        border-bottom: 1px solid rgba(0,0,0,0.08) !important;
+        align-items: flex-start !important;
+    }
+
+    .cv-avatar {
+        width: 60px !important;
+        height: 60px !important;
+    }
+
+    .cv-name {
+        font-size: 14px !important;
+        text-align: left !important;
+    }
+
+    .cv-title {
+        text-align: left !important;
+        margin-top: 0 !important;
+    }
+
+    .cv-skills {
+        width: 100% !important;
+    }
+
+    .cv-contact {
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        display: flex !important;
+    }
+
+    .cv-right {
+        padding: 12px !important;
+    }
+
+    .cv-file-body {
+        font-size: 10px !important;
+    }
+
+    /* ========================================
        LIGHTBOX - Mobile
        ======================================== */
     .project-lightbox-close {
@@ -1513,6 +1566,30 @@ html {
     .gusto-header h2,
     .msentry-header h2 {
         font-size: 12px !important;
+    }
+
+    /* CV Window - small mobile */
+    .cv-avatar {
+        width: 50px !important;
+        height: 50px !important;
+    }
+
+    .cv-name {
+        font-size: 13px !important;
+    }
+
+    .cv-skill-bar {
+        height: 14px !important;
+    }
+
+    .cv-file-body {
+        padding: 8px 10px !important;
+        font-size: 10px !important;
+    }
+
+    .cv-tag {
+        font-size: 8px !important;
+        padding: 1px 5px !important;
     }
 
     /* Projects grid - single column on very small */
@@ -1947,6 +2024,66 @@ html {
     .gusto-statusbar,
     .msentry-statusbar {
         padding: 5px 8px !important;
+        font-size: 8px !important;
+    }
+
+    /* CV Window - extra small */
+    .cv-left {
+        padding: 8px !important;
+        gap: 6px !important;
+    }
+
+    .cv-avatar {
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    .cv-name {
+        font-size: 12px !important;
+    }
+
+    .cv-title {
+        font-size: 9px !important;
+    }
+
+    .cv-skills-header {
+        font-size: 8px !important;
+    }
+
+    .cv-skill-label {
+        font-size: 8px !important;
+    }
+
+    .cv-skill-bar {
+        height: 12px !important;
+    }
+
+    .cv-right {
+        padding: 8px !important;
+        gap: 8px !important;
+    }
+
+    .cv-file-header {
+        padding: 4px 8px !important;
+        font-size: 9px !important;
+    }
+
+    .cv-file-path {
+        font-size: 8px !important;
+    }
+
+    .cv-file-body {
+        padding: 6px 8px !important;
+        font-size: 9px !important;
+        line-height: 1.4 !important;
+    }
+
+    .cv-statusbar {
+        padding: 3px 8px !important;
+        font-size: 8px !important;
+    }
+
+    .cv-contact-item {
         font-size: 8px !important;
     }
 

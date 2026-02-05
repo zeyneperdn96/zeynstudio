@@ -2352,10 +2352,16 @@
             ];
 
             const emojiMap = {};
+            const emojiRegexList = []; // Pre-compiled regex for performance
             [...smileys, ...symbols].forEach(e => {
                 emojiMap[e.code] = e.emoji;
                 emojiMap[e.code.toLowerCase()] = e.emoji;
             });
+            // Pre-compile all emoji regex patterns once
+            for (const [code, emoji] of Object.entries(emojiMap)) {
+                const escaped = code.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                emojiRegexList.push({ regex: new RegExp(escaped, 'g'), emoji });
+            }
 
             // ========================================
             // Bot Responses
@@ -2543,9 +2549,8 @@
             // ========================================
             function convertEmojis(text) {
                 let result = text;
-                for (const [code, emoji] of Object.entries(emojiMap)) {
-                    const escaped = code.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                    result = result.replace(new RegExp(escaped, 'g'), emoji);
+                for (const item of emojiRegexList) {
+                    result = result.replace(item.regex, item.emoji);
                 }
                 return result;
             }
@@ -2836,6 +2841,13 @@
                     history.push({ type, name, text, time: msgTime });
                     saveChat();
                     messageCount++;
+
+                    // Clean up old DOM elements to prevent memory issues
+                    const maxMessages = 50;
+                    const messages = conversation.children;
+                    while (messages.length > maxMessages) {
+                        messages[0].remove();
+                    }
                 }
 
                 updateLastActivity();
@@ -3383,7 +3395,7 @@
             // Window controls - when embedded, send message to parent XP window
             const isEmbedded = window.self !== window.top;
 
-            function openAboutMe() {
+            window.openAboutMe = function() {
                 try {
                     window.parent.postMessage({ type: 'zeynshat-open-window', windowId: 'about' }, '*');
                 } catch(e) {}
@@ -3391,7 +3403,7 @@
                     const wm = window.parent.windowManager;
                     if (wm) wm.openWindow('about');
                 } catch(e) {}
-            }
+            };
 
             function controlParentWindow(action) {
                 if (!isEmbedded) return false;
