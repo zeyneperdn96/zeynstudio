@@ -420,17 +420,17 @@ class WindowManager {
             const filterBtns = windowEl.querySelectorAll('[data-filter]');
 
             const illustrations = [
-                { src: 'assets/projects/illustration/map-of-us.png', label: 'Map of Us' },
-                { src: 'assets/projects/illustration/pet-portrait.png', label: 'Pet Portrait' },
-                { src: 'assets/projects/illustration/character-expressions.png', label: 'Character Expressions' },
-                { src: 'assets/projects/illustration/map-of-dreams.png', label: 'Map of Our Dreams' },
-                { src: 'assets/projects/illustration/christmas-market.png', label: 'Christmas Market' },
-                { src: 'assets/projects/illustration/christmas-postcard.png', label: 'Christmas Postcard' },
-                { src: 'assets/projects/illustration/wedding-welcome.png', label: 'Wedding Welcome' },
-                { src: 'assets/projects/illustration/wedding-vintage.png', label: 'Wedding Vintage' },
-                { src: 'assets/projects/illustration/couple-portal.png', label: 'Couple Portal' },
-                { src: 'assets/projects/illustration/valentines-day.png', label: 'Valentine\'s Day' },
-                { src: 'assets/projects/illustration/crispy-magic.png', label: 'Crispy Magic' },
+                { src: 'assets/projects/illustration/map-of-us.jpg', label: 'Map of Us' },
+                { src: 'assets/projects/illustration/pet-portrait.jpg', label: 'Pet Portrait' },
+                { src: 'assets/projects/illustration/character-expressions.jpg', label: 'Character Expressions' },
+                { src: 'assets/projects/illustration/map-of-dreams.jpg', label: 'Map of Our Dreams' },
+                { src: 'assets/projects/illustration/christmas-market.jpg', label: 'Christmas Market' },
+                { src: 'assets/projects/illustration/christmas-postcard.jpg', label: 'Christmas Postcard' },
+                { src: 'assets/projects/illustration/wedding-welcome.jpg', label: 'Wedding Welcome' },
+                { src: 'assets/projects/illustration/wedding-vintage.jpg', label: 'Wedding Vintage' },
+                { src: 'assets/projects/illustration/couple-portal.jpg', label: 'Couple Portal' },
+                { src: 'assets/projects/illustration/valentines-day.jpg', label: 'Valentine\'s Day' },
+                { src: 'assets/projects/illustration/crispy-magic.jpg', label: 'Crispy Magic' },
             ];
 
             const renderIllustrations = () => {

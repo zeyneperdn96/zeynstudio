@@ -35,13 +35,13 @@ const projectsData = [
         id: 2,
         title: 'FIREBOX',
         category: 'industrial',
-        thumbnail: 'assets/projects/firebox/hero.png',
+        thumbnail: 'assets/projects/firebox/hero.jpg',
         description: 'Portable Camp & Cooking Station',
         featured: true,
         year: '2025',
         role: 'Product Designer (Research, Sketching, 3D Modeling)',
         caseStudy: {
-            hero: 'assets/projects/firebox/hero.png',
+            hero: 'assets/projects/firebox/hero.jpg',
             intro: 'FIREBOX is a portable, foldable camping fire pit and cooking station designed for outdoor enthusiasts. It transforms from a compact carrying case into a fully functional grill and fire pit, perfect for camping, tailgating, and backyard gatherings.',
             challenge: 'Campers and outdoor enthusiasts struggle with bulky, heavy fire pits that are difficult to transport. Traditional camping grills lack versatility and proper airflow for efficient burning. The goal was to design a lightweight, portable solution that combines fire pit and cooking functionality.',
             solution: 'FIREBOX features an innovative folding mechanism that collapses into a briefcase-like form for easy transport. The modular design includes removable grill grates, heat-resistant silicone handles, and an integrated ash drawer for easy cleanup.',
@@ -51,10 +51,10 @@ const projectsData = [
                 components: 'Grill Grate, Fire Chamber, Ash Drawer, Folding Panels'
             },
             images: {
-                context: 'assets/projects/firebox/context.png',
-                render1: 'assets/projects/firebox/exploded.png',
-                render2: 'assets/projects/firebox/inuse.png',
-                technical: 'assets/projects/firebox/technical.png'
+                context: 'assets/projects/firebox/context.jpg',
+                render1: 'assets/projects/firebox/exploded.jpg',
+                render2: 'assets/projects/firebox/inuse.jpg',
+                technical: 'assets/projects/firebox/technical.jpg'
             }
         }
     },
