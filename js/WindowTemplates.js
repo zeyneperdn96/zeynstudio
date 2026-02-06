@@ -1900,9 +1900,9 @@ const WindowTemplates = {
                             <p style="margin-left: 12px; color: #555;">BNS — Marketing visuals, menus & promotional materials.</p>
                             <p><span class="cv-key">SushiCo</span> — Graphic Designer & Social Media, Istanbul (Nov 2021)</p>
                             <p style="margin-left: 12px; color: #555;">BNS — Daily content, data-driven optimization, motion graphics.</p>
-                            <p><span class="cv-key">ITU VAKFI</span> — Graphic Designer, Istanbul (2 months, Freelance)</p>
-                            <p><span class="cv-key">Animanya</span> — 3D Modeler, Ankara (1.5 years)</p>
-                            <p style="margin-left: 12px; color: #555;">Started as intern, then hired full-time. 2D/3D animation assets, rendering.</p>
+                            <p><span class="cv-key">ITU VAKFI</span> — Graphic Designer, Istanbul (2024, 2 months)</p>
+                            <p><span class="cv-key">Animanya</span> — 3D Modeler, Ankara (2016 - 2017 Intern, 2018 Full-time)</p>
+                            <p style="margin-left: 12px; color: #555;">Started as intern (2 internships), then hired full-time. 2D/3D animation assets, rendering.</p>
                         </div>
                     </div>
 
