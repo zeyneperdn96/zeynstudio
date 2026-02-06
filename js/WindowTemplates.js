@@ -142,7 +142,6 @@ const WindowTemplates = {
             { src: 'assets/projects/metbic/render2.png', label: 'METBIC — Render 2' },
             { src: 'assets/projects/metbic/render3.png', label: 'METBIC — Render 3' },
             { src: 'assets/projects/metbic/render4.png', label: 'METBIC — Render 4' },
-            { src: 'assets/projects/metbic/render5.png', label: 'METBIC — Render 5' },
             { src: 'assets/projects/metbic/context.png', label: 'METBIC — Context' },
             { src: 'assets/projects/metbic/technical.png', label: 'METBIC — Technical' },
             { src: 'assets/projects/firebox/hero.jpg', label: 'FIREBOX — Hero' },
@@ -498,9 +497,6 @@ const WindowTemplates = {
                     </div>
                     <div class="metbic-thumb" data-img="assets/projects/metbic/render4.png" data-index="4">
                         <img src="assets/projects/metbic/render4.png" alt="Render 4" loading="lazy">
-                    </div>
-                    <div class="metbic-thumb" data-img="assets/projects/metbic/render5.png" data-index="5">
-                        <img src="assets/projects/metbic/render5.png" alt="Render 5" loading="lazy">
                     </div>
                     <div class="metbic-thumb" data-img="assets/projects/metbic/context.png" data-index="6">
                         <img src="assets/projects/metbic/context.png" alt="Context" loading="lazy">
