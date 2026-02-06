@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chinese Sushi Express – Lezzet Yolculuğum</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Roboto', sans-serif;
+            background: #F9FAFB;
+            color: #1F2937;
+            overflow-x: hidden;
+        }
+
+        .mobile-container {
+            max-width: 430px;
+            height: 100vh;
+            height: 100dvh;
+            margin: 0 auto;
+            background: #F9FAFB;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Status Bar */
+        .status-bar {
+            height: 44px;
+            background: #DC2626;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            padding-top: 10px;
+            font-size: 13px;
+            color: #FFFFFF;
+        }
+
+        /* Header */
+        .header {
+            height: 60px;
+            background: #DC2626;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: #FFFFFF;
+            font-size: 26px;
+            cursor: pointer;
+            padding: 8px;
+            margin-right: 12px;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #FFFFFF;
+            letter-spacing: -0.4px;
+        }
+
+        /* Screen Base */
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            background: #F9FAFB;
+        }
+
+        .screen.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .content {
+            padding: 20px;
+            overflow-y: auto;
+            height: calc(100vh - 104px - 80px);
+            height: calc(100dvh - 104px - 80px);
+            padding-bottom: 100px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* ========== HOMEPAGE ========== */
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+            color: #FFFFFF;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+        }
+
+        .hero-greeting {
+            font-size: 16px;
+            font-weight: 500;
+            opacity: 0.9;
+            margin-bottom: 8px;
+        }
+
+        .hero-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        /* Enhanced Mini Journey */
+        .mini-journey-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .mini-journey-card:active {
+            transform: scale(0.98);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .mini-journey-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .mini-journey-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #FFFFFF;
+            opacity: 0.95;
+        }
+
+        .mini-journey-count {
+            font-size: 14px;
+            font-weight: 600;
+            color: #FFFFFF;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 12px;
+        }
+
+        .mini-progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .mini-progress-fill {
+            height: 100%;
+            background: #FFFFFF;
+            border-radius: 4px;
+            transition: width 0.4s ease;
+        }
+
+        .mini-journey-nodes {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .mini-node {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .mini-node.filled {
+            background: #FFFFFF;
+        }
+
+        .mini-journey-text {
+            font-size: 15px;
+            font-weight: 600;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mini-journey-icon {
+            font-size: 20px;
+        }
+
+        /* Quick Stats */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .stat-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #6B7280;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 24px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1F2937;
+            letter-spacing: -0.3px;
+        }
+
+        .section-link {
+            font-size: 14px;
+            font-weight: 600;
+            color: #DC2626;
+            cursor: pointer;
+        }
+
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .product-card {
+            background: #FFFFFF;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .product-card:active {
+            transform: scale(0.97);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 140px;
+            background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
+        }
+
+        .product-info {
+            padding: 12px;
+        }
+
+        .product-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 4px;
+        }
+
+        .product-desc {
+            font-size: 12px;
+            color: #6B7280;
+            margin-bottom: 8px;
+        }
+
+        .product-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: #DC2626;
+        }
+
+        /* ========== JOURNEY SCREEN ========== */
+
+        /* Progress Hero */
+        .progress-hero {
+            background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
+            border-radius: 20px;
+            padding: 32px 24px;
+            margin-bottom: 20px;
+            color: #FFFFFF;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(220, 38, 38, 0.25);
+        }
+
+        .progress-percentage {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -2px;
+        }
+
+        .progress-label {
+            font-size: 16px;
+            font-weight: 500;
+            opacity: 0.9;
+            margin-bottom: 24px;
+        }
+
+        .circular-progress {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 24px;
+            position: relative;
+        }
+
+        .circular-progress svg {
+            transform: rotate(-90deg);
+        }
+
+        .circular-progress-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.2);
+            stroke-width: 12;
+        }
+
+        .circular-progress-fill {
+            fill: none;
+            stroke: #FFFFFF;
+            stroke-width: 12;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        .circular-progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 40px;
+            font-weight: 800;
+        }
+
+        /* Journey Timeline */
+        .journey-timeline {
+            background: #FFFFFF;
+            border-radius: 20px;
+            padding: 28px 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .timeline-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .metro-line {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .metro-track {
+            position: absolute;
+            top: 50%;
+            left: 40px;
+            right: 40px;
+            height: 4px;
+            background: #E5E7EB;
+            transform: translateY(-50%);
+            border-radius: 2px;
+        }
+
+        .metro-track-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background: linear-gradient(90deg, #DC2626 0%, #EF4444 100%);
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+
+        .metro-nodes {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .metro-node {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            border: 4px solid #E5E7EB;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            z-index: 2;
+        }
+
+        .metro-node.completed {
+            background: #DC2626;
+            border-color: #DC2626;
+            color: #FFFFFF;
+        }
+
+        .metro-node.completed::after {
+            content: '✓';
+            font-weight: 700;
+        }
+
+        .metro-node.current {
+            background: #FFFFFF;
+            border-color: #DC2626;
+            border-width: 4px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4);
+            }
+
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 8px rgba(220, 38, 38, 0);
+            }
+        }
+
+        .metro-node.reward {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            border-color: #10B981;
+            font-size: 24px;
+        }
+
+        .node-label {
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            font-weight: 600;
+            color: #6B7280;
+            white-space: nowrap;
+        }
+
+        .node-label.completed {
+            color: #DC2626;
+        }
+
+        /* Status Cards */
+        .status-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .status-card {
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            text-align: center;
+        }
+
+        .status-card-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .status-card-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 4px;
+        }
+
+        .status-card-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #6B7280;
+        }
+
+        /* Reward Preview */
+        .reward-preview {
+            background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
+            border: 2px solid #FCA5A5;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .reward-preview-icon {
+            font-size: 64px;
+            margin-bottom: 12px;
+        }
+
+        .reward-preview-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #DC2626;
+            margin-bottom: 8px;
+        }
+
+        .reward-preview-desc {
+            font-size: 14px;
+            color: #6B7280;
+            margin-bottom: 16px;
+        }
+
+        .reward-preview-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: #DC2626;
+        }
+
+        /* History Section */
+        .history-section {
+            background: #FFFFFF;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .history-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 16px;
+        }
+
+        .history-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid #F3F4F6;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-icon {
+            width: 48px;
+            height: 48px;
+            background: #FEF2F2;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .history-info {
+            flex: 1;
+        }
+
+        .history-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 4px;
+        }
+
+        .history-date {
+            font-size: 12px;
+            color: #6B7280;
+        }
+
+        .history-badge {
+            background: #10B981;
+            color: #FFFFFF;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Info Card */
+        .info-card {
+            background: #FFFFFF;
+            border: 2px solid #E5E7EB;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .info-card-icon {
+            width: 32px;
+            height: 32px;
+            background: #DC2626;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .info-card-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1F2937;
+        }
+
+        .info-card-text {
+            font-size: 14px;
+            color: #6B7280;
+            line-height: 1.6;
+        }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 18px;
+            border-radius: 16px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            letter-spacing: -0.3px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
+            color: #FFFFFF;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
+        }
+
+        .btn-secondary {
+            background: #FFFFFF;
+            color: #DC2626;
+            border: 2px solid #DC2626;
+        }
+
+        .btn-secondary:active {
+            background: #FEF2F2;
+        }
+
+        .reward-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        /* Navigation Bar */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 430px;
+            width: 100%;
+            background: #FFFFFF;
+            border-top: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0 28px 0;
+            padding-bottom: max(28px, env(safe-area-inset-bottom));
+            box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-radius: 12px;
+        }
+
+        .nav-item:active {
+            background: #F9FAFB;
+        }
+
+        .nav-item.active .nav-icon {
+            color: #DC2626;
+            transform: scale(1.1);
+        }
+
+        .nav-item.active .nav-label {
+            color: #DC2626;
+            font-weight: 600;
+        }
+
+        .nav-icon {
+            font-size: 26px;
+            color: #9CA3AF;
+            transition: all 0.2s ease;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            color: #6B7280;
+            font-weight: 500;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Mobile: full width */
+        @media (max-width: 430px) {
+            .mobile-container {
+                max-width: 100%;
+                box-shadow: none;
+            }
+
+            .nav-bar {
+                max-width: 100%;
+            }
+        }
+
+        /* Small phones */
+        @media (max-width: 360px) {
+            .hero-title {
+                font-size: 24px;
+            }
+
+            .hero-greeting {
+                font-size: 14px;
+            }
+
+            .content {
+                padding: 16px;
+            }
+
+            .stat-value {
+                font-size: 20px;
+            }
+
+            .product-image {
+                height: 110px;
+                font-size: 48px;
+            }
+
+            .progress-percentage {
+                font-size: 44px;
+            }
+
+            .circular-progress {
+                width: 130px;
+                height: 130px;
+            }
+
+            .circular-progress svg {
+                width: 130px;
+                height: 130px;
+            }
+
+            .circular-progress-bg,
+            .circular-progress-fill {
+                cx: 65;
+                cy: 65;
+                r: 56;
+            }
+
+            .circular-progress-text {
+                font-size: 32px;
+            }
+
+            .metro-node {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+
+            .node-label {
+                font-size: 9px;
+                top: 40px;
+            }
+
+            .section-title {
+                font-size: 18px;
+            }
+
+            .reward-preview-icon {
+                font-size: 48px;
+            }
+
+            .reward-preview-title {
+                font-size: 18px;
+            }
+
+            .reward-preview-value {
+                font-size: 24px;
+            }
+        }
+
+        /* Medium phones (375px-414px) */
+        @media (min-width: 361px) and (max-width: 414px) {
+            .hero-title {
+                font-size: 26px;
+            }
+
+            .product-image {
+                height: 120px;
+            }
+        }
+
+        /* Landscape */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .progress-hero {
+                padding: 16px 24px;
+            }
+
+            .circular-progress {
+                width: 100px;
+                height: 100px;
+                margin-bottom: 12px;
+            }
+
+            .circular-progress svg {
+                width: 100px;
+                height: 100px;
+            }
+
+            .circular-progress-text {
+                font-size: 28px;
+            }
+
+            .content {
+                padding: 12px;
+                padding-bottom: 80px;
+            }
+
+            .nav-bar {
+                padding: 8px 0 12px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="mobile-container">
+        <!-- HOMEPAGE -->
+        <div class="screen active" id="homeScreen">
+            <div class="status-bar">
+                <span>9:41</span>
+                <span>●●●●</span>
+            </div>
+            <div class="header">
+                <div class="header-title">Chinese Sushi Express</div>
+            </div>
+            <div class="content">
+                <!-- Hero Section -->
+                <div class="hero-section">
+                    <div class="hero-greeting">Merhaba! 👋</div>
+                    <div class="hero-title">Lezzet Yolculuğun Devam Ediyor</div>
+
+                    <div class="mini-journey-card" onclick="navigateTo('journeyScreen')">
+                        <div class="mini-journey-header">
+                            <div class="mini-journey-title">İlerleme Durumun</div>
+                            <div class="mini-journey-count" id="miniCount">3/6</div>
+                        </div>
+                        <div class="mini-progress-bar">
+                            <div class="mini-progress-fill" id="miniProgressFill" style="width: 50%"></div>
+                        </div>
+                        <div class="mini-journey-nodes" id="miniNodes">
+                            <!-- Generated by JS -->
+                        </div>
+                        <div class="mini-journey-text">
+                            <span class="mini-journey-icon">🎯</span>
+                            <span id="miniText">3 sipariş kaldı • Ücretsiz Noodle</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="quick-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">📦</div>
+                        <div class="stat-value" id="totalOrders">3</div>
+                        <div class="stat-label">Toplam Sipariş</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🏆</div>
+                        <div class="stat-value" id="totalRewards">0</div>
+                        <div class="stat-label">Kazanılan Ödül</div>
+                    </div>
+                </div>
+
+                <!-- Products Section -->
+                <div class="section">
+                    <div class="section-header">
+                        <div class="section-title">Popüler Ürünler</div>
+                        <div class="section-link">Tümü →</div>
+                    </div>
+                    <div class="product-grid">
+                        <div class="product-card">
+                            <div class="product-image">🍜</div>
+                            <div class="product-info">
+                                <div class="product-name">Noodle</div>
+                                <div class="product-desc">Geleneksel lezzet</div>
+                                <div class="product-price">450 TL</div>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-image">🍣</div>
+                            <div class="product-info">
+                                <div class="product-name">Sushi Set</div>
+                                <div class="product-desc">12 parça</div>
+                                <div class="product-price">850 TL</div>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-image">🥟</div>
+                            <div class="product-info">
+                                <div class="product-name">Dumpling</div>
+                                <div class="product-desc">8 adet</div>
+                                <div class="product-price">320 TL</div>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-image">🍱</div>
+                            <div class="product-info">
+                                <div class="product-name">Bento Box</div>
+                                <div class="product-desc">Özel karışım</div>
+                                <div class="product-price">680 TL</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-bar">
+                <div class="nav-item active">
+                    <div class="nav-icon">🏠</div>
+                    <div class="nav-label">Ana Sayfa</div>
+                </div>
+                <div class="nav-item" onclick="navigateTo('journeyScreen')">
+                    <div class="nav-icon">🎯</div>
+                    <div class="nav-label">Yolculuğum</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">👤</div>
+                    <div class="nav-label">Profil</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- JOURNEY SCREEN -->
+        <div class="screen" id="journeyScreen">
+            <div class="status-bar">
+                <span>9:41</span>
+                <span>●●●●</span>
+            </div>
+            <div class="header">
+                <button class="back-button" onclick="navigateTo('homeScreen')">←</button>
+                <div class="header-title">Lezzet Yolculuğum</div>
+            </div>
+            <div class="content">
+                <!-- Progress Hero -->
+                <div class="progress-hero">
+                    <div class="circular-progress">
+                        <svg width="160" height="160">
+                            <circle class="circular-progress-bg" cx="80" cy="80" r="70"></circle>
+                            <circle class="circular-progress-fill" cx="80" cy="80" r="70" id="circularProgress"
+                                stroke-dasharray="440" stroke-dashoffset="220"></circle>
+                        </svg>
+                        <div class="circular-progress-text" id="circularText">50%</div>
+                    </div>
+                    <div class="progress-label" id="progressLabel">Yolculuğun yarısındasın!</div>
+                </div>
+
+                <!-- Status Cards -->
+                <div class="status-cards">
+                    <div class="status-card">
+                        <div class="status-card-icon">✅</div>
+                        <div class="status-card-value" id="completedSteps">3</div>
+                        <div class="status-card-label">Tamamlanan</div>
+                    </div>
+                    <div class="status-card">
+                        <div class="status-card-icon">⏳</div>
+                        <div class="status-card-value" id="remainingSteps">3</div>
+                        <div class="status-card-label">Kalan Adım</div>
+                    </div>
+                </div>
+
+                <!-- Journey Timeline -->
+                <div class="journey-timeline">
+                    <div class="timeline-title">Yolculuk Haritası</div>
+                    <div class="metro-line">
+                        <div class="metro-track">
+                            <div class="metro-track-fill" id="metroTrackFill" style="width: 50%"></div>
+                        </div>
+                        <div class="metro-nodes" id="metroNodes">
+                            <!-- Generated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reward Preview -->
+                <div class="reward-preview" id="rewardPreview">
+                    <div class="reward-preview-icon">🍜</div>
+                    <div class="reward-preview-title">Ödülün Seni Bekliyor!</div>
+                    <div class="reward-preview-desc">3 sipariş daha ver ve kazanacaksın:</div>
+                    <div class="reward-preview-value">Ücretsiz Noodle</div>
+                </div>
+
+                <!-- History -->
+                <div class="history-section">
+                    <div class="history-title">Son Aktiviteler</div>
+                    <div id="historyList">
+                        <div class="history-item">
+                            <div class="history-icon">🍣</div>
+                            <div class="history-info">
+                                <div class="history-text">Sushi Set siparişi</div>
+                                <div class="history-date">2 gün önce</div>
+                            </div>
+                            <div class="history-badge">+1</div>
+                        </div>
+                        <div class="history-item">
+                            <div class="history-icon">🍱</div>
+                            <div class="history-info">
+                                <div class="history-text">Bento Box siparişi</div>
+                                <div class="history-date">5 gün önce</div>
+                            </div>
+                            <div class="history-badge">+1</div>
+                        </div>
+                        <div class="history-item">
+                            <div class="history-icon">🍜</div>
+                            <div class="history-info">
+                                <div class="history-text">Noodle siparişi</div>
+                                <div class="history-date">1 hafta önce</div>
+                            </div>
+                            <div class="history-badge">+1</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Card -->
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <div class="info-card-icon">💡</div>
+                        <div class="info-card-title">Nasıl Çalışır?</div>
+                    </div>
+                    <div class="info-card-text">
+                        750 TL ve üzeri her siparişiniz yolculukta 1 adım ilerletir. 6 adımı tamamladığınızda ücretsiz
+                        noodle kazanırsınız!
+                    </div>
+                </div>
+
+                <!-- Action Button -->
+                <button class="btn btn-primary" id="simulateBtn" onclick="simulateOrder()">
+                    📦 Sipariş Ver ve İlerle
+                </button>
+
+                <!-- Reward Buttons (hidden by default) -->
+                <div class="reward-buttons hidden" id="rewardButtons">
+                    <button class="btn btn-primary" onclick="useReward()">🎁 Ödülü Kullan</button>
+                    <button class="btn btn-secondary" onclick="useReward()">Sonra Kullan</button>
+                </div>
+            </div>
+            <div class="nav-bar">
+                <div class="nav-item" onclick="navigateTo('homeScreen')">
+                    <div class="nav-icon">🏠</div>
+                    <div class="nav-label">Ana Sayfa</div>
+                </div>
+                <div class="nav-item active">
+                    <div class="nav-icon">🎯</div>
+                    <div class="nav-label">Yolculuğum</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">👤</div>
+                    <div class="nav-label">Profil</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let currentStep = 3;
+        const totalSteps = 6;
+        let totalOrders = 3;
+        let totalRewards = 0;
+
+        // Initialize
+        function init() {
+            updateAllViews();
+        }
+
+        // Navigate
+        function navigateTo(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+
+            // Update nav
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        }
+
+        // Update all views
+        function updateAllViews() {
+            updateHomepage();
+            updateJourneyScreen();
+        }
+
+        // Update homepage
+        function updateHomepage() {
+            const percentage = Math.round((currentStep / totalSteps) * 100);
+
+            // Mini count
+            document.getElementById('miniCount').textContent = `${currentStep}/${totalSteps}`;
+
+            // Progress bar
+            document.getElementById('miniProgressFill').style.width = `${percentage}%`;
+
+            // Nodes
+            const miniNodes = document.getElementById('miniNodes');
+            miniNodes.innerHTML = '';
+            for (let i = 0; i < totalSteps; i++) {
+                const node = document.createElement('div');
+                node.className = `mini-node ${i < currentStep ? 'filled' : ''}`;
+                miniNodes.appendChild(node);
+            }
+
+            // Text
+            const remaining = totalSteps - currentStep;
+            const miniText = document.getElementById('miniText');
+            if (remaining > 0) {
+                miniText.textContent = `${remaining} sipariş kaldı • Ücretsiz Noodle`;
+            } else {
+                miniText.textContent = 'Ödülün hazır! 🎉';
+            }
+
+            // Stats
+            document.getElementById('totalOrders').textContent = totalOrders;
+            document.getElementById('totalRewards').textContent = totalRewards;
+        }
+
+        // Update journey screen
+        function updateJourneyScreen() {
+            const percentage = Math.round((currentStep / totalSteps) * 100);
+
+            // Circular progress
+            const circumference = 2 * Math.PI * 70;
+            const offset = circumference - (percentage / 100) * circumference;
+            document.getElementById('circularProgress').style.strokeDashoffset = offset;
+            document.getElementById('circularText').textContent = `${percentage}%`;
+
+            // Progress label
+            const label = document.getElementById('progressLabel');
+            if (currentStep === 0) {
+                label.textContent = 'Yolculuğa başla!';
+            } else if (currentStep < totalSteps / 2) {
+                label.textContent = 'Harika bir başlangıç!';
+            } else if (currentStep < totalSteps) {
+                label.textContent = 'Yolculuğun yarısındasın!';
+            } else {
+                label.textContent = 'Tebrikler! Yolculuğu tamamladın! 🎉';
+            }
+
+            // Status cards
+            document.getElementById('completedSteps').textContent = currentStep;
+            document.getElementById('remainingSteps').textContent = totalSteps - currentStep;
+
+            // Metro track
+            document.getElementById('metroTrackFill').style.width = `${percentage}%`;
+
+            // Metro nodes
+            const metroNodes = document.getElementById('metroNodes');
+            metroNodes.innerHTML = '';
+
+            for (let i = 0; i < totalSteps; i++) {
+                const nodeWrapper = document.createElement('div');
+                nodeWrapper.style.position = 'relative';
+
+                const node = document.createElement('div');
+                let nodeClass = 'metro-node';
+                if (i < currentStep) {
+                    nodeClass += ' completed';
+                } else if (i === currentStep) {
+                    nodeClass += ' current';
+                }
+                node.className = nodeClass;
+
+                const label = document.createElement('div');
+                label.className = `node-label ${i < currentStep ? 'completed' : ''}`;
+                label.textContent = `Adım ${i + 1}`;
+
+                nodeWrapper.appendChild(node);
+                nodeWrapper.appendChild(label);
+                metroNodes.appendChild(nodeWrapper);
+            }
+
+            // Reward node
+            const rewardWrapper = document.createElement('div');
+            rewardWrapper.style.position = 'relative';
+            const rewardNode = document.createElement('div');
+            rewardNode.className = `metro-node ${currentStep >= totalSteps ? 'reward' : ''}`;
+            rewardNode.textContent = currentStep >= totalSteps ? '🎁' : '🏁';
+            const rewardLabel = document.createElement('div');
+            rewardLabel.className = `node-label ${currentStep >= totalSteps ? 'completed' : ''}`;
+            rewardLabel.textContent = 'Ödül';
+            rewardWrapper.appendChild(rewardNode);
+            rewardWrapper.appendChild(rewardLabel);
+            metroNodes.appendChild(rewardWrapper);
+
+            // Reward preview
+            const rewardPreview = document.getElementById('rewardPreview');
+            const simulateBtn = document.getElementById('simulateBtn');
+            const rewardButtons = document.getElementById('rewardButtons');
+
+            if (currentStep >= totalSteps) {
+                rewardPreview.innerHTML = `
+                    <div class="reward-preview-icon">🎉</div>
+                    <div class="reward-preview-title">Tebrikler!</div>
+                    <div class="reward-preview-desc">Ödülünü kazandın:</div>
+                    <div class="reward-preview-value">Ücretsiz Noodle</div>
+                `;
+                simulateBtn.classList.add('hidden');
+                rewardButtons.classList.remove('hidden');
+            } else {
+                const remaining = totalSteps - currentStep;
+                rewardPreview.innerHTML = `
+                    <div class="reward-preview-icon">🍜</div>
+                    <div class="reward-preview-title">Ödülün Seni Bekliyor!</div>
+                    <div class="reward-preview-desc">${remaining} sipariş daha ver ve kazanacaksın:</div>
+                    <div class="reward-preview-value">Ücretsiz Noodle</div>
+                `;
+                simulateBtn.classList.remove('hidden');
+                rewardButtons.classList.add('hidden');
+            }
+        }
+
+        // Simulate order
+        function simulateOrder() {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                totalOrders++;
+                updateAllViews();
+            }
+        }
+
+        // Use reward
+        function useReward() {
+            currentStep = 0;
+            totalRewards++;
+            updateAllViews();
+            navigateTo('homeScreen');
+        }
+
+        // Start
+        init();
+    </script>
+</body>
+
+</html>

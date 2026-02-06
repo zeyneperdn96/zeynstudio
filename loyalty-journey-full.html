@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chinese Sushi Express – Loyalty Journey</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Roboto', sans-serif;
+            background: #F9FAFB;
+            color: #1F2937;
+            overflow-x: hidden;
+        }
+
+        .mobile-container {
+            max-width: 390px;
+            height: 100vh;
+            height: 100dvh;
+            margin: 0 auto;
+            background: #F9FAFB;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Status Bar */
+        .status-bar {
+            height: 24px;
+            background: #DC2626;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            font-size: 12px;
+            color: #FFFFFF;
+        }
+
+        /* Header */
+        .header {
+            height: 56px;
+            background: #DC2626;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: #FFFFFF;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+            margin-right: 12px;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #FFFFFF;
+            letter-spacing: -0.3px;
+        }
+
+        /* Screen Base */
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            background: #F9FAFB;
+        }
+
+        .screen.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .content {
+            padding: 24px 16px;
+            overflow-y: auto;
+            height: calc(100vh - 80px);
+            height: calc(100dvh - 80px);
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* ========== HOMEPAGE ========== */
+        .homepage-content {
+            padding: 16px;
+        }
+
+        /* Mini Journey Indicator */
+        .mini-journey-card {
+            background: #FFFFFF;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .mini-journey-card:active {
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .mini-journey-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #6B7280;
+            margin-bottom: 8px;
+            letter-spacing: -0.2px;
+        }
+
+        .mini-journey-progress {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .mini-node {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            border: 2px solid #E5E7EB;
+            transition: all 0.3s ease;
+        }
+
+        .mini-node.filled {
+            background: #DC2626;
+            border-color: #DC2626;
+        }
+
+        .mini-node.start::after {
+            content: '✓';
+            color: #FFFFFF;
+            font-size: 10px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mini-node.reward {
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mini-journey-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: #DC2626;
+        }
+
+        /* Homepage Sections */
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 12px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .product-card {
+            background: #FFFFFF;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 120px;
+            background: #F3F4F6;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+
+        .product-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 4px;
+        }
+
+        .product-price {
+            font-size: 14px;
+            font-weight: 500;
+            color: #DC2626;
+        }
+
+        /* ========== CART ========== */
+        .cart-content {
+            padding: 16px;
+        }
+
+        .cart-item {
+            background: #FFFFFF;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            gap: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .cart-item-image {
+            width: 60px;
+            height: 60px;
+            background: #F3F4F6;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 4px;
+        }
+
+        .cart-item-price {
+            font-size: 14px;
+            font-weight: 500;
+            color: #6B7280;
+        }
+
+        .cart-loyalty-info {
+            background: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            padding: 12px 16px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin: 16px 0;
+        }
+
+        .info-icon {
+            width: 20px;
+            height: 20px;
+            background: #10B981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .info-text {
+            font-size: 13px;
+            font-weight: 500;
+            color: #6B7280;
+            line-height: 1.4;
+        }
+
+        .cart-total {
+            background: #FFFFFF;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .total-row.final {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1F2937;
+            padding-top: 8px;
+            border-top: 1px solid #E5E7EB;
+        }
+
+        .checkout-button {
+            width: 100%;
+            padding: 16px;
+            background: #DC2626;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .checkout-button:active {
+            background: #B91C1C;
+        }
+
+        /* ========== ORDER CONFIRMATION ========== */
+        .confirmation-content {
+            padding: 40px 16px;
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: #10B981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 48px;
+            color: #FFFFFF;
+        }
+
+        .confirmation-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1F2937;
+            margin-bottom: 8px;
+        }
+
+        .confirmation-subtitle {
+            font-size: 14px;
+            color: #6B7280;
+            margin-bottom: 32px;
+        }
+
+        .order-number {
+            font-size: 16px;
+            font-weight: 600;
+            color: #DC2626;
+            margin-bottom: 32px;
+        }
+
+        .progress-feedback {
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .progress-message {
+            font-size: 16px;
+            font-weight: 600;
+            color: #10B981;
+            margin-bottom: 16px;
+        }
+
+        .progress-visual {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .progress-node {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            border: 2px solid #E5E7EB;
+            transition: all 0.4s ease;
+        }
+
+        .progress-node.filled {
+            background: #DC2626;
+            border-color: #DC2626;
+        }
+
+        .progress-node.animate {
+            animation: nodePop 0.4s ease;
+        }
+
+        @keyframes nodePop {
+            0% {
+                transform: scale(0.8);
+            }
+
+            50% {
+                transform: scale(1.3);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .view-journey-button {
+            width: 100%;
+            padding: 14px;
+            background: #FFFFFF;
+            color: #DC2626;
+            border: 2px solid #DC2626;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+        }
+
+        .view-journey-button:active {
+            background: #FEF2F2;
+        }
+
+        /* ========== PROFILE ========== */
+        .profile-content {
+            padding: 16px;
+        }
+
+        .profile-header {
+            background: #FFFFFF;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            background: #DC2626;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 36px;
+            color: #FFFFFF;
+        }
+
+        .profile-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 4px;
+        }
+
+        .profile-email {
+            font-size: 14px;
+            color: #6B7280;
+        }
+
+        .menu-section {
+            background: #FFFFFF;
+            border-radius: 12px;
+            padding: 8px 0;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .menu-item {
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .menu-item:active {
+            background: #F9FAFB;
+        }
+
+        .menu-item-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .menu-icon {
+            font-size: 20px;
+        }
+
+        .menu-text {
+            font-size: 15px;
+            font-weight: 500;
+            color: #1F2937;
+        }
+
+        .menu-item.loyalty {
+            background: #FEF2F2;
+        }
+
+        .menu-item.loyalty .menu-text {
+            font-weight: 600;
+            color: #DC2626;
+        }
+
+        .menu-badge {
+            font-size: 13px;
+            font-weight: 500;
+            color: #6B7280;
+        }
+
+        .menu-arrow {
+            color: #9CA3AF;
+            font-size: 18px;
+        }
+
+        /* ========== JOURNEY SCREEN ========== */
+        .journey-container {
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 32px 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .metro-line {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            padding: 0 8px;
+        }
+
+        .metro-track {
+            position: absolute;
+            top: 50%;
+            left: 8px;
+            right: 8px;
+            height: 3px;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .track-completed {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background: #DC2626;
+            transition: width 0.4s ease;
+        }
+
+        .track-remaining {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: #E5E7EB;
+        }
+
+        .metro-nodes {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .node {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            border: 3px solid #E5E7EB;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s ease;
+            font-size: 12px;
+        }
+
+        .node.completed {
+            background: #DC2626;
+            border-color: #DC2626;
+        }
+
+        .node.start {
+            background: #DC2626;
+            border-color: #DC2626;
+        }
+
+        .node.start::after {
+            content: '✓';
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .node.reward {
+            background: #FFFFFF;
+            border-color: #E5E7EB;
+            font-size: 16px;
+        }
+
+        .node.reward.unlocked {
+            background: #10B981;
+            border-color: #10B981;
+        }
+
+        .status-message {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .primary-message {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 4px;
+            letter-spacing: -0.3px;
+        }
+
+        .secondary-message {
+            font-size: 14px;
+            font-weight: 400;
+            color: #6B7280;
+        }
+
+        .info-card {
+            background: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .reward-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background: #DC2626;
+            color: #FFFFFF;
+        }
+
+        .btn-primary:active {
+            background: #B91C1C;
+        }
+
+        .btn-secondary {
+            background: #FFFFFF;
+            color: #DC2626;
+            border: 2px solid #DC2626;
+        }
+
+        .btn-secondary:active {
+            background: #FEF2F2;
+        }
+
+        .demo-button {
+            background: #FFFFFF;
+            border: 2px solid #DC2626;
+            color: #DC2626;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 16px;
+        }
+
+        .demo-button:active {
+            background: #FEF2F2;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Navigation Bar */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 390px;
+            width: 100%;
+            background: #FFFFFF;
+            border-top: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            padding-bottom: max(8px, env(safe-area-inset-bottom));
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            border-radius: 8px;
+        }
+
+        .nav-item:active {
+            background: #F9FAFB;
+        }
+
+        .nav-item.active .nav-icon {
+            color: #DC2626;
+        }
+
+        .nav-item.active .nav-label {
+            color: #DC2626;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            color: #9CA3AF;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            color: #6B7280;
+            font-weight: 500;
+        }
+
+        /* Mobile: full width */
+        @media (max-width: 390px) {
+            .mobile-container {
+                max-width: 100%;
+                box-shadow: none;
+            }
+
+            .nav-bar {
+                max-width: 100%;
+            }
+        }
+
+        /* Small phones (360px and below) */
+        @media (max-width: 360px) {
+            .content {
+                padding: 16px 12px;
+            }
+
+            .homepage-content {
+                padding: 12px;
+            }
+
+            .section-title {
+                font-size: 16px;
+            }
+
+            .product-image {
+                height: 100px;
+                font-size: 40px;
+            }
+
+            .product-name {
+                font-size: 13px;
+            }
+
+            .product-price {
+                font-size: 13px;
+            }
+
+            .product-grid {
+                gap: 8px;
+            }
+
+            .header-title {
+                font-size: 16px;
+            }
+
+            .cart-content {
+                padding: 12px;
+            }
+
+            .profile-avatar {
+                width: 64px;
+                height: 64px;
+                font-size: 28px;
+            }
+
+            .profile-name {
+                font-size: 16px;
+            }
+
+            .primary-message {
+                font-size: 18px;
+            }
+
+            .node {
+                width: 20px;
+                height: 20px;
+                font-size: 10px;
+            }
+
+            .metro-line {
+                padding: 0 4px;
+            }
+
+            .confirmation-title {
+                font-size: 20px;
+            }
+
+            .success-icon {
+                width: 64px;
+                height: 64px;
+                font-size: 36px;
+            }
+
+            .progress-node {
+                width: 16px;
+                height: 16px;
+            }
+        }
+
+        /* Medium phones (375px-414px) */
+        @media (min-width: 361px) and (max-width: 414px) {
+            .product-image {
+                height: 110px;
+            }
+        }
+
+        /* Landscape */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .content {
+                padding: 12px;
+            }
+
+            .journey-container {
+                padding: 20px 16px;
+            }
+
+            .confirmation-content {
+                padding: 20px 16px;
+            }
+
+            .success-icon {
+                width: 56px;
+                height: 56px;
+                font-size: 32px;
+                margin-bottom: 12px;
+            }
+
+            .nav-bar {
+                padding: 6px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="mobile-container">
+        <!-- HOMEPAGE -->
+        <div class="screen active" id="homeScreen">
+            <div class="status-bar">
+                <span>9:41</span>
+                <span>●●●●</span>
+            </div>
+            <div class="header">
+                <div class="header-title">Chinese Sushi Express</div>
+            </div>
+            <div class="content">
+                <div class="homepage-content">
+                    <!-- Mini Journey Indicator -->
+                    <div class="mini-journey-card" onclick="navigateTo('journeyScreen')">
+                        <div class="mini-journey-title">Lezzet Yolculuğu</div>
+                        <div class="mini-journey-progress" id="miniProgress">
+                            <!-- Generated by JS -->
+                        </div>
+                        <div class="mini-journey-text" id="miniText">3 sipariş kaldı</div>
+                    </div>
+
+                    <!-- Products -->
+                    <div class="section-title">Popüler Ürünler</div>
+                    <div class="product-grid">
+                        <div class="product-card">
+                            <div class="product-image">🍜</div>
+                            <div class="product-name">Noodle</div>
+                            <div class="product-price">450 TL</div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-image">🍣</div>
+                            <div class="product-name">Sushi Set</div>
+                            <div class="product-price">850 TL</div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-image">🥟</div>
+                            <div class="product-name">Dumpling</div>
+                            <div class="product-price">320 TL</div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-image">🍱</div>
+                            <div class="product-name">Bento Box</div>
+                            <div class="product-price">680 TL</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-bar">
+                <div class="nav-item active" onclick="navigateTo('homeScreen')">
+                    <div class="nav-icon">🏠</div>
+                    <div class="nav-label">Ana Sayfa</div>
+                </div>
+                <div class="nav-item" onclick="navigateTo('cartScreen')">
+                    <div class="nav-icon">🛒</div>
+                    <div class="nav-label">Sepet</div>
+                </div>
+                <div class="nav-item" onclick="navigateTo('profileScreen')">
+                    <div class="nav-icon">👤</div>
+                    <div class="nav-label">Profil</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CART SCREEN -->
+        <div class="screen" id="cartScreen">
+            <div class="status-bar">
+                <span>9:41</span>
+                <span>●●●●</span>
+            </div>
+            <div class="header">
+                <button class="back-button" onclick="navigateTo('homeScreen')">←</button>
+                <div class="header-title">Sepetim</div>
+            </div>
+            <div class="content">
+                <div class="cart-content">
+                    <!-- Cart Items -->
+                    <div class="cart-item">
+                        <div class="cart-item-image">🍣</div>
+                        <div class="cart-item-info">
+                            <div class="cart-item-name">Sushi Set</div>
+                            <div class="cart-item-price">850 TL</div>
+                        </div>
+                    </div>
+
+                    <!-- Loyalty Info -->
+                    <div class="cart-loyalty-info">
+                        <div class="info-icon">✓</div>
+                        <div class="info-text">Bu sipariş seni ödüle 1 adım yaklaştırır</div>
+                    </div>
+
+                    <!-- Total -->
+                    <div class="cart-total">
+                        <div class="total-row">
+                            <span>Ara Toplam</span>
+                            <span>850 TL</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Teslimat</span>
+                            <span>Ücretsiz</span>
+                        </div>
+                        <div class="total-row final">
+                            <span>Toplam</span>
+                            <span>850 TL</span>
+                        </div>
+                    </div>
+
+                    <button class="checkout-button" onclick="completeOrder()">Siparişi Tamamla</button>
+                </div>
+            </div>
+            <div class="nav-bar">
+                <div class="nav-item" onclick="navigateTo('homeScreen')">
+                    <div class="nav-icon">🏠</div>
+                    <div class="nav-label">Ana Sayfa</div>
+                </div>
+                <div class="nav-item active" onclick="navigateTo('cartScreen')">
+                    <div class="nav-icon">🛒</div>
+                    <div class="nav-label">Sepet</div>
+                </div>
+                <div class="nav-item" onclick="navigateTo('profileScreen')">
+                    <div class="nav-icon">👤</div>
+                    <div class="nav-label">Profil</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ORDER CONFIRMATION -->
+        <div class="screen" id="confirmationScreen">
+            <div class="status-bar">
+                <span>9:41</span>
+                <span>●●●●</span>
+            </div>
+            <div class="header">
+                <div class="header-title">Sipariş Onayı</div>
+            </div>
+            <div class="content">
+                <div class="confirmation-content">
+                    <div class="success-icon">✓</div>
+                    <div class="confirmation-title">Siparişiniz Alındı!</div>
+                    <div class="confirmation-subtitle">Siparişiniz hazırlanıyor</div>
+                    <div class="order-number">Sipariş No: #12345</div>
+
+                    <!-- Progress Feedback -->
+                    <div class="progress-feedback">
+                        <div class="progress-message">Lezzet yolunda 1 adım ilerledin</div>
+                        <div class="progress-visual" id="progressVisual">
+                            <!-- Generated by JS -->
+                        </div>
+                        <button class="view-journey-button" onclick="navigateTo('journeyScreen')">
+                            Yolculuğu Gör
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROFILE SCREEN -->
+        <div class="screen" id="profileScreen">
+            <div class="status-bar">
+                <span>9:41</span>
+                <span>●●●●</span>
+            </div>
+            <div class="header">
+                <div class="header-title">Profilim</div>
+            </div>
+            <div class="content">
+                <div class="profile-content">
+                    <div class="profile-header">
+                        <div class="profile-avatar">👤</div>
+                        <div class="profile-name">Kullanıcı Adı</div>
+                        <div class="profile-email">kullanici@email.com</div>
+                    </div>
+
+                    <div class="menu-section">
+                        <div class="menu-item loyalty" onclick="navigateTo('journeyScreen')">
+                            <div class="menu-item-left">
+                                <div class="menu-icon">🎯</div>
+                                <div class="menu-text">Lezzet Yolculuğum</div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div class="menu-badge" id="profileBadge">3 adım kaldı</div>
+                                <div class="menu-arrow">›</div>
+                            </div>
+                        </div>
+                        <div class="menu-item">
+                            <div class="menu-item-left">
+                                <div class="menu-icon">📦</div>
+                                <div class="menu-text">Siparişlerim</div>
+                            </div>
+                            <div class="menu-arrow">›</div>
+                        </div>
+                        <div class="menu-item">
+                            <div class="menu-item-left">
+                                <div class="menu-icon">📍</div>
+                                <div class="menu-text">Adreslerim</div>
+                            </div>
+                            <div class="menu-arrow">›</div>
+                        </div>
+                        <div class="menu-item">
+                            <div class="menu-item-left">
+                                <div class="menu-icon">💳</div>
+                                <div class="menu-text">Ödeme Yöntemlerim</div>
+                            </div>
+                            <div class="menu-arrow">›</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-bar">
+                <div class="nav-item" onclick="navigateTo('homeScreen')">
+                    <div class="nav-icon">🏠</div>
+                    <div class="nav-label">Ana Sayfa</div>
+                </div>
+                <div class="nav-item" onclick="navigateTo('cartScreen')">
+                    <div class="nav-icon">🛒</div>
+                    <div class="nav-label">Sepet</div>
+                </div>
+                <div class="nav-item active" onclick="navigateTo('profileScreen')">
+                    <div class="nav-icon">👤</div>
+                    <div class="nav-label">Profil</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- JOURNEY SCREEN -->
+        <div class="screen" id="journeyScreen">
+            <div class="status-bar">
+                <span>9:41</span>
+                <span>●●●●</span>
+            </div>
+            <div class="header">
+                <button class="back-button" onclick="goBack()">←</button>
+                <div class="header-title">Lezzet Yolculuğum</div>
+            </div>
+            <div class="content">
+                <div class="journey-container">
+                    <div class="metro-line">
+                        <div class="metro-track">
+                            <div class="track-remaining"></div>
+                            <div class="track-completed" id="trackCompleted"></div>
+                        </div>
+                        <div class="metro-nodes" id="metroNodes">
+                            <!-- Generated by JS -->
+                        </div>
+                    </div>
+
+                    <div class="status-message">
+                        <div class="primary-message" id="primaryMessage">3 sipariş kaldı</div>
+                        <div class="secondary-message" id="secondaryMessage">Ücretsiz noodle için</div>
+                    </div>
+
+                    <div class="reward-buttons hidden" id="rewardButtons">
+                        <button class="btn btn-primary" onclick="useReward()">Ödülü Kullan</button>
+                        <button class="btn btn-secondary" onclick="useReward()">Sonra Kullan</button>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon" style="background: #DC2626;">i</div>
+                    <div class="info-text">
+                        750 TL ve üzeri her sipariş yolculukta 1 adım ilerletir.
+                    </div>
+                </div>
+
+                <button class="demo-button" id="simulateBtn" onclick="simulateOrder()">
+                    📦 Sipariş Simüle Et (Test)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let currentStep = 3;
+        const totalSteps = 6;
+        let isRewarded = false;
+        let previousScreen = 'homeScreen';
+
+        // Initialize
+        function init() {
+            updateAllViews();
+        }
+
+        // Navigate
+        function navigateTo(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+
+            // Update nav bar
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+
+            if (screenId !== 'journeyScreen' && screenId !== 'confirmationScreen') {
+                previousScreen = screenId;
+            }
+        }
+
+        function goBack() {
+            navigateTo(previousScreen);
+        }
+
+        // Update all views
+        function updateAllViews() {
+            updateMiniIndicator();
+            updateJourneyScreen();
+            updateProfileBadge();
+        }
+
+        // Mini indicator
+        function updateMiniIndicator() {
+            const container = document.getElementById('miniProgress');
+            container.innerHTML = '';
+
+            // Start
+            const start = document.createElement('div');
+            start.className = 'mini-node start filled';
+            container.appendChild(start);
+
+            // Progress
+            for (let i = 0; i < totalSteps; i++) {
+                const node = document.createElement('div');
+                node.className = `mini-node ${i < currentStep ? 'filled' : ''}`;
+                container.appendChild(node);
+            }
+
+            // Reward
+            const reward = document.createElement('div');
+            reward.className = `mini-node reward ${currentStep >= totalSteps ? 'filled' : ''}`;
+            reward.textContent = currentStep >= totalSteps ? '🎁' : '🏁';
+            container.appendChild(reward);
+
+            // Text
+            const text = document.getElementById('miniText');
+            if (currentStep === 0) {
+                text.textContent = 'Yolculuğa başla';
+            } else if (currentStep < totalSteps) {
+                const remaining = totalSteps - currentStep;
+                text.textContent = `${remaining} sipariş kaldı`;
+            } else {
+                text.textContent = 'Ödül hazır!';
+            }
+        }
+
+        // Journey screen
+        function updateJourneyScreen() {
+            const container = document.getElementById('metroNodes');
+            container.innerHTML = '';
+
+            // Start
+            const start = document.createElement('div');
+            start.className = 'node start';
+            container.appendChild(start);
+
+            // Progress
+            for (let i = 0; i < totalSteps; i++) {
+                const node = document.createElement('div');
+                node.className = `node ${i < currentStep ? 'completed' : ''}`;
+                container.appendChild(node);
+            }
+
+            // Reward
+            const reward = document.createElement('div');
+            reward.className = `node reward ${currentStep >= totalSteps ? 'unlocked' : ''}`;
+            reward.textContent = currentStep >= totalSteps ? '🎁' : '🏁';
+            container.appendChild(reward);
+
+            // Track
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('trackCompleted').style.width = `${progress}%`;
+
+            // Messages
+            const primary = document.getElementById('primaryMessage');
+            const secondary = document.getElementById('secondaryMessage');
+            const rewardBtns = document.getElementById('rewardButtons');
+            const simulateBtn = document.getElementById('simulateBtn');
+
+            if (currentStep === 0) {
+                primary.textContent = 'Lezzet yolculuğuna başla';
+                secondary.textContent = 'İlk siparişinle ilerle';
+                rewardBtns.classList.add('hidden');
+                simulateBtn.classList.remove('hidden');
+            } else if (currentStep < totalSteps) {
+                const remaining = totalSteps - currentStep;
+                primary.textContent = `${remaining} sipariş kaldı`;
+                secondary.textContent = 'Ücretsiz noodle için';
+                rewardBtns.classList.add('hidden');
+                simulateBtn.classList.remove('hidden');
+            } else {
+                primary.textContent = 'Yolculuk tamamlandı';
+                secondary.textContent = 'Ücretsiz Noodle kazandın';
+                rewardBtns.classList.remove('hidden');
+                simulateBtn.classList.add('hidden');
+            }
+        }
+
+        // Profile badge
+        function updateProfileBadge() {
+            const badge = document.getElementById('profileBadge');
+            if (currentStep < totalSteps) {
+                const remaining = totalSteps - currentStep;
+                badge.textContent = `${remaining} adım kaldı`;
+            } else {
+                badge.textContent = 'Ödül hazır!';
+            }
+        }
+
+        // Progress visual
+        function updateProgressVisual() {
+            const container = document.getElementById('progressVisual');
+            container.innerHTML = '';
+
+            for (let i = 0; i < totalSteps; i++) {
+                const node = document.createElement('div');
+                node.className = `progress-node ${i < currentStep ? 'filled' : ''}`;
+                if (i === currentStep - 1) {
+                    node.classList.add('animate');
+                }
+                container.appendChild(node);
+            }
+        }
+
+        // Complete order
+        function completeOrder() {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateProgressVisual();
+                navigateTo('confirmationScreen');
+                updateAllViews();
+            }
+        }
+
+        // Simulate order
+        function simulateOrder() {
+            completeOrder();
+        }
+
+        // Use reward
+        function useReward() {
+            currentStep = 0;
+            isRewarded = false;
+            updateAllViews();
+            navigateTo('homeScreen');
+        }
+
+        // Start
+        init();
+    </script>
+</body>
+
+</html>
