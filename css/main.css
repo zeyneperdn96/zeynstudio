@@ -2549,3 +2549,174 @@ html {
         font-size: 10px;
     }
 }
+
+/* ========================================
+   SCREENSAVER - Starfield
+   ======================================== */
+.screensaver-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99998;
+    background: #000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.8s ease;
+}
+
+.screensaver-overlay.screensaver-active {
+    opacity: 1;
+    pointer-events: auto;
+    cursor: none;
+}
+
+.screensaver-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* ========================================
+   MSN TOAST NOTIFICATIONS
+   ======================================== */
+.msn-notify-container {
+    position: fixed;
+    bottom: 52px;
+    right: 8px;
+    z-index: 9995;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 6px;
+    pointer-events: none;
+}
+
+.msn-toast {
+    width: 230px;
+    background: #fff;
+    border: 1px solid #2968b0;
+    border-radius: 3px;
+    box-shadow: 2px 3px 10px rgba(0,0,0,0.35);
+    font-family: Tahoma, 'Segoe UI', sans-serif;
+    overflow: hidden;
+    pointer-events: auto;
+    transform: translateX(110%);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.34, 1.2, 0.64, 1), opacity 0.3s;
+}
+
+.msn-toast.msn-toast-visible {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.msn-toast.msn-toast-leaving {
+    transform: translateX(110%);
+    opacity: 0;
+    transition: transform 0.35s ease-in, opacity 0.3s;
+}
+
+/* Header - MSN blue gradient */
+.msn-toast-header {
+    background: linear-gradient(180deg, #3a8ad4 0%, #2968b0 100%);
+    color: #fff;
+    padding: 3px 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.msn-toast-close {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 0 2px;
+    line-height: 1;
+    font-family: Tahoma, sans-serif;
+}
+
+.msn-toast-close:hover {
+    color: #ffd700;
+}
+
+/* Body */
+.msn-toast-body {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.msn-toast-body:hover {
+    background: #e8f0fc;
+}
+
+.msn-toast-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 2px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.msn-toast-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.msn-toast-title {
+    font-size: 11px;
+    font-weight: bold;
+    color: #1a1a1a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.msn-toast-subtitle {
+    font-size: 10px;
+    color: #555;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ========================================
+   MSN TOAST - MOBILE RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+    .msn-notify-container {
+        bottom: 46px;
+        right: 4px;
+    }
+
+    .msn-toast {
+        width: 200px;
+    }
+
+    .msn-toast-avatar {
+        width: 26px;
+        height: 26px;
+    }
+
+    .msn-toast-title { font-size: 10px; }
+    .msn-toast-subtitle { font-size: 9px; }
+}
+
+@media (max-width: 480px) {
+    .msn-notify-container {
+        bottom: 42px;
+        right: 2px;
+        left: 2px;
+    }
+
+    .msn-toast {
+        width: 100%;
+    }
+}

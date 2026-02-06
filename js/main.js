@@ -35,6 +35,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.Clippy.initialize();
             }
 
+            // Initialize screensaver
+            if (window.Screensaver) {
+                window.Screensaver.initialize();
+            }
+
+            // Initialize MSN notifications
+            if (window.MsnNotify) {
+                window.MsnNotify.initialize();
+            }
+
             // Extend window manager to handle Terminal initialization
             const originalOpenWindow = windowManager.openWindow.bind(windowManager);
             windowManager.openWindow = function (windowId, options) {
