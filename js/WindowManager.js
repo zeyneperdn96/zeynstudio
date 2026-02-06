@@ -74,6 +74,12 @@ class WindowManager {
             return;
         }
 
+        // Play window open sound
+        if (window.SoundEffects) window.SoundEffects.play('windowOpen');
+
+        // Notify Clippy
+        if (window.Clippy) window.Clippy.onWindowOpen(windowId);
+
         const windowEl = document.createElement('div');
         windowEl.className = 'window';
         windowEl.dataset.windowId = windowId;
@@ -158,6 +164,9 @@ class WindowManager {
     closeWindow(windowId) {
         const windowData = this.windows.get(windowId);
         if (!windowData) return;
+
+        // Play window close sound
+        if (window.SoundEffects) window.SoundEffects.play('windowClose');
 
         // Cleanup matrix animation
         if (windowId === 'terminal') {

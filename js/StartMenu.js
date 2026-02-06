@@ -219,6 +219,9 @@ class StartMenu {
         this.menu.classList.remove('hidden');
         this.startBtn.classList.add('active');
         this.isOpen = true;
+
+        // Play start menu sound
+        if (window.SoundEffects) window.SoundEffects.play('startMenu');
     }
 
     close() {

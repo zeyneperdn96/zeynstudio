@@ -2356,3 +2356,196 @@ html {
         outline: 2px solid #FFFFFF;
     }
 }
+
+/* ========================================
+   ROVER ASSISTANT - XP Search Dog
+   ======================================== */
+
+/* Container */
+.clippy-container {
+    position: fixed;
+    bottom: 50px;
+    right: 20px;
+    z-index: 9990;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translateY(120%);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+}
+
+.clippy-container.clippy-visible {
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.clippy-container.clippy-leaving {
+    transform: translateY(120%);
+    transition: transform 0.4s ease-in;
+}
+
+/* Dismiss button */
+.clippy-dismiss {
+    position: absolute;
+    top: -8px;
+    right: -4px;
+    width: 18px;
+    height: 18px;
+    background: #c0c0c0;
+    border: 1px solid #808080;
+    border-radius: 2px;
+    font-size: 11px;
+    line-height: 16px;
+    text-align: center;
+    cursor: pointer;
+    z-index: 2;
+    color: #333;
+    font-family: Tahoma, sans-serif;
+    display: none;
+}
+
+.clippy-container:hover .clippy-dismiss {
+    display: block;
+}
+
+.clippy-dismiss:hover {
+    background: #e81123;
+    color: #fff;
+    border-color: #a00;
+}
+
+/* Character - Image based */
+.clippy-character {
+    width: 64px;
+    height: 64px;
+    cursor: pointer;
+    position: relative;
+    animation: clippy-idle 3s ease-in-out infinite;
+}
+
+.clippy-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    image-rendering: pixelated;
+    filter: drop-shadow(1px 2px 3px rgba(0,0,0,0.3));
+}
+
+/* Idle bounce */
+@keyframes clippy-idle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+/* Wave/shake animation on click */
+.clippy-wave {
+    animation: clippy-wave-anim 0.6s ease-in-out !important;
+}
+
+@keyframes clippy-wave-anim {
+    0% { transform: rotate(0deg); }
+    20% { transform: rotate(-10deg); }
+    40% { transform: rotate(10deg); }
+    60% { transform: rotate(-6deg); }
+    80% { transform: rotate(6deg); }
+    100% { transform: rotate(0deg); }
+}
+
+/* Speech bubble */
+.clippy-bubble {
+    position: absolute;
+    bottom: 74px;
+    right: 0;
+    background: #ffffe1;
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 8px 12px;
+    max-width: 200px;
+    min-width: 140px;
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    font-family: Tahoma, 'Segoe UI', sans-serif;
+    font-size: 11px;
+    line-height: 1.4;
+    color: #333;
+    opacity: 0;
+    transform: scale(0.8) translateY(10px);
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+}
+
+.clippy-bubble.clippy-bubble-visible {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    pointer-events: auto;
+}
+
+.clippy-bubble-tail {
+    position: absolute;
+    bottom: -7px;
+    right: 18px;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 7px solid #333;
+}
+
+.clippy-bubble-tail::after {
+    content: '';
+    position: absolute;
+    bottom: 1px;
+    left: -5px;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #ffffe1;
+}
+
+/* ========================================
+   ROVER - MOBILE RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+    .clippy-container {
+        bottom: 44px;
+        right: 8px;
+    }
+
+    .clippy-character {
+        width: 50px;
+        height: 50px;
+    }
+
+    .clippy-bubble {
+        bottom: 58px;
+        right: -10px;
+        max-width: 170px;
+        min-width: 120px;
+        font-size: 10px;
+        padding: 6px 10px;
+    }
+
+    .clippy-bubble-tail {
+        right: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .clippy-container {
+        bottom: 40px;
+        right: 6px;
+    }
+
+    .clippy-character {
+        width: 42px;
+        height: 42px;
+    }
+
+    .clippy-bubble {
+        bottom: 50px;
+        max-width: 150px;
+        min-width: 100px;
+        font-size: 10px;
+    }
+}

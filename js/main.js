@@ -30,6 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // Setup desktop icons
             setupDesktopIcons();
 
+            // Initialize Clippy assistant
+            if (window.Clippy) {
+                window.Clippy.initialize();
+            }
+
             // Extend window manager to handle Terminal initialization
             const originalOpenWindow = windowManager.openWindow.bind(windowManager);
             windowManager.openWindow = function (windowId, options) {
