@@ -35,11 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.Clippy.initialize();
             }
 
-            // Initialize screensaver
-            if (window.Screensaver) {
-                window.Screensaver.initialize();
-            }
-
             // Initialize MSN notifications
             if (window.MsnNotify) {
                 window.MsnNotify.initialize();
