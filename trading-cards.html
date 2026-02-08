@@ -236,9 +236,10 @@
         /* Color variations per card */
         .card-wrapper:nth-child(1) .front { border-color: var(--neon-pink); }
         .card-wrapper:nth-child(2) .front { border-color: var(--neon-cyan); }
-        .card-wrapper:nth-child(3) .front { border-color: var(--neon-green); }
-        .card-wrapper:nth-child(4) .front { border-color: var(--neon-yellow); }
-        .card-wrapper:nth-child(5) .front { border-color: var(--neon-pink); }
+        .card-wrapper:nth-child(3) .front { border-color: var(--neon-cyan); }
+        .card-wrapper:nth-child(4) .front { border-color: var(--neon-green); }
+        .card-wrapper:nth-child(5) .front { border-color: var(--neon-yellow); }
+        .card-wrapper:nth-child(6) .front { border-color: var(--neon-pink); }
 
         /* ===== CARD HEADER ===== */
         .card-header {
@@ -293,19 +294,6 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-        }
-
-        /* ===== FLIP HINT ===== */
-        .flip-hint {
-            position: absolute;
-            bottom: 62px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-family: 'VT323', monospace;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.2);
-            z-index: 10;
-            pointer-events: none;
         }
 
         /* ========================================
@@ -1061,11 +1049,6 @@
             transition: opacity 0.2s ease;
         }
 
-        /* Card 5 specific - hide default flip hint, show custom one in flavor */
-        .quest-new + .flip-hint {
-            display: none;
-        }
-
         .quest-shuffle-hint {
             font-family: 'VT323', monospace;
             font-size: 14px;
@@ -1189,6 +1172,204 @@
             text-shadow: 0 0 20px var(--neon-yellow);
         }
 
+        /* ========================================
+           CARD 6: DESIGN CREED
+           ======================================== */
+
+        .creed-panels {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .creed-panel {
+            padding: 12px 14px;
+            border-radius: 6px;
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+        }
+
+        .creed-panel:hover {
+            transform: translateX(4px);
+        }
+
+        .creed-panel.human {
+            border-color: var(--neon-cyan);
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.06) 0%, rgba(0, 0, 0, 0.3) 100%);
+        }
+
+        .creed-panel.human:hover {
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+        }
+
+        .creed-panel.circular {
+            border-color: var(--neon-green);
+            background: linear-gradient(135deg, rgba(10, 255, 0, 0.06) 0%, rgba(0, 0, 0, 0.3) 100%);
+        }
+
+        .creed-panel.circular:hover {
+            box-shadow: 0 0 15px rgba(10, 255, 0, 0.2);
+        }
+
+        .creed-panel-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 8px;
+            margin-bottom: 8px;
+            text-shadow: 0 0 8px currentColor;
+        }
+
+        .creed-panel.human .creed-panel-title { color: var(--neon-cyan); }
+        .creed-panel.circular .creed-panel-title { color: var(--neon-green); }
+
+        .creed-panel ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .creed-panel ul li {
+            font-family: 'VT323', monospace;
+            font-size: 15px;
+            color: #bbb;
+            line-height: 1.5;
+            padding-left: 14px;
+            position: relative;
+        }
+
+        .creed-panel.human ul li::before {
+            content: '>';
+            position: absolute;
+            left: 0;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 6px var(--neon-cyan);
+        }
+
+        .creed-panel.circular ul li::before {
+            content: '>';
+            position: absolute;
+            left: 0;
+            color: var(--neon-green);
+            text-shadow: 0 0 6px var(--neon-green);
+        }
+
+        .creed-alignment {
+            text-align: center;
+            margin-top: auto;
+            padding: 10px;
+            border: 2px solid var(--neon-yellow);
+            background: rgba(255, 238, 0, 0.06);
+            animation: alignmentGlow 2.5s ease-in-out infinite;
+        }
+
+        .creed-alignment-label {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 8px;
+            color: var(--neon-yellow);
+            text-shadow: 0 0 10px var(--neon-yellow);
+            margin-bottom: 4px;
+        }
+
+        .creed-alignment-text {
+            font-family: 'VT323', monospace;
+            font-size: 15px;
+            color: #ccc;
+        }
+
+        @keyframes alignmentGlow {
+            0%, 100% { box-shadow: 0 0 8px rgba(255, 238, 0, 0.15); }
+            50% { box-shadow: 0 0 20px rgba(255, 238, 0, 0.35); }
+        }
+
+        /* Pulse Scanner Footer */
+        .creed-pulse {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            height: 100%;
+            position: relative;
+            width: 200px;
+        }
+
+        .pulse-line {
+            width: 100%;
+            height: 2px;
+            background: rgba(0, 240, 255, 0.15);
+            position: absolute;
+        }
+
+        .pulse-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--neon-cyan);
+            box-shadow: 0 0 8px var(--neon-cyan), 0 0 20px var(--neon-cyan);
+            position: absolute;
+            animation: pulseScan 3s ease-in-out infinite;
+        }
+
+        @keyframes pulseScan {
+            0% { left: 0; opacity: 0.4; }
+            50% { left: calc(100% - 10px); opacity: 1; }
+            100% { left: 0; opacity: 0.4; }
+        }
+
+        /* Card 6 Back: Design Manifesto */
+        .back-manifesto {
+            background: linear-gradient(180deg, #0a1a0a 0%, #050a05 100%);
+        }
+
+        .back-manifesto .card-header {
+            background: linear-gradient(90deg, #006644, #00aa66);
+        }
+
+        .manifesto-content {
+            flex: 1;
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .manifesto-tag {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 7px;
+            color: var(--neon-green);
+            text-shadow: 0 0 10px var(--neon-green);
+            margin-bottom: 16px;
+            animation: manifestoFlicker 4s infinite;
+        }
+
+        .manifesto-text {
+            font-family: 'VT323', monospace;
+            font-size: 17px;
+            color: #ccc;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .manifesto-text em {
+            color: var(--neon-green);
+            font-style: italic;
+            text-shadow: 0 0 8px var(--neon-green);
+        }
+
+        .manifesto-signature {
+            margin-top: 20px;
+            font-family: 'VT323', monospace;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes manifestoFlicker {
+            0%, 90%, 100% { opacity: 1; }
+            92% { opacity: 0.5; }
+            94% { opacity: 1; }
+            96% { opacity: 0.6; }
+        }
+
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .card-deck {
@@ -1277,6 +1458,22 @@
             .inv-slot .label {
                 font-size: 11px;
             }
+
+            .creed-panel ul li {
+                font-size: 13px;
+            }
+
+            .creed-panel-title {
+                font-size: 7px;
+            }
+
+            .creed-alignment-label {
+                font-size: 7px;
+            }
+
+            .manifesto-text {
+                font-size: 15px;
+            }
         }
 
         @media (max-width: 390px) {
@@ -1305,6 +1502,22 @@
 
             .skills {
                 gap: 10px;
+            }
+
+            .creed-panel {
+                padding: 10px 12px;
+            }
+
+            .creed-panel ul li {
+                font-size: 12px;
+            }
+
+            .creed-alignment {
+                padding: 8px;
+            }
+
+            .manifesto-text {
+                font-size: 14px;
             }
         }
 
@@ -1480,12 +1693,71 @@
             </div>
         </div>
 
-        <!-- ========== CARD 3: PASSIVES ========== -->
+        <!-- ========== CARD 3: DESIGN CREED ========== -->
+        <div class="card-wrapper">
+            <div class="card" onclick="flipCard(this)">
+                <div class="face front">
+                    <div class="card-header">DESIGN CREED</div>
+                    <span class="card-number">#003</span>
+                    <div class="card-body">
+                        <div class="creed-panels">
+                            <div class="creed-panel human">
+                                <div class="creed-panel-title">I. HUMAN PROTOCOL</div>
+                                <ul>
+                                    <li>Empathize before you design</li>
+                                    <li>Research before you assume</li>
+                                    <li>Iterate until it clicks</li>
+                                </ul>
+                            </div>
+                            <div class="creed-panel circular">
+                                <div class="creed-panel-title">II. CIRCULAR CODE</div>
+                                <ul>
+                                    <li>Waste is a design flaw</li>
+                                    <li>Materials have memory</li>
+                                    <li>Form follows lifecycle</li>
+                                </ul>
+                            </div>
+                            <div class="creed-alignment">
+                                <div class="creed-alignment-label">ALIGNMENT: CHAOTIC GOOD</div>
+                                <div class="creed-alignment-text">Design for people. Build for the planet.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="creed-pulse">
+                            <div class="pulse-line"></div>
+                            <div class="pulse-dot"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="face back back-manifesto">
+                    <div class="card-header">DESIGN MANIFESTO</div>
+                    <div class="manifesto-content">
+                        <div class="manifesto-tag">>> TRANSMISSION DECODED <<</div>
+                        <div class="manifesto-text">
+                            I design for <em>the hand</em> that holds it,
+                            <em>the mind</em> that uses it,
+                            and <em>the world</em> that receives it.
+                            <br><br>
+                            Every curve has a reason.
+                            Every material has a past.
+                            Every product has a future beyond the shelf.
+                        </div>
+                        <div class="manifesto-signature">
+                            // SIGNED: ZEYNEP<br>
+                            // SEE: COFFEEFORM PROJECT
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== CARD 4: PASSIVES ========== -->
         <div class="card-wrapper">
             <div class="card" onclick="flipCard(this)">
                 <div class="face front">
                     <div class="card-header">PASSIVE SKILLS</div>
-                    <span class="card-number">#003</span>
+                    <span class="card-number">#004</span>
                     <div class="card-body">
                         <div class="passives">
                             <div class="passive">
@@ -1541,12 +1813,12 @@
             </div>
         </div>
 
-        <!-- ========== CARD 4: INVENTORY ========== -->
+        <!-- ========== CARD 5: INVENTORY ========== -->
         <div class="card-wrapper">
             <div class="card" onclick="flipCard(this)">
                 <div class="face front">
                     <div class="card-header">BACKPACK</div>
-                    <span class="card-number">#004</span>
+                    <span class="card-number">#005</span>
                     <div class="card-body">
                         <div class="inventory">
                             <div class="inv-slot">
@@ -1604,12 +1876,12 @@
             </div>
         </div>
 
-        <!-- ========== CARD 5: CURRENT QUEST (NEW) ========== -->
+        <!-- ========== CARD 6: CURRENT QUEST ========== -->
         <div class="card-wrapper">
             <div class="card" onclick="flipCard(this)">
                 <div class="face front">
                     <div class="card-header">CURRENT QUEST</div>
-                    <span class="card-number">#005</span>
+                    <span class="card-number">#006</span>
                     <div class="card-body quest-new">
                         <div class="quest-content">
                             <div class="quest-icon">&#9733;</div>
