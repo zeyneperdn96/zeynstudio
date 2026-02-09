@@ -89,6 +89,33 @@ const projectsData = [
         role: 'Product Designer (Research, Concept Development, 3D Modeling)'
     },
     {
+        id: 8,
+        title: 'Moodie',
+        category: 'ui-ux',
+        thumbnail: 'assets/projects/moodie/user-flow.png',
+        thumbnailPos: 'center',
+        thumbnailSize: 'contain',
+        thumbnailBg: '#f8f4f0',
+        description: 'Mobile Wellness & Mood Tracking App',
+        featured: true,
+        year: '2026',
+        role: 'UI/UX Designer',
+        externalLink: 'moodie-case-study.html'
+    },
+    {
+        id: 9,
+        title: 'Pockety',
+        category: 'ui-ux',
+        thumbnail: 'assets/projects/pockety/dashboard.png',
+        thumbnailPos: 'top center',
+        thumbnailSize: 'cover',
+        description: 'Smart Budget Companion App',
+        featured: true,
+        year: '2026',
+        role: 'UI/UX Designer',
+        externalLink: 'pockety-case-study.html'
+    },
+    {
         id: 7,
         title: 'CoffeeForm',
         category: 'industrial',
@@ -142,15 +169,20 @@ class ProjectsManager {
 
     renderProjectsHTML(category = 'all') {
         const filtered = this.filterByCategory(category);
-        return filtered.map(project => `
+        return filtered.map(project => {
+            const pos = project.thumbnailPos || 'center';
+            const size = project.thumbnailSize || 'cover';
+            const bg = project.thumbnailBg || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            return `
             <div class="project-card" data-project-id="${project.id}" style="cursor: pointer;">
-                <div class="project-thumbnail" style="background: url('${project.thumbnail}') center/cover no-repeat, linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 100px;"></div>
+                <div class="project-thumbnail" style="background: url('${project.thumbnail}') ${pos}/${size} no-repeat, ${bg}; height: 100px;"></div>
                 <div class="project-info">
                     <div class="project-title">${project.title}</div>
                     <div class="project-category">${this.getCategoryLabel(project.category)}</div>
                 </div>
             </div>
-        `).join('');
+        `;
+        }).join('');
     }
 
     getProjectById(id) {

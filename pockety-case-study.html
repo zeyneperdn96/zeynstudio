@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pockety - UX/UI Case Study</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        /* ========================================
+           RESET & BASE
+           ======================================== */
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #FAFAFC;
+            color: #1A1A2E;
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* ========================================
+           LAYOUT
+           ======================================== */
+
+        .container {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        /* ========================================
+           NAVIGATION
+           ======================================== */
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(250, 250, 252, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            transition: box-shadow 0.3s;
+        }
+
+        .nav.scrolled {
+            box-shadow: 0 1px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .nav__inner {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 32px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav__logo {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: #1A1A2E;
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .nav__links {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+        }
+
+        .nav__links a {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #8E8E93;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav__links a:hover {
+            color: #1A1A2E;
+        }
+
+        /* ========================================
+           HERO
+           ======================================== */
+
+        .hero {
+            padding: 140px 0 60px;
+            text-align: center;
+            background: linear-gradient(180deg, #EEF0FF 0%, #FAFAFC 100%);
+        }
+
+        .hero__badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: #E8EDFF;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #4A6CF7;
+            margin-bottom: 24px;
+            letter-spacing: 0.03em;
+        }
+
+        .hero__title {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(2.8rem, 6vw, 4.5rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 1.05;
+            margin-bottom: 8px;
+            color: #1A1A2E;
+        }
+
+        .hero__tagline {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(1.1rem, 2vw, 1.3rem);
+            font-weight: 500;
+            color: #4A6CF7;
+            margin-bottom: 20px;
+            letter-spacing: -0.01em;
+        }
+
+        .hero__subtitle {
+            font-size: clamp(1rem, 2vw, 1.1rem);
+            color: #666;
+            max-width: 540px;
+            margin: 0 auto 48px;
+            line-height: 1.7;
+        }
+
+        .hero__screens {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 24px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero__phone {
+            flex: 0 0 auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .hero__phone img {
+            width: 100%;
+            display: block;
+        }
+
+        .hero__phone--center {
+            width: 240px;
+            z-index: 2;
+        }
+
+        .hero__phone--side {
+            width: 200px;
+            opacity: 0.85;
+        }
+
+        .hero__phone--side:hover,
+        .hero__phone--center:hover {
+            transform: translateY(-6px);
+        }
+
+        /* ========================================
+           OVERVIEW GRID
+           ======================================== */
+
+        .overview {
+            padding: 60px 0 80px;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .overview__grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0;
+        }
+
+        .overview__item {
+            padding: 24px 0;
+            border-right: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .overview__item:last-child {
+            border-right: none;
+        }
+
+        .overview__label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #999;
+            margin-bottom: 8px;
+        }
+
+        .overview__value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1A1A2E;
+        }
+
+        /* ========================================
+           SECTION TYPOGRAPHY
+           ======================================== */
+
+        .section-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #4A6CF7;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: #1A1A2E;
+        }
+
+        .section-text {
+            font-size: 1.05rem;
+            color: #555;
+            line-height: 1.8;
+            max-width: 640px;
+        }
+
+        /* ========================================
+           PROBLEM STATEMENT
+           ======================================== */
+
+        .problem {
+            background: #F2F3F7;
+        }
+
+        .problem__content {
+            max-width: 720px;
+        }
+
+        .problem__quote {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(1.4rem, 3vw, 1.9rem);
+            font-weight: 600;
+            line-height: 1.5;
+            color: #1A1A2E;
+            letter-spacing: -0.02em;
+            padding-left: 24px;
+            border-left: 3px solid #4A6CF7;
+            margin-top: 32px;
+        }
+
+        /* ========================================
+           SOLUTION
+           ======================================== */
+
+        .solution__grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 48px;
+        }
+
+        .solution-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 32px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+        }
+
+        .solution-card__icon {
+            width: 40px;
+            height: 40px;
+            background: #EEF0FF;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+        }
+
+        .solution-card__title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1A1A2E;
+            margin-bottom: 8px;
+            letter-spacing: -0.01em;
+        }
+
+        .solution-card__text {
+            font-size: 0.92rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* ========================================
+           USER FLOW
+           ======================================== */
+
+        .userflow {
+            background: #1A1A2E;
+            color: #fff;
+        }
+
+        .userflow .section-label {
+            color: #8DA2FB;
+        }
+
+        .userflow .section-title {
+            color: #fff;
+        }
+
+        .userflow .section-text {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .userflow__steps {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 0;
+            margin-top: 56px;
+            flex-wrap: wrap;
+        }
+
+        .flow-step {
+            text-align: center;
+            flex: 0 0 auto;
+            width: 140px;
+        }
+
+        .flow-step__icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(74, 108, 247, 0.15);
+            border: 2px solid rgba(74, 108, 247, 0.3);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin: 0 auto 12px;
+        }
+
+        .flow-step__label {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .flow-step__desc {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.45);
+            line-height: 1.4;
+        }
+
+        .flow-arrow {
+            display: flex;
+            align-items: center;
+            padding-top: 16px;
+            color: rgba(74, 108, 247, 0.4);
+            font-size: 1.2rem;
+        }
+
+        /* ========================================
+           KEY SCREENS
+           ======================================== */
+
+        .screens__group {
+            margin-bottom: 80px;
+        }
+
+        .screens__group:last-child {
+            margin-bottom: 0;
+        }
+
+        .screens__group-header {
+            margin-bottom: 40px;
+        }
+
+        .screens__group-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #1A1A2E;
+            margin-bottom: 8px;
+        }
+
+        .screens__group-text {
+            font-size: 0.95rem;
+            color: #777;
+            max-width: 520px;
+            line-height: 1.7;
+        }
+
+        .screens__row {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .screen-card {
+            flex: 0 0 auto;
+            width: 260px;
+            text-align: center;
+        }
+
+        .screen-card img {
+            width: 100%;
+            border-radius: 16px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .screen-card img:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+        }
+
+        .screen-card__label {
+            margin-top: 14px;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: #999;
+        }
+
+        /* ========================================
+           UX DECISIONS
+           ======================================== */
+
+        .uxdecisions {
+            background: #F2F3F7;
+        }
+
+        .ux__grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 48px;
+        }
+
+        .ux-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 28px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .ux-card__bullet {
+            flex: 0 0 auto;
+            width: 8px;
+            height: 8px;
+            background: #4A6CF7;
+            border-radius: 50%;
+            margin-top: 8px;
+        }
+
+        .ux-card__title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1A1A2E;
+            margin-bottom: 6px;
+        }
+
+        .ux-card__text {
+            font-size: 0.88rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* ========================================
+           DESIGN SYSTEM
+           ======================================== */
+
+        .ds__grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            margin-top: 48px;
+        }
+
+        .ds__block-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #999;
+            margin-bottom: 20px;
+        }
+
+        .ds__colors {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .ds__color {
+            text-align: center;
+        }
+
+        .ds__color-swatch {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 16px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .ds__color-name {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #1A1A2E;
+        }
+
+        .ds__color-hex {
+            font-size: 0.72rem;
+            color: #999;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+        }
+
+        .ds__type-sample {
+            margin-bottom: 16px;
+            padding: 20px 24px;
+            background: #fff;
+            border-radius: 14px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .ds__type-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #999;
+            margin-bottom: 8px;
+        }
+
+        .ds__type-preview--heading {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #1A1A2E;
+            letter-spacing: -0.02em;
+        }
+
+        .ds__type-preview--body {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .ds__type-meta {
+            font-size: 0.72rem;
+            color: #999;
+            margin-top: 6px;
+        }
+
+        /* ========================================
+           FINAL THOUGHTS
+           ======================================== */
+
+        .final__grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .final-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 32px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .final-card__title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1A1A2E;
+            margin-bottom: 10px;
+        }
+
+        .final-card__text {
+            font-size: 0.92rem;
+            color: #666;
+            line-height: 1.7;
+        }
+
+        /* ========================================
+           FOOTER
+           ======================================== */
+
+        .footer {
+            padding: 48px 0;
+            text-align: center;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .footer__text {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .footer__text a {
+            color: #4A6CF7;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer__text a:hover {
+            text-decoration: underline;
+        }
+
+        /* ========================================
+           RESPONSIVE
+           ======================================== */
+
+        @media (max-width: 900px) {
+            .overview__grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .overview__item:nth-child(3) {
+                border-right: none;
+            }
+
+            .solution__grid,
+            .ux__grid,
+            .final__grid,
+            .ds__grid {
+                grid-template-columns: 1fr;
+            }
+
+            .screens__row {
+                flex-wrap: wrap;
+            }
+
+            .screen-card {
+                width: 220px;
+            }
+
+            .hero__screens {
+                gap: 16px;
+            }
+
+            .hero__phone--center {
+                width: 200px;
+            }
+
+            .hero__phone--side {
+                width: 160px;
+            }
+
+            .flow-arrow {
+                display: none;
+            }
+
+            .userflow__steps {
+                gap: 16px;
+            }
+
+            .flow-step {
+                width: 110px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 0 20px;
+            }
+
+            section {
+                padding: 56px 0;
+            }
+
+            .hero {
+                padding: 120px 0 40px;
+            }
+
+            .overview__grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .overview__item {
+                border-right: none;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+                padding: 16px 0;
+            }
+
+            .overview__item:nth-child(odd) {
+                border-right: 1px solid rgba(0, 0, 0, 0.06);
+                padding-right: 16px;
+            }
+
+            .overview__item:nth-child(even) {
+                padding-left: 16px;
+            }
+
+            .screen-card {
+                width: 180px;
+            }
+
+            .hero__phone--side {
+                display: none;
+            }
+
+            .hero__phone--center {
+                width: 260px;
+            }
+
+            .nav__links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ============================================
+         NAVIGATION
+         ============================================ -->
+    <nav class="nav" id="nav">
+        <div class="nav__inner">
+            <a href="#" class="nav__logo">Pockety</a>
+            <ul class="nav__links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#flow">User Flow</a></li>
+                <li><a href="#screens">Screens</a></li>
+                <li><a href="#ux">UX Decisions</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ============================================
+         HERO
+         ============================================ -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero__badge">UX/UI Case Study</div>
+            <h1 class="hero__title">Pockety</h1>
+            <p class="hero__tagline">Smart Budget Companion</p>
+            <p class="hero__subtitle">
+                A minimal personal budgeting app that helps users track expenses,
+                understand spending habits, and stay within monthly limits.
+            </p>
+
+            <div class="hero__screens">
+                <div class="hero__phone hero__phone--side">
+                    <img src="assets/projects/pockety/monthly-overview.png" alt="Monthly Overview">
+                </div>
+                <div class="hero__phone hero__phone--center">
+                    <img src="assets/projects/pockety/dashboard.png" alt="Dashboard">
+                </div>
+                <div class="hero__phone hero__phone--side">
+                    <img src="assets/projects/pockety/insights.png" alt="Insights">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         PROJECT OVERVIEW
+         ============================================ -->
+    <section class="overview" id="overview">
+        <div class="container">
+            <div class="overview__grid">
+                <div class="overview__item">
+                    <div class="overview__label">Role</div>
+                    <div class="overview__value">UI/UX Designer</div>
+                </div>
+                <div class="overview__item">
+                    <div class="overview__label">Tools</div>
+                    <div class="overview__value">Figma</div>
+                </div>
+                <div class="overview__item">
+                    <div class="overview__label">Platform</div>
+                    <div class="overview__value">iOS</div>
+                </div>
+                <div class="overview__item">
+                    <div class="overview__label">Duration</div>
+                    <div class="overview__value">3 Weeks</div>
+                </div>
+                <div class="overview__item">
+                    <div class="overview__label">Type</div>
+                    <div class="overview__value">Personal Project</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         PROBLEM STATEMENT
+         ============================================ -->
+    <section class="problem" id="problem">
+        <div class="container">
+            <div class="problem__content">
+                <div class="section-label">Problem</div>
+                <h2 class="section-title">Budgeting shouldn't feel like accounting</h2>
+                <p class="section-text">
+                    Most budgeting apps feel overwhelming, data-heavy, or visually stressful.
+                    They present too much information at once, use intimidating financial jargon,
+                    and treat every user like a finance professional. The result: users often
+                    abandon them after just a few days.
+                </p>
+                <p class="problem__quote">
+                    Young professionals and students want to control their daily spending
+                    but dislike complex finance apps. They need clarity, not complexity.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         SOLUTION
+         ============================================ -->
+    <section class="solution" id="solution">
+        <div class="container">
+            <div class="section-label">Solution</div>
+            <h2 class="section-title">Simplicity as a design strategy</h2>
+            <p class="section-text">
+                Pockety focuses on reducing cognitive load. Every screen serves a single
+                purpose, and the interface guides users through financial tracking without
+                making them think about finance.
+            </p>
+
+            <div class="solution__grid">
+                <div class="solution-card">
+                    <div class="solution-card__icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4A6CF7" stroke-width="2" stroke-linecap="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    </div>
+                    <div class="solution-card__title">One-tap expense entry</div>
+                    <p class="solution-card__text">
+                        Adding an expense takes three taps: amount, category, done.
+                        No friction, no extra fields, no overthinking.
+                    </p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-card__icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4A6CF7" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                    </div>
+                    <div class="solution-card__title">Smart categorization</div>
+                    <p class="solution-card__text">
+                        Pre-built categories with clear icons reduce decision fatigue.
+                        Users can also create custom categories that fit their lifestyle.
+                    </p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-card__icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4A6CF7" stroke-width="2" stroke-linecap="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+                    </div>
+                    <div class="solution-card__title">Visual spending insights</div>
+                    <p class="solution-card__text">
+                        Charts and breakdowns tell the story of spending habits at a glance.
+                        No spreadsheets, no complex graphs, just clarity.
+                    </p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-card__icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4A6CF7" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    </div>
+                    <div class="solution-card__title">Gentle budget alerts</div>
+                    <p class="solution-card__text">
+                        Reminders are informative, not stressful. When approaching a budget
+                        limit, users get a friendly nudge instead of a warning.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         USER FLOW
+         ============================================ -->
+    <section class="userflow" id="flow">
+        <div class="container">
+            <div class="section-label">User Flow</div>
+            <h2 class="section-title">Core expense tracking journey</h2>
+            <p class="section-text">
+                The primary flow is optimized for speed. A user can log an expense in under
+                10 seconds and return to their day.
+            </p>
+
+            <div class="userflow__steps">
+                <div class="flow-step">
+                    <div class="flow-step__icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8DA2FB" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                    </div>
+                    <div class="flow-step__label">Dashboard</div>
+                    <div class="flow-step__desc">View balance & recent activity</div>
+                </div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-step">
+                    <div class="flow-step__icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8DA2FB" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+                    </div>
+                    <div class="flow-step__label">Add Expense</div>
+                    <div class="flow-step__desc">Enter amount & details</div>
+                </div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-step">
+                    <div class="flow-step__icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8DA2FB" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                    </div>
+                    <div class="flow-step__label">Pick Category</div>
+                    <div class="flow-step__desc">Classify the expense</div>
+                </div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-step">
+                    <div class="flow-step__icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8DA2FB" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    </div>
+                    <div class="flow-step__label">Confirmed</div>
+                    <div class="flow-step__desc">Expense logged</div>
+                </div>
+                <div class="flow-arrow">&rarr;</div>
+                <div class="flow-step">
+                    <div class="flow-step__icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8DA2FB" stroke-width="2" stroke-linecap="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+                    </div>
+                    <div class="flow-step__label">Review</div>
+                    <div class="flow-step__desc">Track trends & insights</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         KEY SCREENS
+         ============================================ -->
+    <section class="screens" id="screens">
+        <div class="container">
+            <div class="section-label">Key Screens</div>
+            <h2 class="section-title">Screens by feature</h2>
+            <p class="section-text" style="margin-bottom: 64px;">
+                Each screen was designed with a single purpose in mind.
+                Minimal visual noise, clear hierarchy, and fast interactions.
+            </p>
+
+            <!-- Dashboard & Overview -->
+            <div class="screens__group">
+                <div class="screens__group-header">
+                    <h3 class="screens__group-title">Dashboard & Monthly Overview</h3>
+                    <p class="screens__group-text">
+                        The home screen surfaces the most important number first: total balance.
+                        A weekly spending chart and recent transactions provide quick context
+                        without overwhelming the user.
+                    </p>
+                </div>
+                <div class="screens__row">
+                    <div class="screen-card">
+                        <img src="assets/projects/pockety/dashboard.png" alt="Dashboard">
+                        <div class="screen-card__label">Dashboard</div>
+                    </div>
+                    <div class="screen-card">
+                        <img src="assets/projects/pockety/monthly-overview.png" alt="Monthly Overview">
+                        <div class="screen-card__label">Monthly Overview</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Expense Flow -->
+            <div class="screens__group">
+                <div class="screens__group-header">
+                    <h3 class="screens__group-title">Quick Add Expense</h3>
+                    <p class="screens__group-text">
+                        The expense entry flow prioritizes speed. Large input area for the amount,
+                        one-tap category selection, and instant confirmation. The entire flow
+                        completes in under 10 seconds.
+                    </p>
+                </div>
+                <div class="screens__row">
+                    <div class="screen-card">
+                        <img src="assets/projects/pockety/add-expense.png" alt="Add Expense">
+                        <div class="screen-card__label">Add Expense</div>
+                    </div>
+                    <div class="screen-card">
+                        <img src="assets/projects/pockety/categories.png" alt="Select Category">
+                        <div class="screen-card__label">Category Selection</div>
+                    </div>
+                    <div class="screen-card">
+                        <img src="assets/projects/pockety/expense-added.png" alt="Expense Added">
+                        <div class="screen-card__label">Confirmation</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History & Insights -->
+            <div class="screens__group">
+                <div class="screens__group-header">
+                    <h3 class="screens__group-title">History & Insights</h3>
+                    <p class="screens__group-text">
+                        Transaction history is organized chronologically with an export option.
+                        The insights screen reveals spending patterns through charts and
+                        top categories, helping users understand where their money goes.
+                    </p>
+                </div>
+                <div class="screens__row">
+                    <div class="screen-card">
+                        <img src="assets/projects/pockety/transaction-history.png" alt="Transaction History">
+                        <div class="screen-card__label">Transaction History</div>
+                    </div>
+                    <div class="screen-card">
+                        <img src="assets/projects/pockety/insights.png" alt="Insights">
+                        <div class="screen-card__label">Spending Insights</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Budget & Reminders -->
+            <div class="screens__group">
+                <div class="screens__group-header">
+                    <h3 class="screens__group-title">Budget Limits & Reminders</h3>
+                    <p class="screens__group-text">
+                        Users set a monthly spending limit with a simple slider. When they
+                        approach the limit, a gentle reminder appears. The tone is informative,
+                        never punishing.
+                    </p>
+                </div>
+                <div class="screens__row">
+                    <div class="screen-card">
+                        <img src="assets/projects/pockety/budget-limit.png" alt="Set Budget Limit">
+                        <div class="screen-card__label">Set Budget Limit</div>
+                    </div>
+                    <div class="screen-card">
+                        <img src="assets/projects/pockety/reminder.png" alt="Budget Reminder">
+                        <div class="screen-card__label">Budget Reminder</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         UX DECISIONS
+         ============================================ -->
+    <section class="uxdecisions" id="ux">
+        <div class="container">
+            <div class="section-label">UX Decisions</div>
+            <h2 class="section-title">Design decisions that matter</h2>
+            <p class="section-text">
+                Every interaction was shaped by one principle: reduce anxiety around money.
+                Here are the key decisions and the reasoning behind them.
+            </p>
+
+            <div class="ux__grid">
+                <div class="ux-card">
+                    <div class="ux-card__bullet"></div>
+                    <div>
+                        <div class="ux-card__title">Large tap targets for quick entry</div>
+                        <p class="ux-card__text">
+                            The expense input field and category cards are oversized intentionally.
+                            Users logging expenses are often in a hurry, so every tap target
+                            needs to be easy to hit without precision.
+                        </p>
+                    </div>
+                </div>
+                <div class="ux-card">
+                    <div class="ux-card__bullet"></div>
+                    <div>
+                        <div class="ux-card__title">Minimal visual noise</div>
+                        <p class="ux-card__text">
+                            Money already causes stress. The interface uses generous whitespace,
+                            neutral backgrounds, and soft shadows to create a calm environment
+                            where numbers feel manageable.
+                        </p>
+                    </div>
+                </div>
+                <div class="ux-card">
+                    <div class="ux-card__bullet"></div>
+                    <div>
+                        <div class="ux-card__title">Clear hierarchy for balance and spending</div>
+                        <p class="ux-card__text">
+                            The most important number, total balance, is always the largest
+                            element on screen. Secondary information like monthly spend and
+                            remaining budget follows in a clear visual order.
+                        </p>
+                    </div>
+                </div>
+                <div class="ux-card">
+                    <div class="ux-card__bullet"></div>
+                    <div>
+                        <div class="ux-card__title">Informative alerts, not stressful ones</div>
+                        <p class="ux-card__text">
+                            Budget limit notifications use friendly language and offer a clear
+                            next step ("View Overview") instead of just showing a warning.
+                            The "Not Now" option respects the user's pace.
+                        </p>
+                    </div>
+                </div>
+                <div class="ux-card">
+                    <div class="ux-card__bullet"></div>
+                    <div>
+                        <div class="ux-card__title">Friendly empty states</div>
+                        <p class="ux-card__text">
+                            First-time users see encouraging prompts instead of blank screens.
+                            Empty states are designed to guide the first action rather than
+                            leaving users wondering what to do next.
+                        </p>
+                    </div>
+                </div>
+                <div class="ux-card">
+                    <div class="ux-card__bullet"></div>
+                    <div>
+                        <div class="ux-card__title">Blue accent for trust</div>
+                        <p class="ux-card__text">
+                            The primary blue was chosen deliberately. In fintech, blue conveys
+                            reliability and security. Combined with rounded cards and modern
+                            typography, it creates a professional yet approachable feel.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         DESIGN SYSTEM (compact)
+         ============================================ -->
+    <section id="system">
+        <div class="container">
+            <div class="section-label">Visual Language</div>
+            <h2 class="section-title">Design system</h2>
+
+            <div class="ds__grid">
+                <div>
+                    <div class="ds__block-title">Color Palette</div>
+                    <div class="ds__colors">
+                        <div class="ds__color">
+                            <div class="ds__color-swatch" style="background: #4A6CF7;"></div>
+                            <div class="ds__color-name">Primary Blue</div>
+                            <div class="ds__color-hex">#4A6CF7</div>
+                        </div>
+                        <div class="ds__color">
+                            <div class="ds__color-swatch" style="background: #34C759;"></div>
+                            <div class="ds__color-name">Success</div>
+                            <div class="ds__color-hex">#34C759</div>
+                        </div>
+                        <div class="ds__color">
+                            <div class="ds__color-swatch" style="background: #F5A623;"></div>
+                            <div class="ds__color-name">Warning</div>
+                            <div class="ds__color-hex">#F5A623</div>
+                        </div>
+                        <div class="ds__color">
+                            <div class="ds__color-swatch" style="background: #F5F5FA;"></div>
+                            <div class="ds__color-name">Background</div>
+                            <div class="ds__color-hex">#F5F5FA</div>
+                        </div>
+                        <div class="ds__color">
+                            <div class="ds__color-swatch" style="background: #FFFFFF; border: 1px solid #eee;"></div>
+                            <div class="ds__color-name">Surface</div>
+                            <div class="ds__color-hex">#FFFFFF</div>
+                        </div>
+                        <div class="ds__color">
+                            <div class="ds__color-swatch" style="background: #1A1A2E;"></div>
+                            <div class="ds__color-name">Ink</div>
+                            <div class="ds__color-hex">#1A1A2E</div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="ds__block-title">Typography</div>
+                    <div class="ds__type-sample">
+                        <div class="ds__type-label">Headings</div>
+                        <div class="ds__type-preview--heading">SF Pro Display</div>
+                        <div class="ds__type-meta">SF Pro Display / Semibold-Bold / -0.02em</div>
+                    </div>
+                    <div class="ds__type-sample">
+                        <div class="ds__type-label">Body</div>
+                        <div class="ds__type-preview--body">SF Pro Text Regular</div>
+                        <div class="ds__type-meta">SF Pro Text / 400-500 / 1.5 line-height</div>
+                    </div>
+                    <div class="ds__type-sample">
+                        <div class="ds__type-label">Numbers</div>
+                        <div style="font-family: 'Outfit', sans-serif; font-size: 2rem; font-weight: 800; color: #1A1A2E;">$2,950.00</div>
+                        <div class="ds__type-meta">Tabular figures / Bold / Prominent sizing</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         FINAL THOUGHTS
+         ============================================ -->
+    <section class="final" id="final" style="background: #F2F3F7;">
+        <div class="container">
+            <div class="section-label">Final Thoughts</div>
+            <h2 class="section-title">What I learned</h2>
+            <p class="section-text">
+                Designing a finance app taught me that the hardest part isn't showing data,
+                it's deciding what not to show. Here are the key takeaways.
+            </p>
+
+            <div class="final__grid">
+                <div class="final-card">
+                    <div class="final-card__title">Less data, more understanding</div>
+                    <p class="final-card__text">
+                        Early versions showed too many metrics at once. Reducing the dashboard
+                        to balance, weekly chart, and recent transactions made the information
+                        actually useful instead of just available.
+                    </p>
+                </div>
+                <div class="final-card">
+                    <div class="final-card__title">Emotional design in fintech</div>
+                    <p class="final-card__text">
+                        Finance apps carry emotional weight. Using soft colors, rounded shapes,
+                        and friendly language transforms what could feel stressful into something
+                        approachable. The visual tone directly affects how users feel about their finances.
+                    </p>
+                </div>
+                <div class="final-card">
+                    <div class="final-card__title">Speed builds habits</div>
+                    <p class="final-card__text">
+                        The 10-second expense logging goal was the most impactful design
+                        constraint. When an action is fast enough, users do it consistently.
+                        When it takes too long, they abandon it.
+                    </p>
+                </div>
+                <div class="final-card">
+                    <div class="final-card__title">Constraints drive better design</div>
+                    <p class="final-card__text">
+                        Limiting the scope to expense tracking, budgets, and insights forced
+                        sharper design decisions. Every feature had to earn its place on screen.
+                        The result is a more focused and usable product.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         FOOTER
+         ============================================ -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer__text">
+                Designed by <a href="#">Zeynep</a> &middot; 2026
+            </p>
+        </div>
+    </footer>
+
+    <!-- ============================================
+         SCRIPTS
+         ============================================ -->
+    <script>
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 10);
+        });
+
+        document.querySelectorAll('.nav__links a').forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

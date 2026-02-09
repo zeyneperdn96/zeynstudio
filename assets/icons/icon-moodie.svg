@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFF4D6"/>
+      <stop offset="100%" stop-color="#FFEDC2"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+  <!-- Body -->
+  <ellipse cx="32" cy="36" rx="18" ry="16" fill="#FFE08A" stroke="#1A1A1A" stroke-width="2"/>
+  <!-- Energy rays -->
+  <line x1="10" y1="28" x2="6" y2="25" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round"/>
+  <line x1="8" y1="36" x2="3" y2="36" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round"/>
+  <line x1="10" y1="44" x2="6" y2="47" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round"/>
+  <line x1="54" y1="28" x2="58" y2="25" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round"/>
+  <line x1="56" y1="36" x2="61" y2="36" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round"/>
+  <line x1="54" y1="44" x2="58" y2="47" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round"/>
+  <!-- Eyes -->
+  <ellipse cx="26" cy="34" rx="3" ry="3.5" fill="#1A1A1A"/>
+  <ellipse cx="38" cy="34" rx="3" ry="3.5" fill="#1A1A1A"/>
+  <circle cx="27.2" cy="32.5" r="1.2" fill="white"/>
+  <circle cx="39.2" cy="32.5" r="1.2" fill="white"/>
+  <!-- Cheeks -->
+  <ellipse cx="19" cy="40" rx="4" ry="2.5" fill="#FBBAB0" opacity="0.6"/>
+  <ellipse cx="45" cy="40" rx="4" ry="2.5" fill="#FBBAB0" opacity="0.6"/>
+  <!-- Smile -->
+  <path d="M27 44c3 4 8 4 11 0" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" fill="none"/>
+</svg>

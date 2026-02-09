@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moodie - UX/UI Case Study</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        /* ========================================
+           RESET & BASE
+           ======================================== */
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #FAFAF8;
+            color: #1A1A1A;
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* ========================================
+           LAYOUT
+           ======================================== */
+
+        .container {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        .container--narrow {
+            max-width: 720px;
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        /* ========================================
+           NAVIGATION
+           ======================================== */
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(250, 250, 248, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            transition: box-shadow 0.3s;
+        }
+
+        .nav.scrolled {
+            box-shadow: 0 1px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .nav__inner {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 32px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav__logo {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: #1A1A1A;
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .nav__links {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+        }
+
+        .nav__links a {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #888;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav__links a:hover {
+            color: #1A1A1A;
+        }
+
+        /* ========================================
+           HERO
+           ======================================== */
+
+        .hero {
+            padding: 140px 0 60px;
+            text-align: center;
+        }
+
+        .hero__badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: #F3EDFF;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #7B61AD;
+            margin-bottom: 24px;
+            letter-spacing: 0.03em;
+        }
+
+        .hero__title {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(2.8rem, 6vw, 4.5rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 1.05;
+            margin-bottom: 20px;
+            color: #1A1A1A;
+        }
+
+        .hero__subtitle {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            color: #666;
+            max-width: 560px;
+            margin: 0 auto 48px;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+
+        .hero__image {
+            max-width: 900px;
+            margin: 0 auto;
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        .hero__image img {
+            width: 100%;
+            border-radius: 24px;
+        }
+
+        /* ========================================
+           OVERVIEW GRID
+           ======================================== */
+
+        .overview {
+            padding: 60px 0 80px;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .overview__grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0;
+        }
+
+        .overview__item {
+            padding: 24px 0;
+            border-right: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .overview__item:last-child {
+            border-right: none;
+        }
+
+        .overview__label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #999;
+            margin-bottom: 8px;
+        }
+
+        .overview__value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1A1A1A;
+        }
+
+        /* ========================================
+           SECTION TYPOGRAPHY
+           ======================================== */
+
+        .section-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #7B61AD;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: #1A1A1A;
+        }
+
+        .section-text {
+            font-size: 1.05rem;
+            color: #555;
+            line-height: 1.8;
+            max-width: 640px;
+        }
+
+        /* ========================================
+           PROBLEM STATEMENT
+           ======================================== */
+
+        .problem {
+            background: #F3F1ED;
+        }
+
+        .problem__content {
+            max-width: 720px;
+        }
+
+        .problem__quote {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(1.4rem, 3vw, 1.9rem);
+            font-weight: 600;
+            line-height: 1.5;
+            color: #1A1A1A;
+            letter-spacing: -0.02em;
+            padding-left: 24px;
+            border-left: 3px solid #7B61AD;
+            margin-top: 32px;
+        }
+
+        /* ========================================
+           DESIGN GOALS
+           ======================================== */
+
+        .goals__grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 48px;
+        }
+
+        .goal-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 32px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .goal-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+        }
+
+        .goal-card__number {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #7B61AD;
+            margin-bottom: 12px;
+        }
+
+        .goal-card__title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #1A1A1A;
+            margin-bottom: 8px;
+            letter-spacing: -0.01em;
+        }
+
+        .goal-card__text {
+            font-size: 0.92rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* ========================================
+           USER FLOW
+           ======================================== */
+
+        .userflow {
+            background: #1A1A1A;
+            color: #fff;
+        }
+
+        .userflow .section-label {
+            color: #B39DDB;
+        }
+
+        .userflow .section-title {
+            color: #fff;
+        }
+
+        .userflow .section-text {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .userflow__image {
+            margin-top: 48px;
+            border-radius: 20px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .userflow__image img {
+            width: 100%;
+        }
+
+        .userflow__steps {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-top: 40px;
+        }
+
+        .flow-step {
+            text-align: center;
+        }
+
+        .flow-step__number {
+            width: 32px;
+            height: 32px;
+            background: #7B61AD;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 0 auto 10px;
+        }
+
+        .flow-step__label {
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* ========================================
+           KEY SCREENS
+           ======================================== */
+
+        .screens__group {
+            margin-bottom: 80px;
+        }
+
+        .screens__group:last-child {
+            margin-bottom: 0;
+        }
+
+        .screens__group-header {
+            margin-bottom: 40px;
+        }
+
+        .screens__group-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #1A1A1A;
+            margin-bottom: 8px;
+        }
+
+        .screens__group-text {
+            font-size: 0.95rem;
+            color: #777;
+            max-width: 520px;
+            line-height: 1.7;
+        }
+
+        .screens__row {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .screen-card {
+            flex: 0 0 auto;
+            width: 260px;
+            text-align: center;
+        }
+
+        .screen-card img {
+            width: 100%;
+            border-radius: 16px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .screen-card img:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+        }
+
+        .screen-card__label {
+            margin-top: 14px;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: #999;
+        }
+
+        /* Wide screen card for panoramic images */
+        .screen-card--wide {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .screen-card--wide img {
+            border-radius: 20px;
+        }
+
+        /* ========================================
+           DESIGN SYSTEM
+           ======================================== */
+
+        .designsystem {
+            background: #F3F1ED;
+        }
+
+        .ds__grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            margin-top: 48px;
+        }
+
+        .ds__block-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #999;
+            margin-bottom: 20px;
+        }
+
+        /* Colors */
+        .ds__colors {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .ds__color {
+            text-align: center;
+        }
+
+        .ds__color-swatch {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 16px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .ds__color-name {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #1A1A1A;
+        }
+
+        .ds__color-hex {
+            font-size: 0.72rem;
+            color: #999;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+        }
+
+        /* Typography */
+        .ds__type-sample {
+            margin-bottom: 24px;
+            padding: 20px 24px;
+            background: #fff;
+            border-radius: 14px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .ds__type-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #999;
+            margin-bottom: 8px;
+        }
+
+        .ds__type-preview--heading {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #1A1A1A;
+            letter-spacing: -0.02em;
+        }
+
+        .ds__type-preview--body {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .ds__type-meta {
+            font-size: 0.72rem;
+            color: #999;
+            margin-top: 6px;
+        }
+
+        /* Components */
+        .ds__components {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 32px;
+        }
+
+        .ds__component {
+            background: #fff;
+            border-radius: 14px;
+            padding: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            text-align: center;
+        }
+
+        .ds__component-label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #1A1A1A;
+            margin-bottom: 12px;
+        }
+
+        .ds__btn-sample {
+            display: inline-block;
+            padding: 12px 28px;
+            background: #FFEDC2;
+            border: 2.5px solid #1A1A1A;
+            border-radius: 20px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #1A1A1A;
+        }
+
+        .ds__btn-sample--secondary {
+            background: #F3EDFF;
+            border-color: transparent;
+            color: #7B61AD;
+        }
+
+        .ds__radius-demo {
+            width: 64px;
+            height: 64px;
+            background: #E5DCF5;
+            border-radius: 20px;
+            margin: 0 auto;
+        }
+
+        .ds__nav-sample {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .ds__nav-dot {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #1A1A1A;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ds__nav-dot svg {
+            width: 16px;
+            height: 16px;
+            fill: #fff;
+        }
+
+        .ds__nav-dot--active svg {
+            fill: #FFEDC2;
+        }
+
+        /* Characters row */
+        .ds__characters {
+            margin-top: 32px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .ds__character {
+            text-align: center;
+        }
+
+        .ds__character-blob {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            margin: 0 auto 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+
+        .ds__character-name {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #1A1A1A;
+        }
+
+        /* ========================================
+           REFLECTION
+           ======================================== */
+
+        .reflection__grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .reflection-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 32px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .reflection-card__title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1A1A1A;
+            margin-bottom: 10px;
+            letter-spacing: -0.01em;
+        }
+
+        .reflection-card__text {
+            font-size: 0.92rem;
+            color: #666;
+            line-height: 1.7;
+        }
+
+        /* ========================================
+           FOOTER
+           ======================================== */
+
+        .footer {
+            padding: 48px 0;
+            text-align: center;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .footer__text {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .footer__text a {
+            color: #7B61AD;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer__text a:hover {
+            text-decoration: underline;
+        }
+
+        /* ========================================
+           DIVIDER
+           ======================================== */
+
+        .divider {
+            width: 48px;
+            height: 3px;
+            background: #E5DCF5;
+            border-radius: 2px;
+            margin: 0 0 24px;
+        }
+
+        /* ========================================
+           RESPONSIVE
+           ======================================== */
+
+        @media (max-width: 900px) {
+            .overview__grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .overview__item:nth-child(3) {
+                border-right: none;
+            }
+
+            .overview__item:nth-child(4),
+            .overview__item:nth-child(5) {
+                border-right: none;
+            }
+
+            .goals__grid {
+                grid-template-columns: 1fr;
+            }
+
+            .userflow__steps {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .screens__row {
+                flex-wrap: wrap;
+            }
+
+            .screen-card {
+                width: 220px;
+            }
+
+            .ds__grid {
+                grid-template-columns: 1fr;
+            }
+
+            .reflection__grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 0 20px;
+            }
+
+            section {
+                padding: 56px 0;
+            }
+
+            .hero {
+                padding: 120px 0 40px;
+            }
+
+            .overview__grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .overview__item {
+                border-right: none;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+                padding: 16px 0;
+            }
+
+            .overview__item:nth-child(odd) {
+                border-right: 1px solid rgba(0, 0, 0, 0.06);
+                padding-right: 16px;
+            }
+
+            .overview__item:nth-child(even) {
+                padding-left: 16px;
+            }
+
+            .userflow__steps {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .screen-card {
+                width: 180px;
+            }
+
+            .ds__colors {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .ds__components {
+                grid-template-columns: 1fr;
+            }
+
+            .nav__links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ============================================
+         NAVIGATION
+         ============================================ -->
+    <nav class="nav" id="nav">
+        <div class="nav__inner">
+            <a href="#" class="nav__logo">Moodie</a>
+            <ul class="nav__links">
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#goals">Goals</a></li>
+                <li><a href="#flow">User Flow</a></li>
+                <li><a href="#screens">Screens</a></li>
+                <li><a href="#system">Design System</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ============================================
+         HERO
+         ============================================ -->
+    <section class="hero">
+        <div class="container" style="text-align: center;">
+            <div class="hero__badge">UX/UI Case Study</div>
+            <h1 class="hero__title">Moodie</h1>
+            <p class="hero__subtitle">
+                A mobile wellness companion that helps users track their moods, sleep, and energy
+                through playful, character-driven interactions.
+            </p>
+            <div class="hero__image">
+                <img src="assets/projects/moodie/hero.png" alt="Moodie app screens overview">
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         PROJECT OVERVIEW
+         ============================================ -->
+    <section class="overview" id="overview">
+        <div class="container">
+            <div class="overview__grid">
+                <div class="overview__item">
+                    <div class="overview__label">Role</div>
+                    <div class="overview__value">UI/UX Designer</div>
+                </div>
+                <div class="overview__item">
+                    <div class="overview__label">Tools</div>
+                    <div class="overview__value">Figma</div>
+                </div>
+                <div class="overview__item">
+                    <div class="overview__label">Platform</div>
+                    <div class="overview__value">iOS & Android</div>
+                </div>
+                <div class="overview__item">
+                    <div class="overview__label">Duration</div>
+                    <div class="overview__value">4 Weeks</div>
+                </div>
+                <div class="overview__item">
+                    <div class="overview__label">Type</div>
+                    <div class="overview__value">Personal Project</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         PROBLEM STATEMENT
+         ============================================ -->
+    <section class="problem" id="problem">
+        <div class="container">
+            <div class="problem__content">
+                <div class="section-label">Problem</div>
+                <h2 class="section-title">Why another mood tracker?</h2>
+                <p class="section-text">
+                    Most mood tracking apps feel clinical and impersonal. Users open them once or twice,
+                    then forget about them. The data is useful in theory, but the experience of
+                    logging it every day doesn't feel rewarding enough to build a lasting habit.
+                </p>
+                <p class="problem__quote">
+                    People don't skip tracking because they don't care about their wellbeing.
+                    They skip it because the process feels like a chore.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         DESIGN GOALS
+         ============================================ -->
+    <section class="goals" id="goals">
+        <div class="container">
+            <div class="section-label">Design Goals</div>
+            <h2 class="section-title">What I set out to solve</h2>
+            <p class="section-text">
+                Every design decision was driven by one question: how do we make self-reflection
+                feel natural and even enjoyable?
+            </p>
+
+            <div class="goals__grid">
+                <div class="goal-card">
+                    <div class="goal-card__number">01</div>
+                    <div class="goal-card__title">Make tracking feel approachable</div>
+                    <p class="goal-card__text">
+                        Replace clinical inputs with expressive blob characters that users can
+                        immediately relate to. A single tap replaces a form.
+                    </p>
+                </div>
+                <div class="goal-card">
+                    <div class="goal-card__number">02</div>
+                    <div class="goal-card__title">Keep the daily flow under 10 seconds</div>
+                    <p class="goal-card__text">
+                        The core logging action should be fast enough to do on autopilot.
+                        Select mood, confirm, done. Journaling is optional, never forced.
+                    </p>
+                </div>
+                <div class="goal-card">
+                    <div class="goal-card__number">03</div>
+                    <div class="goal-card__title">Show data that tells a story</div>
+                    <p class="goal-card__text">
+                        Mood history, sleep trends, and energy levels are presented as visual
+                        narratives, not spreadsheets. Patterns emerge over time without effort.
+                    </p>
+                </div>
+                <div class="goal-card">
+                    <div class="goal-card__number">04</div>
+                    <div class="goal-card__title">Reward consistency, not perfection</div>
+                    <p class="goal-card__text">
+                        Streaks, achievements, and gentle reminders encourage daily use
+                        without inducing guilt when users miss a day.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         USER FLOW
+         ============================================ -->
+    <section class="userflow" id="flow">
+        <div class="container">
+            <div class="section-label">User Flow</div>
+            <h2 class="section-title">The daily tracking journey</h2>
+            <p class="section-text">
+                The primary flow is designed around a single daily action: logging your mood.
+                From there, users can explore their history and trends at their own pace.
+            </p>
+
+            <div class="userflow__image">
+                <img src="assets/projects/moodie/user-flow.png" alt="Moodie user flow diagram">
+            </div>
+
+            <div class="userflow__steps">
+                <div class="flow-step">
+                    <div class="flow-step__number">1</div>
+                    <div class="flow-step__label">Open Dashboard</div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-step__number">2</div>
+                    <div class="flow-step__label">Select Mood</div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-step__number">3</div>
+                    <div class="flow-step__label">Confirm Entry</div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-step__number">4</div>
+                    <div class="flow-step__label">Review History</div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-step__number">5</div>
+                    <div class="flow-step__label">Track Trends</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         KEY SCREENS
+         ============================================ -->
+    <section class="screens" id="screens">
+        <div class="container">
+            <div class="section-label">Key Screens</div>
+            <h2 class="section-title">Screens by feature</h2>
+            <p class="section-text" style="margin-bottom: 64px;">
+                Each screen was designed to serve a single, clear purpose.
+                Here's how the main features come together.
+            </p>
+
+            <!-- Onboarding -->
+            <div class="screens__group">
+                <div class="screens__group-header">
+                    <h3 class="screens__group-title">Onboarding</h3>
+                    <p class="screens__group-text">
+                        A three-step setup flow that lets users choose what to track and when to be reminded.
+                        Personalization from the start builds ownership over the experience.
+                    </p>
+                </div>
+                <div class="screens__row">
+                    <div class="screen-card screen-card--wide">
+                        <img src="assets/projects/moodie/onboarding.png" alt="Onboarding screens">
+                        <div class="screen-card__label">Welcome / Customize / Reminders</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard & Mood Logging -->
+            <div class="screens__group">
+                <div class="screens__group-header">
+                    <h3 class="screens__group-title">Dashboard & Mood Logging</h3>
+                    <p class="screens__group-text">
+                        The home screen shows today's snapshot at a glance: mood, sleep, energy, and water intake.
+                        Tapping "Log Mood" opens a full-screen selector with four expressive characters.
+                    </p>
+                </div>
+                <div class="screens__row">
+                    <div class="screen-card">
+                        <img src="assets/projects/moodie/dashboard.png" alt="Dashboard screen">
+                        <div class="screen-card__label">Dashboard</div>
+                    </div>
+                    <div class="screen-card">
+                        <img src="assets/projects/moodie/mood-select.png" alt="Mood selection screen">
+                        <div class="screen-card__label">Mood Selection</div>
+                    </div>
+                    <div class="screen-card">
+                        <img src="assets/projects/moodie/mood-logged.png" alt="Mood logged confirmation">
+                        <div class="screen-card__label">Confirmation</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History & Stats -->
+            <div class="screens__group">
+                <div class="screens__group-header">
+                    <h3 class="screens__group-title">History & Statistics</h3>
+                    <p class="screens__group-text">
+                        The history screen shows a chronological mood timeline, filterable by type.
+                        The stats view summarizes patterns across the week with donut charts and bar graphs.
+                    </p>
+                </div>
+                <div class="screens__row">
+                    <div class="screen-card">
+                        <img src="assets/projects/moodie/mood-history.png" alt="Mood history screen">
+                        <div class="screen-card__label">Mood History</div>
+                    </div>
+                    <div class="screen-card">
+                        <img src="assets/projects/moodie/stats.png" alt="Statistics screen">
+                        <div class="screen-card__label">Statistics</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sleep Tracking -->
+            <div class="screens__group">
+                <div class="screens__group-header">
+                    <h3 class="screens__group-title">Sleep Tracking</h3>
+                    <p class="screens__group-text">
+                        A dedicated sleep detail view shows bedtime, wake time, and weekly
+                        averages. The purple theme creates a visual association with rest.
+                    </p>
+                </div>
+                <div class="screens__row">
+                    <div class="screen-card">
+                        <img src="assets/projects/moodie/sleep-detail.png" alt="Sleep tracking screen">
+                        <div class="screen-card__label">Sleep Details</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Journal -->
+            <div class="screens__group">
+                <div class="screens__group-header">
+                    <h3 class="screens__group-title">Journal</h3>
+                    <p class="screens__group-text">
+                        An optional journal lets users add context to their mood entries.
+                        Tags help categorize what influenced their day.
+                    </p>
+                </div>
+                <div class="screens__row">
+                    <div class="screen-card">
+                        <img src="assets/projects/moodie/journal.png" alt="Journal screen">
+                        <div class="screen-card__label">Journal Entry</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Achievements & Reminders -->
+            <div class="screens__group">
+                <div class="screens__group-header">
+                    <h3 class="screens__group-title">Achievements & Reminders</h3>
+                    <p class="screens__group-text">
+                        Streak counters, badge systems, and configurable reminders turn
+                        self-tracking into a sustainable habit without being pushy.
+                    </p>
+                </div>
+                <div class="screens__row">
+                    <div class="screen-card">
+                        <img src="assets/projects/moodie/achievements.png" alt="Achievements screen">
+                        <div class="screen-card__label">Achievements</div>
+                    </div>
+                    <div class="screen-card">
+                        <img src="assets/projects/moodie/reminders.png" alt="Reminders screen">
+                        <div class="screen-card__label">Reminders</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         DESIGN SYSTEM
+         ============================================ -->
+    <section class="designsystem" id="system">
+        <div class="container">
+            <div class="section-label">Design System</div>
+            <h2 class="section-title">Visual language</h2>
+            <p class="section-text">
+                Moodie's design system is built around soft pastels, rounded shapes,
+                and character-driven UI. Every element reinforces warmth and approachability.
+            </p>
+
+            <div class="ds__grid">
+                <!-- Colors -->
+                <div>
+                    <div class="ds__block-title">Color Palette</div>
+                    <div class="ds__colors">
+                        <div class="ds__color">
+                            <div class="ds__color-swatch" style="background: #FFEDC2;"></div>
+                            <div class="ds__color-name">Sunny</div>
+                            <div class="ds__color-hex">#FFEDC2</div>
+                        </div>
+                        <div class="ds__color">
+                            <div class="ds__color-swatch" style="background: #E5DCF5;"></div>
+                            <div class="ds__color-name">Lavender</div>
+                            <div class="ds__color-hex">#E5DCF5</div>
+                        </div>
+                        <div class="ds__color">
+                            <div class="ds__color-swatch" style="background: #D1EFE4;"></div>
+                            <div class="ds__color-name">Mint</div>
+                            <div class="ds__color-hex">#D1EFE4</div>
+                        </div>
+                        <div class="ds__color">
+                            <div class="ds__color-swatch" style="background: #F8C8BC;"></div>
+                            <div class="ds__color-name">Coral</div>
+                            <div class="ds__color-hex">#F8C8BC</div>
+                        </div>
+                        <div class="ds__color">
+                            <div class="ds__color-swatch" style="background: #F8F6F1;"></div>
+                            <div class="ds__color-name">Background</div>
+                            <div class="ds__color-hex">#F8F6F1</div>
+                        </div>
+                        <div class="ds__color">
+                            <div class="ds__color-swatch" style="background: #1A1A1A;"></div>
+                            <div class="ds__color-name">Ink</div>
+                            <div class="ds__color-hex">#1A1A1A</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Typography -->
+                <div>
+                    <div class="ds__block-title">Typography</div>
+                    <div class="ds__type-sample">
+                        <div class="ds__type-label">Headings</div>
+                        <div class="ds__type-preview--heading">Outfit Bold</div>
+                        <div class="ds__type-meta">Outfit / 700-800 / -0.02em tracking</div>
+                    </div>
+                    <div class="ds__type-sample">
+                        <div class="ds__type-label">Body</div>
+                        <div class="ds__type-preview--body">Inter Regular</div>
+                        <div class="ds__type-meta">Inter / 400-500 / 1.6 line-height</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Characters -->
+            <div style="margin-top: 48px;">
+                <div class="ds__block-title">Mood Characters</div>
+                <p class="section-text" style="margin-bottom: 24px; font-size: 0.92rem;">
+                    Each mood state is represented by a unique blob character with distinct
+                    color, expression, and personality. They serve as the emotional core of the interface.
+                </p>
+                <div class="ds__characters">
+                    <div class="ds__character">
+                        <div class="ds__character-blob" style="background: #FFEDC2;">
+                            <svg viewBox="0 0 50 50" width="48" height="48">
+                                <ellipse cx="25" cy="28" rx="20" ry="18" fill="#FFE08A" stroke="#1A1A1A"
+                                    stroke-width="2" />
+                                <ellipse cx="20" cy="26" rx="2.5" ry="3" fill="#1A1A1A" />
+                                <ellipse cx="30" cy="26" rx="2.5" ry="3" fill="#1A1A1A" />
+                                <circle cx="21" cy="25" r="1" fill="white" />
+                                <circle cx="31" cy="25" r="1" fill="white" />
+                                <path d="M21 34c2 3 6 3 8 0" stroke="#1A1A1A" stroke-width="1.5"
+                                    stroke-linecap="round" fill="none" />
+                                <ellipse cx="13" cy="32" rx="3" ry="2" fill="#FBBAB0" opacity="0.6" />
+                                <ellipse cx="37" cy="32" rx="3" ry="2" fill="#FBBAB0" opacity="0.6" />
+                            </svg>
+                        </div>
+                        <div class="ds__character-name">Happy</div>
+                    </div>
+                    <div class="ds__character">
+                        <div class="ds__character-blob" style="background: #D1EFE4;">
+                            <svg viewBox="0 0 50 50" width="48" height="48">
+                                <ellipse cx="25" cy="28" rx="20" ry="18" fill="#B8E6D4" stroke="#1A1A1A"
+                                    stroke-width="2" />
+                                <ellipse cx="20" cy="26" rx="2.5" ry="3" fill="#1A1A1A" />
+                                <ellipse cx="30" cy="26" rx="2.5" ry="3" fill="#1A1A1A" />
+                                <circle cx="21" cy="25" r="1" fill="white" />
+                                <circle cx="31" cy="25" r="1" fill="white" />
+                                <path d="M22 33c2 2 5 2 7 0" stroke="#1A1A1A" stroke-width="1.5"
+                                    stroke-linecap="round" fill="none" />
+                                <ellipse cx="13" cy="32" rx="3" ry="2" fill="#FBBAB0" opacity="0.6" />
+                                <ellipse cx="37" cy="32" rx="3" ry="2" fill="#FBBAB0" opacity="0.6" />
+                            </svg>
+                        </div>
+                        <div class="ds__character-name">Calm</div>
+                    </div>
+                    <div class="ds__character">
+                        <div class="ds__character-blob" style="background: #E5DCF5;">
+                            <svg viewBox="0 0 50 50" width="48" height="48">
+                                <ellipse cx="25" cy="28" rx="20" ry="18" fill="#D4C4E8" stroke="#1A1A1A"
+                                    stroke-width="2" />
+                                <path d="M16 26c2 2 4 2 6 0" stroke="#1A1A1A" stroke-width="1.5"
+                                    stroke-linecap="round" fill="none" />
+                                <path d="M28 26c2 2 4 2 6 0" stroke="#1A1A1A" stroke-width="1.5"
+                                    stroke-linecap="round" fill="none" />
+                                <path d="M22 34c2 1.5 5 1.5 7 0" stroke="#1A1A1A" stroke-width="1.5"
+                                    stroke-linecap="round" fill="none" />
+                                <ellipse cx="13" cy="32" rx="3" ry="2" fill="#FBBAB0" opacity="0.6" />
+                                <ellipse cx="37" cy="32" rx="3" ry="2" fill="#FBBAB0" opacity="0.6" />
+                                <text x="36" y="14" font-family="Outfit" font-size="8" font-weight="800"
+                                    fill="#1A1A1A">Z</text>
+                                <text x="41" y="9" font-family="Outfit" font-size="6" font-weight="800"
+                                    fill="#1A1A1A">z</text>
+                            </svg>
+                        </div>
+                        <div class="ds__character-name">Sad</div>
+                    </div>
+                    <div class="ds__character">
+                        <div class="ds__character-blob" style="background: #F8C8BC;">
+                            <svg viewBox="0 0 50 50" width="48" height="48">
+                                <ellipse cx="25" cy="28" rx="20" ry="18" fill="#F8C8BC" stroke="#1A1A1A"
+                                    stroke-width="2" />
+                                <ellipse cx="20" cy="26" rx="2.5" ry="3" fill="#1A1A1A" />
+                                <ellipse cx="30" cy="26" rx="2.5" ry="3" fill="#1A1A1A" />
+                                <circle cx="21" cy="25" r="1" fill="white" />
+                                <circle cx="31" cy="25" r="1" fill="white" />
+                                <path d="M20 16 L17 20 M30 16 L33 20" stroke="#1A1A1A" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                                <path d="M22 35c2 -2 5 -2 7 0" stroke="#1A1A1A" stroke-width="1.5"
+                                    stroke-linecap="round" fill="none" />
+                                <ellipse cx="13" cy="32" rx="3" ry="2" fill="#FF9A8A" opacity="0.6" />
+                                <ellipse cx="37" cy="32" rx="3" ry="2" fill="#FF9A8A" opacity="0.6" />
+                            </svg>
+                        </div>
+                        <div class="ds__character-name">Angry</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Components -->
+            <div style="margin-top: 48px;">
+                <div class="ds__block-title">Key Components</div>
+                <div class="ds__components">
+                    <div class="ds__component">
+                        <div class="ds__component-label">Primary Button</div>
+                        <div class="ds__btn-sample">Log Mood</div>
+                    </div>
+                    <div class="ds__component">
+                        <div class="ds__component-label">Secondary Button</div>
+                        <div class="ds__btn-sample ds__btn-sample--secondary">Confirm</div>
+                    </div>
+                    <div class="ds__component">
+                        <div class="ds__component-label">Card Radius</div>
+                        <div class="ds__radius-demo"></div>
+                        <div style="font-size: 0.72rem; color: #999; margin-top: 8px;">24px border-radius</div>
+                    </div>
+                    <div class="ds__component">
+                        <div class="ds__component-label">Navigation Bar</div>
+                        <div class="ds__nav-sample">
+                            <div class="ds__nav-dot ds__nav-dot--active">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+                                </svg>
+                            </div>
+                            <div class="ds__nav-dot">
+                                <svg viewBox="0 0 24 24">
+                                    <path
+                                        d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" />
+                                </svg>
+                            </div>
+                            <div class="ds__nav-dot"
+                                style="background: #fff; border: 2px solid #1A1A1A; width: 42px; height: 42px;">
+                                <svg viewBox="0 0 24 24" style="fill: #1A1A1A;">
+                                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                                </svg>
+                            </div>
+                            <div class="ds__nav-dot">
+                                <svg viewBox="0 0 24 24">
+                                    <path
+                                        d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         REFLECTION
+         ============================================ -->
+    <section class="reflection" id="reflection">
+        <div class="container">
+            <div class="section-label">Reflection</div>
+            <h2 class="section-title">What I learned</h2>
+            <p class="section-text">
+                Designing Moodie taught me that wellness products succeed when they
+                respect the user's time and emotional state. Here are the key takeaways.
+            </p>
+
+            <div class="reflection__grid">
+                <div class="reflection-card">
+                    <div class="reflection-card__title">Character design drives engagement</div>
+                    <p class="reflection-card__text">
+                        The blob characters became the emotional core of the app. Users connect
+                        with illustrated personalities far more than with abstract icons or sliders.
+                        Investing time in character expression paid off in every screen.
+                    </p>
+                </div>
+                <div class="reflection-card">
+                    <div class="reflection-card__title">Simplicity over feature count</div>
+                    <p class="reflection-card__text">
+                        Early versions had too many tracking categories. Narrowing the scope to
+                        mood, sleep, and energy created a more focused experience. Users don't need
+                        to track everything to gain meaningful insight.
+                    </p>
+                </div>
+                <div class="reflection-card">
+                    <div class="reflection-card__title">Color as functional language</div>
+                    <p class="reflection-card__text">
+                        Each color in the palette maps to a specific mood or feature area. This
+                        creates an intuitive visual hierarchy where users can navigate by feeling
+                        rather than reading labels.
+                    </p>
+                </div>
+                <div class="reflection-card">
+                    <div class="reflection-card__title">Habit loops need gentle nudges</div>
+                    <p class="reflection-card__text">
+                        The achievement system and configurable reminders were added after
+                        realizing that even a delightful experience needs structure to become a
+                        daily habit. The balance between motivation and pressure was the hardest
+                        part to get right.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         FOOTER
+         ============================================ -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer__text">
+                Designed by <a href="#">Zeynep</a> &middot; 2026
+            </p>
+        </div>
+    </footer>
+
+    <!-- ============================================
+         SCRIPTS
+         ============================================ -->
+    <script>
+        // Navbar scroll effect
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 10);
+        });
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('.nav__links a').forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

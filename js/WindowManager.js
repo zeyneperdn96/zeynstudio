@@ -546,6 +546,12 @@ class WindowManager {
     }
 
     openCaseStudyWindow(project, projectsManager) {
+        // External link projects - open in new tab
+        if (project.externalLink) {
+            window.open(project.externalLink, '_blank');
+            return;
+        }
+
         // Special handling for METBIC - open XP-style window
         if (project.title === 'METBIC') {
             this.openWindow('metbic', { width: 820, height: 520 });
