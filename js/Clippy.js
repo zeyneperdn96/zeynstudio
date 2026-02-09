@@ -1,6 +1,6 @@
 /* ========================================
-   ROVER ASSISTANT
-   XP Search Dog style animated helper
+   ZEYN ASSISTANT
+   Portfolio helper with avatar
    ======================================== */
 
 class ClippyAssistant {
@@ -17,47 +17,47 @@ class ClippyAssistant {
         // Context-aware messages
         this.messages = {
             welcome: [
-                "Pika pika! Welcome to my portfolio!",
-                "Hey there! I'm here to help you explore!",
-                "Welcome! Wanna look around?"
+                "Hey! Welcome to my portfolio!",
+                "Hi there! Feel free to look around!",
+                "Welcome! Let me show you around."
             ],
             idle: [
-                "Click My Work to see the projects!",
+                "Check out My Work to see the projects!",
                 "Try the Start menu for all programs!",
-                "Wanna check out the Gallery?",
-                "Click Resume to see skills & experience!",
-                "Ask me anything on Zeyn Chat!"
+                "Have you seen the Gallery yet?",
+                "Click Resume to see my skills & experience!",
+                "Wanna chat? Open Zeyn Chat!"
             ],
             work: [
-                "Here are the projects! Pick one and explore.",
-                "Every project tells a story..."
+                "Here are my projects! Pick one and explore.",
+                "Every project tells a different story..."
             ],
             paint: [
-                "Time to channel your inner Bob Ross!",
-                "Let's create a masterpiece!"
+                "Time to get creative!",
+                "Let's make something fun!"
             ],
             games: [
                 "Take a break, play a game!",
-                "Game time! Pika pika!"
+                "Need a quick break? Try a game!"
             ],
             cv: [
-                "Here are my skills and experience!",
-                "Check out the resume!"
+                "Here's my skills and experience!",
+                "Take a look at my resume!"
             ],
             zeynshat: [
-                "Wanna ask Zeynep a question?",
-                "Ready for a chat?"
+                "Feel free to ask me anything!",
+                "Let's have a chat!"
             ],
             showreel: [
-                "Music time! Listen to some tunes!",
-                "Let's vibe to some music!"
+                "Put on some music while you browse!",
+                "Enjoy the tunes!"
             ],
             about: [
-                "Get to know me better!",
-                "Curious about who I am?"
+                "Get to know me a bit better!",
+                "Here's a little about me."
             ],
             illustration: [
-                "Check out the illustrations!",
+                "Check out my illustrations!",
                 "Every drawing tells a feeling..."
             ],
             terminal: [
@@ -65,11 +65,11 @@ class ClippyAssistant {
                 "Welcome to the command line!"
             ],
             random: [
-                "Pika pika! I'm here to help!",
-                "Did you know? This site is Windows XP themed!",
-                "Double-click the icons on the left to open windows!",
-                "Pika! Everything is just a click away!",
-                "I choose you... to explore this portfolio!"
+                "Need help? Just click on me!",
+                "Fun fact: this site is Windows XP themed!",
+                "Double-click the icons to open windows!",
+                "Everything is just a click away!",
+                "Hope you enjoy exploring my work!"
             ]
         };
     }
@@ -94,7 +94,7 @@ class ClippyAssistant {
         this.element.innerHTML = `
             <div class="clippy-dismiss" title="Kapat">x</div>
             <div class="clippy-character">
-                <img src="assets/icons/rover.png" alt="Rover" class="clippy-img" draggable="false">
+                <img src="assets/icons/zeyn-avatar-pixel.png" alt="Zeynep" class="clippy-img" draggable="false">
             </div>
             <div class="clippy-bubble">
                 <div class="clippy-bubble-text"></div>

@@ -2358,7 +2358,7 @@ html {
 }
 
 /* ========================================
-   ROVER ASSISTANT - XP Search Dog
+   ZEYN ASSISTANT - Avatar Helper
    ======================================== */
 
 /* Container */
@@ -2422,14 +2422,18 @@ html {
     cursor: pointer;
     position: relative;
     animation: clippy-idle 3s ease-in-out infinite;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2.5px solid #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
 }
 
 .clippy-img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
+    object-position: center top;
     image-rendering: pixelated;
-    filter: drop-shadow(1px 2px 3px rgba(0,0,0,0.3));
 }
 
 /* Idle bounce */
