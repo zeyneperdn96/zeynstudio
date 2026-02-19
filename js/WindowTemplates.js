@@ -1909,7 +1909,7 @@ const WindowTemplates = {
                             <span class="cv-file-path">C:\\Zeynep\\education.txt</span>
                         </div>
                         <div class="cv-file-body">
-                            <p><span class="cv-key">Beykent University</span> — Industrial Products Design, Licence</p>
+                            <p><span class="cv-key">Beykent University</span> — Industrial Products Design, Licence · %100 Scholarship</p>
                             <p><span class="cv-key">Anadolu University</span> — Cooking, Associate Degree</p>
                         </div>
                     </div>
