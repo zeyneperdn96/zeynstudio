@@ -98,7 +98,8 @@ class WindowManager {
             illustration: { width: 800, height: 600 },
             illustrationWork: { width: 800, height: 600 },
             paint: { width: 750, height: 550 },
-            cv: { width: 720, height: 560 }
+            cv: { width: 720, height: 560 },
+            systembuilder: { width: 880, height: 520 }
         };
 
         const customSize = windowSizes[windowId] || {};
@@ -186,6 +187,11 @@ class WindowManager {
         // Cleanup paint
         if (windowId === 'paint' && windowData.paintCleanup) {
             windowData.paintCleanup();
+        }
+
+        // Cleanup SystemBuilder
+        if (windowId === 'systembuilder' && windowData.systemBuilder) {
+            windowData.systemBuilder.destroy();
         }
 
         windowData.element.remove();
@@ -542,6 +548,13 @@ class WindowManager {
         // Paint window
         if (windowId === 'paint') {
             this.initializePaintWindow(windowEl);
+        }
+
+        // SystemBuilder window
+        if (windowId === 'systembuilder') {
+            const sb = new SystemBuilder(windowEl, this);
+            const windowData = this.windows.get(windowId);
+            if (windowData) windowData.systemBuilder = sb;
         }
     }
 

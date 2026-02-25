@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <!-- Base brick stack -->
+  <rect x="6" y="28" width="16" height="10" rx="2" fill="#4a9eff" stroke="#1a5ab8" stroke-width="1.5"/>
+  <rect x="14" y="18" width="16" height="10" rx="2" fill="#ff7b4a" stroke="#b84a1a" stroke-width="1.5"/>
+  <rect x="26" y="28" width="16" height="10" rx="2" fill="#4adf6f" stroke="#1a8b3a" stroke-width="1.5"/>
+  <!-- Brick studs -->
+  <circle cx="11" cy="28" r="2" fill="#6ab4ff"/>
+  <circle cx="17" cy="28" r="2" fill="#6ab4ff"/>
+  <circle cx="19" cy="18" r="2" fill="#ff9b6a"/>
+  <circle cx="25" cy="18" r="2" fill="#ff9b6a"/>
+  <circle cx="31" cy="28" r="2" fill="#6aef8f"/>
+  <circle cx="37" cy="28" r="2" fill="#6aef8f"/>
+  <!-- Connection lines -->
+  <line x1="22" y1="23" x2="26" y2="28" stroke="#ffd700" stroke-width="1.5" stroke-dasharray="2,2"/>
+  <line x1="22" y1="23" x2="14" y2="28" stroke="#ffd700" stroke-width="1.5" stroke-dasharray="2,2"/>
+  <!-- Sparkle -->
+  <circle cx="38" cy="12" r="3" fill="#ffd700" opacity="0.8"/>
+  <line x1="38" y1="7" x2="38" y2="17" stroke="#ffd700" stroke-width="1"/>
+  <line x1="33" y1="12" x2="43" y2="12" stroke="#ffd700" stroke-width="1"/>
+</svg>

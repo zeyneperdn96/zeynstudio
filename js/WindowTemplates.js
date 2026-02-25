@@ -2000,6 +2000,179 @@ const WindowTemplates = {
                 <span>Build: ZeynStudio v1.0</span>
             </div>
         </div>
+    `,
+
+    systembuilder: () => `
+    <div class="window-titlebar">
+        <span class="window-title">\u25A8 SystemBuilder.exe</span>
+        <div class="window-controls">
+            <button class="win-btn win-minimize" data-action="minimize">_</button>
+            <button class="win-btn win-maximize" data-action="maximize">\u25A1</button>
+            <button class="win-btn win-close" data-action="close">\u00D7</button>
+        </div>
+    </div>
+    <div class="window-content" style="padding:0; display:flex; flex-direction:column; height:100%; font-family:'Segoe UI',Tahoma,sans-serif; font-size:11px; overflow:hidden;">
+        <style>
+            /* ── SystemBuilder \u2014 Premium Layout ── */
+            .sb-root { display:flex; flex-direction:column; flex:1; min-height:0; background:#0a0f18; color:#b8c8d8; }
+
+            /* ── Toolbar ── */
+            .sb-toolbar { display:flex; align-items:center; justify-content:space-between; padding:6px 14px; background:linear-gradient(180deg,#1a2a40,#0f1a28); border-bottom:1px solid #1e3450; }
+            .sb-toolbar-left { display:flex; align-items:center; gap:12px; }
+            .sb-toolbar-title { font-size:11px; font-weight:600; color:#5a9ad8; letter-spacing:.5px; }
+            .sb-toolbar-sep { width:1px; height:14px; background:#1e3450; }
+            .sb-counter { font-size:10px; color:#4a7a9a; }
+            .sb-counter-value { color:#8abae0; font-weight:700; }
+            .sb-toolbar-right { display:flex; align-items:center; gap:8px; }
+            .sb-progress { width:80px; height:4px; background:#0a1520; border-radius:2px; overflow:hidden; }
+            .sb-progress-fill { height:100%; width:0%; background:linear-gradient(90deg,#3a7abd,#5abadd); transition:width .5s ease; border-radius:2px; }
+            .sb-reset-btn { background:none; border:1px solid #1e3450; color:#5a8aaa; font-size:9px; padding:2px 8px; border-radius:3px; cursor:pointer; font-family:inherit; transition:all .15s; }
+            .sb-reset-btn:hover { border-color:#3a7abd; color:#8abae0; }
+
+            /* ── Main Container ── */
+            .sb-main { display:flex; flex:1; min-height:0; }
+
+            /* ── Module Palette (Left) ── */
+            .sb-palette { width:160px; min-width:160px; background:#0c1420; border-right:1px solid #1a2a3c; display:flex; flex-direction:column; }
+            .sb-palette-head { padding:10px 12px 8px; font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:2px; color:#3a6a8a; }
+            .sb-module-grid { flex:1; overflow-y:auto; padding:4px 8px 8px; display:flex; flex-direction:column; gap:3px; }
+            .sb-module { display:flex; align-items:stretch; border-radius:4px; cursor:grab; user-select:none; transition:all .2s; border:1px solid transparent; background:#0f1a26; }
+            .sb-module:hover { border-color:#2a4a6a; background:#121f2e; }
+            .sb-module.sb-used { opacity:.2; pointer-events:none; cursor:default; }
+            .sb-module.sb-locked { opacity:.15; pointer-events:none; cursor:default; }
+            .sb-module.sb-locked .sb-module-bar { background:#1a2030; }
+            .sb-module.sb-selected { border-color:#5abadd; background:#0f2030; box-shadow:0 0 12px rgba(90,186,221,.15); }
+            .sb-module-bar { width:4px; min-width:4px; border-radius:4px 0 0 4px; background:#2a4a6a; transition:background .2s; }
+            .sb-module:hover .sb-module-bar { background:#3a7abd; }
+            .sb-module.sb-selected .sb-module-bar { background:#5abadd; }
+            .sb-module-body { padding:8px 10px; flex:1; }
+            .sb-module-label { font-size:11px; color:#8aaabe; font-weight:500; }
+            .sb-module:hover .sb-module-label { color:#c0dae8; }
+
+            /* ── Assembly Area (Center) ── */
+            .sb-assembly { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; position:relative;
+                background: #080e16;
+                background-image: radial-gradient(circle at 50% 50%, rgba(58,122,189,.04) 0%, transparent 70%); }
+            .sb-connector-svg { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
+            .sb-conn-valid { fill:none; stroke:#3a9a6a; stroke-width:2; opacity:.7; }
+            .sb-conn-dot { fill:#5adaaa; opacity:.8; }
+            .sb-assembly-hint { font-size:10px; color:#2a4a5a; text-align:center; transition:opacity .3s; position:absolute; bottom:14px; }
+            .sb-assembly-label { font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:2px; color:#1a3040; position:absolute; top:14px; }
+
+            /* ── Slots ── */
+            .sb-slots-row { display:flex; align-items:center; gap:40px; z-index:1; }
+            .sb-slot { width:130px; height:56px; border:1.5px dashed #1a3050; border-radius:6px; display:flex; align-items:center; justify-content:center; transition:all .25s;
+                background:rgba(10,20,30,.6); }
+            .sb-slot-placeholder { font-size:10px; color:#1e3a4e; letter-spacing:.5px; }
+            .sb-slot.sb-slot-hover-ready { border-color:#2a5a8a; background:rgba(42,90,138,.08); }
+            .sb-slot.sb-slot-filled { border-style:solid; border-color:#2a5a8a; background:linear-gradient(135deg,#0f1e30,#0a1520); }
+            .sb-slot.sb-slot-valid { border-color:#3a9a6a; box-shadow:0 0 16px rgba(58,154,106,.15); }
+            .sb-slot-content { display:flex; align-items:center; gap:8px; padding:0 12px; width:100%; }
+            .sb-slot-enter { animation: sb-slotIn .25s ease-out; }
+            .sb-slot-exit { animation: sb-slotOut .2s ease-in forwards; }
+            @keyframes sb-slotIn { from { opacity:0; transform:scale(.9); } to { opacity:1; transform:scale(1); } }
+            @keyframes sb-slotOut { to { opacity:0; transform:scale(.9); } }
+            .sb-slot-bar { width:3px; height:28px; border-radius:2px; background:#3a7abd; flex-shrink:0; }
+            .sb-slot-label { font-size:11px; color:#8abae0; font-weight:500; flex:1; }
+            .sb-slot-valid .sb-slot-bar { background:#5adaaa; }
+            .sb-slot-valid .sb-slot-label { color:#a0e8c8; }
+            .sb-slot-remove { color:#4a5a6a; cursor:pointer; font-size:14px; line-height:1; transition:color .15s; }
+            .sb-slot-remove:hover { color:#c0392b; }
+
+            /* ── Connector Label ── */
+            .sb-plus { font-size:16px; color:#1a3040; font-weight:300; z-index:1; }
+
+            /* ── Output Panel (Right) ── */
+            .sb-output-panel { width:200px; min-width:200px; background:#0c1420; border-left:1px solid #1a2a3c; display:flex; flex-direction:column; }
+            .sb-output-head { padding:10px 14px 8px; font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:2px; color:#3a6a8a; border-bottom:1px solid #1a2a3c; }
+            .sb-output { flex:1; padding:12px; display:flex; align-items:center; justify-content:center; }
+            .sb-output-empty { text-align:center; }
+            .sb-output-empty-label { font-size:10px; color:#1e3a4e; font-weight:600; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+            .sb-output-empty-hint { font-size:10px; color:#1e3040; line-height:1.5; }
+            .sb-output-card { width:100%; padding:16px 14px; border-radius:6px; text-align:left; }
+            .sb-output-enter { animation: sb-fadeUp .35s ease-out; }
+            @keyframes sb-fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+            .sb-output-card { background:linear-gradient(135deg,#0a1e18,#081510); border:1px solid #1a4a3a; }
+            .sb-output-tag { font-size:8px; text-transform:uppercase; letter-spacing:1.5px; color:#4a8a6a; margin-bottom:6px; font-weight:600; }
+            .sb-output-name { font-size:15px; font-weight:700; color:#d0e8e0; margin-bottom:4px; }
+            .sb-output-desc { font-size:10px; color:#6a9a8a; line-height:1.5; margin-bottom:12px; }
+            .sb-output-btn { display:inline-block; background:none; border:1px solid #2a5a4a; color:#6aba9a; padding:5px 12px; border-radius:3px; cursor:pointer; font-size:10px; font-family:inherit; font-weight:500; transition:all .2s; }
+            .sb-output-btn:hover { border-color:#5adaaa; color:#a0e8c8; background:rgba(90,218,170,.06); }
+
+            /* ── Status Bar ── */
+            .sb-statusbar { padding:5px 14px; border-top:1px solid #1a2a3c; background:#0a0f16; font-size:10px; color:#2a4a5a; font-style:italic; display:flex; justify-content:space-between; }
+            .sb-quote { flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+            /* ── Drag Ghost ── */
+            .sb-drag-ghost { position:fixed; z-index:99999; pointer-events:none; padding:4px 12px; background:#0f1e30; border:1px solid #3a7abd; border-radius:4px; color:#8abae0; font-size:11px; font-family:'Segoe UI',Tahoma,sans-serif; font-weight:500; box-shadow:0 4px 16px rgba(0,0,0,.5); white-space:nowrap; }
+
+            /* ── Mobile ── */
+            @media (max-width:768px) {
+                .sb-main { flex-direction:column; }
+                .sb-palette { width:100%; min-width:unset; border-right:none; border-bottom:1px solid #1a2a3c; }
+                .sb-palette-head { display:none; }
+                .sb-module-grid { flex-direction:row; overflow-x:auto; overflow-y:hidden; flex-wrap:nowrap; padding:6px 8px; }
+                .sb-module { min-width:max-content; }
+                .sb-module-body { padding:6px 10px; }
+                .sb-output-panel { width:100%; min-width:unset; border-left:none; border-top:1px solid #1a2a3c; max-height:140px; }
+                .sb-output-head { display:none; }
+                .sb-slots-row { gap:20px; }
+                .sb-slot { width:110px; height:48px; }
+                .sb-assembly { min-height:180px; }
+            }
+        </style>
+
+        <div class="sb-root">
+            <!-- Toolbar -->
+            <div class="sb-toolbar">
+                <div class="sb-toolbar-left">
+                    <span class="sb-toolbar-title">Design System Architect</span>
+                    <span class="sb-toolbar-sep"></span>
+                    <span class="sb-counter">Resolved: <span class="sb-counter-value">0/8</span></span>
+                </div>
+                <div class="sb-toolbar-right">
+                    <div class="sb-progress"><div class="sb-progress-fill"></div></div>
+                    <button class="sb-reset-btn sb-clear-btn">Reset</button>
+                </div>
+            </div>
+
+            <div class="sb-main">
+                <!-- Left: Module Palette -->
+                <div class="sb-palette">
+                    <div class="sb-palette-head">Modules</div>
+                    <div class="sb-module-grid"></div>
+                </div>
+
+                <!-- Center: Assembly -->
+                <div class="sb-assembly">
+                    <svg class="sb-connector-svg"></svg>
+                    <span class="sb-assembly-label">Assembly</span>
+                    <div class="sb-slots-row">
+                        <div class="sb-slot" data-slot="0"><span class="sb-slot-placeholder">Module A</span></div>
+                        <span class="sb-plus">+</span>
+                        <div class="sb-slot" data-slot="1"><span class="sb-slot-placeholder">Module B</span></div>
+                    </div>
+                    <span class="sb-assembly-hint">Select a module to begin.</span>
+                </div>
+
+                <!-- Right: Output -->
+                <div class="sb-output-panel">
+                    <div class="sb-output-head">Output</div>
+                    <div class="sb-output">
+                        <div class="sb-output-empty">
+                            <div class="sb-output-empty-label">Output</div>
+                            <div class="sb-output-empty-hint">Pair two modules to reveal a project.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Bar -->
+            <div class="sb-statusbar">
+                <span class="sb-quote">"I don't just design objects \u2014 I design the logic behind them."</span>
+            </div>
+        </div>
+    </div>
     `
 };
 
