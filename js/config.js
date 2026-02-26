@@ -7,7 +7,6 @@ const CONFIG = {
     // Social Media Links
     social: {
         instagram: 'https://instagram.com/yourhandle',
-        github: 'https://github.com/zeyneperdn96',
         linkedin: 'https://www.linkedin.com/in/zynprdn/'
     },
 

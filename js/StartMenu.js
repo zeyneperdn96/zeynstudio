@@ -244,7 +244,6 @@ class StartMenu {
         const config = window.CONFIG.social;
         const links = {
             instagram: config.instagram,
-            github: config.github,
             linkedin: config.linkedin,
             resume: window.CONFIG.assets.resume
         };
