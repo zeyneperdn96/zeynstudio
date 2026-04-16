@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SushiCo - WhatsApp CTA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+        }
+
+        /* Demo Content */
+        .demo-content {
+            padding: 4rem 2rem;
+            text-align: center;
+            color: rgba(255, 255, 255, .3);
+        }
+
+        /* ═══════════ WHATSAPP CTA SECTION ═══════════ */
+        .whatsapp-cta {
+            position: relative;
+            overflow: hidden;
+            background: #0a0a0a;
+            padding: 5rem 2rem;
+        }
+
+        .whatsapp-bg {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 50%, #0a0a0a 100%);
+        }
+
+        .whatsapp-pattern {
+            position: absolute;
+            inset: 0;
+            opacity: .02;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, .5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, .5) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .whatsapp-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(37, 211, 102, .08), transparent 70%);
+            filter: blur(80px);
+        }
+
+        .whatsapp-inner {
+            position: relative;
+            z-index: 10;
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        /* Left Content */
+        .whatsapp-content {
+            max-width: 560px;
+        }
+
+        .whatsapp-label {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .5rem 1rem;
+            background: rgba(37, 211, 102, .1);
+            border: 1px solid rgba(37, 211, 102, .2);
+            border-radius: 50px;
+            font-size: .75rem;
+            font-weight: 600;
+            color: #25D366;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            margin-bottom: 1.5rem;
+        }
+
+        .whatsapp-label::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: #25D366;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: .4;
+            }
+        }
+
+        .whatsapp-title {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+        }
+
+        .whatsapp-title .highlight {
+            color: #25D366;
+            position: relative;
+            display: inline-block;
+        }
+
+        .whatsapp-description {
+            font-size: 1.125rem;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, .6);
+            margin-bottom: 2rem;
+        }
+
+        /* WhatsApp Button */
+        .whatsapp-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: .75rem;
+            padding: 1rem 2rem;
+            background: #25D366;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all .3s ease;
+            box-shadow: 0 4px 16px rgba(37, 211, 102, .3);
+        }
+
+        .whatsapp-btn:hover {
+            background: #20BA5A;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(37, 211, 102, .4);
+        }
+
+        .whatsapp-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Features List */
+        .whatsapp-features {
+            margin-top: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            font-size: .9375rem;
+            color: rgba(255, 255, 255, .5);
+        }
+
+        .feature-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(37, 211, 102, .15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .feature-icon svg {
+            width: 12px;
+            height: 12px;
+            color: #25D366;
+        }
+
+        /* Right Image - Phone Mockup */
+        .whatsapp-visual {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .phone-mockup {
+            position: relative;
+            width: 100%;
+            max-width: 320px;
+            aspect-ratio: 9/19;
+            background: #1a1a1a;
+            border-radius: 40px;
+            border: 8px solid #2a2a2a;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .5);
+            overflow: hidden;
+        }
+
+        .phone-screen {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #128C7E 0%, #075E54 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .phone-whatsapp-icon {
+            width: 80px;
+            height: 80px;
+            background: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 24px rgba(37, 211, 102, .4);
+        }
+
+        .phone-whatsapp-icon svg {
+            width: 48px;
+            height: 48px;
+            color: #fff;
+        }
+
+        .phone-text {
+            font-size: .875rem;
+            color: rgba(255, 255, 255, .9);
+            line-height: 1.6;
+        }
+
+        .phone-number {
+            margin-top: 1rem;
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        /* Floating Elements */
+        .floating-badge {
+            position: absolute;
+            padding: .75rem 1.25rem;
+            background: rgba(0, 0, 0, .8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, .1);
+            border-radius: 12px;
+            font-size: .75rem;
+            color: rgba(255, 255, 255, .8);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, .3);
+        }
+
+        .badge-1 {
+            top: 10%;
+            right: -20%;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .badge-2 {
+            bottom: 15%;
+            left: -15%;
+            animation: float 4s ease-in-out infinite .5s;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .whatsapp-inner {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .whatsapp-content {
+                max-width: 100%;
+                text-align: center;
+            }
+
+            .whatsapp-label,
+            .whatsapp-btn {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .whatsapp-features {
+                align-items: center;
+            }
+
+            .whatsapp-visual {
+                order: -1;
+            }
+
+            .floating-badge {
+                display: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .whatsapp-cta {
+                padding: 3.5rem 1rem;
+            }
+
+            .whatsapp-title {
+                font-size: 2rem;
+            }
+
+            .phone-mockup {
+                max-width: 280px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Demo Content -->
+    <div class="demo-content">
+        ↑ Sayfa İçeriği ↑
+    </div>
+
+    <!-- ═══════════ WHATSAPP CTA SECTION ═══════════ -->
+    <section class="whatsapp-cta">
+        <div class="whatsapp-bg"></div>
+        <div class="whatsapp-pattern"></div>
+        <div class="whatsapp-glow"></div>
+
+        <div class="whatsapp-inner">
+            <!-- Left Content -->
+            <div class="whatsapp-content">
+                <span class="whatsapp-label">
+                    Yeni Sipariş Yöntemi
+                </span>
+
+                <h2 class="whatsapp-title">
+                    SushiCo artık<br>
+                    <span class="highlight">WhatsApp</span>'ta!
+                </h2>
+
+                <p class="whatsapp-description">
+                    SushiCo'yu WhatsApp'tan takip edin. Avantajları ilk siz yakalayın!
+                </p>
+
+                <a href="https://wa.me/905001234567" class="whatsapp-btn" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                    </svg>
+                    Takip et
+                </a>
+
+                <div class="whatsapp-features">
+                    <div class="feature-item">
+                        <span class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </span>
+                        Hızlı sipariş ve teslimat takibi
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </span>
+                        Özel kampanyalar ve fırsatlar
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                        </span>
+                        7/24 müşteri desteği
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Visual - Phone Mockup -->
+            <div class="whatsapp-visual">
+                <div class="phone-mockup">
+                    <div class="phone-screen">
+                        <div class="phone-whatsapp-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                            </svg>
+                        </div>
+                        <p class="phone-text">
+                            Günaydin SushiCo Ailesi!<br>
+                            Haftaniz lezzetli geçsin 🍣
+                        </p>
+                        <div class="phone-number">0 500 123 45 67</div>
+                    </div>
+                </div>
+
+                <!-- Floating Badges -->
+                <div class="floating-badge badge-1">
+                    ✨ Özel kampanyalar
+                </div>
+                <div class="floating-badge badge-2">
+                    🚀 Hızlı teslimat
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Footer -->
+    <div class="demo-content">
+        ↓ Footer Buraya Gelecek ↓
+    </div>
+
+</body>
+
+</html>

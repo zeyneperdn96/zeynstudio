@@ -50,13 +50,10 @@ class MsnNotify {
         this._createContainer();
         this.enabled = true;
 
-        // First notification after 8 seconds
+        // Show only once after 8 seconds
         setTimeout(() => {
             if (this.enabled) this._showRandom();
         }, 8000);
-
-        // Then every 40-60 seconds randomly
-        this._scheduleNext();
     }
 
     _createContainer() {

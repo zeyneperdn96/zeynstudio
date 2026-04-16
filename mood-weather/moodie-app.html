@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Moodie - Your Vibe Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        /* ========================================
+           MOODIE DESIGN SYSTEM - PROFESSIONAL
+           ======================================== */
+
+        :root {
+            /* Colors - Exact Mockup Palette */
+            --color-bg: #F8F6F1;
+            --color-white: #FFFFFF;
+            --color-black: #1A1A1A;
+
+            /* Card Colors - Matched to Mockup */
+            --color-sunny-yellow: #FFEDC2;
+            --color-lavender: #E5DCF5;
+            --color-mint: #D1EFE4;
+            --color-coral: #F8C8BC;
+            --color-sleepy-purple: #D4C4E8;
+
+            /* UI Colors */
+            --color-nav-bg: #1A1A1A;
+            --color-text-primary: #1A1A1A;
+            --color-text-secondary: #888888;
+            --color-chart-pink: #E88A9E;
+
+            /* Typography */
+            --font-heading: 'Outfit', sans-serif;
+            --font-body: 'Inter', sans-serif;
+
+            /* Spacing */
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 0.75rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.25rem;
+            --spacing-xl: 1.5rem;
+
+            /* Border Radius */
+            --radius-sm: 16px;
+            --radius-md: 24px;
+            --radius-lg: 28px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: #E8E4DF;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        /* ========================================
+           PHONE FRAME - Premium Feel
+           ======================================== */
+
+        .phone-frame {
+            width: 390px;
+            height: 844px;
+            background: var(--color-black);
+            border-radius: 52px;
+            padding: 10px;
+            box-shadow:
+                0 60px 120px rgba(0, 0, 0, 0.3),
+                0 20px 50px rgba(0, 0, 0, 0.2),
+                inset 0 0 0 1.5px #444,
+                inset 0 0 0 3px #222;
+            position: relative;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: var(--color-bg);
+            border-radius: 44px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ========================================
+           STATUS BAR
+           ======================================== */
+
+        .status-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 28px;
+            z-index: 50;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .status-time {
+            color: var(--color-black);
+        }
+
+        .status-icons {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        /* ========================================
+           SCREENS
+           ======================================== */
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(30px);
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .screen.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateX(0);
+        }
+
+        .screen::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* ========================================
+           DASHBOARD
+           ======================================== */
+
+        .dashboard {
+            padding: 20px;
+            padding-top: 50px;
+            padding-bottom: 110px;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .greeting {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .date-text {
+            font-size: 0.8rem;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .avatar-blob {
+            width: 48px;
+            height: 48px;
+        }
+
+        /* ========================================
+           CARDS GRID - Mockup Layout
+           ======================================== */
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 200px 140px;
+            gap: 14px;
+        }
+
+        .card {
+            border-radius: var(--radius-md);
+            padding: 18px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px) scale(1.01);
+        }
+
+        .card:active {
+            transform: scale(0.98);
+        }
+
+        .card-yellow {
+            background: var(--color-sunny-yellow);
+        }
+
+        .card-purple {
+            background: var(--color-lavender);
+        }
+
+        .card-mint {
+            background: var(--color-mint);
+        }
+
+        .card-coral {
+            background: var(--color-coral);
+        }
+
+        .card-title {
+            font-family: var(--font-heading);
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: 4px;
+        }
+
+        .card-value {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--color-text-primary);
+        }
+
+        /* ========================================
+           BLOB STICKERS - Professional Style
+           ======================================== */
+
+        .blob-sticker {
+            filter: drop-shadow(0 3px 0 rgba(0, 0, 0, 0.12));
+        }
+
+        .blob-body {
+            stroke: var(--color-black);
+            stroke-width: 2.5;
+        }
+
+        .blob-body-yellow {
+            fill: #FFEAAA;
+        }
+
+        .blob-body-mint {
+            fill: #B8E6D4;
+        }
+
+        .blob-body-purple {
+            fill: #D4C4E8;
+        }
+
+        .blob-body-coral {
+            fill: #F8C8BC;
+        }
+
+        .blob-eyes {
+            fill: var(--color-black);
+        }
+
+        .blob-eyes-white {
+            fill: white;
+        }
+
+        .blob-cheeks {
+            fill: #FBBAB0;
+            opacity: 0.7;
+        }
+
+        .blob-mouth {
+            stroke: var(--color-black);
+            stroke-width: 2;
+            stroke-linecap: round;
+            fill: none;
+        }
+
+        .blob-rays {
+            stroke: var(--color-black);
+            stroke-width: 2.5;
+            stroke-linecap: round;
+        }
+
+        /* Card Blob Positioning */
+        .card-blob {
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+        }
+
+        .card-blob-main {
+            width: 130px;
+            height: 130px;
+        }
+
+        .card-blob-small {
+            width: 60px;
+            height: 60px;
+            bottom: 12px;
+            right: 12px;
+        }
+
+        /* ========================================
+           WEEKLY VIBES CHART
+           ======================================== */
+
+        .vibes-chart {
+            margin-top: 16px;
+            height: 50px;
+        }
+
+        .chart-path {
+            fill: none;
+            stroke: var(--color-chart-pink);
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* ========================================
+           WATER INTAKE
+           ======================================== */
+
+        .water-drops {
+            display: flex;
+            gap: 4px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .water-drop {
+            width: 24px;
+            height: 30px;
+            cursor: pointer;
+            transition: transform 0.15s ease, opacity 0.15s ease;
+            opacity: 0.35;
+        }
+
+        .water-drop.filled {
+            opacity: 1;
+        }
+
+        .water-drop:hover {
+            transform: scale(1.15);
+        }
+
+        .water-drop svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ========================================
+           SLEEP TRACKER
+           ======================================== */
+
+        .sleep-value {
+            display: flex;
+            align-items: baseline;
+            gap: 2px;
+            margin-top: 4px;
+        }
+
+        .sleep-hours {
+            font-family: var(--font-heading);
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--color-text-primary);
+            line-height: 1;
+        }
+
+        .sleep-unit {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+        }
+
+        /* ========================================
+           MOOD CHECK-IN SCREEN
+           ======================================== */
+
+        .checkin-screen {
+            padding: 24px;
+            padding-top: 60px;
+            padding-bottom: 120px;
+            background: var(--color-lavender);
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .checkin-back {
+            position: absolute;
+            top: 54px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .checkin-back:hover {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .checkin-title {
+            font-family: var(--font-heading);
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--color-text-primary);
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 32px;
+            letter-spacing: -0.02em;
+        }
+
+        .mood-blobs {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 36px;
+        }
+
+        .mood-blob-option {
+            width: 85px;
+            height: 85px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .mood-blob-option:hover {
+            transform: scale(1.08);
+        }
+
+        .mood-blob-option.selected {
+            transform: scale(1.12);
+        }
+
+        .mood-blob-option.selected::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 8px;
+            background: var(--color-text-primary);
+            border-radius: 50%;
+        }
+
+        /* ========================================
+           ENERGY SLIDER
+           ======================================== */
+
+        .energy-section {
+            margin-bottom: 28px;
+        }
+
+        .energy-label {
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: 20px;
+        }
+
+        .energy-slider-wrap {
+            position: relative;
+            height: 50px;
+        }
+
+        .energy-wave-bg {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            height: 3px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 2px;
+        }
+
+        .energy-wave-svg {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            transform: translateY(-50%);
+            height: 40px;
+            pointer-events: none;
+        }
+
+        .wave-line {
+            fill: none;
+            stroke: #E88A9E;
+            stroke-width: 2;
+            stroke-linecap: round;
+        }
+
+        .wave-glow {
+            fill: none;
+            stroke: #E88A9E;
+            stroke-width: 6;
+            stroke-linecap: round;
+            opacity: 0.3;
+            filter: blur(4px);
+        }
+
+        .energy-thumb {
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            background: var(--color-white);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            cursor: grab;
+            z-index: 10;
+            transition: box-shadow 0.2s;
+        }
+
+        .energy-thumb:active {
+            cursor: grabbing;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+        }
+
+        /* ========================================
+           NOTE INPUT
+           ======================================== */
+
+        .note-section {
+            flex: 1;
+            margin-bottom: 24px;
+        }
+
+        .note-input {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border: 2px dashed rgba(0, 0, 0, 0.15);
+            border-radius: var(--radius-lg);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            color: var(--color-text-primary);
+            resize: none;
+            min-height: 56px;
+            transition: all 0.2s;
+        }
+
+        .note-input::placeholder {
+            color: rgba(0, 0, 0, 0.35);
+        }
+
+        .note-input:focus {
+            outline: none;
+            border-style: solid;
+            border-color: rgba(0, 0, 0, 0.25);
+            background: rgba(255, 255, 255, 0.75);
+        }
+
+        /* ========================================
+           LOG BUTTON
+           ======================================== */
+
+        .log-btn {
+            width: 100%;
+            padding: 18px;
+            background: var(--color-sunny-yellow);
+            border: 3px solid var(--color-black);
+            border-radius: var(--radius-lg);
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--color-text-primary);
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: -0.01em;
+        }
+
+        .log-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .log-btn:active {
+            transform: translateY(0);
+        }
+
+        .log-btn.success {
+            background: var(--color-mint);
+        }
+
+        /* ========================================
+           BOTTOM NAVIGATION
+           ======================================== */
+
+        .bottom-nav {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            right: 16px;
+            height: 68px;
+            background: var(--color-nav-bg);
+            border-radius: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 0 8px;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 8px 12px;
+            border-radius: 16px;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            color: var(--color-white);
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        .nav-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: currentColor;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
+
+        /* FAB */
+        .fab-btn {
+            width: 52px;
+            height: 52px;
+            background: var(--color-white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            margin-top: -16px;
+            border: none;
+        }
+
+        .fab-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--color-black);
+            transition: transform 0.3s;
+        }
+
+        .fab-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .fab-btn:hover svg {
+            transform: rotate(90deg);
+        }
+
+        /* ========================================
+           ANIMATIONS
+           ======================================== */
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+        @keyframes wiggle {
+
+            0%,
+            100% {
+                transform: rotate(-2deg);
+            }
+
+            50% {
+                transform: rotate(2deg);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.03);
+            }
+        }
+
+        @keyframes wave-flow {
+            0% {
+                stroke-dashoffset: 0;
+            }
+
+            100% {
+                stroke-dashoffset: -40;
+            }
+        }
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .animate-wiggle {
+            animation: wiggle 2.5s ease-in-out infinite;
+        }
+
+        .animate-pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .wave-animated {
+            stroke-dasharray: 10 10;
+            animation: wave-flow 1s linear infinite;
+        }
+
+        /* ========================================
+           RESPONSIVE
+           ======================================== */
+
+        @media (max-width: 420px) {
+            .phone-frame {
+                width: 100%;
+                max-width: 390px;
+                height: auto;
+                aspect-ratio: 390 / 844;
+                padding: 6px;
+                border-radius: 40px;
+            }
+
+            .phone-screen {
+                border-radius: 36px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="phone-frame">
+        <div class="phone-screen">
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <span class="status-time">9:41</span>
+                <div class="status-icons">
+                    <svg width="18" height="12" viewBox="0 0 18 12">
+                        <path d="M1 4h2v8H1V4zm4-2h2v10H5V2zm4-2h2v12H9V0zm4 4h2v8h-2V4z" fill="currentColor" />
+                    </svg>
+                    <svg width="16" height="12" viewBox="0 0 16 12">
+                        <path d="M8 0L0 6h3v6h4V8h2v4h4V6h3L8 0z" fill="currentColor" />
+                    </svg>
+                    <svg width="25" height="12" viewBox="0 0 25 12">
+                        <rect x="0" y="1" width="22" height="10" rx="2" stroke="currentColor" stroke-width="1"
+                            fill="none" />
+                        <rect x="23" y="3.5" width="2" height="5" rx="1" fill="currentColor" />
+                        <rect x="2" y="3" width="16" height="6" rx="1" fill="currentColor" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- ============ DASHBOARD ============ -->
+            <div class="screen dashboard active" id="dashboard-screen">
+                <div class="dashboard-header">
+                    <h1 class="greeting">Hello Zeynep!</h1>
+                    <div class="header-right">
+                        <span class="date-text" id="dateText">FEB 9, 2026</span>
+                        <div class="avatar-blob animate-float">
+                            <!-- Sleepy Blob -->
+                            <svg viewBox="0 0 50 50" class="blob-sticker">
+                                <ellipse class="blob-body blob-body-purple" cx="25" cy="28" rx="22" ry="20" />
+                                <!-- Closed eyes -->
+                                <path d="M16 26c2 2 4 2 6 0" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round"
+                                    fill="none" />
+                                <path d="M28 26c2 2 4 2 6 0" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round"
+                                    fill="none" />
+                                <!-- Cheeks -->
+                                <ellipse class="blob-cheeks" cx="12" cy="32" rx="4" ry="2.5" />
+                                <ellipse class="blob-cheeks" cx="38" cy="32" rx="4" ry="2.5" />
+                                <!-- Smile -->
+                                <path d="M21 36c2 2 6 2 8 0" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round"
+                                    fill="none" />
+                                <!-- ZZZ -->
+                                <text x="36" y="12" font-family="Outfit" font-size="10" font-weight="800"
+                                    fill="#1A1A1A">Z</text>
+                                <text x="42" y="6" font-family="Outfit" font-size="7" font-weight="800"
+                                    fill="#1A1A1A">z</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cards-grid">
+                    <!-- Today's Vibe -->
+                    <div class="card card-yellow" onclick="showScreen('checkin-screen')">
+                        <div class="card-title">Today's Vibe</div>
+                        <div class="card-value">Energetic!</div>
+                        <div class="card-blob card-blob-main animate-wiggle">
+                            <!-- Energetic Yellow Blob -->
+                            <svg viewBox="0 0 100 100" class="blob-sticker">
+                                <!-- Energy Rays -->
+                                <g class="blob-rays">
+                                    <line x1="8" y1="35" x2="-2" y2="30" />
+                                    <line x1="6" y1="50" x2="-6" y2="50" />
+                                    <line x1="8" y1="65" x2="-2" y2="70" />
+                                    <line x1="92" y1="35" x2="102" y2="30" />
+                                    <line x1="94" y1="50" x2="106" y2="50" />
+                                    <line x1="92" y1="65" x2="102" y2="70" />
+                                </g>
+                                <!-- Body -->
+                                <ellipse class="blob-body blob-body-yellow" cx="50" cy="52" rx="40" ry="38" />
+                                <!-- Eyes -->
+                                <ellipse class="blob-eyes" cx="38" cy="48" rx="5" ry="6" />
+                                <ellipse class="blob-eyes" cx="62" cy="48" rx="5" ry="6" />
+                                <circle class="blob-eyes-white" cx="40" cy="46" r="2" />
+                                <circle class="blob-eyes-white" cx="64" cy="46" r="2" />
+                                <!-- Cheeks -->
+                                <ellipse class="blob-cheeks" cx="24" cy="58" rx="7" ry="4" />
+                                <ellipse class="blob-cheeks" cx="76" cy="58" rx="7" ry="4" />
+                                <!-- Smile -->
+                                <path class="blob-mouth" d="M40 66c5 7 15 7 20 0" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Weekly Vibes -->
+                    <div class="card card-purple">
+                        <div class="card-title">Weekly Vibes</div>
+                        <div class="vibes-chart">
+                            <svg width="100%" height="50" viewBox="0 0 130 50" preserveAspectRatio="none">
+                                <path class="chart-path"
+                                    d="M0 40 Q15 40 25 25 Q35 10 50 20 Q65 30 80 15 Q95 0 110 25 Q120 40 130 30" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Water Intake -->
+                    <div class="card card-mint">
+                        <div class="card-title">Water Intake</div>
+                        <div class="water-drops" id="waterDrops">
+                            <!-- Drops will be generated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Sleep Tracker -->
+                    <div class="card card-coral">
+                        <div class="card-title">Sleep Tracker</div>
+                        <div class="sleep-value">
+                            <span class="sleep-hours">7.5</span>
+                            <span class="sleep-unit">h</span>
+                        </div>
+                        <div class="card-blob card-blob-small animate-pulse">
+                            <svg viewBox="0 0 50 50" class="blob-sticker">
+                                <ellipse class="blob-body blob-body-yellow" cx="25" cy="28" rx="20" ry="18" />
+                                <path d="M15 26c2 1.5 4 1.5 6 0" stroke="#1A1A1A" stroke-width="1.5"
+                                    stroke-linecap="round" fill="none" />
+                                <path d="M29 26c2 1.5 4 1.5 6 0" stroke="#1A1A1A" stroke-width="1.5"
+                                    stroke-linecap="round" fill="none" />
+                                <ellipse class="blob-cheeks" cx="12" cy="32" rx="3" ry="2" />
+                                <ellipse class="blob-cheeks" cx="38" cy="32" rx="3" ry="2" />
+                                <path d="M21 35c2 2 6 2 8 0" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round"
+                                    fill="none" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============ CHECK-IN SCREEN ============ -->
+            <div class="screen checkin-screen" id="checkin-screen">
+                <button class="checkin-back" onclick="showScreen('dashboard-screen')">←</button>
+
+                <h2 class="checkin-title">What's your vibe today?</h2>
+
+                <div class="mood-blobs">
+                    <!-- Energetic -->
+                    <div class="mood-blob-option selected" onclick="selectMood(this, 'energetic')">
+                        <svg viewBox="0 0 85 85" class="blob-sticker">
+                            <g class="blob-rays">
+                                <line x1="6" y1="30" x2="-2" y2="26" />
+                                <line x1="4" y1="42" x2="-6" y2="42" />
+                                <line x1="6" y1="54" x2="-2" y2="58" />
+                                <line x1="79" y1="30" x2="87" y2="26" />
+                                <line x1="81" y1="42" x2="91" y2="42" />
+                                <line x1="79" y1="54" x2="87" y2="58" />
+                            </g>
+                            <ellipse class="blob-body blob-body-yellow" cx="42" cy="45" rx="35" ry="33" />
+                            <ellipse class="blob-eyes" cx="32" cy="42" rx="4" ry="5" />
+                            <ellipse class="blob-eyes" cx="52" cy="42" rx="4" ry="5" />
+                            <circle class="blob-eyes-white" cx="34" cy="40" r="1.5" />
+                            <circle class="blob-eyes-white" cx="54" cy="40" r="1.5" />
+                            <ellipse class="blob-cheeks" cx="20" cy="52" rx="5" ry="3" />
+                            <ellipse class="blob-cheeks" cx="64" cy="52" rx="5" ry="3" />
+                            <path class="blob-mouth" d="M34 58c4 5 10 5 14 0" />
+                        </svg>
+                    </div>
+
+                    <!-- Calm -->
+                    <div class="mood-blob-option" onclick="selectMood(this, 'calm')">
+                        <svg viewBox="0 0 85 85" class="blob-sticker">
+                            <ellipse class="blob-body blob-body-mint" cx="42" cy="45" rx="35" ry="33" />
+                            <ellipse class="blob-eyes" cx="32" cy="42" rx="4" ry="5" />
+                            <ellipse class="blob-eyes" cx="52" cy="42" rx="4" ry="5" />
+                            <circle class="blob-eyes-white" cx="34" cy="40" r="1.5" />
+                            <circle class="blob-eyes-white" cx="54" cy="40" r="1.5" />
+                            <ellipse class="blob-cheeks" cx="20" cy="52" rx="5" ry="3" />
+                            <ellipse class="blob-cheeks" cx="64" cy="52" rx="5" ry="3" />
+                            <path class="blob-mouth" d="M36 55c3 3 10 3 13 0" />
+                        </svg>
+                    </div>
+
+                    <!-- Peaceful -->
+                    <div class="mood-blob-option" onclick="selectMood(this, 'peaceful')">
+                        <svg viewBox="0 0 85 95" class="blob-sticker">
+                            <!-- Halo -->
+                            <ellipse cx="42" cy="8" rx="16" ry="4" fill="none" stroke="#FFD54F" stroke-width="3" />
+                            <ellipse class="blob-body blob-body-purple" cx="42" cy="52" rx="35" ry="33" />
+                            <!-- Closed eyes -->
+                            <path d="M26 48c3 2 6 2 9 0" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round"
+                                fill="none" />
+                            <path d="M50 48c3 2 6 2 9 0" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round"
+                                fill="none" />
+                            <ellipse class="blob-cheeks" cx="20" cy="58" rx="5" ry="3" />
+                            <ellipse class="blob-cheeks" cx="64" cy="58" rx="5" ry="3" />
+                            <path class="blob-mouth" d="M36 65c3 3 10 3 13 0" />
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Energy Level -->
+                <div class="energy-section">
+                    <div class="energy-label">Energy Level</div>
+                    <div class="energy-slider-wrap">
+                        <div class="energy-wave-bg"></div>
+                        <svg class="energy-wave-svg" viewBox="0 0 300 40" preserveAspectRatio="none">
+                            <path class="wave-glow wave-animated"
+                                d="M0 20 Q10 10 20 20 T40 20 T60 20 T80 20 T100 20 T120 20 T140 20 T160 20 T180 20 T200 20 T220 20 T240 20 T260 20 T280 20 T300 20" />
+                            <path class="wave-line wave-animated"
+                                d="M0 20 Q10 10 20 20 T40 20 T60 20 T80 20 T100 20 T120 20 T140 20 T160 20 T180 20 T200 20 T220 20 T240 20 T260 20 T280 20 T300 20" />
+                        </svg>
+                        <div class="energy-thumb" id="energyThumb"></div>
+                    </div>
+                </div>
+
+                <!-- Note -->
+                <div class="note-section">
+                    <textarea class="note-input" placeholder="What made you feel this way?"></textarea>
+                </div>
+
+                <!-- Log Button -->
+                <button class="log-btn" id="logBtn" onclick="logVibe()">Log My Vibe!</button>
+            </div>
+
+            <!-- ============ BOTTOM NAV ============ -->
+            <nav class="bottom-nav">
+                <a class="nav-item active" onclick="showScreen('dashboard-screen')">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+                        </svg>
+                    </span>
+                    <span class="nav-label">Home</span>
+                </a>
+                <a class="nav-item">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" />
+                        </svg>
+                    </span>
+                    <span class="nav-label">Stats</span>
+                </a>
+                <button class="fab-btn" onclick="showScreen('checkin-screen')">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                    </svg>
+                </button>
+                <a class="nav-item">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
+                        </svg>
+                    </span>
+                    <span class="nav-label">Profis</span>
+                </a>
+                <a class="nav-item">
+                    <span class="nav-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                        </svg>
+                    </span>
+                    <span class="nav-label">Profile</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <script>
+        // ============ INIT ============
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDate();
+            initWaterDrops();
+            initEnergySlider();
+        });
+
+        // ============ DATE ============
+        function updateDate() {
+            const now = new Date();
+            const options = { month: 'short', day: 'numeric', year: 'numeric' };
+            document.getElementById('dateText').textContent =
+                now.toLocaleDateString('en-US', options).toUpperCase();
+        }
+
+        // ============ WATER DROPS ============
+        function initWaterDrops() {
+            const container = document.getElementById('waterDrops');
+            const dropSVG = `<svg viewBox="0 0 24 30"><path d="M12 2C12 2 4 12 4 18c0 4.4 3.6 8 8 8s8-3.6 8-8c0-6-8-16-8-16z" fill="#7ECEF4" stroke="#1A1A1A" stroke-width="1.5"/></svg>`;
+
+            for (let i = 0; i < 6; i++) {
+                const drop = document.createElement('div');
+                drop.className = 'water-drop' + (i < 3 ? ' filled' : '');
+                drop.innerHTML = dropSVG;
+                drop.onclick = () => drop.classList.toggle('filled');
+                container.appendChild(drop);
+            }
+        }
+
+        // ============ ENERGY SLIDER ============
+        function initEnergySlider() {
+            const thumb = document.getElementById('energyThumb');
+            let isDragging = false;
+
+            const startDrag = (e) => {
+                isDragging = true;
+                e.preventDefault();
+            };
+
+            const endDrag = () => { isDragging = false; };
+
+            const onDrag = (e) => {
+                if (!isDragging) return;
+                const parent = thumb.parentElement;
+                const rect = parent.getBoundingClientRect();
+                const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+                const pct = Math.max(5, Math.min(95, (x / rect.width) * 100));
+                thumb.style.left = pct + '%';
+            };
+
+            thumb.addEventListener('mousedown', startDrag);
+            thumb.addEventListener('touchstart', startDrag);
+            document.addEventListener('mouseup', endDrag);
+            document.addEventListener('touchend', endDrag);
+            document.addEventListener('mousemove', onDrag);
+            document.addEventListener('touchmove', onDrag);
+        }
+
+        // ============ SCREEN NAV ============
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            if (id === 'dashboard-screen') {
+                document.querySelector('.nav-item').classList.add('active');
+            }
+        }
+
+        // ============ MOOD SELECT ============
+        function selectMood(el, mood) {
+            document.querySelectorAll('.mood-blob-option').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        // ============ LOG VIBE ============
+        function logVibe() {
+            const btn = document.getElementById('logBtn');
+            btn.textContent = '✓ Logged!';
+            btn.classList.add('success');
+
+            setTimeout(() => {
+                showScreen('dashboard-screen');
+                btn.textContent = 'Log My Vibe!';
+                btn.classList.remove('success');
+            }, 800);
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,2441 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sushico - Uzak Dogu Lezzetleri</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap"
+    rel="stylesheet" />
+  <style>
+    /* ─────────────── RESET & BASE ─────────────── */
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --black: #0a0a0a;
+      --dark: #1a1a1a;
+      --anthracite: #2d2d2d;
+      --red: #c41e24;
+      --red-dark: #9e1a1f;
+      --gold: #c9a96e;
+      --cream: #f5f0e8;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--black);
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    ::selection {
+      background: rgba(196, 30, 36, .3);
+      color: #fff;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--dark);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--anthracite);
+      border-radius: 99px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--red);
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-family: inherit;
+      color: inherit;
+    }
+
+    .serif {
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+
+    /* ─────────────── HEADER ─────────────── */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--black);
+      transition: transform .4s ease, box-shadow .4s;
+    }
+
+    .header.scrolled {
+      box-shadow: 0 2px 20px rgba(0, 0, 0, .5);
+    }
+
+    .header.scrolled .topbar {
+      transform: translateY(-100%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* ── Top Bar ── */
+    .topbar {
+      background: var(--dark);
+      border-bottom: 1px solid rgba(255, 255, 255, .04);
+      font-size: .75rem;
+      transition: transform .4s ease, opacity .4s ease;
+    }
+
+    .topbar-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .5rem 2rem;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .topbar-link {
+      display: flex;
+      align-items: center;
+      gap: .375rem;
+      color: rgba(255, 255, 255, .4);
+      transition: color .3s;
+    }
+
+    .topbar-link:hover {
+      color: rgba(255, 255, 255, .7);
+    }
+
+    .topbar-link svg {
+      width: 12px;
+      height: 12px;
+      flex-shrink: 0;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: .375rem;
+      color: rgba(255, 255, 255, .35);
+    }
+
+    .topbar-hours {
+      display: flex;
+      align-items: center;
+      gap: .375rem;
+    }
+
+    .topbar-auth-group {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .topbar-sep {
+      color: rgba(255, 255, 255, .12);
+    }
+
+    .topbar-auth {
+      color: rgba(255, 255, 255, .45);
+      font-size: .75rem;
+      font-weight: 500;
+      transition: color .3s;
+    }
+
+    .topbar-auth:hover {
+      color: rgba(255, 255, 255, .8);
+    }
+
+    .lang-switch-topbar {
+      font-size: .6875rem;
+    }
+
+    .topbar-right svg {
+      width: 12px;
+      height: 12px;
+      flex-shrink: 0;
+    }
+
+    /* ── Main Nav ── */
+    .navbar {
+      border-bottom: 1px solid rgba(255, 255, 255, .06);
+      background: var(--black);
+    }
+
+    .navbar-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      align-items: center;
+      padding: .875rem 2rem;
+      gap: 0;
+    }
+
+    .logo {
+      grid-column: 1 / 3;
+      display: flex;
+      align-items: baseline;
+      gap: .625rem;
+    }
+
+    .logo-text {
+      color: var(--red);
+      font-size: 1.625rem;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      transition: color .3s;
+    }
+
+    .logo:hover .logo-text {
+      color: var(--red-dark);
+    }
+
+    .logo-sub {
+      font-size: .5625rem;
+      text-transform: uppercase;
+      letter-spacing: .35em;
+      color: rgba(201, 169, 110, .5);
+    }
+
+    .nav-desktop {
+      grid-column: 3 / 9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .nav-link {
+      font-size: .8125rem;
+      font-weight: 400;
+      letter-spacing: .03em;
+      color: rgba(255, 255, 255, .55);
+      transition: color .3s;
+      position: relative;
+      padding-bottom: 2px;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      height: 1.5px;
+      width: 0;
+      background: var(--red);
+      transition: width .3s ease;
+    }
+
+    .nav-link:hover {
+      color: #fff;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .nav-right {
+      grid-column: 9 / 13;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    /* Icon Buttons */
+    .icon-btn {
+      position: relative;
+      padding: .5rem;
+      border-radius: 6px;
+      color: rgba(255, 255, 255, .6);
+      transition: all .3s;
+      background: transparent;
+    }
+
+    .icon-btn:hover {
+      background: rgba(255, 255, 255, .06);
+      color: #fff;
+    }
+
+    .icon-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .icon-btn .badge {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      min-width: 16px;
+      height: 16px;
+      padding: 0 4px;
+      background: var(--red);
+      border-radius: 8px;
+      font-size: .625rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .lang-switch {
+      display: flex;
+      align-items: center;
+      gap: .25rem;
+      font-size: .6875rem;
+      font-weight: 500;
+      letter-spacing: .04em;
+    }
+
+    .lang-switch span {
+      cursor: pointer;
+      padding: .2rem .375rem;
+      border-radius: 3px;
+      color: rgba(255, 255, 255, .3);
+      transition: color .25s, background .25s;
+    }
+
+    .lang-switch span:hover {
+      color: rgba(255, 255, 255, .6);
+    }
+
+    .lang-switch .active-lang {
+      color: var(--gold);
+      background: rgba(201, 169, 110, .08);
+    }
+
+    /* Üye Ol - Outline button */
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 36px;
+      padding: 0 16px;
+      border: 1px solid var(--red);
+      border-radius: 999px;
+      font-size: .875rem;
+      font-weight: 600;
+      color: var(--red);
+      background: transparent;
+      white-space: nowrap;
+      transition: background .3s, color .3s;
+    }
+
+    .btn-outline:hover {
+      background: rgba(196, 30, 36, .08);
+      color: var(--red);
+    }
+
+    .lang-sep {
+      width: 1px;
+      height: 20px;
+      background: rgba(255, 255, 255, .08);
+      margin: 0 .25rem;
+    }
+
+    .btn-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 36px;
+      padding: 0 16px;
+      background: var(--red);
+      font-size: .875rem;
+      font-weight: 600;
+      border-radius: 999px;
+      white-space: nowrap;
+      transition: background .3s, transform .2s;
+    }
+
+    .btn-cta:hover {
+      background: var(--red-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: .375rem;
+      padding: .4375rem 1rem;
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 4px;
+      font-size: .8125rem;
+      font-weight: 400;
+      color: rgba(255, 255, 255, .6);
+      letter-spacing: .02em;
+      transition: border-color .3s, color .3s;
+    }
+
+    .btn-ghost:hover {
+      border-color: rgba(255, 255, 255, .3);
+      color: #fff;
+    }
+
+    .btn-ghost svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .hamburger {
+      display: none;
+      padding: 4px;
+      color: rgba(255, 255, 255, .7);
+    }
+
+    .hamburger:hover {
+      color: #fff;
+    }
+
+    .hamburger svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    /* ── Mobile Menu ── */
+    .mobile-menu {
+      display: none;
+      overflow: hidden;
+      background: var(--dark);
+      border-top: 1px solid rgba(255, 255, 255, .04);
+      max-height: 0;
+      transition: max-height .4s ease, opacity .3s;
+      opacity: 0;
+    }
+
+    .mobile-menu.open {
+      max-height: 500px;
+      opacity: 1;
+    }
+
+    .mobile-menu nav {
+      display: flex;
+      flex-direction: column;
+      padding: 1.25rem 1.5rem;
+      gap: .25rem;
+    }
+
+    .mobile-menu .nav-link-m {
+      font-size: 1rem;
+      font-weight: 400;
+      color: rgba(255, 255, 255, .7);
+      padding: .75rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, .04);
+      transition: color .3s;
+    }
+
+    .mobile-menu .nav-link-m:hover {
+      color: #fff;
+    }
+
+    .mobile-menu .mobile-cta-row {
+      display: flex;
+      gap: .75rem;
+      margin-top: .75rem;
+    }
+
+    .mobile-menu .btn-cta-m {
+      flex: 1;
+      text-align: center;
+      padding: .75rem;
+      background: var(--red);
+      font-size: .875rem;
+      font-weight: 500;
+      border-radius: 4px;
+      transition: background .3s;
+    }
+
+    .mobile-menu .btn-cta-m:hover {
+      background: var(--red-dark);
+    }
+
+    /* ─────────────── HERO SLIDER ─────────────── */
+    .hero-wrapper {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem 2rem 0;
+    }
+
+    .hero {
+      position: relative;
+      height: 400px;
+      overflow: hidden;
+      border-radius: 1rem;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 1.5rem;
+      opacity: 0;
+      transform: translateX(60px);
+      transition: opacity .6s ease, transform .6s ease;
+      pointer-events: none;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+    }
+
+    .slide.exit-left {
+      opacity: 0;
+      transform: translateX(-60px);
+    }
+
+    /* Slide backgrounds */
+    .slide-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .slide-bg-1 {
+      background: linear-gradient(135deg, #2d1b1b 0%, #1a1a1a 50%, #0a0a0a 100%);
+    }
+
+    .slide-bg-2 {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2520 50%, #1a1a1a 100%);
+    }
+
+    .slide-bg-3 {
+      background: linear-gradient(135deg, #1f1515 0%, #1a1a1a 50%, #0f0f0f 100%);
+    }
+
+    .slide-accent {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+
+    .slide-accent-1 {
+      background: radial-gradient(ellipse at center, rgba(196, 30, 36, .15), transparent 70%);
+    }
+
+    .slide-accent-2 {
+      background: radial-gradient(ellipse at center, rgba(201, 169, 110, .1), transparent 70%);
+    }
+
+    .slide-accent-3 {
+      background: radial-gradient(ellipse at center, rgba(196, 30, 36, .2), transparent 70%);
+    }
+
+    .slide-pattern {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      opacity: .02;
+      background-image: radial-gradient(circle at 1px 1px, white 1px, transparent 0);
+      background-size: 40px 40px;
+    }
+
+    .slide-content {
+      position: relative;
+      z-index: 10;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .slide-label {
+      color: var(--gold);
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .3em;
+      margin-bottom: 1rem;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: opacity .5s .2s, transform .5s .2s;
+    }
+
+    .slide.active .slide-label {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .slide-title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      max-width: 800px;
+      line-height: 1.1;
+      letter-spacing: -.02em;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity .6s .3s, transform .6s .3s;
+    }
+
+    .slide.active .slide-title {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .slide-subtitle {
+      margin-top: 1rem;
+      color: rgba(255, 255, 255, .6);
+      font-size: clamp(.875rem, 2vw, 1.125rem);
+      max-width: 560px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .5s .45s, transform .5s .45s;
+    }
+
+    .slide.active .slide-subtitle {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .slide-cta {
+      margin-top: 2rem;
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .75rem 2rem;
+      background: var(--red);
+      font-size: .875rem;
+      font-weight: 500;
+      border-radius: 4px;
+      transition: background .3s, opacity .4s .6s, transform .4s .6s;
+      opacity: 0;
+      transform: scale(.9);
+    }
+
+    .slide.active .slide-cta {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .slide-cta:hover {
+      background: var(--red-dark);
+    }
+
+    /* Arrows */
+    .slider-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 20;
+      padding: .5rem;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, .4);
+      backdrop-filter: blur(8px);
+      color: rgba(255, 255, 255, .6);
+      transition: all .3s;
+      border: 1px solid rgba(255, 255, 255, .1);
+    }
+
+    .slider-arrow:hover {
+      background: rgba(0, 0, 0, .7);
+      color: #fff;
+      border-color: rgba(255, 255, 255, .2);
+    }
+
+    .slider-arrow.prev {
+      left: 1.5rem;
+    }
+
+    .slider-arrow.next {
+      right: 1.5rem;
+    }
+
+    .slider-arrow svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Indicators */
+    .indicators {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      display: flex;
+      gap: .375rem;
+    }
+
+    .dot {
+      height: 3px;
+      border-radius: 99px;
+      transition: width .4s, background .4s;
+      width: 24px;
+      background: rgba(255, 255, 255, .25);
+    }
+
+    .dot:hover {
+      background: rgba(255, 255, 255, .4);
+    }
+
+    .dot.active {
+      width: 32px;
+      background: var(--red);
+    }
+
+    /* ─────────────── INFO SECTION ─────────────── */
+    .info-section {
+      padding: 0;
+      background: var(--cream);
+      color: var(--black);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .info-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 4rem;
+    }
+
+    .info-left {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .info-icon-deco {
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .info-icon-deco svg {
+      width: 64px;
+      height: 64px;
+      color: var(--red);
+      opacity: .7;
+    }
+
+    .info-year-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .125rem;
+    }
+
+    .info-year-badge .year-num {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--red);
+      line-height: 1;
+    }
+
+    .info-year-badge .year-label {
+      font-size: .625rem;
+      text-transform: uppercase;
+      letter-spacing: .25em;
+      color: rgba(10, 10, 10, .4);
+      font-weight: 500;
+    }
+
+    .info-right {
+      flex: 1;
+    }
+
+    .info-divider-line {
+      width: 48px;
+      height: 2px;
+      background: var(--red);
+      margin-bottom: 1.5rem;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .8s ease;
+    }
+
+    .info-divider-line.visible {
+      transform: scaleX(1);
+    }
+
+    .info-title {
+      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+      font-weight: 600;
+      color: var(--black);
+      line-height: 1.2;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity .6s, transform .6s;
+    }
+
+    .info-title.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .info-desc {
+      margin-top: 1.25rem;
+      color: rgba(10, 10, 10, .55);
+      max-width: 560px;
+      line-height: 1.8;
+      font-size: .9375rem;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity .6s .15s, transform .6s .15s;
+    }
+
+    .info-desc.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .info-stats {
+      margin-top: 2rem;
+      display: flex;
+      gap: 2.5rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .6s .3s, transform .6s .3s;
+    }
+
+    .info-stats.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .info-stat {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .info-stat-num {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--red);
+      line-height: 1;
+    }
+
+    .info-stat-label {
+      margin-top: .25rem;
+      font-size: .6875rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: rgba(10, 10, 10, .4);
+      font-weight: 500;
+    }
+
+    /* ─────────────── VISUAL BANNER ─────────────── */
+    .visual-banner {
+      position: relative;
+      height: 420px;
+      overflow: hidden;
+    }
+
+    .visual-banner-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #1a0a0a 0%, #2d1515 25%, #1a1210 50%, #0f0a05 100%);
+    }
+
+    .visual-banner-img-layer {
+      position: absolute;
+      inset: 0;
+      opacity: .35;
+      background:
+        radial-gradient(ellipse at 30% 50%, rgba(196, 30, 36, .2), transparent 60%),
+        radial-gradient(ellipse at 70% 40%, rgba(201, 169, 110, .15), transparent 50%),
+        radial-gradient(circle at 50% 80%, rgba(255, 255, 255, .03), transparent 40%);
+    }
+
+    .visual-banner-grain {
+      position: absolute;
+      inset: 0;
+      opacity: .03;
+      background-image: radial-gradient(circle at 1px 1px, white 1px, transparent 0);
+      background-size: 24px 24px;
+    }
+
+    .visual-banner-content {
+      position: relative;
+      z-index: 10;
+      height: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .visual-banner-label {
+      font-size: .6875rem;
+      text-transform: uppercase;
+      letter-spacing: .4em;
+      color: var(--gold);
+      margin-bottom: 1.25rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .6s, transform .6s;
+    }
+
+    .visual-banner-label.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .visual-banner-title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.15;
+      max-width: 700px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity .6s .15s, transform .6s .15s;
+    }
+
+    .visual-banner-title.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .visual-banner-sub {
+      margin-top: 1rem;
+      font-size: .9375rem;
+      color: rgba(255, 255, 255, .45);
+      max-width: 480px;
+      line-height: 1.6;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .5s .3s, transform .5s .3s;
+    }
+
+    .visual-banner-sub.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .visual-banner-deco {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      background: linear-gradient(to top, var(--black), transparent);
+      z-index: 5;
+    }
+
+    /* ─────────────── CUISINE CARDS ─────────────── */
+    .cuisine-section {
+      padding: 5rem 2rem;
+      background: var(--black);
+    }
+
+    .cuisine-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .cuisine-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity .6s, transform .6s;
+    }
+
+    .cuisine-header.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .cuisine-header-label {
+      color: var(--gold);
+      font-size: .6875rem;
+      text-transform: uppercase;
+      letter-spacing: .3em;
+    }
+
+    .cuisine-header-title {
+      margin-top: .75rem;
+      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+      font-weight: 600;
+    }
+
+    .cuisine-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .cuisine-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: .75rem;
+      min-height: 280px;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity .6s, transform .6s;
+    }
+
+    .cuisine-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .cuisine-card:nth-child(1) { transition-delay: 0s; }
+    .cuisine-card:nth-child(2) { transition-delay: .12s; }
+    .cuisine-card:nth-child(3) { transition-delay: .24s; }
+    .cuisine-card:nth-child(4) { transition-delay: .36s; }
+
+    .cuisine-card-bg {
+      position: absolute;
+      inset: 0;
+      transition: transform .6s ease;
+    }
+
+    .cuisine-card:hover .cuisine-card-bg {
+      transform: scale(1.08);
+    }
+
+    .cuisine-card-bg-japan {
+      background: linear-gradient(160deg, #3d1520 0%, #1a0a0e 40%, #0f0808 100%);
+    }
+
+    .cuisine-card-bg-china {
+      background: linear-gradient(160deg, #3d2a15 0%, #1a1008 40%, #0f0a05 100%);
+    }
+
+    .cuisine-card-bg-thai {
+      background: linear-gradient(160deg, #0f3d2a 0%, #081a10 40%, #050f0a 100%);
+    }
+
+    .cuisine-card-bg-korea {
+      background: linear-gradient(160deg, #3d2015 0%, #1a0e08 40%, #0f0805 100%);
+    }
+
+    .cuisine-card-accent {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity .5s;
+    }
+
+    .cuisine-card:hover .cuisine-card-accent {
+      opacity: 1;
+    }
+
+    .cuisine-card-accent-japan {
+      background: radial-gradient(ellipse at 50% 60%, rgba(196, 30, 36, .15), transparent 70%);
+    }
+
+    .cuisine-card-accent-china {
+      background: radial-gradient(ellipse at 50% 60%, rgba(201, 169, 110, .12), transparent 70%);
+    }
+
+    .cuisine-card-accent-thai {
+      background: radial-gradient(ellipse at 50% 60%, rgba(34, 197, 94, .1), transparent 70%);
+    }
+
+    .cuisine-card-accent-korea {
+      background: radial-gradient(ellipse at 50% 60%, rgba(234, 88, 12, .12), transparent 70%);
+    }
+
+    .cuisine-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.7) 0%, rgba(0,0,0,.1) 50%, transparent 100%);
+      z-index: 2;
+    }
+
+    .cuisine-card-content {
+      position: relative;
+      z-index: 10;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.75rem;
+    }
+
+    .cuisine-card-flag {
+      font-size: .625rem;
+      text-transform: uppercase;
+      letter-spacing: .25em;
+      color: var(--gold);
+      margin-bottom: .5rem;
+      opacity: .7;
+      transition: opacity .3s;
+    }
+
+    .cuisine-card:hover .cuisine-card-flag {
+      opacity: 1;
+    }
+
+    .cuisine-card-name {
+      font-size: clamp(1.25rem, 2.5vw, 1.625rem);
+      font-weight: 600;
+      line-height: 1.2;
+      transition: color .3s;
+    }
+
+    .cuisine-card:hover .cuisine-card-name {
+      color: var(--gold);
+    }
+
+    .cuisine-card-desc {
+      margin-top: .375rem;
+      font-size: .8125rem;
+      color: rgba(255, 255, 255, .4);
+      line-height: 1.5;
+      transition: color .3s;
+    }
+
+    .cuisine-card:hover .cuisine-card-desc {
+      color: rgba(255, 255, 255, .6);
+    }
+
+    .cuisine-card-line {
+      margin-top: .75rem;
+      height: 2px;
+      width: 0;
+      background: var(--red);
+      border-radius: 1px;
+      transition: width .5s ease;
+    }
+
+    .cuisine-card:hover .cuisine-card-line {
+      width: 40px;
+    }
+
+    .cuisine-card-arrow {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .05);
+      border: 1px solid rgba(255, 255, 255, .08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, .3);
+      z-index: 10;
+      opacity: 0;
+      transform: translate(8px, -8px);
+      transition: opacity .4s, transform .4s, background .3s, color .3s;
+    }
+
+    .cuisine-card:hover .cuisine-card-arrow {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+
+    .cuisine-card-arrow:hover {
+      background: var(--red);
+      border-color: var(--red);
+      color: #fff;
+    }
+
+    .cuisine-card-arrow svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* ─────────────── POPULAR DISHES CARDS ─────────────── */
+    .dishes-section {
+      padding: 5rem 2rem;
+      background: var(--dark);
+    }
+
+    .dishes-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .dishes-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 3rem;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity .6s, transform .6s;
+    }
+
+    .dishes-header.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .dishes-header-left {}
+
+    .dishes-header-label {
+      color: var(--gold);
+      font-size: .6875rem;
+      text-transform: uppercase;
+      letter-spacing: .3em;
+    }
+
+    .dishes-header-title {
+      margin-top: .5rem;
+      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+      font-weight: 600;
+    }
+
+    .dishes-view-all {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .8125rem;
+      color: rgba(255, 255, 255, .4);
+      transition: color .3s;
+      white-space: nowrap;
+      padding-bottom: .25rem;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .dishes-view-all:hover {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    .dishes-view-all svg {
+      width: 14px;
+      height: 14px;
+      transition: transform .3s;
+    }
+
+    .dishes-view-all:hover svg {
+      transform: translateX(3px);
+    }
+
+    .dishes-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .dish-card {
+      background: var(--black);
+      border-radius: .75rem;
+      border: 1px solid rgba(255, 255, 255, .04);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity .6s, transform .6s, border-color .3s, box-shadow .3s;
+    }
+
+    .dish-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .dish-card:nth-child(1) { transition-delay: 0s; }
+    .dish-card:nth-child(2) { transition-delay: .1s; }
+    .dish-card:nth-child(3) { transition-delay: .2s; }
+    .dish-card:nth-child(4) { transition-delay: .3s; }
+    .dish-card:nth-child(5) { transition-delay: .4s; }
+    .dish-card:nth-child(6) { transition-delay: .5s; }
+
+    .dish-card:hover {
+      border-color: rgba(255, 255, 255, .08);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, .3);
+    }
+
+    .dish-card-img {
+      position: relative;
+      height: 200px;
+      overflow: hidden;
+    }
+
+    .dish-card-img-bg {
+      position: absolute;
+      inset: 0;
+      transition: transform .6s ease;
+    }
+
+    .dish-card:hover .dish-card-img-bg {
+      transform: scale(1.08);
+    }
+
+    .dish-img-1 {
+      background: linear-gradient(135deg, #2d1318 0%, #1a0a0e 50%, #140808 100%);
+    }
+
+    .dish-img-2 {
+      background: linear-gradient(135deg, #2d2215 0%, #1a150a 50%, #140f05 100%);
+    }
+
+    .dish-img-3 {
+      background: linear-gradient(135deg, #152d1e 0%, #0a1a10 50%, #051408 100%);
+    }
+
+    .dish-img-4 {
+      background: linear-gradient(135deg, #2d1f15 0%, #1a120a 50%, #140d05 100%);
+    }
+
+    .dish-img-5 {
+      background: linear-gradient(135deg, #1a152d 0%, #0f0a1a 50%, #0a0814 100%);
+    }
+
+    .dish-img-6 {
+      background: linear-gradient(135deg, #2d2d15 0%, #1a1a0a 50%, #141405 100%);
+    }
+
+    .dish-card-img-accent {
+      position: absolute;
+      inset: 0;
+      opacity: .4;
+    }
+
+    .dish-accent-1 {
+      background: radial-gradient(circle at 50% 60%, rgba(196, 30, 36, .3), transparent 70%);
+    }
+
+    .dish-accent-2 {
+      background: radial-gradient(circle at 50% 60%, rgba(201, 169, 110, .25), transparent 70%);
+    }
+
+    .dish-accent-3 {
+      background: radial-gradient(circle at 50% 60%, rgba(34, 197, 94, .2), transparent 70%);
+    }
+
+    .dish-accent-4 {
+      background: radial-gradient(circle at 50% 60%, rgba(234, 88, 12, .25), transparent 70%);
+    }
+
+    .dish-accent-5 {
+      background: radial-gradient(circle at 50% 60%, rgba(139, 92, 246, .2), transparent 70%);
+    }
+
+    .dish-accent-6 {
+      background: radial-gradient(circle at 50% 60%, rgba(201, 169, 110, .2), transparent 70%);
+    }
+
+    .dish-card-badge {
+      position: absolute;
+      top: .75rem;
+      left: .75rem;
+      z-index: 10;
+      padding: .25rem .625rem;
+      border-radius: 4px;
+      font-size: .625rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .badge-popular {
+      background: var(--red);
+      color: #fff;
+    }
+
+    .badge-new {
+      background: var(--gold);
+      color: var(--black);
+    }
+
+    .badge-chef {
+      background: rgba(255, 255, 255, .1);
+      backdrop-filter: blur(8px);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, .12);
+    }
+
+    .dish-card-body {
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .dish-card-cuisine {
+      font-size: .625rem;
+      text-transform: uppercase;
+      letter-spacing: .2em;
+      color: var(--gold);
+      opacity: .6;
+      margin-bottom: .375rem;
+    }
+
+    .dish-card-name {
+      font-size: 1.125rem;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .dish-card-desc {
+      margin-top: .375rem;
+      font-size: .8125rem;
+      color: rgba(255, 255, 255, .35);
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .dish-card-footer {
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: .75rem;
+      border-top: 1px solid rgba(255, 255, 255, .04);
+    }
+
+    .dish-card-price {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .dish-card-price .currency {
+      font-size: .75rem;
+      font-weight: 400;
+      color: rgba(255, 255, 255, .4);
+      margin-left: .125rem;
+    }
+
+    .dish-card-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .375rem;
+      padding: .5rem 1rem;
+      border-radius: 6px;
+      font-size: .75rem;
+      font-weight: 500;
+      background: rgba(196, 30, 36, .1);
+      color: var(--red);
+      border: 1px solid rgba(196, 30, 36, .15);
+      transition: background .3s, color .3s, border-color .3s;
+      cursor: pointer;
+    }
+
+    .dish-card-btn:hover {
+      background: var(--red);
+      color: #fff;
+      border-color: var(--red);
+    }
+
+    .dish-card-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* ─────────────── FOOTER ─────────────── */
+    .footer {
+      border-top: 1px solid rgba(255, 255, 255, .05);
+    }
+
+    .footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .footer-brand-desc {
+      margin-top: 1rem;
+      font-size: .875rem;
+      color: rgba(255, 255, 255, .4);
+      line-height: 1.7;
+      max-width: 320px;
+    }
+
+    .footer-heading {
+      font-size: .875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: rgba(255, 255, 255, .7);
+      margin-bottom: 1rem;
+    }
+
+    .contact-list {
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .875rem;
+      color: rgba(255, 255, 255, .4);
+      transition: color .3s;
+    }
+
+    .contact-link:hover {
+      color: rgba(255, 255, 255, .7);
+    }
+
+    .contact-link svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    .social-row {
+      display: flex;
+      gap: .75rem;
+    }
+
+    .social-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: var(--dark);
+      border: 1px solid rgba(255, 255, 255, .05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, .4);
+      transition: color .3s, border-color .3s;
+    }
+
+    .social-icon:hover {
+      color: var(--red);
+      border-color: rgba(196, 30, 36, .3);
+    }
+
+    .social-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .copyright {
+      margin-top: 3.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, .05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      font-size: .75rem;
+      color: rgba(255, 255, 255, .3);
+    }
+
+    /* ─────────────── RESPONSIVE ─────────────── */
+    @media (min-width: 640px) {
+      .logo-sub-resp {
+        display: inline;
+      }
+
+      .info-inner {
+        padding: 6rem 2rem;
+      }
+
+      .visual-banner {
+        height: 480px;
+      }
+
+      .cuisine-section {
+        padding: 6rem 2rem;
+      }
+
+      .cuisine-card {
+        min-height: 320px;
+      }
+
+      .dishes-section {
+        padding: 6rem 2rem;
+      }
+
+      .dishes-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .copyright {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+
+      .slide-label {
+        font-size: .875rem;
+      }
+
+      .hero {
+        height: 520px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .hamburger {
+        display: none !important;
+      }
+
+      .nav-desktop {
+        display: flex !important;
+      }
+
+      .btn-outline,
+      .btn-cta {
+        display: inline-flex !important;
+      }
+
+      .mobile-menu {
+        display: none !important;
+      }
+
+      .cuisine-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .cuisine-card {
+        min-height: 360px;
+      }
+
+      .dishes-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .footer-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 767px) {
+      .nav-desktop {
+        display: none;
+      }
+
+      .nav-right .btn-outline,
+      .nav-right .btn-cta,
+      .nav-right .icon-btn {
+        display: none;
+      }
+
+      .hamburger {
+        display: block;
+      }
+
+      .mobile-menu {
+        display: block;
+      }
+
+      .logo-sub-resp {
+        display: none;
+      }
+
+      .topbar-desktop {
+        display: none;
+      }
+
+      .navbar-inner {
+        display: flex;
+        padding: .75rem 1rem;
+      }
+
+      .hero-wrapper {
+        padding: 1rem;
+      }
+
+      .hero {
+        height: 360px;
+        border-radius: .75rem;
+      }
+
+      .slide-content {
+        padding: 0 1rem;
+      }
+
+      .slider-arrow.prev {
+        left: .75rem;
+      }
+
+      .slider-arrow.next {
+        right: .75rem;
+      }
+
+      .info-inner {
+        padding: 3rem 1.25rem;
+        flex-direction: column;
+        text-align: center;
+        gap: 2rem;
+      }
+
+      .info-divider-line {
+        margin: 0 auto 1.25rem;
+        transform-origin: center;
+      }
+
+      .info-stats {
+        justify-content: center;
+      }
+
+      .visual-banner {
+        height: 320px;
+      }
+
+      .cuisine-section {
+        padding: 3.5rem 1rem;
+      }
+
+      .cuisine-grid {
+        grid-template-columns: 1fr;
+        gap: .75rem;
+      }
+
+      .cuisine-card {
+        min-height: 220px;
+      }
+
+      .dishes-section {
+        padding: 3.5rem 1rem;
+      }
+
+      .dishes-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .dish-card-img {
+        height: 170px;
+      }
+
+      .footer-inner {
+        padding: 3rem 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ════════════ HEADER ════════════ -->
+  <header class="header" id="header">
+    <!-- Top Bar -->
+    <div class="topbar topbar-desktop">
+      <div class="topbar-inner">
+        <div class="topbar-left">
+          <a href="#" class="topbar-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+            </svg>
+            0850 XXX XX XX
+          </a>
+          <a href="#" class="topbar-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            50+ Sube
+          </a>
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-hours">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            Her gun 11:00 - 23:00
+          </div>
+          <div class="topbar-auth-group">
+            <div class="lang-switch lang-switch-topbar">
+              <span class="active-lang">TR</span>
+              <span>EN</span>
+            </div>
+            <span class="topbar-sep">|</span>
+            <a href="#giris" class="topbar-auth">Giris Yap</a>
+            <span class="topbar-sep">·</span>
+            <a href="#kayit" class="topbar-auth">Kayit Ol</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Navbar -->
+    <div class="navbar">
+      <div class="navbar-inner">
+        <a href="#" class="logo">
+          <span class="logo-text serif">Sushico</span>
+          <span class="logo-sub logo-sub-resp">since 1998</span>
+        </a>
+
+        <nav class="nav-desktop">
+          <a href="#menu" class="nav-link">Menu</a>
+          <a href="#subeler" class="nav-link">Subeler</a>
+          <a href="#hakkimizda" class="nav-link">Hakkimizda</a>
+          <a href="#iletisim" class="nav-link">Iletisim</a>
+        </nav>
+
+        <div class="nav-right">
+          <!-- Cart + CTA buttons -->
+          <button class="icon-btn" aria-label="Sepet">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="8" cy="21" r="1" />
+              <circle cx="19" cy="21" r="1" />
+              <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+            </svg>
+            <span class="badge">3</span>
+          </button>
+          <a href="#uye" class="btn-outline">Uye Ol</a>
+          <a href="#siparis" class="btn-cta">Siparis Ver</a>
+
+          <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+            <svg id="iconMenu" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" x2="20" y1="12" y2="12" />
+              <line x1="4" x2="20" y1="6" y2="6" />
+              <line x1="4" x2="20" y1="18" y2="18" />
+            </svg>
+            <svg id="iconX" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              style="display:none">
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <nav>
+        <a href="#menu" class="nav-link-m" onclick="closeMobile()">Menu</a>
+        <a href="#subeler" class="nav-link-m" onclick="closeMobile()">Subeler</a>
+        <a href="#hakkimizda" class="nav-link-m" onclick="closeMobile()">Hakkimizda</a>
+        <a href="#iletisim" class="nav-link-m" onclick="closeMobile()">Iletisim</a>
+        <a href="#siparis" class="btn-cta-m" onclick="closeMobile()" style="margin-top:.75rem">Siparis Ver</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ════════════ HERO SLIDER ════════════ -->
+    <div class="hero-wrapper">
+      <section class="hero" id="heroSlider">
+        <!-- Slide 1 -->
+        <div class="slide active" data-slide="0">
+          <div class="slide-bg slide-bg-1"></div>
+          <div class="slide-accent slide-accent-1"></div>
+          <div class="slide-pattern"></div>
+          <div class="slide-content">
+            <span class="slide-label">Sushico</span>
+            <h1 class="slide-title serif">Uzak Dogunun Essiz Lezzetleri</h1>
+            <p class="slide-subtitle">Japonya'dan Tayland'a, 27 yillik ustalikla sofralarinizda</p>
+            <a href="#menu" class="slide-cta btn-cta">Menuyu Kesfet</a>
+          </div>
+        </div>
+        <!-- Slide 2 -->
+        <div class="slide" data-slide="1">
+          <div class="slide-bg slide-bg-2"></div>
+          <div class="slide-accent slide-accent-2"></div>
+          <div class="slide-pattern"></div>
+          <div class="slide-content">
+            <span class="slide-label">Sushico</span>
+            <h1 class="slide-title serif">Yeni Sezon Omakase</h1>
+            <p class="slide-subtitle">Sef'in ozenle sectigi 12 parcalik ozel degustation menusu</p>
+            <a href="#" class="slide-cta btn-cta">Rezervasyon Yap</a>
+          </div>
+        </div>
+        <!-- Slide 3 -->
+        <div class="slide" data-slide="2">
+          <div class="slide-bg slide-bg-3"></div>
+          <div class="slide-accent slide-accent-3"></div>
+          <div class="slide-pattern"></div>
+          <div class="slide-content">
+            <span class="slide-label">Sushico</span>
+            <h1 class="slide-title serif">%30 Indirim Firsati</h1>
+            <p class="slide-subtitle">Ilk online siparisine ozel, minimum 500 TL ve uzeri</p>
+            <a href="#siparis" class="slide-cta btn-cta">Siparis Ver</a>
+          </div>
+        </div>
+
+        <!-- Arrows -->
+        <button class="slider-arrow prev" onclick="slidePrev()" aria-label="Previous slide">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m15 18-6-6 6-6" />
+          </svg>
+        </button>
+        <button class="slider-arrow next" onclick="slideNext()" aria-label="Next slide">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m9 18 6-6-6-6" />
+          </svg>
+        </button>
+
+        <!-- Indicators -->
+        <div class="indicators">
+          <button class="dot active" onclick="slideGoTo(0)" aria-label="Slide 1"></button>
+          <button class="dot" onclick="slideGoTo(1)" aria-label="Slide 2"></button>
+          <button class="dot" onclick="slideGoTo(2)" aria-label="Slide 3"></button>
+        </div>
+      </section>
+    </div>
+
+    <!-- ════════════ INFO SECTION ════════════ -->
+    <section id="hakkimizda" class="info-section">
+      <div class="info-inner" data-reveal="info">
+        <div class="info-left">
+          <div class="info-icon-deco">
+            <!-- Chopsticks icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+              <line x1="18" y1="6" x2="30" y2="58" />
+              <line x1="46" y1="6" x2="34" y2="58" />
+              <ellipse cx="32" cy="52" rx="8" ry="3" opacity=".3" />
+            </svg>
+          </div>
+          <div class="info-year-badge">
+            <span class="year-num">27</span>
+            <span class="year-label">Yillik Miras</span>
+          </div>
+        </div>
+
+        <div class="info-right">
+          <div class="info-divider-line"></div>
+          <h2 class="info-title serif">Uzak Dogu'nun Ruhu,<br>Sizin Sofranizda</h2>
+          <p class="info-desc">
+            1998'den bu yana Turkiye'nin dort bir yaninda 50'den fazla subemizle,
+            Uzak Dogu'nun zengin mutfak kulturunu ozgun yorumlarimizla sofralariniza
+            tasiyoruz. Her tabakta gelenek, her lokmada tutku.
+          </p>
+          <div class="info-stats">
+            <div class="info-stat">
+              <span class="info-stat-num">50+</span>
+              <span class="info-stat-label">Sube</span>
+            </div>
+            <div class="info-stat">
+              <span class="info-stat-num">4</span>
+              <span class="info-stat-label">Mutfak</span>
+            </div>
+            <div class="info-stat">
+              <span class="info-stat-num">200+</span>
+              <span class="info-stat-label">Cesit</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ VISUAL BANNER ════════════ -->
+    <section class="visual-banner" data-reveal="banner">
+      <div class="visual-banner-bg"></div>
+      <div class="visual-banner-img-layer"></div>
+      <div class="visual-banner-grain"></div>
+      <div class="visual-banner-content">
+        <span class="visual-banner-label">Sushico Deneyimi</span>
+        <h2 class="visual-banner-title serif">Essiz Uzak Dogu Lezzetleri</h2>
+        <p class="visual-banner-sub">Japonya'dan Kore'ye, Cin'den Tayland'a dort farkli mutfagin en ozel tatlarini kesfedin</p>
+      </div>
+      <div class="visual-banner-deco"></div>
+    </section>
+
+    <!-- ════════════ CUISINE CARDS ════════════ -->
+    <section id="menu" class="cuisine-section">
+      <div class="cuisine-inner" data-reveal="cuisine">
+        <div class="cuisine-header">
+          <span class="cuisine-header-label">Mutfaklarimiz</span>
+          <h2 class="cuisine-header-title serif">Dort Mutfak, Bir Deneyim</h2>
+        </div>
+
+        <div class="cuisine-grid">
+          <!-- Japon -->
+          <div class="cuisine-card">
+            <div class="cuisine-card-bg cuisine-card-bg-japan"></div>
+            <div class="cuisine-card-accent cuisine-card-accent-japan"></div>
+            <div class="cuisine-card-overlay"></div>
+            <div class="cuisine-card-content">
+              <span class="cuisine-card-flag">Japonya</span>
+              <h3 class="cuisine-card-name serif">Sushi &amp; Sashimi</h3>
+              <p class="cuisine-card-desc">Taze baliklar, geleneksel tarifler ve usta ellerin dokunusu</p>
+              <div class="cuisine-card-line"></div>
+            </div>
+            <div class="cuisine-card-arrow">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+            </div>
+          </div>
+          <!-- Cin -->
+          <div class="cuisine-card">
+            <div class="cuisine-card-bg cuisine-card-bg-china"></div>
+            <div class="cuisine-card-accent cuisine-card-accent-china"></div>
+            <div class="cuisine-card-overlay"></div>
+            <div class="cuisine-card-content">
+              <span class="cuisine-card-flag">Cin</span>
+              <h3 class="cuisine-card-name serif">Wok &amp; Noodle</h3>
+              <p class="cuisine-card-desc">Atesle bulusan tatlar, dim sum ve noodle cesitleri</p>
+              <div class="cuisine-card-line"></div>
+            </div>
+            <div class="cuisine-card-arrow">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+            </div>
+          </div>
+          <!-- Tayland -->
+          <div class="cuisine-card">
+            <div class="cuisine-card-bg cuisine-card-bg-thai"></div>
+            <div class="cuisine-card-accent cuisine-card-accent-thai"></div>
+            <div class="cuisine-card-overlay"></div>
+            <div class="cuisine-card-content">
+              <span class="cuisine-card-flag">Tayland</span>
+              <h3 class="cuisine-card-name serif">Thai Mutfagi</h3>
+              <p class="cuisine-card-desc">Pad thai, curry ve tropikal aromatik tatlar</p>
+              <div class="cuisine-card-line"></div>
+            </div>
+            <div class="cuisine-card-arrow">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+            </div>
+          </div>
+          <!-- Kore -->
+          <div class="cuisine-card">
+            <div class="cuisine-card-bg cuisine-card-bg-korea"></div>
+            <div class="cuisine-card-accent cuisine-card-accent-korea"></div>
+            <div class="cuisine-card-overlay"></div>
+            <div class="cuisine-card-content">
+              <span class="cuisine-card-flag">Kore</span>
+              <h3 class="cuisine-card-name serif">Kore BBQ</h3>
+              <p class="cuisine-card-desc">BBQ, bibimbap ve kimchi lezzetleri</p>
+              <div class="cuisine-card-line"></div>
+            </div>
+            <div class="cuisine-card-arrow">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════ POPULAR DISHES CARDS ════════════ -->
+    <section class="dishes-section" data-reveal="dishes">
+      <div class="dishes-inner">
+        <div class="dishes-header">
+          <div class="dishes-header-left">
+            <span class="dishes-header-label">Populer Secimler</span>
+            <h2 class="dishes-header-title serif">En Cok Tercih Edilenler</h2>
+          </div>
+          <a href="#" class="dishes-view-all">
+            Tum Menuyu Gor
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+
+        <div class="dishes-grid">
+          <!-- Card 1 - Dragon Roll -->
+          <div class="dish-card">
+            <div class="dish-card-img">
+              <div class="dish-card-img-bg dish-img-1"></div>
+              <div class="dish-card-img-accent dish-accent-1"></div>
+              <span class="dish-card-badge badge-popular">Populer</span>
+            </div>
+            <div class="dish-card-body">
+              <span class="dish-card-cuisine">Japon</span>
+              <h3 class="dish-card-name serif">Dragon Roll</h3>
+              <p class="dish-card-desc">Karides tempura, avokado, unagi sos ve susam ile</p>
+              <div class="dish-card-footer">
+                <span class="dish-card-price">285<span class="currency">TL</span></span>
+                <button class="dish-card-btn">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                  Sepete Ekle
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2 - Pad Thai -->
+          <div class="dish-card">
+            <div class="dish-card-img">
+              <div class="dish-card-img-bg dish-img-3"></div>
+              <div class="dish-card-img-accent dish-accent-3"></div>
+              <span class="dish-card-badge badge-chef">Sef Onerisi</span>
+            </div>
+            <div class="dish-card-body">
+              <span class="dish-card-cuisine">Tayland</span>
+              <h3 class="dish-card-name serif">Pad Thai</h3>
+              <p class="dish-card-desc">Pirinc noodle, karides, yer fistigi ve taze limon</p>
+              <div class="dish-card-footer">
+                <span class="dish-card-price">245<span class="currency">TL</span></span>
+                <button class="dish-card-btn">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                  Sepete Ekle
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3 - Dim Sum -->
+          <div class="dish-card">
+            <div class="dish-card-img">
+              <div class="dish-card-img-bg dish-img-2"></div>
+              <div class="dish-card-img-accent dish-accent-2"></div>
+              <span class="dish-card-badge badge-new">Yeni</span>
+            </div>
+            <div class="dish-card-body">
+              <span class="dish-card-cuisine">Cin</span>
+              <h3 class="dish-card-name serif">Dim Sum Tabagi</h3>
+              <p class="dish-card-desc">Buharla pisirilen 8 parca karisik dim sum secimi</p>
+              <div class="dish-card-footer">
+                <span class="dish-card-price">195<span class="currency">TL</span></span>
+                <button class="dish-card-btn">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                  Sepete Ekle
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4 - Korean BBQ -->
+          <div class="dish-card">
+            <div class="dish-card-img">
+              <div class="dish-card-img-bg dish-img-4"></div>
+              <div class="dish-card-img-accent dish-accent-4"></div>
+              <span class="dish-card-badge badge-popular">Populer</span>
+            </div>
+            <div class="dish-card-body">
+              <span class="dish-card-cuisine">Kore</span>
+              <h3 class="dish-card-name serif">Bulgogi BBQ</h3>
+              <p class="dish-card-desc">Marine edilmis dana eti, pirinc ve ozel sos ile</p>
+              <div class="dish-card-footer">
+                <span class="dish-card-price">320<span class="currency">TL</span></span>
+                <button class="dish-card-btn">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                  Sepete Ekle
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 5 - Sashimi -->
+          <div class="dish-card">
+            <div class="dish-card-img">
+              <div class="dish-card-img-bg dish-img-5"></div>
+              <div class="dish-card-img-accent dish-accent-5"></div>
+              <span class="dish-card-badge badge-chef">Sef Onerisi</span>
+            </div>
+            <div class="dish-card-body">
+              <span class="dish-card-cuisine">Japon</span>
+              <h3 class="dish-card-name serif">Premium Sashimi</h3>
+              <p class="dish-card-desc">Somon, ton ve hamachi - 12 parca ozel secim</p>
+              <div class="dish-card-footer">
+                <span class="dish-card-price">420<span class="currency">TL</span></span>
+                <button class="dish-card-btn">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                  Sepete Ekle
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 6 - Ramen -->
+          <div class="dish-card">
+            <div class="dish-card-img">
+              <div class="dish-card-img-bg dish-img-6"></div>
+              <div class="dish-card-img-accent dish-accent-6"></div>
+              <span class="dish-card-badge badge-new">Yeni</span>
+            </div>
+            <div class="dish-card-body">
+              <span class="dish-card-cuisine">Japon</span>
+              <h3 class="dish-card-name serif">Tonkotsu Ramen</h3>
+              <p class="dish-card-desc">18 saat demlenmis kemik suyu, chashu ve ajitsuke yumurta</p>
+              <div class="dish-card-footer">
+                <span class="dish-card-price">210<span class="currency">TL</span></span>
+                <button class="dish-card-btn">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                  Sepete Ekle
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ════════════ FOOTER ════════════ -->
+  <footer id="iletisim" class="footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <!-- Brand -->
+        <div>
+          <span class="logo-text serif" style="font-size:1.5rem">Sushico</span>
+          <p class="footer-brand-desc">
+            1998'den bu yana Turkiye'nin en buyuk Uzak Dogu restoran zinciri.
+            27 yildir damak zevkinize hitap ediyoruz.
+          </p>
+        </div>
+        <!-- Contact -->
+        <div>
+          <h4 class="footer-heading">Iletisim</h4>
+          <div class="contact-list">
+            <a href="#" class="contact-link">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+              </svg>
+              0850 XXX XX XX
+            </a>
+            <a href="#" class="contact-link">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              50+ Sube - Turkiye Geneli
+            </a>
+          </div>
+        </div>
+        <!-- Social -->
+        <div>
+          <h4 class="footer-heading">Bizi Takip Edin</h4>
+          <div class="social-row">
+            <a href="#" class="social-icon" aria-label="Instagram">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+              </svg>
+            </a>
+            <a href="#" class="social-icon" aria-label="Facebook">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+              </svg>
+            </a>
+            <a href="#" class="social-icon" aria-label="Twitter">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="copyright">
+        <span>&copy; 2026 Sushico. Tum haklar saklidir.</span>
+        <span>Tasarim &amp; Gelistirme: ZeynStudio</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* ════════════ HEADER SCROLL ════════════ */
+    var header = document.getElementById('header');
+    window.addEventListener('scroll', function () {
+      header.classList.toggle('scrolled', window.scrollY > 50);
+    }, { passive: true });
+
+    /* ════════════ MOBILE MENU ════════════ */
+    var hamburgerBtn = document.getElementById('hamburgerBtn');
+    var mobileMenu = document.getElementById('mobileMenu');
+    var iconMenu = document.getElementById('iconMenu');
+    var iconX = document.getElementById('iconX');
+    var mobileOpen = false;
+
+    hamburgerBtn.addEventListener('click', function () {
+      mobileOpen = !mobileOpen;
+      mobileMenu.classList.toggle('open', mobileOpen);
+      iconMenu.style.display = mobileOpen ? 'none' : 'block';
+      iconX.style.display = mobileOpen ? 'block' : 'none';
+      document.body.style.overflow = mobileOpen ? 'hidden' : '';
+    });
+
+    function closeMobile() {
+      mobileOpen = false;
+      mobileMenu.classList.remove('open');
+      iconMenu.style.display = 'block';
+      iconX.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    /* ════════════ HERO SLIDER ════════════ */
+    var slides = document.querySelectorAll('.slide');
+    var dots = document.querySelectorAll('.dot');
+    var currentSlide = 0;
+    var autoplayTimer = null;
+
+    function showSlide(index) {
+      slides.forEach(function (s, i) {
+        s.classList.remove('active', 'exit-left');
+        if (i === currentSlide && i !== index) s.classList.add('exit-left');
+      });
+      currentSlide = index;
+      slides[currentSlide].classList.add('active');
+      dots.forEach(function (d, i) { d.classList.toggle('active', i === currentSlide); });
+      resetAutoplay();
+    }
+
+    function slideNext() {
+      showSlide((currentSlide + 1) % slides.length);
+    }
+
+    function slidePrev() {
+      showSlide((currentSlide - 1 + slides.length) % slides.length);
+    }
+
+    function slideGoTo(i) {
+      showSlide(i);
+    }
+
+    function resetAutoplay() {
+      clearInterval(autoplayTimer);
+      autoplayTimer = setInterval(slideNext, 5000);
+    }
+    resetAutoplay();
+
+    /* Touch / swipe */
+    var touchStartX = 0;
+    var heroEl = document.getElementById('heroSlider');
+    heroEl.addEventListener('touchstart', function (e) {
+      touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+    heroEl.addEventListener('touchend', function (e) {
+      var diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) {
+        diff > 0 ? slideNext() : slidePrev();
+      }
+    });
+
+    /* ════════════ SCROLL REVEAL ════════════ */
+    var observerOptions = { threshold: 0.15 };
+
+    /* Info section */
+    var infoSection = document.querySelector('[data-reveal="info"]');
+    var infoObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var line = entry.target.querySelector('.info-divider-line');
+          if (line) line.classList.add('visible');
+          var title = entry.target.querySelector('.info-title');
+          if (title) title.classList.add('visible');
+          var desc = entry.target.querySelector('.info-desc');
+          if (desc) desc.classList.add('visible');
+          var stats = entry.target.querySelector('.info-stats');
+          if (stats) stats.classList.add('visible');
+          infoObserver.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+    infoObserver.observe(infoSection);
+
+    /* Visual banner */
+    var bannerSection = document.querySelector('[data-reveal="banner"]');
+    var bannerObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.querySelectorAll('.visual-banner-label, .visual-banner-title, .visual-banner-sub').forEach(function (el) {
+            el.classList.add('visible');
+          });
+          bannerObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    bannerObserver.observe(bannerSection);
+
+    /* Cuisine cards */
+    var cuisineSection = document.querySelector('[data-reveal="cuisine"]');
+    var cuisineObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var header = entry.target.querySelector('.cuisine-header');
+          if (header) header.classList.add('visible');
+          entry.target.querySelectorAll('.cuisine-card').forEach(function (el) { el.classList.add('visible'); });
+          cuisineObserver.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+    cuisineObserver.observe(cuisineSection);
+
+    /* Dishes cards */
+    var dishesSection = document.querySelector('[data-reveal="dishes"]');
+    var dishesObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var header = entry.target.querySelector('.dishes-header');
+          if (header) header.classList.add('visible');
+          entry.target.querySelectorAll('.dish-card').forEach(function (el) { el.classList.add('visible'); });
+          dishesObserver.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+    dishesObserver.observe(dishesSection);
+
+    /* ════════════ CART BADGE ════════════ */
+    var cartCount = 3; // Demo: Sepetteki ürün sayısı
+    var cartBadge = document.querySelector('.icon-btn .badge');
+
+    function updateCartBadge(count) {
+      if (!cartBadge) return;
+
+      if (count === 0) {
+        // Sepet boş - badge'i gizle
+        cartBadge.style.display = 'none';
+      } else if (count > 9) {
+        // 10+ ürün - "9+" göster
+        cartBadge.textContent = '9+';
+        cartBadge.style.display = 'flex';
+      } else {
+        // 1-9 ürün - sayıyı göster
+        cartBadge.textContent = count;
+        cartBadge.style.display = 'flex';
+      }
+    }
+
+    // İlk yüklemede badge'i güncelle
+    updateCartBadge(cartCount);
+
+    // Demo: Sepet ikonuna tıklayınca sayıyı değiştir (test için)
+    document.querySelectorAll('.icon-btn').forEach(function (btn) {
+      if (btn.querySelector('.badge')) {
+        btn.addEventListener('click', function () {
+          // Demo: Her tıklamada sayıyı değiştir
+          cartCount = (cartCount + 1) % 12; // 0-11 arası döngü
+          updateCartBadge(cartCount);
+          console.log('Sepet: ' + cartCount + ' ürün');
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>

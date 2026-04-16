@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STELLAR VANGUARD - Character Selection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="character-select.css">
+</head>
+
+<body>
+    <div class="game-container">
+        <!-- Background Elements -->
+        <div class="bg-stars"></div>
+        <div class="bg-nebula"></div>
+        <div class="scan-lines"></div>
+
+        <!-- Top: Game Title Area -->
+        <header class="game-header">
+            <div class="header-accent left"></div>
+            <div class="title-container">
+                <div class="title-sub">SELECT YOUR</div>
+                <h1 class="game-title">CREW MEMBER</h1>
+                <div class="title-decoration">
+                    <span class="deco-line"></span>
+                    <span class="deco-diamond"></span>
+                    <span class="deco-line"></span>
+                </div>
+            </div>
+            <div class="header-accent right"></div>
+            <div class="header-info">
+                <span class="mission-label">MISSION:</span>
+                <span class="mission-name">STELLAR VANGUARD</span>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Left: Character Portrait -->
+            <section class="portrait-section">
+                <div class="portrait-frame">
+                    <div class="frame-corner top-left"></div>
+                    <div class="frame-corner top-right"></div>
+                    <div class="frame-corner bottom-left"></div>
+                    <div class="frame-corner bottom-right"></div>
+                    <div class="portrait-glow"></div>
+                    <div class="portrait-container" id="mainPortrait">
+                        <div class="portrait-silhouette" id="portraitImage">
+                            <svg viewBox="0 0 400 500" class="character-svg">
+                                <defs>
+                                    <linearGradient id="silhouetteGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#0ff;stop-opacity:0.3" />
+                                        <stop offset="50%" style="stop-color:#0aa;stop-opacity:0.15" />
+                                        <stop offset="100%" style="stop-color:#066;stop-opacity:0.05" />
+                                    </linearGradient>
+                                    <filter id="glow">
+                                        <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                                        <feMerge>
+                                            <feMergeNode in="coloredBlur" />
+                                            <feMergeNode in="SourceGraphic" />
+                                        </feMerge>
+                                    </filter>
+                                </defs>
+                                <!-- Commander Silhouette -->
+                                <g id="silhouette-commander" class="silhouette active">
+                                    <ellipse cx="200" cy="100" rx="55" ry="65" fill="url(#silhouetteGrad)"
+                                        filter="url(#glow)" />
+                                    <path d="M120 160 Q200 140 280 160 L300 350 Q200 380 100 350 Z"
+                                        fill="url(#silhouetteGrad)" filter="url(#glow)" />
+                                    <rect x="100" y="350" width="80" height="140" rx="10" fill="url(#silhouetteGrad)"
+                                        filter="url(#glow)" />
+                                    <rect x="220" y="350" width="80" height="140" rx="10" fill="url(#silhouetteGrad)"
+                                        filter="url(#glow)" />
+                                    <path d="M60 180 Q80 170 120 180 L130 300 Q90 310 70 290 Z"
+                                        fill="url(#silhouetteGrad)" filter="url(#glow)" />
+                                    <path d="M340 180 Q320 170 280 180 L270 300 Q310 310 330 290 Z"
+                                        fill="url(#silhouetteGrad)" filter="url(#glow)" />
+                                </g>
+                                <!-- Engineer Silhouette -->
+                                <g id="silhouette-engineer" class="silhouette">
+                                    <ellipse cx="200" cy="95" rx="50" ry="60" fill="url(#silhouetteGrad)"
+                                        filter="url(#glow)" />
+                                    <rect x="155" y="40" width="90" height="25" rx="5" fill="url(#silhouetteGrad)"
+                                        filter="url(#glow)" />
+                                    <path d="M130 150 Q200 130 270 150 L290 360 Q200 390 110 360 Z"
+                                        fill="url(#silhouetteGrad)" filter="url(#glow)" />
+                                    <rect x="110" y="360" width="70" height="130" rx="8" fill="url(#silhouetteGrad)"
+                                        filter="url(#glow)" />
+                                    <rect x="220" y="360" width="70" height="130" rx="8" fill="url(#silhouetteGrad)"
+                                        filter="url(#glow)" />
+                                    <rect x="50" y="200" width="60" height="120" rx="10" fill="url(#silhouetteGrad)"
+                                        filter="url(#glow)" />
+                                    <rect x="290" y="200" width="60" height="120" rx="10" fill="url(#silhouetteGrad)"
+                                        filter="url(#glow)" />
+                                </g>
+                                <!-- Medic Silhouette -->
+                                <g id="silhouette-medic" class="silhouette">
+                                    <ellipse cx="200" cy="100" rx="48" ry="58" fill="url(#silhouetteGrad)"
+                                        filter="url(#glow)" />
+                                    <path d="M135 155 Q200 135 265 155 L280 370 Q200 400 120 370 Z"
+                                        fill="url(#silhouetteGrad)" filter="url(#glow)" />
+                                    <rect x="115" y="370" width="65" height="120" rx="8" fill="url(#silhouetteGrad)"
+                                        filter="url(#glow)" />
+                                    <rect x="220" y="370" width="65" height="120" rx="8" fill="url(#silhouetteGrad)"
+                                        filter="url(#glow)" />
+                                    <ellipse cx="200" cy="250" rx="30" ry="30" fill="none" stroke="#0ff"
+                                        stroke-width="2" opacity="0.5" />
+                                    <rect x="190" y="225" width="20" height="50" fill="#0ff" opacity="0.3" />
+                                    <rect x="175" y="240" width="50" height="20" fill="#0ff" opacity="0.3" />
+                                </g>
+                                <!-- Pilot Silhouette -->
+                                <g id="silhouette-pilot" class="silhouette">
+                                    <ellipse cx="200" cy="90" rx="52" ry="62" fill="url(#silhouetteGrad)"
+                                        filter="url(#glow)" />
+                                    <path d="M140 75 Q200 50 260 75 L250 85 Q200 70 150 85 Z"
+                                        fill="url(#silhouetteGrad)" filter="url(#glow)" />
+                                    <path d="M125 148 Q200 128 275 148 L295 355 Q200 385 105 355 Z"
+                                        fill="url(#silhouetteGrad)" filter="url(#glow)" />
+                                    <rect x="105" y="355" width="75" height="135" rx="10" fill="url(#silhouetteGrad)"
+                                        filter="url(#glow)" />
+                                    <rect x="220" y="355" width="75" height="135" rx="10" fill="url(#silhouetteGrad)"
+                                        filter="url(#glow)" />
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="portrait-overlay"></div>
+                    </div>
+                    <div class="portrait-data">
+                        <div class="data-row">
+                            <span class="data-label">STATUS</span>
+                            <span class="data-value active">AVAILABLE</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">CLEARANCE</span>
+                            <span class="data-value">LEVEL 5</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right: Character Info Panel -->
+            <section class="info-section">
+                <div class="info-panel">
+                    <div class="panel-border"></div>
+
+                    <!-- Character Name & Role -->
+                    <div class="character-header">
+                        <div class="rank-badge" id="rankBadge">CDR</div>
+                        <div class="name-block">
+                            <h2 class="character-name" id="characterName">COMMANDER REVA CHEN</h2>
+                            <div class="character-role" id="characterRole">TACTICAL OPERATIONS LEAD</div>
+                        </div>
+                    </div>
+
+                    <!-- Character Description -->
+                    <div class="character-description">
+                        <div class="desc-header">
+                            <span class="desc-icon">◆</span>
+                            <span>PERSONNEL FILE</span>
+                        </div>
+                        <p class="desc-text" id="characterDesc">
+                            A veteran of the Andromeda Conflict, Commander Chen brings 15 years of tactical expertise to
+                            the Stellar Vanguard. Known for her calm demeanor under pressure and strategic brilliance in
+                            multi-front engagements.
+                        </p>
+                    </div>
+
+                    <!-- Stats Section -->
+                    <div class="stats-container">
+                        <div class="stats-header">
+                            <span class="stats-icon">▣</span>
+                            <span>PERFORMANCE METRICS</span>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-icon speed">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 2L4.5 20.3l.7.7L12 18l6.8 3 .7-.7L12 2z" />
+                                    </svg>
+                                </div>
+                                <div class="stat-info">
+                                    <span class="stat-label">SPEED</span>
+                                    <div class="stat-bar-container">
+                                        <div class="stat-bar" id="statSpeed" style="--stat-value: 75%">
+                                            <div class="stat-fill"></div>
+                                            <div class="stat-glow"></div>
+                                        </div>
+                                        <span class="stat-value">75</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon skill">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z" />
+                                    </svg>
+                                </div>
+                                <div class="stat-info">
+                                    <span class="stat-label">SKILL</span>
+                                    <div class="stat-bar-container">
+                                        <div class="stat-bar" id="statSkill" style="--stat-value: 92%">
+                                            <div class="stat-fill"></div>
+                                            <div class="stat-glow"></div>
+                                        </div>
+                                        <span class="stat-value">92</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon stamina">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path
+                                            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                    </svg>
+                                </div>
+                                <div class="stat-info">
+                                    <span class="stat-label">STAMINA</span>
+                                    <div class="stat-bar-container">
+                                        <div class="stat-bar" id="statStamina" style="--stat-value: 68%">
+                                            <div class="stat-fill"></div>
+                                            <div class="stat-glow"></div>
+                                        </div>
+                                        <span class="stat-value">68</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon intelligence">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path
+                                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
+                                    </svg>
+                                </div>
+                                <div class="stat-info">
+                                    <span class="stat-label">INTELLIGENCE</span>
+                                    <div class="stat-bar-container">
+                                        <div class="stat-bar" id="statIntel" style="--stat-value: 88%">
+                                            <div class="stat-fill"></div>
+                                            <div class="stat-glow"></div>
+                                        </div>
+                                        <span class="stat-value">88</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Special Ability -->
+                    <div class="ability-section">
+                        <div class="ability-header">
+                            <span class="ability-icon">⬡</span>
+                            <span>SPECIAL ABILITY</span>
+                        </div>
+                        <div class="ability-card" id="abilityCard">
+                            <div class="ability-name">TACTICAL OVERDRIVE</div>
+                            <div class="ability-desc">Boost team coordination by 40% for 10 seconds</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom: Character Cards Row -->
+        <section class="character-roster">
+            <div class="roster-frame">
+                <div class="roster-label">AVAILABLE CREW</div>
+                <div class="roster-cards" id="rosterCards">
+                    <!-- Character Card 1 - Commander -->
+                    <div class="character-card selected" data-character="0">
+                        <div class="card-glow"></div>
+                        <div class="card-frame">
+                            <div class="card-portrait">
+                                <svg viewBox="0 0 80 100" class="card-silhouette">
+                                    <ellipse cx="40" cy="25" rx="18" ry="20" fill="currentColor" />
+                                    <path d="M20 45 Q40 38 60 45 L65 90 Q40 98 15 90 Z" fill="currentColor" />
+                                </svg>
+                            </div>
+                            <div class="card-info">
+                                <span class="card-name">REVA CHEN</span>
+                                <span class="card-role">COMMANDER</span>
+                            </div>
+                            <div class="card-select-indicator"></div>
+                        </div>
+                    </div>
+                    <!-- Character Card 2 - Engineer -->
+                    <div class="character-card" data-character="1">
+                        <div class="card-glow"></div>
+                        <div class="card-frame">
+                            <div class="card-portrait">
+                                <svg viewBox="0 0 80 100" class="card-silhouette">
+                                    <ellipse cx="40" cy="23" rx="16" ry="18" fill="currentColor" />
+                                    <rect x="28" y="8" width="24" height="8" rx="2" fill="currentColor" />
+                                    <path d="M22 42 Q40 35 58 42 L62 92 Q40 100 18 92 Z" fill="currentColor" />
+                                </svg>
+                            </div>
+                            <div class="card-info">
+                                <span class="card-name">BORIS VOLKOV</span>
+                                <span class="card-role">ENGINEER</span>
+                            </div>
+                            <div class="card-select-indicator"></div>
+                        </div>
+                    </div>
+                    <!-- Character Card 3 - Medic -->
+                    <div class="character-card" data-character="2">
+                        <div class="card-glow"></div>
+                        <div class="card-frame">
+                            <div class="card-portrait">
+                                <svg viewBox="0 0 80 100" class="card-silhouette">
+                                    <ellipse cx="40" cy="25" rx="15" ry="18" fill="currentColor" />
+                                    <path d="M24 44 Q40 37 56 44 L60 92 Q40 100 20 92 Z" fill="currentColor" />
+                                    <rect x="36" y="55" width="8" height="20" fill="currentColor" opacity="0.7" />
+                                    <rect x="30" y="61" width="20" height="8" fill="currentColor" opacity="0.7" />
+                                </svg>
+                            </div>
+                            <div class="card-info">
+                                <span class="card-name">AMARA OSEI</span>
+                                <span class="card-role">MEDIC</span>
+                            </div>
+                            <div class="card-select-indicator"></div>
+                        </div>
+                    </div>
+                    <!-- Character Card 4 - Pilot -->
+                    <div class="character-card" data-character="3">
+                        <div class="card-glow"></div>
+                        <div class="card-frame">
+                            <div class="card-portrait">
+                                <svg viewBox="0 0 80 100" class="card-silhouette">
+                                    <ellipse cx="40" cy="23" rx="17" ry="19" fill="currentColor" />
+                                    <path d="M26 18 Q40 10 54 18 L52 22 Q40 16 28 22 Z" fill="currentColor" />
+                                    <path d="M21 43 Q40 36 59 43 L63 92 Q40 100 17 92 Z" fill="currentColor" />
+                                </svg>
+                            </div>
+                            <div class="card-info">
+                                <span class="card-name">KIRA TANAKA</span>
+                                <span class="card-role">PILOT</span>
+                            </div>
+                            <div class="card-select-indicator"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="roster-nav">
+                    <button class="nav-arrow prev" aria-label="Previous">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                        </svg>
+                    </button>
+                    <div class="roster-dots">
+                        <span class="dot active"></span>
+                        <span class="dot"></span>
+                    </div>
+                    <button class="nav-arrow next" aria-label="Next">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bottom Right: Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-back">
+                <span class="btn-icon">◄</span>
+                <span class="btn-text">BACK</span>
+                <div class="btn-shine"></div>
+            </button>
+            <button class="btn btn-select">
+                <span class="btn-text">DEPLOY</span>
+                <span class="btn-icon">►</span>
+                <div class="btn-shine"></div>
+            </button>
+        </div>
+
+        <!-- Decorative UI Elements -->
+        <div class="ui-corner top-left"></div>
+        <div class="ui-corner top-right"></div>
+        <div class="ui-corner bottom-left"></div>
+        <div class="ui-corner bottom-right"></div>
+    </div>
+
+    <script src="character-select.js"></script>
+</body>
+
+</html>

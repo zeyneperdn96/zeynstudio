@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SushiCo - Info & Cuisine Cards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #F7F6F3;
+            color: #1a1a1a;
+        }
+
+        /* Hero Placeholder */
+        .hero-placeholder {
+            background: linear-gradient(135deg, #fff 0%, #f5f5f5 100%);
+            padding: 6rem 2rem;
+            text-align: center;
+            color: rgba(26, 26, 26, .4);
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        /* ═══════════ INFO SECTION ═══════════ */
+        .info-section {
+            background: #FBF9F4;
+            padding: 5rem 2rem;
+            text-align: center;
+        }
+
+        .info-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .info-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info-logo svg {
+            width: 100%;
+            height: 100%;
+            fill: #C41E24;
+        }
+
+        .info-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 1.5rem;
+            letter-spacing: .05em;
+        }
+
+        .info-description {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: rgba(26, 26, 26, .7);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* ═══════════ VISUAL BANNER ═══════════ */
+        .visual-banner {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .visual-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .visual-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, .3) 100%);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 3rem;
+        }
+
+        .visual-text {
+            color: #fff;
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, .3);
+        }
+
+        /* ═══════════ CUISINE CARDS ═══════════ */
+        .cuisine-section {
+            padding: 5rem 2rem;
+            background: #F7F6F3;
+        }
+
+        .cuisine-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: .75rem;
+        }
+
+        .section-subtitle {
+            font-size: 1rem;
+            color: rgba(26, 26, 26, .6);
+        }
+
+        /* Cuisine Grid */
+        .cuisine-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        /* Cuisine Card */
+        .cuisine-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .06);
+            transition: all .3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cuisine-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, .12);
+        }
+
+        /* Card Image */
+        .cuisine-image {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1;
+            overflow: hidden;
+            background: #F7F6F3;
+        }
+
+        .cuisine-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .3s ease;
+        }
+
+        .cuisine-card:hover .cuisine-image img {
+            transform: scale(1.1);
+        }
+
+        /* Card Content */
+        .cuisine-content {
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .cuisine-name {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: .5rem;
+        }
+
+        .cuisine-description {
+            font-size: .875rem;
+            line-height: 1.5;
+            color: rgba(26, 26, 26, .6);
+        }
+
+        /* Flag Icon */
+        .cuisine-flag {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .cuisine-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .visual-banner {
+                height: 300px;
+            }
+
+            .visual-text {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .info-section {
+                padding: 3.5rem 1.5rem;
+            }
+
+            .cuisine-section {
+                padding: 3.5rem 1.5rem;
+            }
+
+            .cuisine-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 1.75rem;
+            }
+
+            .visual-banner {
+                height: 240px;
+            }
+
+            .visual-text {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Hero Placeholder -->
+    <div class="hero-placeholder">
+        ↑ Hero Slider Buraya Gelecek ↑
+    </div>
+
+    <!-- ═══════════ INFO SECTION ═══════════ -->
+    <section class="info-section">
+        <div class="info-container">
+            <div class="info-logo">
+                <!-- Sushi Icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+                    <path
+                        d="M32 8c-13.3 0-24 10.7-24 24s10.7 24 24 24 24-10.7 24-24S45.3 8 32 8zm0 44c-11 0-20-9-20-20s9-20 20-20 20 9 20 20-9 20-20 20z" />
+                    <circle cx="32" cy="32" r="12" />
+                </svg>
+            </div>
+            <h2 class="info-title">Türkiye'nin ilk ve en büyük Uzak Doğu restoranı zinciri</h2>
+            <p class="info-description">
+                SushiCo olarak hikayemiz 1997 yılına uzanıyor. Uzak Doğu kültürünün lezzetlerini Türkiye'yle çıktığımız
+                yolda kaliteden ödün vermeden ilerliyoruz. Turi'si ve yurt dışındaki 70'ten fazla restoranımızla Çin,
+                Japon, Tayland ve Kore mutfağının eşsiz tatlarını orijinal tariflere sadık kalarak size özel tokuşlarla
+                sunuyoruz.
+            </p>
+        </div>
+    </section>
+
+    <!-- ═══════════ VISUAL BANNER ═══════════ -->
+    <section class="visual-banner">
+        <img src="https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=1920&h=800&fit=crop&q=90"
+            alt="Eşsiz Uzak Doğu Lezzetleri">
+        <div class="visual-overlay">
+            <h2 class="visual-text">Eşsiz Uzak Doğu Lezzetleri</h2>
+        </div>
+    </section>
+
+    <!-- ═══════════ CUISINE CARDS ═══════════ -->
+    <section class="cuisine-section">
+        <div class="cuisine-container">
+            <div class="section-header">
+                <h2 class="section-title">Mutfaklarımız</h2>
+                <p class="section-subtitle">Dört farklı kültürün eşsiz lezzetleri</p>
+            </div>
+
+            <div class="cuisine-grid">
+
+                <!-- Japanese Cuisine -->
+                <a href="#japanese" class="cuisine-card">
+                    <div class="cuisine-image">
+                        <img src="https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=400&h=400&fit=crop&q=90"
+                            alt="Japon Mutfağı">
+                        <span class="cuisine-flag">🇯🇵</span>
+                    </div>
+                    <div class="cuisine-content">
+                        <h3 class="cuisine-name">Japon Mutfağı</h3>
+                        <p class="cuisine-description">Sushi, sashimi ve ramen</p>
+                    </div>
+                </a>
+
+                <!-- Chinese Cuisine -->
+                <a href="#chinese" class="cuisine-card">
+                    <div class="cuisine-image">
+                        <img src="https://images.unsplash.com/photo-1525755662778-989d0524087e?w=400&h=400&fit=crop&q=90"
+                            alt="Çin Mutfağı">
+                        <span class="cuisine-flag">🇨🇳</span>
+                    </div>
+                    <div class="cuisine-content">
+                        <h3 class="cuisine-name">Çin Mutfağı</h3>
+                        <p class="cuisine-description">Dim sum, wok ve noodle</p>
+                    </div>
+                </a>
+
+                <!-- Thai Cuisine -->
+                <a href="#thai" class="cuisine-card">
+                    <div class="cuisine-image">
+                        <img src="https://images.unsplash.com/photo-1559314809-0d155014e29e?w=400&h=400&fit=crop&q=90"
+                            alt="Tayland Mutfağı">
+                        <span class="cuisine-flag">🇹🇭</span>
+                    </div>
+                    <div class="cuisine-content">
+                        <h3 class="cuisine-name">Tayland Mutfağı</h3>
+                        <p class="cuisine-description">Pad thai, curry ve tom yum</p>
+                    </div>
+                </a>
+
+                <!-- Korean Cuisine -->
+                <a href="#korean" class="cuisine-card">
+                    <div class="cuisine-image">
+                        <img src="https://images.unsplash.com/photo-1498654896293-37aacf113fd9?w=400&h=400&fit=crop&q=90"
+                            alt="Kore Mutfağı">
+                        <span class="cuisine-flag">🇰🇷</span>
+                    </div>
+                    <div class="cuisine-content">
+                        <h3 class="cuisine-name">Kore Mutfağı</h3>
+                        <p class="cuisine-description">Bibimbap, kimchi ve bulgogi</p>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>

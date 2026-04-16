@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SushiCo - Starbucks Style Header</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        /* ═══════════ HEADER (Starbucks Style) ═══════════ */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: #fff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .1);
+        }
+
+        .header-inner {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem 2.5rem;
+            gap: 2rem;
+        }
+
+        /* Logo */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            flex-shrink: 0;
+            text-decoration: none;
+        }
+
+        .logo-text {
+            color: #C41E24;
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: -.03em;
+            transition: opacity .3s;
+        }
+
+        .logo:hover .logo-text {
+            opacity: .8;
+        }
+
+        /* Center Navigation */
+        .nav-center {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .nav-link {
+            font-size: .875rem;
+            font-weight: 600;
+            letter-spacing: .05em;
+            color: rgba(0, 0, 0, .87);
+            transition: color .3s;
+            text-transform: uppercase;
+            text-decoration: none;
+            padding: .5rem 0;
+        }
+
+        .nav-link:hover {
+            color: #C41E24;
+        }
+
+        /* Right Actions */
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        /* Location Button */
+        .location-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .5rem;
+            color: rgba(0, 0, 0, .87);
+            font-size: .875rem;
+            font-weight: 600;
+            transition: color .3s;
+            border-radius: 50px;
+            text-decoration: none;
+        }
+
+        .location-btn:hover {
+            color: #C41E24;
+        }
+
+        .location-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Cart Icon */
+        .cart-btn {
+            position: relative;
+            padding: .5rem;
+            border-radius: 50%;
+            color: rgba(0, 0, 0, .87);
+            transition: all .3s;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cart-btn:hover {
+            background: rgba(0, 0, 0, .05);
+        }
+
+        .cart-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            min-width: 18px;
+            height: 18px;
+            padding: 0 5px;
+            background: #C41E24;
+            border-radius: 9px;
+            font-size: .625rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+
+        /* Sign In Button */
+        .btn-sign-in {
+            display: inline-flex;
+            align-items: center;
+            padding: .5rem 1rem;
+            font-size: .875rem;
+            font-weight: 600;
+            color: rgba(0, 0, 0, .87);
+            border: 1px solid rgba(0, 0, 0, .87);
+            border-radius: 50px;
+            transition: all .3s;
+            letter-spacing: .05em;
+            text-decoration: none;
+            background: transparent;
+        }
+
+        .btn-sign-in:hover {
+            background: rgba(0, 0, 0, .05);
+        }
+
+        /* Join Now Button (Black) */
+        .btn-join {
+            display: inline-flex;
+            align-items: center;
+            padding: .5rem 1rem;
+            background: rgba(0, 0, 0, .87);
+            color: #fff;
+            font-size: .875rem;
+            font-weight: 600;
+            border-radius: 50px;
+            letter-spacing: .05em;
+            transition: all .3s;
+            border: 1px solid rgba(0, 0, 0, .87);
+            text-decoration: none;
+        }
+
+        .btn-join:hover {
+            background: rgba(0, 0, 0, .75);
+            border-color: rgba(0, 0, 0, .75);
+        }
+
+        /* Hamburger (Mobile) */
+        .hamburger {
+            display: none;
+            padding: .5rem;
+            color: rgba(0, 0, 0, .87);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hamburger:hover {
+            color: #C41E24;
+        }
+
+        .hamburger svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            overflow: hidden;
+            background: #fff;
+            border-top: 1px solid rgba(0, 0, 0, .1);
+            max-height: 0;
+            transition: max-height .4s ease;
+        }
+
+        .mobile-menu.open {
+            max-height: 500px;
+        }
+
+        .mobile-menu nav {
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            gap: .5rem;
+        }
+
+        .mobile-menu .nav-link {
+            padding: .75rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, .05);
+            text-transform: none;
+        }
+
+        .mobile-menu .mobile-actions {
+            display: flex;
+            gap: .75rem;
+            margin-top: 1rem;
+        }
+
+        .mobile-menu .btn-sign-in,
+        .mobile-menu .btn-join {
+            flex: 1;
+            justify-content: center;
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .hamburger {
+                display: none !important;
+            }
+
+            .mobile-menu {
+                display: none !important;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .nav-center {
+                display: none;
+            }
+
+            .location-btn {
+                display: none;
+            }
+
+            .btn-sign-in {
+                display: none;
+            }
+
+            .btn-join {
+                display: none;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .header-inner {
+                padding: 1rem 1.5rem;
+            }
+        }
+
+        /* Demo Content */
+        .demo-content {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .demo-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: rgba(0, 0, 0, .87);
+        }
+
+        .demo-content p {
+            font-size: 1.25rem;
+            color: rgba(0, 0, 0, .6);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ═══════════ HEADER ═══════════ -->
+    <header class="header">
+        <div class="header-inner">
+            <!-- Logo -->
+            <a href="#" class="logo">
+                <span class="logo-text">Sushico</span>
+            </a>
+
+            <!-- Center Navigation -->
+            <nav class="nav-center">
+                <a href="#menu" class="nav-link">Menu</a>
+                <a href="#rewards" class="nav-link">SushiCo Club</a>
+                <a href="#subeler" class="nav-link">Subeler</a>
+            </nav>
+
+            <!-- Right Actions -->
+            <div class="nav-right">
+                <!-- Find a Store -->
+                <a href="#" class="location-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                        <circle cx="12" cy="10" r="3" />
+                    </svg>
+                    Sube Bul
+                </a>
+
+                <!-- Cart -->
+                <button class="cart-btn" aria-label="Sepet">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="8" cy="21" r="1" />
+                        <circle cx="19" cy="21" r="1" />
+                        <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+                    </svg>
+                    <span class="cart-badge">3</span>
+                </button>
+
+                <!-- Sign In -->
+                <a href="#" class="btn-sign-in">Giris Yap</a>
+
+                <!-- Join Now (Black Button) -->
+                <a href="#" class="btn-join">Uye Ol</a>
+
+                <!-- Hamburger -->
+                <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+                    <svg id="iconMenu" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <line x1="4" x2="20" y1="12" y2="12" />
+                        <line x1="4" x2="20" y1="6" y2="6" />
+                        <line x1="4" x2="20" y1="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <nav>
+                <a href="#menu" class="nav-link">Menu</a>
+                <a href="#rewards" class="nav-link">SushiCo Club</a>
+                <a href="#subeler" class="nav-link">Subeler</a>
+                <a href="#" class="nav-link">Sube Bul</a>
+                <div class="mobile-actions">
+                    <a href="#" class="btn-sign-in">Giris Yap</a>
+                    <a href="#" class="btn-join">Uye Ol</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Demo Content -->
+    <div class="demo-content">
+        <h1>Starbucks-Style Header</h1>
+        <p>Temiz, minimal, tek satır tasarım</p>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        var hamburgerBtn = document.getElementById('hamburgerBtn');
+        var mobileMenu = document.getElementById('mobileMenu');
+
+        hamburgerBtn.addEventListener('click', function () {
+            mobileMenu.classList.toggle('open');
+        });
+
+        // Cart badge demo
+        var cartCount = 3;
+        var cartBadge = document.querySelector('.cart-badge');
+        var cartBtn = document.querySelector('.cart-btn');
+
+        function updateCartBadge(count) {
+            if (count === 0) {
+                cartBadge.style.display = 'none';
+            } else if (count > 9) {
+                cartBadge.textContent = '9+';
+                cartBadge.style.display = 'flex';
+            } else {
+                cartBadge.textContent = count;
+                cartBadge.style.display = 'flex';
+            }
+        }
+
+        updateCartBadge(cartCount);
+
+        cartBtn.addEventListener('click', function () {
+            cartCount = (cartCount + 1) % 12;
+            updateCartBadge(cartCount);
+            console.log('Sepet: ' + cartCount + ' ürün');
+        });
+    </script>
+
+</body>
+
+</html>

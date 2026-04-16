@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uzak Doğu Mutfağını Keşfedin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #F7F6F3;
+            color: #1a1a1a;
+            padding: 2rem;
+        }
+
+        /* ═══════════ CUISINE DISCOVERY SECTION ═══════════ */
+        .cuisine-discovery {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: -.02em;
+            margin-bottom: .75rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: rgba(26, 26, 26, .6);
+            font-weight: 400;
+        }
+
+        /* Cuisine Grid */
+        .cuisine-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        /* Cuisine Card */
+        .cuisine-card {
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, .06);
+            transition: all .4s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cuisine-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, .12);
+        }
+
+        /* Card Image */
+        .card-image {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 3/4;
+            overflow: hidden;
+            background: #F7F6F3;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .5s ease;
+        }
+
+        .cuisine-card:hover .card-image img {
+            transform: scale(1.1);
+        }
+
+        /* Image Overlay */
+        .image-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, .2) 100%);
+            opacity: 0;
+            transition: opacity .4s;
+        }
+
+        .cuisine-card:hover .image-overlay {
+            opacity: 1;
+        }
+
+        /* Card Content */
+        .card-content {
+            padding: 1.75rem 1.5rem;
+            text-align: center;
+            background: #fff;
+        }
+
+        .cuisine-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: .5rem;
+            line-height: 1.3;
+        }
+
+        .cuisine-subtitle {
+            font-size: .875rem;
+            line-height: 1.5;
+            color: rgba(26, 26, 26, .55);
+        }
+
+        /* Accent Line */
+        .accent-line {
+            width: 32px;
+            height: 3px;
+            background: #C41E24;
+            margin: 0 auto 1rem;
+            border-radius: 2px;
+            transform: scaleX(0);
+            transition: transform .4s ease;
+        }
+
+        .cuisine-card:hover .accent-line {
+            transform: scaleX(1);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .cuisine-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .cuisine-discovery {
+                padding: 3.5rem 1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .cuisine-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .card-image {
+                aspect-ratio: 16/9;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <section class="cuisine-discovery">
+        <div class="section-header">
+            <h2 class="section-title">Uzak Doğu Mutfağını Keşfedin</h2>
+            <p class="section-subtitle">Dört farklı kültürün eşsiz lezzetleri</p>
+        </div>
+
+        <div class="cuisine-grid">
+
+            <!-- Japanese Cuisine -->
+            <a href="#japanese" class="cuisine-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=500&h=700&fit=crop&q=90"
+                        alt="Japon Mutfağı">
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="card-content">
+                    <div class="accent-line"></div>
+                    <h3 class="cuisine-name">Japon Mutfağı</h3>
+                    <p class="cuisine-subtitle">Geleneksel ve modern lezzetler</p>
+                </div>
+            </a>
+
+            <!-- Korean Cuisine -->
+            <a href="#korean" class="cuisine-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1498654896293-37aacf113fd9?w=500&h=700&fit=crop&q=90"
+                        alt="Kore Mutfağı">
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="card-content">
+                    <div class="accent-line"></div>
+                    <h3 class="cuisine-name">Kore Mutfağı</h3>
+                    <p class="cuisine-subtitle">Geleneksel ve modern lezzetler</p>
+                </div>
+            </a>
+
+            <!-- Chinese Cuisine -->
+            <a href="#chinese" class="cuisine-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1525755662778-989d0524087e?w=500&h=700&fit=crop&q=90"
+                        alt="Çin Mutfağı">
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="card-content">
+                    <div class="accent-line"></div>
+                    <h3 class="cuisine-name">Çin Mutfağı</h3>
+                    <p class="cuisine-subtitle">Geleneksel ve modern lezzetler</p>
+                </div>
+            </a>
+
+            <!-- Thai Cuisine -->
+            <a href="#thai" class="cuisine-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1559314809-0d155014e29e?w=500&h=700&fit=crop&q=90"
+                        alt="Tay Mutfağı">
+                    <div class="image-overlay"></div>
+                </div>
+                <div class="card-content">
+                    <div class="accent-line"></div>
+                    <h3 class="cuisine-name">Tay Mutfağı</h3>
+                    <p class="cuisine-subtitle">Geleneksel ve modern lezzetler</p>
+                </div>
+            </a>
+
+        </div>
+    </section>
+
+</body>
+
+</html>
