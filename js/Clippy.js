@@ -197,12 +197,7 @@ class ClippyAssistant {
     }
 
     _startIdleTimer() {
-        clearTimeout(this.idleTimeout);
-        this.idleTimeout = setTimeout(() => {
-            if (this.visible && !this.dismissed) {
-                this.showMessage(this._pick(this.messages.idle.concat(this.messages.random)));
-            }
-        }, 25000); // Show idle message every 25s
+        // No recurring idle messages - only show on user interaction
     }
 
     _clearTimers() {
