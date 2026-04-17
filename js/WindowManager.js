@@ -77,9 +77,6 @@ class WindowManager {
         // Play window open sound
         if (window.SoundEffects) window.SoundEffects.play('windowOpen');
 
-        // Notify Clippy
-        if (window.Clippy) window.Clippy.onWindowOpen(windowId);
-
         const windowEl = document.createElement('div');
         windowEl.className = 'window';
         windowEl.dataset.windowId = windowId;
