@@ -1842,41 +1842,42 @@ const WindowTemplates = {
                     <div class="cv-left-label">Identity Card</div>
                     <img class="cv-avatar" src="assets/icons/zeynep-avatar.jpg" alt="Zeynep Erden" onclick="this.closest('.window-content').querySelector('.cv-lightbox').classList.add('active')">
                     <div class="cv-name">Zeynep Erden</div>
-                    <div class="cv-title">Industrial Designer</div>
+                    <div class="cv-title">Multidisciplinary Product Designer<br><span style="font-size: 9px; color: #666;">UI/UX, interactive experiences and visual systems with an industrial design background.</span></div>
 
                     <div class="cv-skills">
                         <div class="cv-skills-header">Installed Skills</div>
 
                         <div class="cv-skill">
-                            <div class="cv-skill-label"><span>Industrial Design</span><span>95%</span></div>
-                            <div class="cv-skill-bar"><div class="cv-skill-fill sk-blue" style="width: 95%"></div></div>
+                            <div class="cv-skill-label"><span>UI/UX & Figma</span><span>90%</span></div>
+                            <div class="cv-skill-bar"><div class="cv-skill-fill sk-teal" style="width: 90%"></div></div>
                         </div>
 
                         <div class="cv-skill">
-                            <div class="cv-skill-label"><span>3D Modeling</span><span>90%</span></div>
-                            <div class="cv-skill-bar"><div class="cv-skill-fill sk-purple" style="width: 90%"></div></div>
+                            <div class="cv-skill-label"><span>Graphic Design</span><span>90%</span></div>
+                            <div class="cv-skill-bar"><div class="cv-skill-fill sk-pink" style="width: 90%"></div></div>
                         </div>
 
                         <div class="cv-skill">
-                            <div class="cv-skill-label"><span>Graphic Design</span><span>85%</span></div>
-                            <div class="cv-skill-bar"><div class="cv-skill-fill sk-pink" style="width: 85%"></div></div>
+                            <div class="cv-skill-label"><span>Industrial Design</span><span>85%</span></div>
+                            <div class="cv-skill-bar"><div class="cv-skill-fill sk-blue" style="width: 85%"></div></div>
                         </div>
 
                         <div class="cv-skill">
-                            <div class="cv-skill-label"><span>Motion</span><span>85%</span></div>
-                            <div class="cv-skill-bar"><div class="cv-skill-fill sk-orange" style="width: 85%"></div></div>
+                            <div class="cv-skill-label"><span>3D Modeling</span><span>85%</span></div>
+                            <div class="cv-skill-bar"><div class="cv-skill-fill sk-purple" style="width: 85%"></div></div>
                         </div>
 
                         <div class="cv-skill">
-                            <div class="cv-skill-label"><span>UI/UX</span><span>75%</span></div>
-                            <div class="cv-skill-bar"><div class="cv-skill-fill sk-teal" style="width: 75%"></div></div>
+                            <div class="cv-skill-label"><span>Motion & AI Tools</span><span>80%</span></div>
+                            <div class="cv-skill-bar"><div class="cv-skill-fill sk-orange" style="width: 80%"></div></div>
                         </div>
                     </div>
 
                     <div class="cv-contact">
                         <div class="cv-contact-item"><span>📍</span> Istanbul, Turkey</div>
-                        <div class="cv-contact-item"><span>🔗</span> <a href="https://www.linkedin.com/in/zeyneperden/" target="_blank">LinkedIn</a></div>
-                        <div class="cv-contact-item"><span>🗣️</span> Turkish, English</div>
+                        <div class="cv-contact-item"><span>📧</span> <a href="mailto:zeyneperdn96@gmail.com">zeyneperdn96@gmail.com</a></div>
+                        <div class="cv-contact-item"><span>🔗</span> <a href="https://www.linkedin.com/in/zynprdn" target="_blank">linkedin.com/in/zynprdn</a></div>
+                        <div class="cv-contact-item"><span>🗣️</span> Turkish (Native), English (A2)</div>
                     </div>
                 </div>
 
@@ -1890,15 +1891,19 @@ const WindowTemplates = {
                         </div>
                         <div class="cv-file-body">
                             <p class="cv-comment">// Professional experience (newest first)</p>
-                            <p><span class="cv-key">CoTech</span> — UI/UX & Product Designer, Istanbul (2025 - Present)</p>
-                            <p style="margin-left: 12px; color: #555;">Figma wireframes, mobile UI design, UI component development.</p>
-                            <p><span class="cv-key">Chinese & Sushi Express</span> — Graphic Designer, Istanbul (2022)</p>
-                            <p style="margin-left: 12px; color: #555;">BNS — Marketing visuals, menus & promotional materials.</p>
-                            <p><span class="cv-key">SushiCo</span> — Graphic Designer & Social Media, Istanbul (Nov 2021)</p>
-                            <p style="margin-left: 12px; color: #555;">BNS — Daily content, data-driven optimization, motion graphics.</p>
-                            <p><span class="cv-key">ITU VAKFI</span> — Graphic Designer, Istanbul (2024, 2 months)</p>
-                            <p><span class="cv-key">Animanya</span> — 3D Modeler, Ankara (2016 - 2017 Intern, 2018 Full-time)</p>
-                            <p style="margin-left: 12px; color: #555;">Started as intern (2 internships), then hired full-time. 2D/3D animation assets, rendering.</p>
+                            <p><span class="cv-key">BNS — CoTech</span> · UI/UX Designer, Istanbul (2024 - Present)</p>
+                            <p style="margin-left: 12px; color: #555;">Figma wireframes & prototypes, mobile UI, user testing, reusable component library, AI-assisted design (Claude).</p>
+                            <p><span class="cv-key">BNS — Chinese & Sushi Express</span> · Graphic & Social Media Designer, Istanbul (07/2022 - 11/2024)</p>
+                            <p style="margin-left: 12px; color: #555;">+40% engagement via brand-consistent content; marketing visuals, menus, multi-branch comms.</p>
+                            <p><span class="cv-key">BNS — SushiCo</span> · Graphic & Social Media Designer, Istanbul (11/2021 - 07/2022)</p>
+                            <p style="margin-left: 12px; color: #555;">Daily content across platforms, data-driven optimization, motion graphics.</p>
+                            <p><span class="cv-key">ITU Foundation (İTÜ Vakfı)</span> · Designer, Istanbul (09/2023 - 11/2023)</p>
+                            <p style="margin-left: 12px; color: #555;">Project-based institutional digital content design.</p>
+                            <p><span class="cv-key">Freelance</span> · Graphic & Social Media Designer (06/2019 - 09/2021)</p>
+                            <p style="margin-left: 12px; color: #555;">Multi-client brand visuals for digital and print channels.</p>
+                            <p><span class="cv-key">Animanya</span> · 3D Artist, Ankara (12/2018 - 05/2019)</p>
+                            <p style="margin-left: 12px; color: #555;">2D/3D animation assets for ads & explainers, optimized rendering pipeline.</p>
+                            <p><span class="cv-key">Animanya</span> · Industrial Design Intern, Ankara (01/2016 - 03/2016)</p>
                         </div>
                     </div>
 
@@ -1909,8 +1914,8 @@ const WindowTemplates = {
                             <span class="cv-file-path">C:\\Zeynep\\education.txt</span>
                         </div>
                         <div class="cv-file-body">
-                            <p><span class="cv-key">Beykent University</span> — Industrial Products Design, Licence · %100 Scholarship</p>
-                            <p><span class="cv-key">Anadolu University</span> — Cooking, Associate Degree</p>
+                            <p><span class="cv-key">Anadolu University</span> — Management Information Systems, BSc · Distance Learning</p>
+                            <p><span class="cv-key">Beykent University</span> — Industrial Product Design, BSc · 100% Scholarship</p>
                         </div>
                     </div>
 
@@ -1922,12 +1927,12 @@ const WindowTemplates = {
                         </div>
                         <div class="cv-file-body">
                             <p class="cv-comment">; Primary design & modeling tools</p>
+                            <p><span class="cv-key">UI_UX</span> = Figma, Sketch, Wireframing, Prototyping, User Testing, Component Libraries</p>
+                            <p><span class="cv-key">2D_Design</span> = Photoshop, Illustrator, Canva, Procreate</p>
+                            <p><span class="cv-key">Motion</span> = After Effects, Motion Graphics</p>
                             <p><span class="cv-key">3D_Modeling</span> = Rhino, Blender, 3ds Max</p>
-                            <p><span class="cv-key">Rendering</span> = KeyShot</p>
-                            <p><span class="cv-key">2D_Design</span> = Photoshop, Illustrator, Sketch, Canva</p>
-                            <p><span class="cv-key">Motion</span> = After Effects</p>
-                            <p><span class="cv-key">Illustration</span> = Procreate</p>
-                            <p><span class="cv-key">Other</span> = Unity, AutoCAD</p>
+                            <p><span class="cv-key">AI_Tools</span> = Claude, Midjourney, AI-assisted design workflows</p>
+                            <p><span class="cv-key">Other</span> = Unity, Photography, Brand Identity, E-commerce</p>
                         </div>
                     </div>
 
@@ -1938,8 +1943,8 @@ const WindowTemplates = {
                             <span class="cv-file-path">C:\\Zeynep\\awards.txt</span>
                         </div>
                         <div class="cv-file-body">
-                            <p><span class="cv-key">(BSH) FRANCIS Frugal Innovation Challenge</span></p>
-                            <p>Semi-final honorable mention — April 2023</p>
+                            <p><span class="cv-key">BSH FRANCIS Frugal Innovation Challenge</span></p>
+                            <p>Semi-final Honorable Mention — March 2023</p>
                         </div>
                     </div>
 
@@ -1951,9 +1956,9 @@ const WindowTemplates = {
                         </div>
                         <div class="cv-file-body">
                             <p class="cv-comment">// Organizations & volunteering</p>
-                            <p><span class="cv-key">AIESEC</span> — Team Leader, Global Volunteer - Germany</p>
-                            <p><span class="cv-key">LOSEV</span> — Volunteer, Ankara</p>
-                            <p><span class="cv-key">Sea Turtles Conservation</span> — Volunteer, Mersin</p>
+                            <p><span class="cv-key">AIESEC</span> — Team Leader (04/2016 - 07/2017)</p>
+                            <p><span class="cv-key">LÖSEV</span> — Volunteer, Foundation for Children with Leukemia (09/2016 - 09/2021)</p>
+                            <p><span class="cv-key">Sea Turtle Monitoring & Conservation</span> — Volunteer (06/2017 - 09/2017)</p>
                         </div>
                     </div>
 
@@ -1964,15 +1969,13 @@ const WindowTemplates = {
                             <span class="cv-file-path">C:\\Zeynep\\certificates.txt</span>
                         </div>
                         <div class="cv-file-body">
-                            <p><span class="cv-key">Google Game & App Academy</span> — Trainee (10 months)</p>
-                            <p style="margin-left: 12px; color: #555;">Game Development, Project Management, Unity</p>
-                            <p><span class="cv-key">Wireframe Training for UI/UX Designers</span> — Udemy</p>
-                            <p><span class="cv-key">Practical Figma Training</span> — Userspots</p>
-                            <p><span class="cv-key">UX Research Training</span> — Userspots</p>
-                            <p><span class="cv-key">CMF Applications in Industrial Design</span> — Beykent University</p>
+                            <p class="cv-comment">// Professional training</p>
+                            <p><span class="cv-key">Google Game & App Academy</span> — 10-month intensive program · Sponsored by Google (2023 - 2024)</p>
+                            <p class="cv-comment" style="margin-top: 6px;">// Certificates</p>
+                            <p><span class="cv-key">Fundamentals of Project Management</span> — Coursera</p>
+                            <p><span class="cv-key">Project Initiation: Starting a Successful Project</span> — Coursera</p>
                             <p><span class="cv-key">Intellectual and Industrial Property Rights</span> — ETMK Istanbul</p>
-                            <p><span class="cv-key">Project Management Fundamentals</span> — Coursera</p>
-                            <p><span class="cv-key">Initiating the Project: Starting Successfully</span> — Coursera</p>
+                            <p><span class="cv-key">Color, Material and Finish (CMF) Applications</span> — Beykent University</p>
                         </div>
                     </div>
                 </div>
