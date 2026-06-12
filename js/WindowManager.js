@@ -94,6 +94,7 @@ class WindowManager {
             zeynshat: { width: 500, height: 700 },
             illustration: { width: 800, height: 600 },
             illustrationWork: { width: 800, height: 600 },
+            aiVisualsWork: { width: 860, height: 640 },
             paint: { width: 750, height: 550 },
             cv: { width: 720, height: 560 },
             systembuilder: { width: 880, height: 520 }
@@ -464,9 +465,37 @@ class WindowManager {
                 });
             };
 
+            const renderAiVisuals = () => {
+                const items = (typeof AI_VISUALS !== 'undefined') ? AI_VISUALS : [];
+                projectsGrid.innerHTML = items.map((it, i) => `
+                    <div class="project-card ai-visual-card" data-index="${i}" style="cursor: pointer;">
+                        <div class="project-thumbnail" style="height: 100px; position: relative; overflow: hidden;">
+                            <img src="${it.thumb}" alt="${it.label}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;">
+                            ${it.type === 'video' ? '<span style="position:absolute; top:6px; right:6px; width:22px; height:22px; background:rgba(0,0,0,0.6); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; padding-left:2px;">▶</span>' : ''}
+                        </div>
+                        <div class="project-info">
+                            <div class="project-title">${it.label}</div>
+                            <div class="project-category">AI Visuals${it.type === 'video' ? ' · Video' : ''}</div>
+                        </div>
+                    </div>
+                `).join('');
+
+                projectsGrid.querySelectorAll('.ai-visual-card').forEach(card => {
+                    card.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this._aiVisualsStartIndex = parseInt(card.dataset.index, 10) || 0;
+                        this.openWindow('aiVisualsWork', { width: 860, height: 640 });
+                    });
+                });
+            };
+
             const renderAndBindProjects = (filter) => {
                 if (filter === 'illustration') {
                     renderIllustrations();
+                    return;
+                }
+                if (filter === 'ai-visuals') {
+                    renderAiVisuals();
                     return;
                 }
 
@@ -540,6 +569,11 @@ class WindowManager {
         // Gallery lightbox
         if (windowId === 'illustration' || windowId === 'illustrationWork') {
             this.initializeGalleryWindow(windowEl);
+        }
+
+        // AI Visuals gallery (images + videos)
+        if (windowId === 'aiVisualsWork') {
+            this.initializeAiVisualsGallery(windowEl);
         }
 
         // Paint window
@@ -695,6 +729,84 @@ class WindowManager {
             if (e.key === 'ArrowLeft') { goTo(currentIndex - 1); e.preventDefault(); }
             if (e.key === 'ArrowRight') { goTo(currentIndex + 1); e.preventDefault(); }
         });
+        windowEl.focus();
+    }
+
+    initializeAiVisualsGallery(windowEl) {
+        const preview = windowEl.querySelector('#aiv-preview');
+        const video = windowEl.querySelector('#aiv-video');
+        const label = windowEl.querySelector('#aiv-label');
+        const counter = windowEl.querySelector('#aiv-counter');
+        const prevBtn = windowEl.querySelector('#aiv-prev');
+        const nextBtn = windowEl.querySelector('#aiv-next');
+        const thumbs = windowEl.querySelectorAll('.aiv-thumb');
+        const total = thumbs.length;
+        if (!total) return;
+
+        let currentIndex = 0;
+
+        const goTo = (index) => {
+            if (index < 0) index = total - 1;
+            if (index >= total) index = 0;
+            currentIndex = index;
+            const thumb = thumbs[currentIndex];
+            const type = thumb.dataset.type;
+            const src = thumb.dataset.src;
+
+            // Always pause/reset any playing video when switching
+            if (video) {
+                video.pause();
+            }
+
+            if (type === 'video') {
+                if (preview) preview.style.display = 'none';
+                if (video) {
+                    video.style.display = '';
+                    video.src = src;
+                    video.poster = thumb.dataset.thumb;
+                    video.load();
+                }
+            } else {
+                if (video) {
+                    video.style.display = 'none';
+                    video.removeAttribute('src');
+                }
+                if (preview) {
+                    preview.style.display = '';
+                    preview.style.opacity = '0';
+                    setTimeout(() => {
+                        preview.src = src;
+                        preview.alt = thumb.dataset.label;
+                        preview.style.opacity = '1';
+                    }, 100);
+                }
+            }
+
+            if (label) label.textContent = thumb.dataset.label;
+            if (counter) counter.textContent = `${currentIndex + 1} / ${total}`;
+            thumbs.forEach(t => t.classList.remove('active'));
+            thumb.classList.add('active');
+            thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        };
+
+        prevBtn.addEventListener('click', () => goTo(currentIndex - 1));
+        nextBtn.addEventListener('click', () => goTo(currentIndex + 1));
+
+        thumbs.forEach((thumb, i) => {
+            thumb.addEventListener('click', () => goTo(i));
+        });
+
+        // Keyboard navigation when window is focused
+        windowEl.setAttribute('tabindex', '0');
+        windowEl.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') { goTo(currentIndex - 1); e.preventDefault(); }
+            if (e.key === 'ArrowRight') { goTo(currentIndex + 1); e.preventDefault(); }
+        });
+
+        // Open at the card the user clicked (set by the Work grid), default 0
+        const startIndex = (typeof this._aiVisualsStartIndex === 'number') ? this._aiVisualsStartIndex : 0;
+        this._aiVisualsStartIndex = 0;
+        goTo(startIndex);
         windowEl.focus();
     }
 

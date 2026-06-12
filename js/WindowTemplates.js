@@ -20,6 +20,7 @@ const WindowTemplates = {
                 <button class="btn btn-sm btn-secondary" data-filter="ui-ux">UI/UX</button>
                 <button class="btn btn-sm btn-secondary" data-filter="industrial">Industrial Design</button>
                 <button class="btn btn-sm btn-secondary" data-filter="illustration">Illustration</button>
+                <button class="btn btn-sm btn-secondary" data-filter="ai-visuals">AI Visuals</button>
             </div>
             <div class="projects-grid" id="projects-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px;">
                 <!-- Projects rendered here -->
@@ -298,6 +299,66 @@ const WindowTemplates = {
 
             <div class="gal-statusbar">
                 <span>${allImages.length} images — Illustrations</span>
+                <span>Use ← → arrows to navigate</span>
+            </div>
+        </div>
+    `;
+    },
+
+    // AI Visuals Gallery (My Work version - MidJourney images & videos)
+    aiVisualsWork: () => {
+        const items = (typeof AI_VISUALS !== 'undefined') ? AI_VISUALS : [];
+        const first = items[0] || { type: 'image', src: '', thumb: '', label: '' };
+        const videoCount = items.filter(it => it.type === 'video').length;
+        const imageCount = items.length - videoCount;
+        return `
+        <div class="window-titlebar">
+            <span class="window-title">✨ AIVisuals.exe - MidJourney Gallery</span>
+            <div class="window-controls">
+                <button class="win-btn win-minimize" data-action="minimize">_</button>
+                <button class="win-btn win-maximize" data-action="maximize">□</button>
+                <button class="win-btn win-close" data-action="close">×</button>
+            </div>
+        </div>
+        <div class="window-content" style="padding: 0; display: flex; flex-direction: column; height: 100%; overflow: hidden;">
+            <style>
+                .aiv-viewer { flex: 1; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%); position: relative; min-height: 0; overflow: hidden; }
+                .aiv-viewer img, .aiv-viewer video { max-width: 95%; max-height: 95%; object-fit: contain; transition: opacity 0.2s; }
+                .aiv-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.85); border: 1px solid #aaa; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,0.3); transition: all 0.15s; }
+                .aiv-arrow:hover { background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+                .aiv-arrow-left { left: 12px; }
+                .aiv-arrow-right { right: 12px; }
+                .aiv-counter { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); color: #fff; padding: 4px 14px; border-radius: 12px; font-size: 11px; font-family: 'Segoe UI', Tahoma, sans-serif; pointer-events: none; }
+                .aiv-label { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); max-width: 80%; background: rgba(0,0,0,0.55); color: #fff; padding: 4px 14px; border-radius: 12px; font-size: 11px; font-family: 'Segoe UI', Tahoma, sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none; }
+                .aiv-thumbstrip { height: 80px; min-height: 80px; background: #e8e8e8; border-top: 1px solid #a0a0a0; display: flex; align-items: center; gap: 6px; padding: 8px 12px; overflow-x: auto; overflow-y: hidden; }
+                .aiv-thumb { position: relative; width: 56px; height: 56px; min-width: 56px; border: 2px solid #c0c0c0; border-radius: 3px; overflow: hidden; cursor: pointer; transition: all 0.15s; background: #f0f0f0; }
+                .aiv-thumb:hover { border-color: #0078d4; transform: scale(1.05); }
+                .aiv-thumb.active { border-color: #0078d4; box-shadow: 0 0 0 2px rgba(0,120,212,0.4); }
+                .aiv-thumb img { width: 100%; height: 100%; object-fit: cover; }
+                .aiv-thumb .aiv-play { position: absolute; bottom: 2px; right: 2px; width: 16px; height: 16px; background: rgba(0,0,0,0.65); color: #fff; border-radius: 50%; font-size: 8px; display: flex; align-items: center; justify-content: center; padding-left: 1px; }
+                .aiv-statusbar { padding: 4px 12px; background: linear-gradient(180deg, #e8e8e8 0%, #d0d0d0 100%); border-top: 1px solid #a0a0a0; display: flex; justify-content: space-between; font-size: 10px; color: #555; font-family: 'Segoe UI', Tahoma, sans-serif; }
+            </style>
+
+            <div class="aiv-viewer">
+                <button class="aiv-arrow aiv-arrow-left" id="aiv-prev">❮</button>
+                <img src="${first.type === 'image' ? first.src : first.thumb}" alt="${first.label}" id="aiv-preview"${first.type === 'video' ? ' style="display:none;"' : ''}>
+                <video id="aiv-video" controls playsinline preload="none"${first.type === 'video' ? ` src="${first.src}" poster="${first.thumb}"` : ' style="display:none;"'}></video>
+                <button class="aiv-arrow aiv-arrow-right" id="aiv-next">❯</button>
+                <div class="aiv-label" id="aiv-label">${first.label}</div>
+                <div class="aiv-counter" id="aiv-counter">1 / ${items.length}</div>
+            </div>
+
+            <div class="aiv-thumbstrip" id="aiv-thumbstrip">
+                ${items.map((it, i) => `
+                    <div class="aiv-thumb${i === 0 ? ' active' : ''}" data-index="${i}" data-type="${it.type}" data-src="${it.src}" data-thumb="${it.thumb}" data-label="${it.label}">
+                        <img src="${it.thumb}" alt="${it.label}" loading="lazy">
+                        ${it.type === 'video' ? '<span class="aiv-play">▶</span>' : ''}
+                    </div>
+                `).join('')}
+            </div>
+
+            <div class="aiv-statusbar">
+                <span>${imageCount} images · ${videoCount} videos — AI Visuals (MidJourney)</span>
                 <span>Use ← → arrows to navigate</span>
             </div>
         </div>
