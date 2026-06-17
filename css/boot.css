@@ -67,6 +67,32 @@
     background: #000000;
 }
 
+/* Overlay that masks the video's baked-in "Industrial Designer" subtitle.
+   Position/size/font are computed in BootSequence.positionSubtitle() so it
+   stays aligned with the letterboxed video at any screen size. The vertical
+   gradient feathers the top/bottom edges so the black band blends seamlessly
+   into the video's near-black background (no visible rectangle). */
+#boot-subtitle {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-family: "Segoe UI", Tahoma, "Helvetica Neue", Arial, sans-serif;
+    font-weight: 400;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 2;
+    background: linear-gradient(to bottom,
+        rgba(0, 0, 0, 0) 0%,
+        #000000 13%,
+        #000000 74%,
+        rgba(0, 0, 0, 0) 100%);
+}
+
 /* ========================================
    BOOT SCREEN - MOBILE RESPONSIVE
    ======================================== */

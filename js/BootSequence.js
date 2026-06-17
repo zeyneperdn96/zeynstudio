@@ -16,7 +16,33 @@ class BootSequence {
         this.hasStarted = false;
         this.hasLoggedIn = false;
 
+        // Align the subtitle overlay with the video's letterboxed frame
+        this.positionSubtitle();
+        this._resizeHandler = () => this.positionSubtitle();
+        window.addEventListener('resize', this._resizeHandler);
+
         this.setupEventListeners();
+    }
+
+    // The boot video (1536x1024) is rendered with object-fit: contain, so it is
+    // letterboxed inside the viewport. Compute the rendered frame box and place
+    // the overlay exactly over the baked-in subtitle line (vertical center at
+    // ~64.6% of the frame height, clear of the logo above and progress bar below).
+    positionSubtitle() {
+        const stage = this.biosStage;
+        const el = document.getElementById('boot-subtitle');
+        if (!stage || !el) return;
+        const W = stage.clientWidth;
+        const H = stage.clientHeight;
+        if (!W || !H) return;
+        const VW = 1536, VH = 1024;            // boot video intrinsic size
+        const scale = Math.min(W / VW, H / VH);
+        const rH = VH * scale;                 // rendered frame height
+        const offY = (H - rH) / 2;             // top letterbox offset
+        el.style.top = (offY + 0.656 * rH) + 'px';
+        el.style.height = (rH * 0.057) + 'px';
+        el.style.fontSize = (rH * 0.035) + 'px';
+        el.style.letterSpacing = (rH * 0.0004) + 'px';
     }
 
     setupEventListeners() {
