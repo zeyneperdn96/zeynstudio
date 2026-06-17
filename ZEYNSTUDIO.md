@@ -4,6 +4,65 @@ Bu dosya, Zeyn Studio portfolyo sitesinde yapılan işleri kaydeder.
 
 ---
 
+## 📍 DURUM & YOL HARİTASI — Game UI Pivotu (son güncelleme: 2026-06-17)
+
+> **Yeni bir oturumda buradan devam et.** Bağlam: Zeynep bir oyun stüdyosunda
+> **Game UI Artist** pozisyonuna başvurdu. Dönüş (recruiter Zhyldyz/Yıldız Sen):
+> "Portfolyoda oyun alanına dair daha fazla proje görmek istiyoruz; bol oyun
+> oynayıp hazır hissedince tekrar başvur." Amaç: portfolyoyu (bu repo, XP temalı,
+> vanilla HTML/CSS/JS, GitHub Pages → zeynstudio.com) oyun UI'ı görünür olacak
+> ve büyüyecek şekilde geliştirmek.
+
+### Kimlik kararı
+"Multidisciplinary Designer" (İngilizce) olarak kalır — tam "Game UI Artist"e
+rebrand YOK — ama Game UI birinci sınıf, öne çıkan kategori olur. Endüstriyel
+tasarım geçmişi gerçek bir artı, ikincil olarak korunur (silme).
+
+### Kilit içgörü
+Zeynep "oyun işim yok" dese de sitede gizli/yanlış paketlenmiş oyun UI işi VAR:
+- **Games.exe** — kodladığı oynanabilir Minesweeper/Snake/Tetris/Pong
+- **STELLAR VANGUARD** (`character-select.html`) — sci-fi karakter seçim ekranı
+- `cyberpunk-cards.html` + `trading-cards.html` — RPG mekanikli kart oyunu UI
+- **Super Zeynep World** (`super-zeynep-world.html`) — HUD/quest/level gamified UX
+
+### Fazlar
+- **Faz 0 — Konumlandırma: ✅ TAMAM & CANLIDA.** "Industrial Designer" → 
+  "Multidisciplinary Designer", game UI öne alındı. Değişen: `index.html` (title/
+  meta/start-menu), `js/config.js`, `js/WindowTemplates.js` (CV), `msn-chatbot.html`.
+- **Boot ekranı düzeltmesi: ✅ TAMAM & CANLIDA.** Boot videosuna ("Industrial
+  Designer" gömülü) HTML/CSS overlay ile "Multidisciplinary Designer" bindirildi.
+  `index.html` (#boot-subtitle div), `css/boot.css` (#boot-subtitle), 
+  `js/BootSequence.js` (positionSubtitle — letterbox hizası). Asset'lere `?v=2`.
+- **Login ekranı (`assets/boot/login3.jpg`): 🔵 ZEYNEP HALLEDECEK** (Photoshop).
+  İki "Industrial Designer" yazısı baked. Bittiğinde: `index.html`'deki login img
+  src'ye `?v=2` ekle + commit. (Doku: panel ≈ #3D63D0, kenar ≈ #1E3F9E.)
+- **Faz 1 — Mevcut oyun işlerini görünür kıl:** ⬜ YAPILACAK. My Work'e **Game UI**
+  kategorisi + filtre (`js/ProjectsData.js` + `js/WindowManager.js`). STELLAR
+  VANGUARD / kartlar / Games.exe / Super Zeynep World → case study.
+- **Faz 2 — Flagship oyun UI seti:** ⬜ YAPILACAK. **Karar: Cyberpunk/Sci-fi →
+  STELLAR VANGUARD'ı uçtan uca oyun UI'ına büyüt.** Ekranlar: Title+menü, Pilot
+  seçimi (var), **HUD ⭐** (can/shield/ammo/radar/objective/cooldown/low-hp vignette),
+  Loadout/envanter, Augment skill tree, Star map/mission select, Armory/shop,
+  Comms/diyalog, Pause/settings, juice katmanı (level-up/alert/bildirim). Diegetic
+  = geminin holografik arayüzü. Art direction: derin uzay lacivert/siyah + neon
+  camgöbeği/magenta, techno display + temiz UI sans, çizgi/holografik ikon, glitch/glow.
+  Yöntem: Figma'da UI kit + statik frame'ler, kodda HUD + 1-2 menü canlı oynanabilir
+  demo (Zeynep'in farkı = kodlanmış juicy UI). + 2 UI teardown (Hades, Cyberpunk 2077).
+- **Faz 3 — Game art/illüstrasyon:** ⬜ karakter konsept, item/ikon seti, keyart.
+- **Faz 4 — Cila + showreel + yeniden başvuru.** ⬜
+
+### Sıradaki somut adım
+İki seçenek (Zeynep'in tercihine bağlı, henüz seçmedi):
+(a) Ben başlatırım: "Game UI" kategorisi + STELLAR VANGUARD interaktif HUD demo
+    iskeleti (art direction taslağıyla); Zeynep sanat yönünü giydirir.
+(b) Önce Zeynep Figma'da art direction'ı oturtur.
+
+### Lokal test
+`ruby -run -e httpd . -p 8765 --bind-address 127.0.0.1` → http://127.0.0.1:8765/
+(Bu makinede python3/node yok.) Push: GitHub Desktop ("Push origin"); CLI auth yok.
+
+---
+
 ## 2026-06-12 — AI Visuals Galerisi
 
 ### Özet

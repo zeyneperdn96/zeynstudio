@@ -1,4 +1,6 @@
 .claude/
+.DS_Store
+**/.DS_Store
 *.png
 !assets/**/*.png
 _archive/
