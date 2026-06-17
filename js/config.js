@@ -33,9 +33,9 @@ const CONFIG = {
     // Personal Info
     personal: {
         name: 'Zeyn',
-        title: 'Industrial Designer',
+        title: 'Multidisciplinary Designer',
         studio: 'ZeynStudio',
-        bio: `I'm an industrial designer with a passion for creating meaningful, user-centered experiences. My work spans digital interfaces, illustrations, and physical product design.`
+        bio: `I'm a multidisciplinary designer crafting playful, user-centered experiences — from game UI, HUDs and menus to interactive interfaces, illustration and physical product design.`
     },
 
     // Media Player Playlist
@@ -65,7 +65,7 @@ const CONFIG = {
             about: {
                 description: 'About Zeyn',
                 action: 'about',
-                output: `Zeyn - Industrial Designer\nCreative. Curious. Playful.\nBuilding experiences at the intersection of digital and physical design.`
+                output: `Zeyn - Multidisciplinary Designer\nCreative. Curious. Playful.\nDesigning game UI, interactive experiences and visual systems.`
             },
             projects: {
                 description: 'Open My Projects window',

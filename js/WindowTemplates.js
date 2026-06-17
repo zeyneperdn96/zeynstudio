@@ -1903,7 +1903,7 @@ const WindowTemplates = {
                     <div class="cv-left-label">Identity Card</div>
                     <img class="cv-avatar" src="assets/icons/zeynep-avatar.jpg" alt="Zeynep Erden" onclick="this.closest('.window-content').querySelector('.cv-lightbox').classList.add('active')">
                     <div class="cv-name">Zeynep Erden</div>
-                    <div class="cv-title">Multidisciplinary Product Designer<br><span style="font-size: 9px; color: #666;">UI/UX, interactive experiences and visual systems with an industrial design background.</span></div>
+                    <div class="cv-title">Multidisciplinary Designer<br><span style="font-size: 9px; color: #666;">Game UI, interactive experiences and visual systems — with an industrial design background.</span></div>
 
                     <div class="cv-skills">
                         <div class="cv-skills-header">Installed Skills</div>
