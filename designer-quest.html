@@ -167,6 +167,7 @@
   const BASE = 'assets/games/designer-quest/';
   const SRC = {
     idle:'sprites/idle.png', walk1:'sprites/walk1.png', walk2:'sprites/walk2.png', jump:'sprites/jump.png',
+    enemy:'sprites/enemy.png',
     groundStart:'tiles/ground-start.png', groundMid:'tiles/ground-mid.png', groundStrip:'tiles/ground-strip.png',
     floatSm:'tiles/float-sm.png', floatLg:'tiles/float-lg.png',
     pipeShort:'tiles/pipe-short.png', pipeTall:'tiles/pipe-tall.png',
@@ -246,12 +247,31 @@
     return out;
   }
 
+  // Crop to the alpha bounding box (for assets that already have real transparency).
+  function cropAlpha(img){
+    const c=document.createElement('canvas'); c.width=img.width; c.height=img.height;
+    const x=c.getContext('2d'); x.drawImage(img,0,0);
+    let id; try{ id=x.getImageData(0,0,c.width,c.height); }catch(e){ return img; }
+    const d=id.data, W=c.width, H=c.height; let minX=W,minY=H,maxX=0,maxY=0,found=false;
+    for(let y=0;y<H;y++) for(let xx=0;xx<W;xx++){ if(d[(y*W+xx)*4+3]>16){ found=true;
+      if(xx<minX)minX=xx; if(xx>maxX)maxX=xx; if(y<minY)minY=y; if(y>maxY)maxY=y; } }
+    if(!found) return img;
+    const w=maxX-minX+1, h=maxY-minY+1;
+    const out=document.createElement('canvas'); out.width=w; out.height=h;
+    out.getContext('2d').drawImage(c, minX,minY,w,h, 0,0,w,h); return out;
+  }
+  const CHARS={idle:1,walk1:1,walk2:1,jump:1};
+  const ALPHA_ART={enemy:1,icPs:1,icAi:1,icFigma:1,icBlender:1,icRhino:1};
+
   function loadAll(cb){
     keys.forEach(k=>{
       const im = new Image();
       im.onload = ()=>{
-        // character sprites: chroma-key the box, then downscale to a clean sprite resolution
-        IMG[k] = (k==='idle'||k==='walk1'||k==='walk2'||k==='jump') ? downscale(trim(im), 260) : im;
+        // character sprites: chroma-key the opaque box; alpha art (enemy/skill blocks): just crop.
+        // both get a high-quality downscale into a clean game-sprite resolution.
+        IMG[k] = CHARS[k] ? downscale(trim(im), 260)
+               : ALPHA_ART[k] ? downscale(cropAlpha(im), 150)
+               : im;
         loaded++;
         loadTxt.textContent = 'LOADING… ' + Math.round(loaded/keys.length*100) + '%';
         if(loaded===keys.length) cb();
@@ -365,7 +385,7 @@
 
     // ===== ZONE 3 — FIRST SKILL (clear small goal) =====
     skill('ps','icPs','PHOTOSHOP', 1150, 318);       // Photoshop = first skill goal (reachable)
-    coinArc(1212, 286, 3, 36, 28);
+    coinArc(1212, 250, 3, 36, 22);                   // float the coins clearly ABOVE the PS block
     addBug(1360, 1230, 1470);                        // first enemy only after the calm start
 
     // pit 1500–1620 — bridged by a step
@@ -655,23 +675,27 @@
   }
 
   function drawEnemy(e){
-    const x=Math.round(e.x-cam.x), y=Math.round(e.y-cam.y);
-    if(e.dead){ // squash
-      ctx.save(); ctx.globalAlpha=Math.max(0,e.squashT/0.4);
-      ctx.fillStyle='#7a3bd0'; ctx.fillRect(x, y+e.h-8, e.w, 8); ctx.restore(); return;
+    const im=IMG.enemy;
+    const VDH=50;                                   // visual height (a touch bigger than the 34px hitbox)
+    const dw = im ? im.width/im.height*VDH : e.w;
+    const cx = e.x + e.w/2;
+    if(e.dead){ // squash + fade
+      const k=Math.max(0,e.squashT/0.4);
+      ctx.save(); ctx.globalAlpha=k; ctx.imageSmoothingEnabled=true;
+      const sh=VDH*0.45*(0.6+0.4*k), sw=dw*(1.15);
+      if(im) ctx.drawImage(im, Math.round(cx-sw/2-cam.x), Math.round(e.y+e.h-sh-cam.y), Math.round(sw), Math.round(sh));
+      ctx.restore(); return;
     }
-    const bob=Math.sin(e.t*8)*2;
-    // body
-    ctx.fillStyle='#2a1040'; ctx.fillRect(x-1,y+bob-1,e.w+2,e.h+2);
-    ctx.fillStyle='#9b3bff'; ctx.fillRect(x,y+bob,e.w,e.h);
-    ctx.fillStyle='#c98bff'; ctx.fillRect(x+4,y+bob+4,e.w-8,6); // glitch band
-    // eyes
-    ctx.fillStyle='#fff'; ctx.fillRect(x+8,y+bob+10,8,8); ctx.fillRect(x+e.w-16,y+bob+10,8,8);
-    ctx.fillStyle='#ff2e6e'; ctx.fillRect(x+10+e.dir*2,y+bob+12,4,4); ctx.fillRect(x+e.w-14+e.dir*2,y+bob+12,4,4);
-    // glitch flicker
-    if(Math.floor(e.t*12)%5===0){ ctx.fillStyle='rgba(0,229,255,.6)'; ctx.fillRect(x,y+bob+Math.floor(Math.random()*e.h),e.w,2); }
-    // legs
-    ctx.fillStyle='#2a1040'; ctx.fillRect(x+6,y+bob+e.h,6,4); ctx.fillRect(x+e.w-12,y+bob+e.h,6,4);
+    const bob=Math.round(Math.sin(e.t*6)*2);
+    const dx=cx-dw/2-cam.x, dy=e.y+e.h-VDH-cam.y+bob;
+    ctx.save(); ctx.imageSmoothingEnabled=true;
+    if(im){
+      if(e.dir<0){ ctx.translate(Math.round(dx+dw),0); ctx.scale(-1,1); ctx.drawImage(im, 0, Math.round(dy), Math.round(dw), Math.round(VDH)); }
+      else ctx.drawImage(im, Math.round(dx), Math.round(dy), Math.round(dw), Math.round(VDH));
+    } else { // fallback
+      ctx.fillStyle='#3a2150'; ctx.fillRect(Math.round(e.x-cam.x),Math.round(e.y+bob-cam.y),e.w,e.h);
+    }
+    ctx.restore();
   }
 
   function drawSpike(sp){
@@ -721,15 +745,21 @@
 
   function drawSkill(s){
     if(s.got) return;
-    const im=IMG[s.icon]; const bob=Math.sin(s.t)*6;
-    const sz=44, x=Math.round(s.x-sz/2-cam.x), y=Math.round(s.y-sz/2-cam.y+bob);
-    // glow ring
-    ctx.save(); ctx.globalAlpha=0.5+Math.sin(s.t*2)*0.2;
-    ctx.fillStyle='rgba(0,229,255,.35)';
-    ctx.beginPath(); ctx.arc(x+sz/2,y+sz/2,sz*0.7,0,7); ctx.fill(); ctx.restore();
-    if(im) ctx.drawImage(im, x, y, sz, sz);
-    // sparkle
-    if(Math.floor(s.t*4)%3===0){ ctx.fillStyle='#fff'; ctx.fillRect(x-4,y+sz/2,3,3); ctx.fillRect(x+sz+1,y+sz/2,3,3); }
+    const im=IMG[s.icon]; const bob=Math.round(Math.sin(s.t)*5);
+    const dh=54, dw= im ? im.width/im.height*dh : 48;
+    const x=Math.round(s.x-dw/2-cam.x), y=Math.round(s.y-dh/2-cam.y+bob);
+    // soft ground shadow (subtle, NOT a halo)
+    ctx.save(); ctx.globalAlpha=0.18; ctx.fillStyle='#000';
+    ctx.beginPath(); ctx.ellipse(Math.round(s.x-cam.x), Math.round(s.y+dh/2+6-cam.y), dw*0.36, 5, 0, 0, 7); ctx.fill();
+    ctx.restore();
+    // the collectible block (clean, sharp)
+    ctx.save(); ctx.imageSmoothingEnabled=true;
+    if(im) ctx.drawImage(im, x, y, Math.round(dw), Math.round(dh));
+    else { ctx.fillStyle='#9aa6b8'; ctx.fillRect(x,y,48,48); }
+    ctx.restore();
+    // clean sparkle accents (no ring)
+    if(Math.floor(s.t*3)%4===0){ ctx.fillStyle='#fff';
+      ctx.fillRect(x+Math.round(dw)+2, y+8, 3,3); ctx.fillRect(x-5, y+Math.round(dh)-14, 3,3); }
   }
 
   function drawParticles(){
