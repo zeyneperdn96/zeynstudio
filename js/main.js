@@ -85,6 +85,12 @@ function setupDesktopIcons() {
     const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
     const isMobileWidth = () => window.innerWidth <= 768;
 
+    // Open an icon's target: external page (data-href, new tab) or an in-OS window (data-window)
+    const openIcon = (icon) => {
+        if (icon.dataset.href) { window.open(icon.dataset.href, '_blank'); return; }
+        window.windowManager.openWindow(icon.dataset.window);
+    };
+
     icons.forEach(icon => {
         let touchTimeout = null;
         let lastTap = 0;
@@ -97,8 +103,7 @@ function setupDesktopIcons() {
                 touchHandled = false;
                 return;
             }
-            const windowId = icon.dataset.window;
-            window.windowManager.openWindow(windowId);
+            openIcon(icon);
         });
 
         // Single click to select (desktop only)
@@ -176,14 +181,12 @@ function setupDesktopIcons() {
                         clearTimeout(touchTimeout);
                         touchTimeout = null;
                     }
-                    const windowId = icon.dataset.window;
-                    window.windowManager.openWindow(windowId);
+                    openIcon(icon);
                 } else {
                     // Single tap on mobile - open after delay
                     if (isMobileWidth()) {
                         touchTimeout = setTimeout(() => {
-                            const windowId = icon.dataset.window;
-                            window.windowManager.openWindow(windowId);
+                            openIcon(icon);
                             touchTimeout = null;
                         }, 350);
                     }
