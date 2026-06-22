@@ -17,6 +17,7 @@ const WindowTemplates = {
         <div class="window-content">
             <div class="explorer-toolbar" style="margin: -16px -16px 16px -16px; padding: 8px; background: #C0C0C0; border-bottom: 2px solid #808080;">
                 <button class="btn btn-sm btn-primary active" data-filter="all">All Projects</button>
+                <button class="btn btn-sm btn-secondary" data-filter="game-ui">🎮 Game UI</button>
                 <button class="btn btn-sm btn-secondary" data-filter="ui-ux">UI/UX</button>
                 <button class="btn btn-sm btn-secondary" data-filter="industrial">Industrial Design</button>
                 <button class="btn btn-sm btn-secondary" data-filter="illustration">Illustration</button>

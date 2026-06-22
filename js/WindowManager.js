@@ -596,6 +596,12 @@ class WindowManager {
             return;
         }
 
+        // Projects that open an existing in-OS window (e.g. Games.exe)
+        if (project.opensWindow) {
+            this.openWindow(project.opensWindow);
+            return;
+        }
+
         // Special handling for METBIC - open XP-style window
         if (project.title === 'METBIC') {
             this.openWindow('metbic', { width: 820, height: 520 });

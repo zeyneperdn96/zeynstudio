@@ -1,4 +1,6 @@
 .claude/
+.preview-server.js
+_dqcheck.js
 .DS_Store
 **/.DS_Store
 *.png

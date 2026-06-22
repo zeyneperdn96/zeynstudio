@@ -5,6 +5,71 @@
 
 const projectsData = [
     {
+        id: 14,
+        title: 'DESIGNER QUEST',
+        category: 'game-ui',
+        thumbnail: 'assets/games/designer-quest/tiles/trophy.png',
+        thumbnailSize: 'contain',
+        thumbnailBg: 'linear-gradient(135deg, #4a9bf0 0%, #7ec0ff 100%)',
+        description: 'Playable Pixel Platformer — Level Up Your Portfolio',
+        featured: true,
+        year: '2026',
+        role: 'Game UI Designer & Developer (Pixel UI, HUD, Gameplay Code)',
+        externalLink: 'designer-quest.html'
+    },
+    {
+        id: 10,
+        title: 'STELLAR VANGUARD',
+        category: 'game-ui',
+        thumbnail: null,
+        thumbnailIcon: '🚀',
+        thumbnailBg: 'radial-gradient(circle at 30% 20%, #00d9ff22 0%, transparent 40%), linear-gradient(135deg, #060a24 0%, #141452 55%, #2a0a4e 100%)',
+        description: 'Sci-Fi Pilot Select Screen — Interactive Game UI',
+        featured: true,
+        year: '2026',
+        role: 'Game UI Designer (UI Design, Front-End Implementation)',
+        externalLink: 'character-select.html'
+    },
+    {
+        id: 11,
+        title: 'NEON DECK',
+        category: 'game-ui',
+        thumbnail: null,
+        thumbnailIcon: '🃏',
+        thumbnailBg: 'radial-gradient(circle at 70% 30%, #ff00aa22 0%, transparent 45%), linear-gradient(135deg, #1a0030 0%, #3a0a5e 50%, #ff1493 100%)',
+        description: 'Cyberpunk RPG Card Battle UI',
+        featured: true,
+        year: '2026',
+        role: 'Game UI Designer (Card System, UI Design, Front-End)',
+        externalLink: 'cyberpunk-cards.html'
+    },
+    {
+        id: 12,
+        title: 'SUPER ZEYNEP WORLD',
+        category: 'game-ui',
+        thumbnail: null,
+        thumbnailIcon: '🍄',
+        thumbnailBg: 'radial-gradient(circle at 50% 15%, #ffe06633 0%, transparent 40%), linear-gradient(135deg, #1f8fe0 0%, #4fc3ff 60%, #9be7ff 100%)',
+        description: 'Platformer HUD & Gamified Portfolio UX',
+        featured: true,
+        year: '2026',
+        role: 'Game UI Designer (HUD, Quest System, Front-End)',
+        externalLink: 'super-zeynep-world.html'
+    },
+    {
+        id: 13,
+        title: 'Games.exe',
+        category: 'game-ui',
+        thumbnail: null,
+        thumbnailIcon: '🎮',
+        thumbnailBg: 'radial-gradient(circle at 30% 70%, #6d28d955 0%, transparent 45%), linear-gradient(135deg, #0e1a3a 0%, #1e3a8a 55%, #6d28d9 100%)',
+        description: 'Playable Arcade Suite — Minesweeper · Snake · Tetris · Pong',
+        featured: true,
+        year: '2026',
+        role: 'Game UI Designer & Developer (Game UI, Gameplay Code)',
+        opensWindow: 'games'
+    },
+    {
         id: 1,
         title: 'METBIC',
         category: 'industrial',
@@ -160,6 +225,7 @@ class ProjectsManager {
 
     getCategoryLabel(category) {
         const labels = {
+            'game-ui': 'Game UI',
             'ui-ux': 'UI/UX',
             'illustration': 'Illustration',
             'industrial': 'Industrial Design'
@@ -173,9 +239,16 @@ class ProjectsManager {
             const pos = project.thumbnailPos || 'center';
             const size = project.thumbnailSize || 'cover';
             const bg = project.thumbnailBg || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            // Icon-only thumbnail (no image): gradient + centered emoji badge
+            const thumbStyle = project.thumbnail
+                ? `background: url('${project.thumbnail}') ${pos}/${size} no-repeat, ${bg}; height: 100px;`
+                : `background: ${bg}; height: 100px; display: flex; align-items: center; justify-content: center; font-size: 40px;`;
+            const thumbContent = project.thumbnail
+                ? ''
+                : `<span style="filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5));">${project.thumbnailIcon || '🎮'}</span>`;
             return `
             <div class="project-card" data-project-id="${project.id}" style="cursor: pointer;">
-                <div class="project-thumbnail" style="background: url('${project.thumbnail}') ${pos}/${size} no-repeat, ${bg}; height: 100px;"></div>
+                <div class="project-thumbnail" style="${thumbStyle}">${thumbContent}</div>
                 <div class="project-info">
                     <div class="project-title">${project.title}</div>
                     <div class="project-category">${this.getCategoryLabel(project.category)}</div>

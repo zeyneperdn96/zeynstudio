@@ -36,9 +36,21 @@ Zeynep "oyun işim yok" dese de sitede gizli/yanlış paketlenmiş oyun UI işi 
 - **Login ekranı (`assets/boot/login3.jpg`): 🔵 ZEYNEP HALLEDECEK** (Photoshop).
   İki "Industrial Designer" yazısı baked. Bittiğinde: `index.html`'deki login img
   src'ye `?v=2` ekle + commit. (Doku: panel ≈ #3D63D0, kenar ≈ #1E3F9E.)
-- **Faz 1 — Mevcut oyun işlerini görünür kıl:** ⬜ YAPILACAK. My Work'e **Game UI**
-  kategorisi + filtre (`js/ProjectsData.js` + `js/WindowManager.js`). STELLAR
-  VANGUARD / kartlar / Games.exe / Super Zeynep World → case study.
+- **Faz 1 — Mevcut oyun işlerini görünür kıl:** 🟡 BAŞLADI (2026-06-22).
+  - ✅ My Work'e **Game UI** kategorisi + filtre eklendi (All Projects'ten hemen
+    sonra, öne çıkan sekme). 4 iş `category: 'game-ui'` ile listeleniyor:
+    STELLAR VANGUARD (`character-select.html`), NEON DECK (`cyberpunk-cards.html`),
+    SUPER ZEYNEP WORLD (`super-zeynep-world.html`), Games.exe (in-OS `games` penceresi).
+    Game UI işleri "All Projects" görünümünde de en başta görünüyor.
+  - Değişen: `js/WindowTemplates.js` (Game UI filtre butonu), `js/ProjectsData.js`
+    (4 kayıt + `game-ui` label + thumbnailsiz kartlar için emoji/gradient desteği:
+    `thumbnailIcon` + `thumbnailBg`), `js/WindowManager.js` (`opensWindow` prop →
+    Games.exe gibi in-OS pencere açan projeler için).
+  - Sanat yönü taslağı: derin uzay lacivert/siyah + neon camgöbeği/magenta gradient'ler
+    (STELLAR VANGUARD 🚀, NEON DECK 🃏 magenta, SUPER ZEYNEP WORLD 🍄 mavi, Games.exe 🎮).
+  - ⬜ KALAN: gerçek ekran görüntüsü thumbnaillar (şu an emoji+gradient placeholder);
+    her oyun işi için kısa case study metni; istenirse trading-cards.html'i de ekle
+    (şu an About Me olarak kullanılıyor, mükerrerlik riski için dışarıda bırakıldı).
 - **Faz 2 — Flagship oyun UI seti:** ⬜ YAPILACAK. **Karar: Cyberpunk/Sci-fi →
   STELLAR VANGUARD'ı uçtan uca oyun UI'ına büyüt.** Ekranlar: Title+menü, Pilot
   seçimi (var), **HUD ⭐** (can/shield/ammo/radar/objective/cooldown/low-hp vignette),
