@@ -12,9 +12,11 @@
   html,body { width:100%; height:100%; overflow:hidden; background:#0a0e17;
     font-family:'Press Start 2P', monospace; -webkit-tap-highlight-color:transparent; }
   #dq-wrap { position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
-    background: radial-gradient(circle at 50% 30%, #14203a 0%, #070b14 100%); }
-  #dq-stage { position:relative; }
-  canvas#dq { display:block; image-rendering:auto;
+    overflow:hidden; background: radial-gradient(circle at 50% 30%, #14203a 0%, #070b14 100%); }
+  /* Stage is fixed at the design size; fit() scales the whole thing (canvas + overlays)
+     uniformly, so popups/title never overflow on small screens. */
+  #dq-stage { position:relative; width:960px; height:540px; flex:0 0 auto; transform-origin:center center; }
+  canvas#dq { display:block; width:960px; height:540px; image-rendering:auto;
     box-shadow:0 0 0 4px #1a2a4e, 0 0 40px rgba(0,0,0,.6); background:#7ec0ff; }
 
   /* ---- Overlay screens ---- */
@@ -64,15 +66,25 @@
   .dq-scrim { position:absolute; inset:0; background:rgba(6,10,20,.72); }
   .dq-scrim.soft { background:rgba(6,10,20,.45); }
 
-  /* Touch controls */
-  #dq-touch { position:absolute; inset:0; pointer-events:none; display:none; }
+  /* Touch controls — live outside the scaled stage so they stay finger-size on any screen */
+  #dq-touch { position:absolute; inset:0; pointer-events:none; display:none; z-index:15; }
   #dq-touch.show { display:block; }
-  .dq-pad { position:absolute; bottom:18px; pointer-events:auto;
-    width:64px; height:64px; border-radius:14px; background:rgba(244,236,208,.18);
-    border:3px solid rgba(255,255,255,.5); color:#fff; font-size:20px;
-    display:flex; align-items:center; justify-content:center; user-select:none; }
-  .dq-pad:active { background:rgba(255,210,63,.4); }
-  #dq-left { left:18px; } #dq-right { left:96px; } #dq-jump { right:18px; width:84px; height:84px; }
+  .dq-pad { position:absolute; bottom:max(20px, env(safe-area-inset-bottom)); pointer-events:auto;
+    width:72px; height:72px; border-radius:16px; background:rgba(244,236,208,.2);
+    border:3px solid rgba(255,255,255,.55); color:#fff; font-size:24px;
+    display:flex; align-items:center; justify-content:center; user-select:none;
+    box-shadow:0 2px 10px rgba(0,0,0,.35); }
+  .dq-pad:active { background:rgba(255,210,63,.45); transform:scale(.94); }
+  #dq-left { left:max(20px, env(safe-area-inset-left)); }
+  #dq-right { left:calc(max(20px, env(safe-area-inset-left)) + 84px); }
+  #dq-jump { right:max(24px, env(safe-area-inset-right)); width:96px; height:96px; }
+
+  /* Portrait "rotate" hint (touch + portrait only; non-blocking) */
+  #dq-rotate { position:absolute; top:max(10px, env(safe-area-inset-top)); left:50%; transform:translateX(-50%);
+    z-index:20; display:none; pointer-events:none; background:rgba(20,16,40,.88); color:#ffd23f;
+    border:2px solid #ffd23f; font-size:9px; padding:8px 12px; border-radius:8px; letter-spacing:1px;
+    text-align:center; white-space:nowrap; }
+  @media (orientation:portrait){ body.touch #dq-rotate { display:block; } }
 
   .dq-hint { position:absolute; bottom:8px; left:0; right:0; text-align:center;
     font-size:7px; color:rgba(255,255,255,.55); letter-spacing:1px; }
@@ -143,13 +155,15 @@
       <div style="position:relative; z-index:2;" class="dq-sub" id="load-txt">LOADING… 0%</div>
     </div>
 
-    <!-- Touch -->
-    <div id="dq-touch">
-      <div class="dq-pad" id="dq-left">◄</div>
-      <div class="dq-pad" id="dq-right">►</div>
-      <div class="dq-pad" id="dq-jump">▲</div>
-    </div>
+  </div><!-- /dq-stage -->
+
+  <!-- Touch controls + rotate hint live OUTSIDE the scaled stage so they stay finger-size -->
+  <div id="dq-touch">
+    <div class="dq-pad" id="dq-left">◄</div>
+    <div class="dq-pad" id="dq-right">►</div>
+    <div class="dq-pad" id="dq-jump">▲</div>
   </div>
+  <div id="dq-rotate">↻ ROTATE FOR THE BEST VIEW</div>
 </div>
 
 <script>
@@ -326,7 +340,10 @@
     el.addEventListener('mousedown',on); el.addEventListener('mouseup',off); el.addEventListener('mouseleave',off);
   }
   bindPad('dq-left','left'); bindPad('dq-right','right'); bindPad('dq-jump','jump');
-  if('ontouchstart' in window) document.getElementById('dq-touch').classList.add('show');
+  if(('ontouchstart' in window) || navigator.maxTouchPoints>0){
+    document.getElementById('dq-touch').classList.add('show');
+    document.body.classList.add('touch');
+  }
 
   // ---------- World / Level ----------
   const GROUND_TOP = 452;
@@ -1026,16 +1043,14 @@
   document.querySelector('.dq-win-x').onclick = ()=>{};
 
   // ---------- Responsive scaling ----------
+  // Scale the whole 960x540 stage (canvas + DOM overlays) uniformly to fit the viewport.
   function fit(){
     const ww=window.innerWidth, wh=window.innerHeight;
     const scale=Math.min(ww/VW, wh/VH);
-    const w=Math.round(VW*scale), h=Math.round(VH*scale);
-    canvas.style.width=w+'px'; canvas.style.height=h+'px';
-    const stage=document.getElementById('dq-stage');
-    stage.style.width=w+'px'; stage.style.height=h+'px';
-    document.querySelectorAll('.dq-screen').forEach(s=>{ s.style.fontSize=(scale).toFixed(3)+'rem'; });
+    document.getElementById('dq-stage').style.transform = 'scale('+scale.toFixed(4)+')';
   }
   window.addEventListener('resize', fit);
+  window.addEventListener('orientationchange', fit);
 
   // ---------- Boot ----------
   // need level for render even on title -> build a preview level after load
