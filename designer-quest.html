@@ -415,16 +415,13 @@
     coinLine(4180, 372, 4, 46);
     const tImg=IMG.trophy; const tdh=120, tdw=tImg? tImg.width/tImg.height*tdh : 114;
     deco.push({img:'trophy', x:4520, y:GROUND_TOP-tdh, dw:tdw, dh:tdh});
-    const goalImg=IMG.goal; const gdh=300; const gdw=goalImg? goalImg.width/goalImg.height*gdh : 350;
-    const goalX=4760, goalY=GROUND_TOP-gdh+18;
-    deco.push({img:'goal', x:goalX, y:goalY, dw:gdw, dh:gdh});
-    deco.push({img:'flagTower', x:5000, y:GROUND_TOP-260, dw:182, dh:260});
-    const goalZone = {x:goalX+20, y:goalY, w:gdw-60, h:gdh};
+    const goalX=4760;                                  // procedural goal area -> drawGoal()
+    const goalZone = {x:goalX+28, y:GROUND_TOP-170, w:196, h:170};
 
     function addBug(x,x0,x1){ enemies.push({x, y:GROUND_TOP-34, w:40, h:34, x0, x1, dir:1, dead:false, t:Math.random()*6.28, squashT:0}); }
 
     WORLD_W = 5340;
-    return {solids, oneway, coins, skills, enemies, spikes, deco, gifts, goalZone, signX};
+    return {solids, oneway, coins, skills, enemies, spikes, deco, gifts, goalZone, goalX, signX};
   }
 
   // ---------- Player ----------
@@ -538,10 +535,11 @@
     // invuln timer
     if(p.invuln>0) p.invuln-=dt;
 
-    // ---- coins ----
+    // ---- coins (collectible along the character's whole visual height -> grab while walking;
+    //      taller arc coins still need a jump) ----
     for(const c of level.coins){
       if(c.got) continue; c.t+=dt*6;
-      if(Math.abs((p.x+PW/2)-c.x)<30 && Math.abs((p.y+PH/2)-c.y)<34){
+      if(Math.abs((p.x+PW/2)-c.x)<34 && c.y > p.y-34 && c.y < p.y+PH+8){
         c.got=true; coinCount++; SFX.coin(); addParticles(c.x,c.y,'#ffd23f',7,160);
       }
     }
@@ -729,6 +727,116 @@
     ctx.textAlign='left'; ctx.textBaseline='top';
   }
 
+  // Procedural goal/unlock area: cohesive brick gate (PROJECT UNLOCKED door + lock)
+  // + taller ladder tower with flag + clean bushes & mushroom. Pixel-art, thin outlines.
+  function drawGoal(wx){
+    const gY=GROUND_TOP, sx=wx-cam.x;
+    if(sx>VW+90 || sx<-380) return;
+    const X=v=>Math.round(sx+v), Y=h=>Math.round(gY-h);
+    const OUT='#241208', BR='#9c5a2e', BR2='#854a25', MOR='#5e3318', BRT='#b06d38';
+    const GRO='#244d14', GRD='#3f7d22', GR='#6fbf3a', GRL='#8fd957';
+    const PUR='#7a3bd8', PURD='#5526a0', PURL='#9d6bf0', POUT='#23103f';
+
+    function bricks(lx, lw, h){
+      const x=X(lx), y=Y(h), W=Math.round(lw), H=Math.round(h);
+      ctx.fillStyle=OUT; ctx.fillRect(x-3,y-3,W+6,H+6);
+      ctx.fillStyle=BR;  ctx.fillRect(x,y,W,H);
+      ctx.fillStyle=MOR;
+      for(let ry=0; ry<H; ry+=20) ctx.fillRect(x, y+ry, W, 2);
+      for(let r=0; r*20<H; r++){ const ry=r*20, off=(r%2)?0:22;
+        for(let rx=off; rx<W; rx+=44) ctx.fillRect(x+rx, y+ry, 2, Math.min(20,H-ry)); }
+      ctx.fillStyle=BR2; ctx.fillRect(x, y+H-6, W, 6);
+      ctx.fillStyle=BRT; ctx.fillRect(x, y, 4, H);
+    }
+    function grass(lx, lw, topH){
+      const x=X(lx), y=Y(topH), W=Math.round(lw);
+      ctx.fillStyle=OUT; ctx.fillRect(x-3, y-3, W+6, 25);
+      ctx.fillStyle=GRD; ctx.fillRect(x, y, W, 21);
+      ctx.fillStyle=GR;  ctx.fillRect(x, y, W, 11);
+      ctx.fillStyle=GRL; ctx.fillRect(x, y, W, 4);
+    }
+    function bush(lx, r){ const x=X(lx), y=Y(r*0.55);
+      ctx.fillStyle=GRO; ctx.beginPath(); ctx.arc(x,y,r+2,0,7); ctx.fill();
+      ctx.fillStyle=GRD; ctx.beginPath(); ctx.arc(x,y,r,0,7); ctx.fill();
+      ctx.fillStyle=GR;  ctx.beginPath(); ctx.arc(x-r*0.3, y-r*0.35, r*0.5, 0,7); ctx.fill(); }
+
+    bush(2,14); bush(20,18); bush(40,12);
+
+    // ===== TOWER =====
+    const tX=210, tW=128, tH=224;
+    bricks(tX, tW, tH);
+    grass(tX-6, tW+12, tH+20);
+    const lX=tX+36, lW=56;
+    ctx.fillStyle=BR2; ctx.fillRect(X(lX-5), Y(tH-12), lW+10, Math.round(tH-30));   // recessed channel
+    ctx.fillStyle='#caa23a';
+    ctx.fillRect(X(lX), Y(tH-12), 7, Math.round(tH-34));
+    ctx.fillRect(X(lX+lW-7), Y(tH-12), 7, Math.round(tH-34));
+    for(let rh=tH-22; rh>18; rh-=24){ ctx.fillStyle='#e0bd4a'; ctx.fillRect(X(lX), Y(rh), lW, 7);
+      ctx.fillStyle='#9c7a20'; ctx.fillRect(X(lX), Y(rh)+5, lW, 2); }
+    // flag
+    const poleX=tX+tW-34, poleH=tH+20+70, fbaseH=tH+20;
+    ctx.fillStyle='#6a4a1e'; ctx.fillRect(X(poleX), Y(poleH), 6, Math.round(poleH-fbaseH));
+    ctx.fillStyle='#caa23a'; ctx.fillRect(X(poleX)-1, Y(poleH)-3, 8, 5);
+    const wave=Math.round(Math.sin(clock*3)*3);
+    ctx.fillStyle=POUT;
+    ctx.beginPath(); ctx.moveTo(X(poleX+6), Y(poleH)); ctx.lineTo(X(poleX+6+58), Y(poleH-16)+wave); ctx.lineTo(X(poleX+6), Y(poleH-34)); ctx.closePath(); ctx.fill();
+    ctx.fillStyle=PUR;
+    ctx.beginPath(); ctx.moveTo(X(poleX+6), Y(poleH)+2); ctx.lineTo(X(poleX+6+50), Y(poleH-16)+wave); ctx.lineTo(X(poleX+6), Y(poleH-31)); ctx.closePath(); ctx.fill();
+
+    // ===== GATE (lower) =====
+    const gX=24, gW=178, gH=150;
+    bricks(gX, gW, gH);
+    grass(gX-4, gW+8, gH+18);
+
+    // mushroom (right of tower base)
+    (function(){ const mx=tX+tW+16, x=X(mx), y=Y(0);
+      ctx.fillStyle=OUT; ctx.fillRect(x-2, y-30, 18, 30);
+      ctx.fillStyle='#e8d9b0'; ctx.fillRect(x, y-28, 14, 28);
+      ctx.fillStyle=OUT; ctx.fillRect(x-9, y-46, 32, 20);
+      ctx.fillStyle='#e0463c'; ctx.fillRect(x-7, y-44, 28, 17);
+      ctx.fillStyle='#ff6a5c'; ctx.fillRect(x-7, y-44, 28, 5);
+      ctx.fillStyle='#fff'; ctx.fillRect(x-2, y-39, 5,5); ctx.fillRect(x+10, y-36, 4,4); })();
+
+    // ===== DOOR (PROJECT UNLOCKED) =====
+    const dW=126, dX=gX+(gW-dW)/2, dBaseH=10, dBodyTopH=118;
+    const dx0=X(dX), dw=Math.round(dW), cx=dx0+dw/2;
+    const yBodyTop=Y(dBodyTopH), yBase=Y(dBaseH);
+    ctx.save(); ctx.globalAlpha=0.22+Math.sin(clock*3)*0.10; ctx.fillStyle='#b98bff';
+    ctx.fillRect(dx0-12, yBodyTop-46, dw+24, (yBase-yBodyTop)+60); ctx.restore();
+    ctx.fillStyle=POUT; ctx.fillRect(dx0-3, yBodyTop, dw+6, yBase-yBodyTop);
+    ctx.fillStyle=PUR;  ctx.fillRect(dx0, yBodyTop, dw, yBase-yBodyTop);
+    ctx.fillStyle=PURD; ctx.fillRect(dx0, yBase-6, dw, 6);
+    ctx.fillStyle=PURL; ctx.fillRect(dx0, yBodyTop, 5, yBase-yBodyTop);
+    // arched top (stepped, thin outline) — no thick black arch
+    let by=yBodyTop; const bands=[dw, dw-16, dw-38, dw-68, dw-106];
+    for(let i=0;i<bands.length;i++){ const ww=Math.max(12, bands[i]); const bx=Math.round(cx-ww/2);
+      ctx.fillStyle=POUT; ctx.fillRect(bx-3, by-9, Math.round(ww)+6, 10);
+      ctx.fillStyle=PUR;  ctx.fillRect(bx, by-9, Math.round(ww), 9);
+      ctx.fillStyle=PURL; ctx.fillRect(bx, by-9, Math.round(ww), 2);
+      by-=9; }
+    // centered text
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    const tcy=(yBodyTop+yBase)/2 - 6;
+    ctx.font="12px 'Press Start 2P', monospace";
+    ctx.fillStyle=POUT; ctx.fillText('PROJECT', cx+1, tcy-11+1);
+    ctx.fillStyle='#f1e8ff'; ctx.fillText('PROJECT', cx, tcy-11);
+    ctx.fillStyle=POUT; ctx.fillText('UNLOCKED', cx+1, tcy+9+1);
+    ctx.fillStyle='#f1e8ff'; ctx.fillText('UNLOCKED', cx, tcy+9);
+    ctx.textAlign='left'; ctx.textBaseline='top';
+    // polished padlock
+    (function(){ const lw=28, lh=22, lx=Math.round(cx-lw/2), ly=yBase-lh-8;
+      ctx.fillStyle='#aeb7c6'; ctx.fillRect(lx+5, ly-12, 4, 13); ctx.fillRect(lx+lw-9, ly-12, 4, 13); ctx.fillRect(lx+5, ly-14, lw-10, 5);
+      ctx.fillStyle='#d7deea'; ctx.fillRect(lx+6, ly-13, 2, 11);
+      ctx.fillStyle=OUT; ctx.fillRect(lx-2, ly-2, lw+4, lh+4);
+      ctx.fillStyle='#f0a81e'; ctx.fillRect(lx, ly, lw, lh);
+      ctx.fillStyle='#ffd84a'; ctx.fillRect(lx, ly, lw, 6);
+      ctx.fillStyle='#a8650e'; ctx.fillRect(lx, ly+lh-4, lw, 4);
+      ctx.fillStyle='#7a4a08'; ctx.fillRect(Math.round(cx-3), ly+7, 6, 6); ctx.fillRect(Math.round(cx-2), ly+11, 4, 7); })();
+    // gate sparkles (rewarding)
+    if(Math.floor(clock*3)%2===0){ ctx.fillStyle='#fff';
+      ctx.fillRect(dx0-9, Y(dBodyTopH+8), 3,3); ctx.fillRect(dx0+dw+6, Y(dBodyTopH-8), 3,3); }
+  }
+
   function drawGift(gf){
     if(gf.got) return;
     const im=IMG.gift; const bob=Math.round(Math.sin(gf.t*3)*2);
@@ -854,8 +962,9 @@
   function drawWorld(){
     drawBackground();
     drawSign(level.signX);
-    for(const d of level.deco) drawImg(d.img, d.x, d.y, d.dw, d.dh);   // goal, trophy, flag
+    for(const d of level.deco) drawImg(d.img, d.x, d.y, d.dw, d.dh);   // trophy
     drawGround();
+    drawGoal(level.goalX);                                             // procedural goal/unlock area
     for(const o of level.oneway) drawImg(o.img, o.x, o.y, o.dw, o.dh); // grass steps
     for(const s of level.solids) drawImg(s.img, s.x, s.y, s.dw, s.dh); // pipes
     for(const gf of level.gifts) drawGift(gf);
