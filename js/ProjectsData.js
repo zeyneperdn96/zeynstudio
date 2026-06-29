@@ -18,9 +18,23 @@ const projectsData = [
         externalLink: 'designer-quest.html'
     },
     {
+        id: 15,
+        title: 'YARN PUZZLE',
+        category: 'game-ui',
+        thumbnail: 'assets/projects/yarn-puzzle/hero.png',
+        thumbnailSize: 'cover',
+        thumbnailPos: 'center',
+        description: 'Premium Mobile Puzzle: Game UI & HUD Case Study',
+        featured: true,
+        year: '2026',
+        role: 'Game UI Designer (HUD, Modals, Visual Design)',
+        externalLink: 'yarn-puzzle-case-study.html'
+    },
+    {
         id: 10,
         title: 'STELLAR VANGUARD',
         category: 'game-ui',
+        hidden: true,   // kodda durur, canlıda gizli
         thumbnail: null,
         thumbnailIcon: '🚀',
         thumbnailBg: 'radial-gradient(circle at 30% 20%, #00d9ff22 0%, transparent 40%), linear-gradient(135deg, #060a24 0%, #141452 55%, #2a0a4e 100%)',
@@ -34,6 +48,7 @@ const projectsData = [
         id: 11,
         title: 'NEON DECK',
         category: 'game-ui',
+        hidden: true,   // kodda durur, canlıda gizli
         thumbnail: null,
         thumbnailIcon: '🃏',
         thumbnailBg: 'radial-gradient(circle at 70% 30%, #ff00aa22 0%, transparent 45%), linear-gradient(135deg, #1a0030 0%, #3a0a5e 50%, #ff1493 100%)',
@@ -47,6 +62,7 @@ const projectsData = [
         id: 12,
         title: 'SUPER ZEYNEP WORLD',
         category: 'game-ui',
+        hidden: true,   // kodda durur, canlıda gizli
         thumbnail: null,
         thumbnailIcon: '🍄',
         thumbnailBg: 'radial-gradient(circle at 50% 15%, #ffe06633 0%, transparent 40%), linear-gradient(135deg, #1f8fe0 0%, #4fc3ff 60%, #9be7ff 100%)',
@@ -60,6 +76,7 @@ const projectsData = [
         id: 13,
         title: 'Games.exe',
         category: 'game-ui',
+        hidden: true,   // kodda durur, canlıda gizli
         thumbnail: null,
         thumbnailIcon: '🎮',
         thumbnailBg: 'radial-gradient(circle at 30% 70%, #6d28d955 0%, transparent 45%), linear-gradient(135deg, #0e1a3a 0%, #1e3a8a 55%, #6d28d9 100%)',
@@ -234,7 +251,7 @@ class ProjectsManager {
     }
 
     renderProjectsHTML(category = 'all') {
-        const filtered = this.filterByCategory(category);
+        const filtered = this.filterByCategory(category).filter(p => !p.hidden);
         return filtered.map(project => {
             const pos = project.thumbnailPos || 'center';
             const size = project.thumbnailSize || 'cover';

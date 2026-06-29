@@ -139,6 +139,9 @@ const WindowTemplates = {
     // Illustration.exe
     illustration: () => {
         const allImages = [
+            { src: 'assets/projects/yarn-puzzle/hero.png', label: 'Yarn Puzzle — Key Visual' },
+            { src: 'assets/projects/yarn-puzzle/gameplay.png', label: 'Yarn Puzzle — Gameplay UI' },
+            { src: 'assets/projects/yarn-puzzle/exit-flow.png', label: 'Yarn Puzzle — Exit Flow' },
             { src: 'assets/projects/metbic/hero.png', label: 'METBIC — Hero' },
             { src: 'assets/projects/metbic/render1.png', label: 'METBIC — Render 1' },
             { src: 'assets/projects/metbic/render2.png', label: 'METBIC — Render 2' },
@@ -1937,7 +1940,6 @@ const WindowTemplates = {
 
                     <div class="cv-contact">
                         <div class="cv-contact-item"><span>📍</span> Istanbul, Turkey</div>
-                        <div class="cv-contact-item"><span>📧</span> <a href="mailto:zeyneperdn96@gmail.com">zeyneperdn96@gmail.com</a></div>
                         <div class="cv-contact-item"><span>🔗</span> <a href="https://www.linkedin.com/in/zynprdn" target="_blank">linkedin.com/in/zynprdn</a></div>
                         <div class="cv-contact-item"><span>🗣️</span> Turkish (Native), English (A2)</div>
                     </div>
