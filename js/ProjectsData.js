@@ -31,6 +31,48 @@ const projectsData = [
         externalLink: 'yarn-puzzle-case-study.html'
     },
     {
+        id: 26,
+        title: 'GAME ICON SET',
+        category: 'game-ui',
+        thumbnail: 'assets/projects/game-icon-set/thumb.png',
+        thumbnailSize: 'cover',
+        thumbnailPos: 'center',
+        thumbnailBg: '#0c0a1c',
+        description: 'Fantasy Casual Game Icon Set — Economy, Rewards, Boosters & Utility',
+        featured: true,
+        year: '2026',
+        role: 'Game UI Artist (Icon Design, 3D-Stylized Visual Assets)',
+        externalLink: 'game-icon-set.html'
+    },
+    {
+        id: 27,
+        title: 'UI COMPONENTS',
+        category: 'game-ui',
+        thumbnail: 'assets/projects/game-ui-components/thumb.png',
+        thumbnailSize: 'cover',
+        thumbnailPos: 'center',
+        thumbnailBg: '#0c0a1c',
+        description: 'Scalable Game UI Kit — Buttons, HUD, Navigation & Feedback',
+        featured: true,
+        year: '2026',
+        role: 'Game UI Artist (Component System, States, HUD)',
+        externalLink: 'game-ui-components.html'
+    },
+    {
+        id: 28,
+        title: 'REWARD & POP-UPS',
+        category: 'game-ui',
+        thumbnail: 'assets/projects/reward-popup-system/thumb.png',
+        thumbnailSize: 'cover',
+        thumbnailPos: 'center',
+        thumbnailBg: '#0c0a1c',
+        description: 'Reward-Driven Pop-up System — Daily Reward, Victory, Bonus & Confirmation',
+        featured: true,
+        year: '2026',
+        role: 'Game UI Artist (Pop-up System, Reward UX, Visual Hierarchy)',
+        externalLink: 'reward-popup-system.html'
+    },
+    {
         id: 10,
         title: 'STELLAR VANGUARD',
         category: 'game-ui',
