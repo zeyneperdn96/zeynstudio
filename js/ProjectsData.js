@@ -260,8 +260,7 @@ const projectsData = [
             },
             images: {
                 context: 'assets/projects/coffeeform/context.png',
-                render1: 'assets/projects/coffeeform/render1.png',
-                render2: 'assets/projects/coffeeform/render2.png',
+                exploded: 'assets/projects/coffeeform/exploded.png',
                 technical: 'assets/projects/coffeeform/technical.png'
             }
         }

@@ -4,6 +4,36 @@ Bu dosya, ZeynStudio XP projesinde yapılan tüm değişiklikleri kronolojik ola
 
 ---
 
+## 📅 26 Ağustos 2026 - Kırık Dosya Yolları Temizliği
+
+### 🔧 Site genelinde eksik/yanlış asset yolları düzeltildi
+- **Değişiklik**: Kod taramasında bulunan, diskte karşılığı olmayan 13 dosya yolu düzeltildi
+- **Amaç**: Konsol 404'lerini temizlemek, config'i gerçek dosya adlarıyla hizalamak
+- **Değiştirilen Dosyalar**:
+  - `js/config.js` - ikon yolları
+  - `super-zeynep-world.html` - kullanılmayan sprite yüklemeleri
+  - `js/ProjectsData.js` - CoffeeForm case study görselleri
+
+#### ✨ Değişiklikler:
+- ✅ `CONFIG.icons` içindeki 7 yol boşluklu/büyük harfli isimlerden gerçek dosya adlarına çevrildi (`my project.png` → `my-project.png`, `LinkedIn.png` → `icon-linkedin.svg`, `shut down.png` → `icon-shutdown.svg` vb.)
+- ✅ Diskte hiç olmayan `Restart.png` / `Stand By.png` girdileri kaldırıldı; yerine sitede gerçekten kullanılan `logOff` ikonu eklendi
+- ✅ `super-zeynep-world.html`: her açılışta 404 veren `question-block.png` ve `used-block.png` yüklemeleri kaldırıldı (bloklar zaten canvas'ta prosedürel çiziliyor, sprite'lar hiç kullanılmıyordu)
+- ✅ `ProjectsData.js`: CoffeeForm case study'sinde var olmayan `render1.png`/`render2.png` yerine diskteki `exploded.png` bağlandı
+
+#### 📋 Kontrol edildi, sorun yok:
+- 14 HTML sayfasının tamamı açılıyor (HTTP 200)
+- 17 projenin thumbnail ve linkleri sağlam
+- AI Visuals: 124 kaydın thumb + full/video dosyalarının hepsi yerinde
+- Tekrarlanan HTML `id`'si veya boşa çıkan `getElementById` yok
+
+#### ⚠️ Bilinçli olarak dokunulmadı:
+- `js/config.js:9` → `instagram: 'https://instagram.com/yourhandle'` hâlâ placeholder (şu an menüde Instagram linki yok, görünmüyor)
+- `assets/resume.pdf` → kodda referansı var, dosya yok (Resume pencere olarak açılıyor, kırık bir şey görünmüyor)
+- `sushico/` → yarım kalmış Vite/React projesi, `src/` commit edilmemiş; siteden link değil
+- Oyun dosyaları ve Game UI board'ları olduğu gibi bırakıldı
+
+---
+
 ## 📅 2 Şubat 2026 - Zeyn Chat Güncellemesi & Boot Sequence Düzeltmesi
 
 ### 💬 Zeyn Chat (msn-chatbot.html) Güncellemesi

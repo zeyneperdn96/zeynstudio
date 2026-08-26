@@ -17,17 +17,16 @@ const CONFIG = {
 
     // Icon paths (uploaded pixel icons)
     icons: {
-        myProject: 'assets/icons/my project.png',
-        aboutMe: 'assets/icons/about me.png',
-        contactMe: 'assets/icons/contact me.png',
-        myGallery: 'assets/icons/My Gallery.png',
-        mediaPlayer: 'assets/icons/media player.png',
-        commandPrompt: 'assets/icons/command prompt.png',
-        linkedin: 'assets/icons/LinkedIn.png',
+        myProject: 'assets/icons/my-project.png',
+        aboutMe: 'assets/icons/about-me.png',
+        contactMe: 'assets/icons/contact-me.png',
+        myGallery: 'assets/icons/my-gallery.png',
+        mediaPlayer: 'assets/icons/icon-mediaplayer.svg',
+        commandPrompt: 'assets/icons/icon-cmd.svg',
+        linkedin: 'assets/icons/icon-linkedin.svg',
         allPrograms: 'assets/icons/All Programs.png',
-        shutDown: 'assets/icons/shut down.png',
-        restart: 'assets/icons/Restart.png',
-        standBy: 'assets/icons/Stand By.png'
+        shutDown: 'assets/icons/icon-shutdown.svg',
+        logOff: 'assets/icons/icon-logoff.svg'
     },
 
     // Personal Info
