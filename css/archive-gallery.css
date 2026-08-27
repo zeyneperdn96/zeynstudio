@@ -1,0 +1,241 @@
+/* ========================================
+   ARCHIVE GALLERY — 3D card rail (Archive.exe)
+   Lives inside an XP window; the scene owns the whole content area.
+   Only transform / opacity / filter are animated.
+   ======================================== */
+
+.archive-stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #06070f;
+    perspective: 1400px;
+    perspective-origin: 50% 46%;
+    cursor: grab;
+}
+.archive-stage.dragging { cursor: grabbing; }
+
+/* ---- depth environment: a floor that fades into the dark ---- */
+.archive-env { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.archive-env .sky {
+    position: absolute; inset: 0;
+    background:
+        radial-gradient(ellipse 70% 50% at 50% 34%, rgba(60,90,180,.20), transparent 70%),
+        radial-gradient(ellipse 40% 30% at 18% 22%, rgba(150,60,190,.13), transparent 70%),
+        linear-gradient(180deg, #06070f 0%, #090c1c 46%, #05060c 100%);
+}
+.archive-env .floor {
+    position: absolute; left: -60%; right: -60%; bottom: -8%; height: 58%;
+    background-image:
+        repeating-linear-gradient(90deg, transparent 0 84px, rgba(96,132,224,.34) 84px 86px),
+        repeating-linear-gradient(0deg,  transparent 0 52px, rgba(96,132,224,.20) 52px 54px);
+    transform: perspective(340px) rotateX(72deg);
+    transform-origin: bottom center;
+    -webkit-mask-image: linear-gradient(to top, #000 0, rgba(0,0,0,.75) 26%, transparent 92%);
+            mask-image: linear-gradient(to top, #000 0, rgba(0,0,0,.75) 26%, transparent 92%);
+}
+.archive-env .horizon {
+    position: absolute; left: 0; right: 0; bottom: 58%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(120,160,255,.45) 22%, rgba(120,160,255,.45) 78%, transparent);
+}
+.archive-env .haze {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 76% 74% at 50% 46%, transparent 44%, rgba(3,4,10,.86) 100%);
+}
+
+/* ---- the rail holds every card in one 3D space ---- */
+.archive-rail {
+    position: absolute;
+    left: 50%; top: 46%;
+    width: 0; height: 0;
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+
+.archive-card {
+    position: absolute;
+    left: 0; top: 0;
+    width: var(--acw, 230px);
+    height: var(--ach, 345px);
+    margin-left: calc(var(--acw, 230px) / -2);
+    margin-top:  calc(var(--ach, 345px) / -2);
+    transform-style: preserve-3d;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+.archive-card .plate {
+    position: absolute; inset: 0;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #0a0b18;
+    box-shadow:
+        0 18px 40px rgba(0,0,0,.6),
+        0 0 0 1px rgba(255,255,255,.07);
+    transition: box-shadow .35s ease;
+}
+.archive-card .plate img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    -webkit-user-drag: none;
+    user-select: none;
+}
+/* the reflection strip that sells "physical card on a surface" */
+.archive-card .sheen {
+    position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(112deg, transparent 38%, rgba(255,255,255,.15) 48%, transparent 58%);
+    opacity: 0; transition: opacity .35s ease;
+}
+.archive-card.is-focus .plate {
+    box-shadow:
+        0 26px 60px rgba(0,0,0,.7),
+        0 0 0 1px rgba(255,255,255,.16),
+        0 0 34px rgba(120,170,255,.32);
+}
+.archive-card.is-hover .plate {
+    box-shadow:
+        0 30px 70px rgba(0,0,0,.72),
+        0 0 0 1px rgba(255,255,255,.30),
+        0 0 52px rgba(150,190,255,.5);
+}
+.archive-card.is-hover .sheen { opacity: 1; }
+
+/* caption rides under the focused card only */
+.archive-card .cap {
+    position: absolute;
+    left: 0; right: 0; bottom: -30px;
+    text-align: center;
+    font-family: Tahoma, 'Segoe UI', sans-serif;
+    font-size: 11px; letter-spacing: .14em;
+    color: #cfe0ff;
+    text-shadow: 0 2px 6px rgba(0,0,0,.9);
+    opacity: 0; transition: opacity .3s ease;
+    pointer-events: none;
+    white-space: nowrap;
+}
+.archive-card.is-focus .cap { opacity: .92; }
+
+/* ---- motion trail clones (created and destroyed by JS) ---- */
+.archive-trail {
+    position: absolute;
+    left: 0; top: 0;
+    width: var(--acw, 230px);
+    height: var(--ach, 345px);
+    margin-left: calc(var(--acw, 230px) / -2);
+    margin-top:  calc(var(--ach, 345px) / -2);
+    border-radius: 6px;
+    overflow: hidden;
+    pointer-events: none;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    box-shadow: 0 0 0 1px rgba(160,200,255,.10);
+}
+.archive-trail img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ---- XP-flavoured chrome sitting on top of the scene ---- */
+.archive-hud {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    display: flex; align-items: center; gap: 10px;
+    padding: 6px 10px;
+    background: linear-gradient(180deg, #ece9d8 0%, #e2ddc8 100%);
+    border-top: 1px solid #fff;
+    box-shadow: inset 0 1px 0 #fff;
+    font-family: Tahoma, 'Segoe UI', sans-serif; font-size: 11px; color: #2b2b2b;
+    z-index: 6;
+}
+.archive-hud .grp { display: flex; align-items: center; gap: 6px; }
+.archive-hud .spacer { flex: 1; }
+.archive-hud .status {
+    padding: 2px 8px;
+    border: 1px solid; border-color: #808080 #fff #fff #808080;
+    background: #f4f2e6; min-width: 190px;
+}
+.archive-hud .status b { font-weight: 700; }
+.archive-hud .count { padding: 2px 8px; border: 1px solid; border-color: #808080 #fff #fff #808080; background: #f4f2e6; }
+.xpbtn {
+    font: 11px Tahoma, 'Segoe UI', sans-serif; color: #000;
+    padding: 3px 11px;
+    background: linear-gradient(180deg, #fdfdfd 0%, #eceade 46%, #dedbc8 100%);
+    border: 1px solid #8f8f7a; border-radius: 3px;
+    box-shadow: inset 0 1px 0 #fff; cursor: pointer;
+}
+.xpbtn:hover { background: linear-gradient(180deg, #fff 0%, #f4f2e4 46%, #e6e3d0 100%); border-color: #4a7fd4; }
+.xpbtn:active { background: #d8d5c2; box-shadow: inset 1px 1px 2px rgba(0,0,0,.28); }
+.xpbtn:disabled { color: #909090; text-shadow: 1px 1px 0 #fff; cursor: default; background: #eceade; border-color: #b3b3a0; }
+
+.archive-hint {
+    position: absolute; top: 10px; left: 12px; z-index: 6;
+    font-family: Tahoma, 'Segoe UI', sans-serif; font-size: 10px; letter-spacing: .1em;
+    color: rgba(190,212,255,.5); text-shadow: 0 1px 4px #000;
+    pointer-events: none; transition: opacity .5s ease;
+}
+.archive-hint.gone { opacity: 0; }
+
+/* ---- detail view: the "content" a card opens into ---- */
+.archive-detail {
+    position: absolute; inset: 0; z-index: 20;
+    display: flex; align-items: center; justify-content: center;
+    padding: 26px 26px 52px;
+    background: rgba(4,6,14,.9);
+    opacity: 0; pointer-events: none; transition: opacity .3s ease;
+}
+.archive-detail.on { opacity: 1; pointer-events: auto; }
+.archive-detail .frame {
+    position: relative;
+    max-width: 100%; max-height: 100%;
+    display: flex; flex-direction: column;
+    background: #ece9d8;
+    border: 2px solid; border-color: #fff #808080 #808080 #fff;
+    box-shadow: 6px 6px 20px rgba(0,0,0,.6);
+    transform: scale(.94); transition: transform .3s cubic-bezier(.2,.9,.25,1);
+}
+.archive-detail.on .frame { transform: scale(1); }
+.archive-detail .bar {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 3px 4px 3px 8px;
+    background: linear-gradient(180deg, #0058e6 0%, #3a80f0 8%, #2a6ad8 20%, #1a50b8 80%, #0a3a90 100%);
+    color: #fff; font: 700 12px Tahoma, 'Segoe UI', sans-serif;
+    text-shadow: 1px 1px 2px rgba(0,0,0,.5);
+}
+.archive-detail .bar button {
+    width: 20px; height: 18px; line-height: 1;
+    font: 700 12px Tahoma, sans-serif; color: #fff;
+    background: linear-gradient(180deg, #e8705a 0%, #d4402a 50%, #b02818 100%);
+    border: 1px solid #7a1c10; border-radius: 3px; cursor: pointer;
+}
+.archive-detail .bar button:hover { background: linear-gradient(180deg, #f08a72 0%, #e05038 50%, #c03020 100%); }
+.archive-detail .body { padding: 10px; background: #ece9d8; overflow: hidden; }
+.archive-detail img {
+    display: block; max-width: 100%;
+    max-height: calc(100vh - 260px);
+    width: auto; height: auto;
+    border: 1px solid #808080; background: #000;
+}
+.archive-detail .meta {
+    padding: 5px 9px; background: #ece9d8; border-top: 1px solid #b6b3a0;
+    font: 11px Tahoma, 'Segoe UI', sans-serif; color: #3a3a3a;
+    display: flex; justify-content: space-between; gap: 14px;
+}
+
+/* ---- responsive ---- */
+@media (max-width: 1024px) {
+    .archive-stage { perspective: 1150px; }
+}
+@media (max-width: 640px) {
+    .archive-stage { perspective: 900px; perspective-origin: 50% 44%; }
+    .archive-hud .status { min-width: 0; flex: 1; }
+    .archive-hud .lbl { display: none; }
+    .archive-hint { font-size: 9px; }
+    .archive-detail { padding: 14px 14px 46px; }
+}
+
+/* ---- reduced motion: no cinematics, just a readable gallery ---- */
+@media (prefers-reduced-motion: reduce) {
+    .archive-card .plate,
+    .archive-card .sheen,
+    .archive-card .cap,
+    .archive-detail,
+    .archive-detail .frame { transition-duration: .01ms !important; }
+}

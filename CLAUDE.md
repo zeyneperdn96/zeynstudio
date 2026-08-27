@@ -4,6 +4,54 @@ Bu dosya, ZeynStudio XP projesinde yapılan tüm değişiklikleri kronolojik ola
 
 ---
 
+## 📅 27 Ağustos 2026 - ARCHIVE GALLERY (Archive.exe) Eklendi
+
+### 🎞️ ZEYNEP.EXE kart setinin 3B kart galerisi
+- **Değişiklik**: Masaüstüne `Archive.exe` penceresi — GSAP + CSS 3D ile sinematik kart galerisi
+- **Amaç**: Zeynep'in gönderdiği referans videodaki hareket dili; carousel/grid değil, fiziksel kart hissi
+- **Değiştirilen Dosyalar**:
+  - `js/ArchiveData.js` - YENİ, kart dizisi (dinamik sayıda kart)
+  - `js/ArchiveGallery.js` - YENİ, motor (~780 satır), `destroy()` ile temiz kapanış
+  - `css/archive-gallery.css` - YENİ, sahne + kart + iz + XP HUD + detay
+  - `js/WindowTemplates.js` - `archive` şablonu eklendi
+  - `js/WindowManager.js` - pencere boyutu, `initializeArchiveWindow`, kapanışta cleanup
+  - `index.html` - GSAP CDN, css/js etiketleri, masaüstü ikonu
+
+#### ✨ Koreografi:
+- ✅ Uzak deste (`z:-1000, scale:.15`) + deterministik jitter → arkada çok kart hissi
+- ✅ Derinlikten geliş, arkadaki kartlar daha geç kalkıyor
+- ✅ Geçici DOM klonlarıyla diyagonal iz efekti (opacity .8/.55/.3/.12/.06, sonra siliniyor)
+- ✅ Merkezden kenarlara yelpaze; her kart yerinin ötesine taşıp oturuyor (üst üste binme)
+- ✅ Soldan sağa dalga (`y-35 · z+100 · rotateY 7 · scale 1.04`)
+- ✅ 4'erli gruplarda topla → kay → aç → otur, soldan sağa
+- ✅ Kavisli final yerleşim, dışa doğru sıkışan aralık (kaçış noktası)
+- ✅ Mouse parallax (sadece ortam döner), hover, tıklama→detay, idle, Replay
+
+#### 🧱 Mimari:
+- Her kartta 3 ayrı sayı kanalı (`base` / `fx` / `idle`), tek ticker toplayıp tek transform yazıyor
+- Böylece dalga + hover + idle aynı anda çalışıyor, birbirini ezmiyor
+- Animasyonda sadece `transform` ve `opacity`; layout tetikleyen özellik yok
+
+#### 🖼️ Görseller:
+- ✅ PNG'ler değiştirilmedi/kırpılmadı; **kart oranı görselin kendi oranından** geliyor
+- ✅ Ray'de 600px kopyalar, detayda orijinal PNG (`ARCHIVE_RAIL_SOURCE` ile tek satırda değişir)
+- ✅ Odaktan dışa doğru sıralı yükleme
+
+#### ♿ Düşüş yolları:
+- ✅ `prefers-reduced-motion` → intro yok, kartlar doğrudan yerinde, hover/tık çalışır
+- ✅ GSAP yüklenmezse aynı statik moda düşüyor (CDN'e sert bağımlılık yok)
+- ✅ Klavye sadece Archive penceresi aktifken çalışıyor (`.inactive` kontrolü)
+
+#### 🔧 Doğrulama:
+- ✅ Ray geometrisi 18 kontrol (spec aralıkları, 3 tier, simetri, sıkışma)
+- ✅ Statik tutarlılık: 27 metot, 11 seçici, CSS/JS sınıf örtüşmesi
+- ✅ 40 asset + GSAP CDN yerel sunucuda HTTP 200; 17 pencere şablonu bozulmadı
+
+#### ⚠️ AÇIK:
+- **Tarayıcıda henüz test edilmedi.** İlk açışta bakılacaklar `ARCHIVE-GALLERY.md` §8'de.
+
+---
+
 ## 📅 27 Ağustos 2026 - ARCHIVE SOLITAIRE Eklendi
 
 ### 🃏 Oynanabilir Klondike solitaire, 20 kartlık pixel arşivden

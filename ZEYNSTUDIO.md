@@ -51,6 +51,11 @@ Zeynep "oyun işim yok" dese de sitede gizli/yanlış paketlenmiş oyun UI işi 
   - ⬜ KALAN: gerçek ekran görüntüsü thumbnaillar (şu an emoji+gradient placeholder);
     her oyun işi için kısa case study metni; istenirse trading-cards.html'i de ekle
     (şu an About Me olarak kullanılıyor, mükerrerlik riski için dışarıda bırakıldı).
+- **ARCHIVE GALLERY (Archive.exe):** 🟡 YAZILDI, TARAYICIDA TEST EDİLMEDİ
+  (2026-08-27, aynı `archive-solitaire` dalında). ZEYNEP.EXE kart setinin 3B
+  kart galerisi, masaüstünde XP penceresi olarak açılıyor. GSAP + CSS 3D.
+  Yeni: `js/ArchiveGallery.js`, `js/ArchiveData.js`, `css/archive-gallery.css`.
+  Ayrıntı, koreografi ve ilk açışta bakılacaklar: **`ARCHIVE-GALLERY.md`**.
 - **ARCHIVE SOLITAIRE:** ✅ TAMAM (2026-08-27), `archive-solitaire` dalında,
   master'a merge edilmedi. Oynanabilir Klondike, Zeynep'in 20 kartlık ZEYNEP.EXE
   pixel arşivinden. Referans: Dohris'in LinkedIn solitaire reklamı. Tek dosya

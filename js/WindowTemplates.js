@@ -29,6 +29,21 @@ const WindowTemplates = {
         </div>
     `,
 
+    // Archive.exe - 3D card gallery
+    archive: () => `
+        <div class="window-titlebar">
+            <span class="window-title">🗂️ Archive.exe - Card Gallery</span>
+            <div class="window-controls">
+                <button class="win-btn win-minimize" data-action="minimize">_</button>
+                <button class="win-btn win-maximize" data-action="maximize">□</button>
+                <button class="win-btn win-close" data-action="close">×</button>
+            </div>
+        </div>
+        <div class="window-content" style="padding: 0; overflow: hidden; background: #06070f; display: flex;">
+            <div class="archive-stage" id="archive-stage" style="flex: 1; min-height: 0;"></div>
+        </div>
+    `,
+
     // About.txt - Trading Cards About window
     about: () => `
         <div class="window-titlebar">

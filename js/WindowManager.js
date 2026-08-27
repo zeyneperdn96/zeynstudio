@@ -97,7 +97,8 @@ class WindowManager {
             aiVisualsWork: { width: 860, height: 640 },
             paint: { width: 750, height: 550 },
             cv: { width: 720, height: 560 },
-            systembuilder: { width: 880, height: 520 }
+            systembuilder: { width: 880, height: 520 },
+            archive: { width: 1000, height: 660 }
         };
 
         const customSize = windowSizes[windowId] || {};
@@ -178,6 +179,10 @@ class WindowManager {
         }
 
         // Cleanup games
+        if (windowId === 'archive' && windowData.archiveCleanup) {
+            windowData.archiveCleanup();
+        }
+
         if (windowId === 'games' && windowData.gamesCleanup) {
             windowData.gamesCleanup();
         }
@@ -529,6 +534,11 @@ class WindowManager {
                     renderAndBindProjects(filter);
                 });
             });
+        }
+
+        // Archive.exe - 3D card gallery
+        if (windowId === 'archive') {
+            this.initializeArchiveWindow(windowEl);
         }
 
         // Games window
@@ -1216,6 +1226,26 @@ class WindowManager {
             img.style.cursor = 'zoom-in';
             img.addEventListener('click', () => this.openLightbox(img.src));
         }
+    }
+
+    initializeArchiveWindow(windowEl) {
+        const stage = windowEl.querySelector('#archive-stage');
+        if (!stage || typeof ArchiveGallery === 'undefined') return;
+
+        const cards = window.ARCHIVE_CARDS || [];
+        if (!cards.length) {
+            stage.innerHTML = '<div style="color:#8ba4b4;font:12px Tahoma;padding:24px">No cards in ARCHIVE_CARDS.</div>';
+            return;
+        }
+
+        // The stage needs its real size before the intro is choreographed.
+        requestAnimationFrame(() => {
+            const gallery = new ArchiveGallery(stage, cards);
+            const windowData = this.windows.get('archive');
+            if (!windowData) { gallery.destroy(); return; }
+            windowData.archiveGallery = gallery;
+            windowData.archiveCleanup = () => gallery.destroy();
+        });
     }
 
     initializeGamesWindow(windowEl) {
