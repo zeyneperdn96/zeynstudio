@@ -51,6 +51,14 @@ Zeynep "oyun işim yok" dese de sitede gizli/yanlış paketlenmiş oyun UI işi 
   - ⬜ KALAN: gerçek ekran görüntüsü thumbnaillar (şu an emoji+gradient placeholder);
     her oyun işi için kısa case study metni; istenirse trading-cards.html'i de ekle
     (şu an About Me olarak kullanılıyor, mükerrerlik riski için dışarıda bırakıldı).
+- **ARCHIVE SOLITAIRE:** ✅ TAMAM (2026-08-27), `archive-solitaire` dalında,
+  master'a merge edilmedi. Oynanabilir Klondike, Zeynep'in 20 kartlık ZEYNEP.EXE
+  pixel arşivinden. Referans: Dohris'in LinkedIn solitaire reklamı. Tek dosya
+  `zeynep-archive-solitaire.html` + `assets/projects/zeynep-archive/`.
+  Ayrıntı, karar gerekçeleri ve kalanlar: **`ARCHIVE-SOLITAIRE.md`**.
+  - Not: bu iş önce STELLAR VANGUARD temasıyla ("CREW MANIFEST") kurulmuştu,
+    Zeynep kendi kart setini tercih edince o sürüm silindi. **Faz 2 artık
+    solitaire'e bağlı değil**, aşağıdaki plan olduğu gibi duruyor.
 - **Faz 2 — Flagship oyun UI seti:** ⬜ YAPILACAK. **Karar: Cyberpunk/Sci-fi →
   STELLAR VANGUARD'ı uçtan uca oyun UI'ına büyüt.** Ekranlar: Title+menü, Pilot
   seçimi (var), **HUD ⭐** (can/shield/ammo/radar/objective/cooldown/low-hp vignette),
@@ -71,7 +79,7 @@ Zeynep "oyun işim yok" dese de sitede gizli/yanlış paketlenmiş oyun UI işi 
 
 ### Lokal test
 `ruby -run -e httpd . -p 8765 --bind-address 127.0.0.1` → http://127.0.0.1:8765/
-(Bu makinede python3/node yok.) Push: GitHub Desktop ("Push origin"); CLI auth yok.
+(Bu makinede node yok; python3 VAR — `python3 -m http.server 8000` da olur.) Push: GitHub Desktop ("Push origin"); CLI auth yok.
 
 ---
 
@@ -130,4 +138,4 @@ cd ~/Desktop/AI/zeynstudio-master
 ruby -run -e httpd . -p 8765 --bind-address 127.0.0.1
 # → http://127.0.0.1:8765/index.html
 ```
-(Bu makinede `python3`/`node` kurulu değil; statik sunucu için Ruby kullanıldı.)
+(Bu makinede `node` kurulu değil. `python3` VAR — `python3 -m http.server 8000` da olur.)
