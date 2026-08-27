@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ZEYNEP.EXE — Archive Solitaire</title>
+<meta name="description" content="Klondike solitaire built from a 20-card personal pixel archive. Card game UI design & development by Zeynep Erden.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#eaf6ff; --ink-dim:#7f8fb0; --ink-mute:#4c5b78;
+  --mak:#ff4fa3; --go:#43d2ff; --stay:#b07cff; --live:#ffd23f;
+  --mak-ink:#3d0022; --go-ink:#04283c; --stay-ink:#22004d; --live-ink:#3a2a00;
+  --cw:96px; --ch:144px; --hdr:26px;   /* set by JS */
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#05060f}
+body{font-family:'Share Tech Mono',monospace;color:var(--ink);
+  -webkit-font-smoothing:none;-webkit-tap-highlight-color:transparent;
+  touch-action:none;user-select:none;-webkit-user-select:none}
+img{display:block;image-rendering:pixelated}
+button{font-family:inherit;color:inherit;background:none;border:none;cursor:pointer;padding:0}
+.px{font-family:'Press Start 2P',monospace;letter-spacing:0}
+
+/* ============ STAGE ============ */
+#stage{position:fixed;inset:0;overflow:hidden;background:#05060f}
+#tableBg{position:absolute;inset:0;background-size:cover;background-position:center;display:none}
+#tableBg.on{display:block}
+
+.stars{position:absolute;inset:0;pointer-events:none;
+  background-image:
+    radial-gradient(1px 1px at 8% 12%,#fff,transparent),
+    radial-gradient(1px 1px at 19% 30%,rgba(255,255,255,.6),transparent),
+    radial-gradient(1px 1px at 27% 7%,rgba(160,220,255,.8),transparent),
+    radial-gradient(1px 1px at 36% 22%,rgba(255,255,255,.5),transparent),
+    radial-gradient(1px 1px at 44% 41%,rgba(255,160,240,.7),transparent),
+    radial-gradient(1px 1px at 53% 9%,#fff,transparent),
+    radial-gradient(1px 1px at 61% 26%,rgba(255,255,255,.55),transparent),
+    radial-gradient(1px 1px at 72% 15%,rgba(150,255,220,.7),transparent),
+    radial-gradient(1px 1px at 81% 34%,rgba(255,255,255,.6),transparent),
+    radial-gradient(1px 1px at 89% 6%,#fff,transparent),
+    radial-gradient(1px 1px at 95% 24%,rgba(200,180,255,.6),transparent),
+    radial-gradient(1px 1px at 13% 46%,rgba(255,255,255,.4),transparent),
+    radial-gradient(1px 1px at 67% 44%,rgba(255,255,255,.45),transparent);
+  animation:tw 6s steps(2,end) infinite}
+@keyframes tw{0%,100%{opacity:.85}50%{opacity:1}}
+.planet{position:absolute;left:4.5%;top:41%;width:26px;height:26px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle at 34% 32%,#5ce1ff,#1668a8 62%,#0b3358);
+  box-shadow:0 0 18px rgba(70,190,255,.35)}
+
+/* horizon grid, the way the reference draws it */
+.grid{position:absolute;left:-30%;right:-30%;bottom:0;height:52%;pointer-events:none;
+  background-image:
+    repeating-linear-gradient(90deg,transparent 0 66px,rgba(90,120,255,.55) 66px 68px),
+    repeating-linear-gradient(0deg,transparent 0 40px,rgba(60,235,190,.42) 40px 42px);
+  transform:perspective(300px) rotateX(70deg);transform-origin:bottom center;
+  mask-image:linear-gradient(to top,#000 0,#000 32%,transparent 92%);
+  -webkit-mask-image:linear-gradient(to top,#000 0,#000 32%,transparent 92%)}
+.horizon{position:absolute;left:0;right:0;bottom:52%;height:1px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(90,150,255,.5) 20%,rgba(90,150,255,.5) 80%,transparent)}
+.vignette{position:absolute;inset:0;pointer-events:none;z-index:880;
+  background:radial-gradient(ellipse 78% 78% at center,transparent 42%,rgba(0,0,0,.75) 100%)}
+.scan{position:absolute;inset:0;pointer-events:none;z-index:890;opacity:.35;
+  background:repeating-linear-gradient(0deg,transparent 0 2px,rgba(0,0,0,.5) 2px 3px)}
+
+/* ============ CORNER CHROME (no HUD bar) ============ */
+.badge{position:absolute;top:16px;left:18px;z-index:600;
+  padding:7px 11px;border:2px solid var(--ink);border-radius:11px;
+  font-size:9px;line-height:1;color:var(--ink);
+  text-shadow:0 2px 0 rgba(0,0,0,.9)}
+#counter{position:absolute;top:18px;right:20px;z-index:600;font-size:12px;line-height:1;
+  text-shadow:0 2px 0 rgba(0,0,0,.9)}
+#counter .n{color:#fff}
+#counter .sl{color:var(--ink-mute);margin:0 5px}
+#counter .w{color:#fff}
+#clock{position:absolute;bottom:16px;left:20px;z-index:600;font-size:13px;line-height:1;color:#fff;
+  text-shadow:0 2px 0 rgba(0,0,0,.9)}
+#movebox{position:absolute;bottom:18px;right:20px;z-index:600;font-size:10px;line-height:1;
+  color:var(--ink-dim);text-shadow:0 2px 0 rgba(0,0,0,.9)}
+#movebox .n{color:#fff}
+
+#tools{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);z-index:600;
+  display:flex;gap:18px;align-items:center}
+#tools button{font-family:'Press Start 2P',monospace;font-size:8px;line-height:1;color:var(--ink-mute);
+  text-shadow:0 2px 0 rgba(0,0,0,.9);transition:color .12s}
+#tools button:hover:not(:disabled){color:#fff}
+#tools button:disabled{opacity:.32;cursor:default}
+
+#backLink{position:absolute;top:18px;left:50%;transform:translateX(-50%);z-index:600;
+  font-family:'Press Start 2P',monospace;font-size:7px;color:var(--ink-mute);text-decoration:none;
+  text-shadow:0 2px 0 rgba(0,0,0,.9);transition:color .12s}
+#backLink:hover{color:#fff}
+
+/* ============ BOARD ============ */
+#board{position:absolute;inset:0;z-index:400}
+
+.flabel{position:absolute;z-index:405;text-align:center;pointer-events:none;
+  font-family:'Press Start 2P',monospace;line-height:1;text-shadow:0 2px 0 rgba(0,0,0,.9)}
+.flabel .t{display:block;font-size:7px;margin-bottom:3px;white-space:nowrap}
+.flabel .a{display:block;font-size:8px;opacity:.9}
+
+.slot{position:absolute;border-radius:4px;border:2px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.022)}
+.slot.img{border:none;background-size:100% 100%;background-repeat:no-repeat}
+.slot.hot{border-color:#fff;background:rgba(255,255,255,.10);box-shadow:0 0 0 2px rgba(255,255,255,.25)}
+.slot .glyph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:'Press Start 2P',monospace;font-size:calc(var(--cw)*.20);color:rgba(255,255,255,.22);
+  pointer-events:none}
+.slot.recycle{cursor:pointer}
+.slot[data-found="0"].hot{border-color:var(--mak)} .slot[data-found="1"].hot{border-color:var(--go)}
+.slot[data-found="2"].hot{border-color:var(--stay)} .slot[data-found="3"].hot{border-color:var(--live)}
+
+/* ============ CARDS ============ */
+.card{position:absolute;width:var(--cw);height:var(--ch);transform-style:preserve-3d;
+  transition:transform .2s cubic-bezier(.2,.9,.25,1);will-change:transform}
+.card.drag{transition:none;cursor:grabbing}
+.card.grabbable{cursor:pointer}
+.card .inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;
+  transition:transform .26s cubic-bezier(.4,0,.2,1)}
+.card.down .inner{transform:rotateY(180deg)}
+.card .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border-radius:4px;overflow:hidden;box-shadow:0 2px 0 rgba(0,0,0,.55)}
+
+/* --- back: flat plate + repeating mark, like the reference --- */
+.card .back{transform:rotateY(180deg);background:#5b2a52;border:2px solid #8d4a80;
+  display:flex;align-items:center;justify-content:center}
+.card .back .bimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+.card .back.hasimg .bimg{display:block}
+.card .back.hasimg .bpat{display:none}
+.card .back .bpat{position:absolute;inset:0;
+  background-image:
+    repeating-linear-gradient(45deg,transparent 0 6px,rgba(255,255,255,.07) 6px 12px),
+    repeating-linear-gradient(-45deg,transparent 0 6px,rgba(0,0,0,.14) 6px 12px);
+  display:flex;align-items:center;justify-content:center}
+.card .back .bpat span{font-family:'Press Start 2P',monospace;font-size:calc(var(--cw)*.26);
+  color:rgba(255,255,255,.55);text-shadow:0 2px 0 rgba(0,0,0,.35)}
+
+/* --- front: flat colour plate, rank top-left, art below --- */
+.card .front{display:flex;flex-direction:column;background:var(--fc);
+  border:2px solid color-mix(in srgb,var(--fc) 58%,#000)}
+.card .hdr{flex:0 0 auto;height:var(--hdr);display:flex;align-items:center;
+  padding:0 0 0 calc(var(--cw)*.09);background:var(--fc)}
+.card .rank{font-family:'Press Start 2P',monospace;line-height:1;
+  font-size:calc(var(--ch)*.10);color:var(--fi);text-shadow:0 2px 0 rgba(0,0,0,.18)}
+.card .art{position:relative;flex:1 1 auto;overflow:hidden;background:var(--fc)}
+.card .art img{width:100%;height:100%;object-fit:cover;object-position:center 45%;display:none;
+  image-rendering:auto}
+.card .art.hasimg img{display:block}
+.card .art .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:'Press Start 2P',monospace;font-size:calc(var(--cw)*.26);color:var(--fi);opacity:.5}
+.card .art.hasimg .ph{display:none}
+
+.card.lift .face{box-shadow:0 10px 0 rgba(0,0,0,.45),0 0 0 2px rgba(255,255,255,.6)}
+.card.shake{animation:shake .3s steps(6,end)}
+@keyframes shake{0%,100%{margin-left:0}20%{margin-left:-6px}40%{margin-left:6px}60%{margin-left:-4px}80%{margin-left:4px}}
+.card.seat .front{animation:seat .18s steps(3,end)}
+@keyframes seat{0%{filter:brightness(1.7)}100%{filter:brightness(1)}}
+.card.flyer{transition:none!important;z-index:1200}
+
+#tip{position:absolute;z-index:1250;padding:5px 9px;border-radius:9px;
+  background:#1d1030;border:2px solid var(--tc,#fff);
+  font-family:'Press Start 2P',monospace;font-size:7px;line-height:1;color:#fff;white-space:nowrap;
+  transform:translate(-50%,0);pointer-events:none;opacity:0;transition:opacity .12s}
+#tip.on{opacity:1}
+
+.fx-glow{position:absolute;border-radius:5px;pointer-events:none;z-index:380;
+  box-shadow:0 0 0 3px currentColor;opacity:0;animation:fxglow .55s steps(5,end)}
+@keyframes fxglow{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.3)}}
+
+/* ============ OVERLAYS ============ */
+.overlay{position:absolute;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;
+  background:rgba(4,5,14,.9);opacity:0;pointer-events:none;transition:opacity .3s}
+.overlay.on{opacity:1;pointer-events:auto}
+.panel{width:min(560px,92vw);padding:30px 28px;text-align:center;
+  border:3px solid var(--ink);background:#0a0b1a;box-shadow:0 8px 0 rgba(0,0,0,.5)}
+.panel .kicker{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--ink-mute);margin-bottom:14px}
+.panel h2{font-family:'Press Start 2P',monospace;font-size:clamp(14px,2.6vw,21px);line-height:1.5;
+  margin-bottom:14px;color:#fff;text-shadow:0 3px 0 rgba(0,0,0,.7)}
+.panel p{font-size:14px;line-height:1.65;color:var(--ink-dim);margin-bottom:20px}
+.panel .rules{display:grid;grid-template-columns:1fr;gap:7px;margin-bottom:22px;text-align:left;
+  font-size:13px;color:var(--ink-dim);line-height:1.5}
+.panel .rules div{display:flex;gap:10px}
+.panel .rules b{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--ink-mute);
+  flex:0 0 auto;padding-top:3px}
+.panel .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.pxbtn{font-family:'Press Start 2P',monospace;font-size:9px;line-height:1;padding:13px 18px;
+  border:2px solid var(--ink);color:#fff;background:#131530;box-shadow:0 4px 0 rgba(0,0,0,.6);
+  transition:transform .08s}
+.pxbtn:hover{background:#1e2148}
+.pxbtn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.6)}
+.pxbtn.go{background:#1b4d33;border-color:#4ade9a;color:#c6ffe4}
+.pxbtn.go:hover{background:#246642}
+
+.suit-row{display:flex;justify-content:center;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.suit-chip{width:78px}
+.suit-chip .av{width:100%;aspect-ratio:2/3;border:2px solid currentColor;overflow:hidden;
+  display:flex;align-items:flex-end;background:currentColor}
+.suit-chip .av img{width:100%;height:82%;object-fit:cover;object-position:center 45%}
+.suit-chip .nm{font-family:'Press Start 2P',monospace;font-size:6px;line-height:1.6;margin-top:7px;
+  color:var(--ink-dim)}
+
+#winStats{display:flex;justify-content:center;gap:30px;margin-bottom:22px}
+#winStats .k{font-family:'Press Start 2P',monospace;font-size:6px;color:var(--ink-mute);display:block;margin-bottom:7px}
+#winStats .v{font-family:'Press Start 2P',monospace;font-size:14px;color:#fff}
+
+#toast{position:absolute;left:50%;bottom:52px;transform:translateX(-50%);z-index:1100;
+  font-family:'Press Start 2P',monospace;font-size:8px;color:#fff;
+  text-shadow:0 2px 0 rgba(0,0,0,.9);opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap}
+#toast.on{opacity:1}
+
+@media (max-width:600px){
+  .badge{top:10px;left:10px;padding:5px 8px;font-size:7px}
+  #counter{top:12px;right:12px;font-size:10px}
+  #clock{bottom:12px;left:12px;font-size:11px}
+  #movebox{bottom:13px;right:12px;font-size:8px}
+  #tools{gap:12px;bottom:11px} #tools button{font-size:7px}
+  #backLink{display:none}
+}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="tableBg"></div>
+  <div class="stars"></div>
+  <div class="planet"></div>
+  <div class="horizon"></div>
+  <div class="grid"></div>
+
+  <div id="board"></div>
+  <div id="tip"></div>
+
+  <div class="badge px">ZEYNEP.EXE</div>
+  <div id="counter" class="px"><span class="n" id="squadVal">0</span><span class="sl">/</span><span class="w">Archives</span></div>
+  <a id="backLink" href="index.html">&lt; DESKTOP</a>
+  <div id="clock" class="px"><span id="statTime">00:00</span></div>
+  <div id="movebox" class="px"><span class="n" id="statMoves">0</span> / moves</div>
+  <div id="tools">
+    <button id="btnUndo">UNDO</button>
+    <button id="btnAuto">FILE</button>
+    <button id="btnNew">NEW</button>
+    <button id="btnSound">SND</button>
+  </div>
+
+  <div class="vignette"></div>
+  <div class="scan"></div>
+  <div id="toast"></div>
+
+  <div class="overlay on" id="introOv">
+    <div class="panel">
+      <div class="kicker">20 FILES // 4 ARCHIVES</div>
+      <h2>ARCHIVE<br>SOLITAIRE</h2>
+      <p>Every card is a file. Sort all four archives back into order and the whole thing spills open.</p>
+      <div class="suit-row" id="suitRow"></div>
+      <div class="rules">
+        <div><b>01</b><span>Fill each archive <b style="color:#fff">A to K</b> in the four bays up top.</span></div>
+        <div><b>02</b><span>On the desk, stack <b style="color:#fff">descending</b>, alternating <b style="color:#fff">warm / cool</b>.</span></div>
+        <div><b>03</b><span>Only a <b style="color:#fff">K</b> can start an empty column.</span></div>
+        <div><b>04</b><span><b style="color:#fff">Click</b> a card to file it straight into its archive.</span></div>
+      </div>
+      <div class="cta"><button class="pxbtn go" id="btnStart">OPEN ARCHIVE</button></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="winOv">
+    <div class="panel">
+      <div class="kicker">EVERY FILE BACK IN PLACE</div>
+      <h2 style="color:#4ade9a">ARCHIVE<br>COMPLETE</h2>
+      <div id="winStats">
+        <div><span class="k">TIME</span><span class="v" id="winTime">00:00</span></div>
+        <div><span class="k">MOVES</span><span class="v" id="winMoves">0</span></div>
+        <div><span class="k">RANK</span><span class="v" id="winRank">-</span></div>
+      </div>
+      <div class="cta">
+        <button class="pxbtn go" id="btnAgain">NEW DEAL</button>
+        <button class="pxbtn" id="btnAdmire">WATCH IT FALL</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* =======================================================================
+   ZEYNEP.EXE — Archive Solitaire
+   Klondike dealt from a 20-card personal pixel archive. Four archives of
+   five files; ranks A-K cycle through a suit's five files, the same way
+   the reference ad reuses its portraits per column.
+   Presentation follows that ad: flat colour plates, rank letter top-left,
+   a tight fan so buried cards read as coloured strips, and no HUD bar --
+   just the four corners.
+   ======================================================================= */
+
+var DIR = 'assets/projects/zeynep-archive/';
+var THUMB = DIR + 'thumbs/';
+
+var SUITS = [
+  { key:'making',  name:'MAKING',  wing:'WARM', color:'#ff4fa3', ink:'#3d0022',
+    files:['019','002','014','007','006'],
+    titles:['SKETCHBOOK','CAMERA & FILM','STICKER BOX','SOUNDTRACKS','QUEST NOTES'] },
+  { key:'going',   name:'GOING',   wing:'COOL', color:'#43d2ff', ink:'#04283c',
+    files:['003','004','017','015','005'],
+    titles:['JAPAN DIARIES','TRAVEL FILE','CITY LIGHTS','SUMMER NOTES','ROWING LOG'] },
+  { key:'staying', name:'STAYING', wing:'COOL', color:'#b07cff', ink:'#22004d',
+    files:['012','008','020','013','010'],
+    titles:['BOOK NOOK','HOME CORNERS','CAT MOMENTS','CINEMA NIGHTS','SECRET STUFF'] },
+  { key:'living',  name:'LIVING',  wing:'WARM', color:'#ffd23f', ink:'#3a2a00',
+    files:['009','011','018','016','001'],
+    titles:['GOOD FOOD','COFFEE BREAK','SWEET THINGS','DANCE FILE','ZEYNEP.EXE'] }
+];
+
+var RANK_LABEL = ['','A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+
+function artIndex(rank){ return (rank - 1) % 5; }
+function artFile(suit, rank){ return SUITS[suit].files[artIndex(rank)]; }
+function artTitle(suit, rank){ return SUITS[suit].titles[artIndex(rank)]; }
+
+var ASSETS = {};
+function probe(path, key){
+  return new Promise(function(res){
+    var im = new Image();
+    im.onload  = function(){ ASSETS[key] = true;  res(); };
+    im.onerror = function(){ ASSETS[key] = false; res(); };
+    im.src = path;
+  });
+}
+function assetJobs(){
+  var jobs = [], i, s;
+  for (s = 0; s < 4; s++){
+    for (i = 0; i < 5; i++){
+      (function(f){ jobs.push(probe(THUMB + 'file-' + f + '.jpg', 'f' + f)); })(SUITS[s].files[i]);
+    }
+  }
+  ['card-back.png','table-bg.png','slot-frame.png'].forEach(function(n){
+    jobs.push(probe(DIR + n, n));
+  });
+  return jobs;
+}
+function has(k){ return ASSETS[k] === true; }
+
+/* ---------------------------------------------------------------- state */
+var board = document.getElementById('board');
+var stage = document.getElementById('stage');
+var tipEl = document.getElementById('tip');
+var cards = [], piles = {}, geo = {}, slots = {}, labels = {}, history = [];
+var moves = 0, startTime = 0, timerId = 0, running = false, won = false;
+var soundOn = true;
+
+var PILE_IDS = (function(){
+  var a = ['stock','waste'], i;
+  for (i=0;i<4;i++) a.push('f'+i);
+  for (i=0;i<7;i++) a.push('t'+i);
+  return a;
+})();
+
+function isTab(p){ return p.charAt(0) === 't'; }
+function isFound(p){ return p.charAt(0) === 'f'; }
+function top(p){ var a = piles[p]; return a.length ? cards[a[a.length-1]] : null; }
+
+/* ---------------------------------------------------------------- audio */
+var actx = null;
+function beep(freq, dur, type, vol){
+  if (!soundOn) return;
+  try{
+    if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+    var o = actx.createOscillator(), g = actx.createGain();
+    o.type = type || 'square';
+    o.frequency.setValueAtTime(freq, actx.currentTime);
+    g.gain.setValueAtTime(vol || .05, actx.currentTime);
+    g.gain.exponentialRampToValueAtTime(.0001, actx.currentTime + (dur||.09));
+    o.connect(g); g.connect(actx.destination);
+    o.start(); o.stop(actx.currentTime + (dur||.09) + .02);
+  }catch(e){}
+}
+var SFX = {
+  place:  function(){ beep(340, .06, 'square', .035); },
+  flip:   function(){ beep(560, .05, 'square', .03); },
+  draw:   function(){ beep(250, .05, 'square', .03); },
+  file:   function(){ beep(800, .1, 'square', .045); setTimeout(function(){ beep(1200,.09,'square',.03); }, 55); },
+  bad:    function(){ beep(110, .12, 'sawtooth', .04); },
+  archive:function(){ [660,880,1320].forEach(function(f,i){ setTimeout(function(){ beep(f,.14,'square',.045); }, i*85); }); },
+  win:    function(){ [523,659,784,1047,1319].forEach(function(f,i){ setTimeout(function(){ beep(f,.3,'square',.05); }, i*125); }); }
+};
+
+/* --------------------------------------------------------------- layout */
+function computeGeo(){
+  var W = stage.clientWidth, H = stage.clientHeight;
+  var gapR = 0.22;
+  var padX = W < 640 ? 10 : 26;
+
+  // the reference keeps the board compact and centred rather than full-bleed
+  var cw = Math.floor((W - padX*2) / (7 + 6*gapR));
+  cw = Math.max(34, Math.min(cw, 104));
+  var ch  = Math.round(cw * 1.5);
+  var hdr = Math.round(ch * 0.18);          // the strip a buried card shows
+  var gap = Math.round(cw * gapR);
+  var bw  = 7*cw + 6*gap;
+  var left = Math.round((W - bw) / 2);
+
+  var fanUp   = hdr;                        // stacked cards read as clean bars
+  var fanDown = Math.max(4, Math.round(ch * 0.075));
+
+  // vertical: label row, top row, gap, tableau -- centred as a block
+  var labelH = Math.round(ch * 0.22);
+  var rowGap = Math.round(ch * 0.26);
+  var deepest = 6*fanDown + 12*fanUp + ch;
+  var blockH = labelH + ch + rowGap + deepest;
+  var avail = H - 96;
+  if (blockH > avail){
+    var k = Math.max(0.3, (avail - labelH - ch - rowGap - ch) / (deepest - ch));
+    fanUp   = Math.max(7, Math.round(fanUp * k));
+    fanDown = Math.max(3, Math.round(fanDown * k));
+    deepest = 6*fanDown + 12*fanUp + ch;
+    blockH  = labelH + ch + rowGap + deepest;
+  }
+  var topY = Math.max(58, Math.round((H - blockH) / 2) + labelH);
+  var tabY = topY + ch + rowGap;
+
+  document.documentElement.style.setProperty('--cw', cw + 'px');
+  document.documentElement.style.setProperty('--ch', ch + 'px');
+  document.documentElement.style.setProperty('--hdr', hdr + 'px');
+
+  function colX(i){ return left + i*(cw+gap); }
+  geo = { cw:cw, ch:ch, gap:gap, fanUp:fanUp, fanDown:fanDown, labelH:labelH };
+  geo.stock = {x:colX(0), y:topY};
+  geo.waste = {x:colX(1), y:topY};
+  for (var f=0; f<4; f++) geo['f'+f] = {x:colX(3+f), y:topY};
+  for (var t=0; t<7; t++) geo['t'+t] = {x:colX(t), y:tabY};
+}
+
+function cardY(pile, idx){
+  var g = geo[pile];
+  if (!isTab(pile)) return g.y;
+  var y = g.y, ids = piles[pile];
+  for (var i=0; i<idx; i++) y += cards[ids[i]].up ? geo.fanUp : geo.fanDown;
+  return y;
+}
+
+/* ------------------------------------------------------------ build DOM */
+function buildSlots(){
+  PILE_IDS.forEach(function(p){
+    var el = document.createElement('div');
+    el.className = 'slot';
+    el.dataset.pile = p;
+    if (isFound(p)) el.dataset.found = p.charAt(1);
+
+    if (has('slot-frame.png')){
+      el.classList.add('img');
+      el.style.backgroundImage = 'url(' + DIR + 'slot-frame.png)';
+    }
+    if (p === 'stock'){
+      el.classList.add('recycle');
+      var g = document.createElement('div');
+      g.className = 'glyph';
+      g.textContent = '↺';
+      el.appendChild(g);
+    }
+    board.appendChild(el);
+    slots[p] = el;
+
+    if (isFound(p)){                        // tiny caption above the bay
+      var s = SUITS[+p.charAt(1)];
+      var lab = document.createElement('div');
+      lab.className = 'flabel';
+      lab.style.color = s.color;
+      lab.innerHTML = '<span class="t">' + s.name + '</span><span class="a">▼</span>';
+      board.appendChild(lab);
+      labels[p] = lab;
+    }
+  });
+}
+
+function buildCards(){
+  cards.length = 0;
+  for (var s=0; s<4; s++){
+    for (var r=1; r<=13; r++){
+      var suit = SUITS[s];
+      var id = cards.length;
+      var file = artFile(s, r);
+      var okArt = has('f' + file);
+
+      var el = document.createElement('div');
+      el.className = 'card down';
+      el.dataset.id = id;
+      el.style.setProperty('--fc', suit.color);
+      el.style.setProperty('--fi', suit.ink);
+
+      el.innerHTML =
+        '<div class="inner">' +
+          '<div class="face back' + (has('card-back.png') ? ' hasimg' : '') + '">' +
+            '<img class="bimg" src="' + (has('card-back.png') ? DIR + 'card-back.png' : '') + '" alt="">' +
+            '<div class="bpat"><span>Z</span></div>' +
+          '</div>' +
+          '<div class="face front">' +
+            '<div class="hdr"><span class="rank">' + RANK_LABEL[r] + '</span></div>' +
+            '<div class="art' + (okArt ? ' hasimg' : '') + '">' +
+              '<img src="' + (okArt ? THUMB + 'file-' + file + '.jpg' : '') + '" alt="" loading="lazy">' +
+              '<div class="ph">?</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+
+      board.appendChild(el);
+      cards.push({ id:id, suit:s, rank:r, up:false, el:el, pile:null });
+    }
+  }
+}
+
+/* --------------------------------------------------------------- render */
+function render(anim){
+  PILE_IDS.forEach(function(p){
+    var ids = piles[p], g = geo[p];
+    slots[p].style.transform = 'translate3d(' + g.x + 'px,' + g.y + 'px,0)';
+    slots[p].style.width  = geo.cw + 'px';
+    slots[p].style.height = geo.ch + 'px';
+
+    if (labels[p]){
+      labels[p].style.transform = 'translate3d(' + g.x + 'px,' + (g.y - geo.labelH) + 'px,0)';
+      labels[p].style.width = geo.cw + 'px';
+    }
+
+    ids.forEach(function(id, i){
+      var c = cards[id];
+      c.pile = p;
+      var y = cardY(p, i);
+      if (anim === false) c.el.style.transition = 'none';
+      c.el.style.transform = 'translate3d(' + g.x + 'px,' + y + 'px,0)';
+      c.el.style.zIndex = 10 + PILE_IDS.indexOf(p)*60 + i;
+      c.el.classList.toggle('down', !c.up);
+      c.el.classList.toggle('grabbable', c.up || p === 'stock');
+      if (anim === false){ void c.el.offsetWidth; c.el.style.transition = ''; }
+    });
+  });
+
+  var dry = piles.stock.length === 0 && piles.waste.length > 0;
+  slots.stock.classList.toggle('recycle', dry);
+  var sg = slots.stock.querySelector('.glyph');
+  if (sg) sg.style.opacity = dry ? '1' : '0';
+
+  updateHud();
+}
+
+function updateHud(){
+  var ready = 0;
+  for (var f=0; f<4; f++) if (piles['f'+f].length === 13) ready++;
+  document.getElementById('squadVal').textContent = ready;
+  document.getElementById('statMoves').textContent = moves;
+  document.getElementById('btnUndo').disabled = history.length === 0;
+}
+
+function fmtTime(ms){
+  var s = Math.floor(ms/1000);
+  return ('0' + Math.floor(s/60)).slice(-2) + ':' + ('0' + (s%60)).slice(-2);
+}
+function tick(){ if (running) document.getElementById('statTime').textContent = fmtTime(Date.now() - startTime); }
+
+var toastT;
+function toast(msg){
+  var t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('on');
+  clearTimeout(toastT);
+  toastT = setTimeout(function(){ t.classList.remove('on'); }, 1600);
+}
+
+/* the little caption that follows a dragged card, as in the reference */
+function showTip(card){
+  tipEl.textContent = artTitle(card.suit, card.rank);
+  tipEl.style.setProperty('--tc', SUITS[card.suit].color);
+  tipEl.classList.add('on');
+}
+function moveTip(x, y){
+  tipEl.style.left = (x + geo.cw/2) + 'px';
+  tipEl.style.top  = (y + geo.ch + 8) + 'px';
+}
+function hideTip(){ tipEl.classList.remove('on'); }
+/* ----------------------------------------------------------------- rules */
+function canDropFoundation(c, f){
+  if (c.suit !== f) return false;
+  var t = top('f'+f);
+  return t ? (t.rank === c.rank - 1) : (c.rank === 1);
+}
+function canDropTableau(c, t){
+  var tp = top('t'+t);
+  if (!tp) return c.rank === 13;                       // only a K opens an empty column
+  if (!tp.up) return false;
+  return tp.rank === c.rank + 1 && SUITS[tp.suit].wing !== SUITS[c.suit].wing;
+}
+function canDrop(c, pile){
+  if (isFound(pile)) return canDropFoundation(c, +pile.charAt(1));
+  if (isTab(pile))   return canDropTableau(c, +pile.charAt(1));
+  return false;
+}
+
+/* -------------------------------------------------------------- history */
+function snapshot(){
+  var s = { piles:{}, up:{}, moves:moves };
+  PILE_IDS.forEach(function(p){ s.piles[p] = piles[p].slice(); });
+  cards.forEach(function(c){ s.up[c.id] = c.up; });
+  history.push(s);
+  if (history.length > 200) history.shift();
+}
+function undo(){
+  if (!history.length || won) return;
+  var s = history.pop();
+  PILE_IDS.forEach(function(p){ piles[p] = s.piles[p].slice(); });
+  cards.forEach(function(c){ c.up = s.up[c.id]; });
+  moves = s.moves;
+  render(); SFX.flip();
+}
+
+/* ---------------------------------------------------------------- moves */
+function fxAt(pile, color){
+  var g = geo[pile];
+  var d = document.createElement('div');
+  d.className = 'fx-glow';
+  d.style.cssText += 'left:0;top:0;width:' + geo.cw + 'px;height:' + geo.ch + 'px;color:' + color +
+                     ';transform:translate3d(' + g.x + 'px,' + g.y + 'px,0)';
+  board.appendChild(d);
+  setTimeout(function(){ d.remove(); }, 640);
+}
+
+function applyMove(ids, from, to, silent){
+  snapshot();
+  piles[from].splice(piles[from].length - ids.length, ids.length);
+  ids.forEach(function(id){ piles[to].push(id); });
+
+  // expose whatever was underneath
+  if (isTab(from)){
+    var t = top(from);
+    if (t && !t.up){ t.up = true; if (!silent) SFX.flip(); }
+  }
+  moves++;
+
+  if (isFound(to)){
+    if (!silent) SFX.file();
+    if (piles[to].length === 13){
+      fxAt(to, SUITS[+to.charAt(1)].color);
+      SFX.archive();
+      toast(SUITS[+to.charAt(1)].name + ' ARCHIVE COMPLETE');
+    }
+  } else if (!silent){
+    SFX.place();
+  }
+
+  var lead = cards[ids[0]];
+  lead.el.classList.remove('seat'); void lead.el.offsetWidth; lead.el.classList.add('seat');
+
+  render();
+  if (!running) startClock();
+  checkWin();
+}
+
+function tryAutoFile(c){
+  if (!c.up) return false;
+  var p = c.pile;
+  if (isTab(p) && piles[p][piles[p].length-1] !== c.id) return false;
+  if ((p === 'waste' || isFound(p)) && piles[p][piles[p].length-1] !== c.id) return false;
+  var f = 'f' + c.suit;
+  if (p === f) return false;
+  if (canDropFoundation(c, c.suit)){ applyMove([c.id], p, f); return true; }
+  return false;
+}
+
+function shake(c){
+  c.el.classList.remove('shake'); void c.el.offsetWidth; c.el.classList.add('shake');
+  SFX.bad();
+}
+
+function drawFromStock(){
+  if (won) return;
+  if (piles.stock.length){
+    snapshot();
+    var id = piles.stock.pop();
+    cards[id].up = true;
+    piles.waste.push(id);
+    moves++;
+    SFX.draw();
+    render();
+    if (!running) startClock();
+  } else if (piles.waste.length){
+    snapshot();
+    while (piles.waste.length){
+      var w = piles.waste.pop();
+      cards[w].up = false;
+      piles.stock.push(w);
+    }
+    moves++;
+    SFX.flip();
+    toast('DESK REFILED');
+    render();
+  }
+}
+
+/* ----------------------------------------------------------------- drag */
+var drag = null;
+
+function pileRect(p){
+  var g = geo[p], h = geo.ch;
+  if (isTab(p)){
+    var n = piles[p].length;
+    if (n) h = cardY(p, n-1) - g.y + geo.ch;
+  }
+  return { x:g.x, y:g.y, w:geo.cw, h:h };
+}
+function overlapArea(a, b){
+  var ox = Math.max(0, Math.min(a.x+a.w, b.x+b.w) - Math.max(a.x, b.x));
+  var oy = Math.max(0, Math.min(a.y+a.h, b.y+b.h) - Math.max(a.y, b.y));
+  return ox * oy;
+}
+
+board.addEventListener('pointerdown', function(e){
+  if (won || drag) return;
+  var cardEl = e.target.closest ? e.target.closest('.card') : null;
+  var slotEl = e.target.closest ? e.target.closest('.slot') : null;
+
+  if (!cardEl){
+    if (slotEl && slotEl.dataset.pile === 'stock') drawFromStock();
+    return;
+  }
+
+  var c = cards[+cardEl.dataset.id];
+  if (c.pile === 'stock'){ drawFromStock(); return; }
+  if (!c.up) return;
+
+  var p = c.pile, idx = piles[p].indexOf(c.id);
+  if (!isTab(p) && idx !== piles[p].length - 1) return;
+
+  var ids = isTab(p) ? piles[p].slice(idx) : [c.id];
+  if (ids.some(function(id){ return !cards[id].up; })) return;
+
+  var orig = ids.map(function(id, i){
+    return { x: geo[p].x, y: cardY(p, idx + i) };
+  });
+
+  drag = { ids:ids, from:p, sx:e.clientX, sy:e.clientY, orig:orig, moved:false, card:c };
+  board.setPointerCapture(e.pointerId);
+  e.preventDefault();
+});
+
+board.addEventListener('pointermove', function(e){
+  if (!drag) return;
+  var dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
+  if (!drag.moved && Math.abs(dx) + Math.abs(dy) < 5) return;
+
+  if (!drag.moved){
+    drag.moved = true;
+    drag.ids.forEach(function(id, i){
+      var el = cards[id].el;
+      el.classList.add('drag', 'lift');
+      el.style.zIndex = 1000 + i;
+    });
+    showTip(drag.card);
+  }
+
+  drag.ids.forEach(function(id, i){
+    cards[id].el.style.transform =
+      'translate3d(' + (drag.orig[i].x + dx) + 'px,' + (drag.orig[i].y + dy) + 'px,0)';
+  });
+  moveTip(drag.orig[0].x + dx, drag.orig[0].y + dy);
+
+  // live drop-target highlight
+  var lead = { x:drag.orig[0].x + dx, y:drag.orig[0].y + dy, w:geo.cw, h:geo.ch };
+  var best = null, bestA = geo.cw * geo.ch * 0.12;
+  PILE_IDS.forEach(function(p){
+    if (p === 'stock' || p === 'waste' || p === drag.from) return;
+    if (!canDrop(drag.card, p)) return;
+    if (drag.ids.length > 1 && isFound(p)) return;
+    var a = overlapArea(lead, pileRect(p));
+    if (a > bestA){ bestA = a; best = p; }
+  });
+  PILE_IDS.forEach(function(p){ slots[p].classList.toggle('hot', p === best); });
+  drag.target = best;
+});
+
+function endDrag(e){
+  if (!drag) return;
+  var d = drag; drag = null;
+  PILE_IDS.forEach(function(p){ slots[p].classList.remove('hot'); });
+  d.ids.forEach(function(id){ cards[id].el.classList.remove('drag', 'lift'); });
+  hideTip();
+
+  if (!d.moved){                       // a tap: send it straight to its bay
+    if (!tryAutoFile(d.card)) render();
+    return;
+  }
+  if (d.target && canDrop(d.card, d.target) && !(d.ids.length > 1 && isFound(d.target))){
+    applyMove(d.ids, d.from, d.target);
+  } else {
+    render();
+    shake(d.card);
+  }
+}
+board.addEventListener('pointerup', endDrag);
+board.addEventListener('pointercancel', endDrag);
+
+board.addEventListener('dblclick', function(e){
+  var el = e.target.closest ? e.target.closest('.card') : null;
+  if (!el) return;
+  tryAutoFile(cards[+el.dataset.id]);
+});
+
+/* --------------------------------------------------------- auto deploy */
+var autoRunning = false;
+function autoFile(){
+  if (won || autoRunning) return;
+  autoRunning = true;
+  (function step(){
+    var moved = false;
+    var sources = ['waste']; for (var i=0;i<7;i++) sources.push('t'+i);
+    for (var s=0; s<sources.length && !moved; s++){
+      var t = top(sources[s]);
+      if (t && t.up && canDropFoundation(t, t.suit)){
+        applyMove([t.id], sources[s], 'f' + t.suit);
+        moved = true;
+      }
+    }
+    if (moved && !won) setTimeout(step, 120);
+    else { autoRunning = false; if (!moved && !won) toast('NOTHING READY TO FILE'); }
+  })();
+}
+
+/* ------------------------------------------------------------------ win */
+var cascadeOn = false;
+function checkWin(){
+  for (var f=0; f<4; f++) if (piles['f'+f].length !== 13) return;
+  won = true; running = false;
+  clearInterval(timerId);
+  var ms = Date.now() - startTime;
+  SFX.win();
+  cascade();
+  setTimeout(function(){
+    document.getElementById('winTime').textContent  = fmtTime(ms);
+    document.getElementById('winMoves').textContent = moves;
+    var mins = ms/60000;
+    var rank = (moves <= 140 && mins <= 5) ? 'S'
+             : (moves <= 190 && mins <= 9) ? 'A'
+             : (moves <= 260)              ? 'B' : 'C';
+    document.getElementById('winRank').textContent = rank;
+    document.getElementById('winOv').classList.add('on');
+  }, 2600);
+}
+
+function cascade(){
+  cascadeOn = true;
+  var W = stage.clientWidth, H = stage.clientHeight;
+  var seq = [];
+  for (var r = 12; r >= 0; r--) for (var f = 0; f < 4; f++) seq.push(piles['f'+f][r]);
+  var flyers = [], i = 0;
+
+  var spawn = setInterval(function(){
+    if (i >= seq.length || !cascadeOn){ clearInterval(spawn); return; }
+    var c = cards[seq[i++]];
+    var g = geo['f' + c.suit];
+    c.el.classList.add('flyer');
+    flyers.push({
+      el:c.el, x:g.x, y:g.y,
+      vx:(2 + Math.random()*5) * (Math.random() < .5 ? -1 : 1),
+      vy:-(2 + Math.random()*6)
+    });
+    beep(300 + Math.random()*500, .05, 'square', .022);
+  }, 85);
+
+  (function frame(){
+    if (!cascadeOn) return;
+    for (var k = flyers.length - 1; k >= 0; k--){
+      var f = flyers[k];
+      f.vy += 0.58; f.x += f.vx; f.y += f.vy;
+      if (f.y + geo.ch > H){ f.y = H - geo.ch; f.vy *= -0.74; f.vx *= 0.995; }
+      if (f.x < -geo.cw*2 || f.x > W + geo.cw*2){ f.el.style.display = 'none'; flyers.splice(k,1); continue; }
+      f.el.style.transform = 'translate3d(' + f.x + 'px,' + f.y + 'px,0)';
+    }
+    requestAnimationFrame(frame);
+  })();
+}
+function stopCascade(){
+  cascadeOn = false;
+  cards.forEach(function(c){ c.el.classList.remove('flyer'); c.el.style.display = ''; });
+}
+
+/* ----------------------------------------------------------------- deal */
+function startClock(){
+  running = true; startTime = Date.now();
+  clearInterval(timerId); timerId = setInterval(tick, 500);
+}
+
+function deal(){
+  stopCascade();
+  won = false; moves = 0; history = []; running = false; autoRunning = false;
+  clearInterval(timerId);
+  document.getElementById('statTime').textContent = '0:00';
+  document.getElementById('winOv').classList.remove('on');
+
+  var deck = [];
+  for (var i = 0; i < 52; i++) deck.push(i);
+  for (var j = deck.length - 1; j > 0; j--){
+    var k = Math.floor(Math.random() * (j+1));
+    var tmp = deck[j]; deck[j] = deck[k]; deck[k] = tmp;
+  }
+
+  PILE_IDS.forEach(function(p){ piles[p] = []; });
+  cards.forEach(function(c){ c.up = false; c.el.style.display = ''; });
+
+  var order = [], faceUp = {}, n = 0;
+  for (var a = 0; a < 7; a++){
+    for (var b = a; b < 7; b++){
+      var id = deck[n++];
+      piles['t'+b].push(id);
+      order.push(id);
+      if (a === b) faceUp[id] = true;
+    }
+  }
+  while (n < 52) piles.stock.push(deck[n++]);
+
+  // everything starts stacked on the stock, then flies out
+  cards.forEach(function(c){
+    c.el.style.transition = 'none';
+    c.el.classList.add('down');
+    c.el.style.transform = 'translate3d(' + geo.stock.x + 'px,' + geo.stock.y + 'px,0)';
+  });
+  void board.offsetWidth;
+  cards.forEach(function(c){ c.el.style.transition = ''; });
+
+  order.forEach(function(id, ix){ cards[id].el.style.transitionDelay = (ix * 26) + 'ms'; });
+  render();
+
+  order.forEach(function(id, ix){
+    setTimeout(function(){
+      if (won) return;
+      SFX.draw();
+      if (faceUp[id]){ cards[id].up = true; cards[id].el.classList.remove('down'); }
+    }, ix * 26 + 90);
+  });
+  setTimeout(function(){
+    cards.forEach(function(c){ c.el.style.transitionDelay = ''; });
+    render();
+  }, order.length * 26 + 400);
+}
+
+/* ----------------------------------------------------------------- boot */
+function buildSuitRow(){
+  var row = document.getElementById('suitRow');
+  row.innerHTML = SUITS.map(function(s){
+    var f = s.files[0];
+    var inner = has('f' + f)
+      ? '<img src="' + THUMB + 'file-' + f + '.jpg" alt="">'
+      : s.sym;
+    return '<div class="suit-chip" style="color:' + s.color + '">' +
+             '<div class="av">' + inner + '</div>' +
+             '<div class="nm">' + s.name + '<br>' + s.wing + '</div>' +
+           '</div>';
+  }).join('');
+}
+
+function wireUi(){
+  document.getElementById('btnNew').onclick   = function(){ deal(); toast('NEW DEAL'); };
+  document.getElementById('btnUndo').onclick  = undo;
+  document.getElementById('btnAuto').onclick  = autoFile;
+  document.getElementById('btnAgain').onclick = function(){ deal(); };
+  document.getElementById('btnAdmire').onclick = function(){
+    document.getElementById('winOv').classList.remove('on');
+  };
+  document.getElementById('btnSound').onclick = function(){
+    soundOn = !soundOn;
+    this.textContent = soundOn ? 'SND' : 'MUTE';
+    toast(soundOn ? 'SOUND ON' : 'SOUND OFF');
+  };
+  document.getElementById('btnStart').onclick = function(){
+    document.getElementById('introOv').classList.remove('on');
+    deal();
+  };
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'z' && (e.ctrlKey || e.metaKey)){ e.preventDefault(); undo(); }
+    else if (e.key === 'n' || e.key === 'N'){ deal(); }
+    else if (e.key === ' '){ e.preventDefault(); drawFromStock(); }
+    else if (e.key === 'a' || e.key === 'A'){ autoFile(); }
+  });
+
+  var rz;
+  window.addEventListener('resize', function(){
+    clearTimeout(rz);
+    rz = setTimeout(function(){ computeGeo(); render(false); }, 120);
+  });
+}
+
+Promise.all(assetJobs()).then(function(){
+  if (has('table-bg.png')){
+    var tb = document.getElementById('tableBg');
+    tb.style.backgroundImage = 'url(' + DIR + 'table-bg.png)';
+    tb.classList.add('on');
+  }
+  computeGeo();
+  buildSlots();
+  buildCards();
+  buildSuitRow();
+  PILE_IDS.forEach(function(p){ piles[p] = []; });
+  cards.forEach(function(c){ piles.stock.push(c.id); });
+  render(false);
+  wireUi();
+});
+
+})();
+</script>
+</body>
+</html>

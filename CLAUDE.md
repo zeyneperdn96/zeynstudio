@@ -4,6 +4,52 @@ Bu dosya, ZeynStudio XP projesinde yapılan tüm değişiklikleri kronolojik ola
 
 ---
 
+## 📅 27 Ağustos 2026 - ARCHIVE SOLITAIRE Eklendi
+
+### 🃏 Oynanabilir Klondike solitaire, 20 kartlık pixel arşivden
+- **Değişiklik**: `zeynep-archive-solitaire.html` eklendi — tek dosya, standalone, DESIGNER QUEST rotası
+- **Amaç**: Game UI portfolyosuna oynanabilir bir kart oyunu; referans Dohris'in LinkedIn solitaire reklamı
+- **Değiştirilen Dosyalar**:
+  - `zeynep-archive-solitaire.html` - oyunun tamamı (HTML + CSS + JS)
+  - `assets/projects/zeynep-archive/` - 20 kart (full + thumbs), icon.png, README.md
+  - `js/ProjectsData.js` - ARCHIVE SOLITAIRE proje verisi (id 29)
+  - `index.html` - masaüstü ikonu
+
+#### ✨ Oyun:
+- ✅ Tam Klondike: 7 sütun, çek-1 + sınırsız yeniden dizme, K ile boş sütun açma
+- ✅ Sürükle-bırak (mouse + touch, `pointer` event'leri), çoklu kart taşıma
+- ✅ Tek tık ile doğrudan arşive gönderme, FILE butonu ile otomatik toplama
+- ✅ Sınırsız undo (Ctrl+Z), süre + hamle sayacı, S/A/B derecelendirme
+- ✅ Kazanınca klasik kart şelalesi + `ARCHIVE COMPLETE`
+- ✅ Kısayollar: Space çek, A otomatik, N yeni, Ctrl+Z geri al
+- ✅ WebAudio ile üretilen sesler (harici dosya yok), ♪ ile kapanıyor
+
+#### 🎨 Sunum — referans videoya göre:
+- ✅ Kartlar **düz renk plaka**: koyu gövde/gradient başlık/alt şerit yok, rank tek harf sol üstte
+- ✅ Üst üste binen kartlar ince renkli şerit halinde (kart yüksekliğinin %18'i = fan offset)
+- ✅ HUD bar yok — sol üst `ZEYNEP.EXE` rozeti, sağ üst `0 / Archives`, sol alt saat, sağ alt hamle
+- ✅ Foundation'ların üstünde minik etiket + ▼
+- ✅ Sürüklenen kartın altında başlık balonu (referanstaki "HR Manager" etiketi)
+- ✅ Tahta kompakt ve dikey ortalanmış, tam ekrana yayılmıyor
+- ✅ Press Start 2P pixel font, steps() animasyonlar, sert gölgeler
+
+#### 🎨 Deste yapısı:
+- 4 arşiv × 5 dosya = 20 görsel; A–K ranklar beşliyi döngüyle kullanıyor (referans reklam da 52 ayrı çizim kullanmıyor)
+- MAKING (pembe) · GOING (mavi) · STAYING (mor) · LIVING (altın)
+- Klasik kırmızı/siyah dönüşümü **WARM / COOL** olarak yeniden tanımlandı — iki sıcak, iki soğuk arşiv
+
+#### 🔧 Doğrulama:
+- ✅ Headless DOM stub ile 25 kontrol: dağıtım, foundation/tableau kuralları, 600 hamlelik rastgele bot altında 52-kart bütünlüğü, undo, otomatik toplama, kazanma tespiti, görsel eşleme
+- ✅ 20/20 thumb yolu diskte mevcut, ölü referans yok
+
+#### ⚠️ Notlar:
+- `full/` (42 MB) arşiv kopyası, siteye çıkan `thumbs/` (2.3 MB)
+- `card-back.png`, `table-bg.png`, `slot-frame.png` opsiyonel; yoksa CSS karşılıklarına düşüyor
+- Kartlarda iki farklı en-boy oranı var (001–010 → 2:3, 011–020 → 3:4); yeni kart 2:3 üretilmeli
+- STELLAR VANGUARD temalı ilk deneme (`stellar-vanguard-solitaire.html`) bu sürümle değiştirildi ve silindi
+
+---
+
 ## 📅 26 Ağustos 2026 - Kırık Dosya Yolları Temizliği
 
 ### 🔧 Site genelinde eksik/yanlış asset yolları düzeltildi

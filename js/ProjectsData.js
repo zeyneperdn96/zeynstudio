@@ -5,6 +5,20 @@
 
 const projectsData = [
     {
+        id: 29,
+        title: 'ARCHIVE SOLITAIRE',
+        category: 'game-ui',
+        thumbnail: 'assets/projects/zeynep-archive/thumbs/file-001.jpg',
+        thumbnailSize: 'cover',
+        thumbnailPos: 'center 35%',
+        thumbnailBg: '#0a0518',
+        description: 'Playable Solitaire Built From a 20-Card Pixel Archive',
+        featured: true,
+        year: '2026',
+        role: 'Game UI Designer & Developer (Card Art, HUD, Gameplay Code)',
+        externalLink: 'zeynep-archive-solitaire.html'
+    },
+    {
         id: 14,
         title: 'DESIGNER QUEST',
         category: 'game-ui',
