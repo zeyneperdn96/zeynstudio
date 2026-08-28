@@ -60,65 +60,70 @@ kullanılmıyor.
 
 ## 3. INTRO STATE vs BROWSE STATE
 
-İki ayrı pozisyon sistemi. Intro `railFor()`'u **sadece son adımda** çağırıyor;
-ondan öncesi tamamen formasyon mantığı. Carousel = browse state, intro
-tarafından hiç kullanılmıyor.
+İki ayrı pozisyon sistemi. Intro `railFor()`'u **sadece son beatte** çağırıyor.
+Carousel = browse state; intro boyunca focus değişmiyor, hover/drag kapalı,
+layout yeniden hesaplanmıyor.
 
-```
-setIntroStackState()
-  -> stackArrival()
-  -> createVisibleTrails()          klonlar görünür ve EKRANDA KALIR
-  -> splitCardsIntoThreeGroups()
-  -> runWaveAcrossGroups()
-  -> removeTrailClones()
-  -> transitionRealCardsToCarousel()   <- railFor() ilk ve tek kez burada
-  -> enableCarousel()
-```
-
-| Faz | Süre (sn) | Ne oluyor |
+| Beat | Süre (sn) | Ne oluyor |
 |---|---|---|
-| 0 | 0.00 – 0.69 | **Tek sıkışık deste.** `z:-1200`, `scale ≈ .05` (sahne yüksekliğinin %50'sinin 0.11'i), jitter %16'ya kısıldı — gerçekten tek kart gibi görünüyor. `opacity 0→1`. |
-| 1 | 0.80 – 1.67 | **stackArrival.** `z:-1200→-60`, deste **sahne yüksekliğinin ~%50'sine** kadar büyüyor. Hâlâ tek gövde. |
-| 2 | 1.70 – 2.90 | **createVisibleTrails.** 5 hero kart desteden kopuyor, her biri **7 kalıcı klon** bırakıyor. Klonlar sönmüyor — 4.90'a kadar ekranda kalıyor. |
-| 3 | 2.90 – 3.84 | **splitCardsIntoThreeGroups.** 3 grup, farklı `z` (`-170 / +90 / -50`), grup içi merdiven dizilim. |
-| 4 | 3.90 – 4.97 | **runWaveAcrossGroups.** Soldan sağa: `y-55, z+150, rotateY 9°, scale 1.06`. |
-| 5 | 4.90 – 5.35 | **removeTrailClones.** Bütün klonlar sönüp DOM'dan siliniyor. |
-| 6 | 5.40 – 6.63 | **transitionRealCardsToCarousel.** Ortadaki kart önce, sonra dışa doğru. |
+| **STACK** | 0.0 – 0.8 | Tek deste, `z:-1400 → +100`, `scale .1 → 1` (sahne yüksekliğinin %56'sı) |
+| **EXPLODE** | 0.8 – 1.6 | Altı yöne patlama. 4 halka, farklı derinlikte (`z: +200 / -60 / -300 / -520`) |
+| **TRAIL** | 1.3 – 2.4 | 4 hero, ters diyagonallerde 7'şer opak klon. Ekranın karşı köşesinden karşı köşesine |
+| **WALLS** | 2.1 – 2.9 | İki kart duvarı, zıt diyagonaller, 3 sütun × 4 satır merdiven |
+| **GROUPS** | 2.9 – 3.8 | Üç grup: sol `z-100 s.42`, **orta `z+150 s.62`**, sağ `z-50 s.44` |
+| **WAVE** | 3.8 – 4.7 | Soldan sağa domino: `y-70, z+180, rotateY 8°, scale 1.08` |
+| **COLLAPSE** | 4.7 – 5.4 | Her şey merkeze; yoğun ve büyük deste. Klonlar burada siliniyor |
+| **CAROUSEL** | 5.4 – 6.2 | Ortadan dışa yelpaze → ray pozisyonları |
 
-**Toplam 6.63 sn.**
+**Toplam 6.2 sn.** Hiçbir formasyon 0.9 sn'den uzun sabit kalmıyor.
 
-### Ekran yoğunluğu
+### Ölçek — perspektife göre hesaplanıyor
 
-| | Gerçek kart | Klon | Toplam görüntü |
+Önceki sürümdeki asıl hata buydu: ölçekler `perspective` büyütmesini hesaba
+katmıyordu, bu yüzden kartlar ya çok küçük ya çok büyük çıkıyordu.
+
+```js
+sAt(f, z) = (H * f) / (ch * (P / (P - z)))   // P = 1050
+```
+
+Yani "sahne yüksekliğinin %62'si olsun" dediğinde, kart `z:+150`'deyken
+perspektifin büyüttüğü kadarı düşülerek ölçek veriliyor.
+
+### Ölçülen kaplama
+
+Formasyonların ekranı ne kadar doldurduğunu hesapladım (perspektif projeksiyonu
++ 72×48 grid örnekleme):
+
+| Beat | Genişlik | Kapladığı alan | En büyük kart |
 |---|---|---|---|
-| Desktop | 20 | 35 (5 hero × 7) | **55** |
-| Tablet | 20 | 24 (4 × 6) | 44 |
-| Mobil | 20 | 12 (3 × 4) | 32 |
+| EXPLODE | %78–80 | %46–51 | %63 |
+| WALLS | %76–84 | %50–57 | %49 |
+| GROUPS | %86–93 | %51–56 | %62 |
+| COLLAPSE | %54–58 | %42–45 | %70 |
 
-Klonlar **1.70 – 4.90 arası, 3.2 saniye boyunca** ekranda duruyor. Bütçe:
-desktop 44, tablet 30, mobil 14 — aşılırsa yeni klon üretilmiyor.
+Hedefler: genişlik %75–90, kaplama ≥%35, ön kart %55–70. Hepsi tutuyor —
+hem 1000×660 pencerede hem maximize'da.
 
-Opacity merdiveni yükseltildi, arkadakiler gerçekten görünsün diye:
-`.95 / .82 / .68 / .52 / .38 / .25 / .15 / .10`
+### Klonlar
 
-Klonlar DOM'a eklenmeden **önce** transform'ları yazılıyor; yoksa ilk karede
-ray merkezinde belirip sıçrıyorlardı.
+| | Gerçek | Klon | Toplam görüntü |
+|---|---|---|---|
+| Desktop | 20 | 28 (4 hero × 7) | **48** |
+| Mobil | 20 | 15 (3 × 5) | 35 |
 
-### Boyut
+Opacity merdiveni: `1 / .90 / .80 / .68 / .55 / .40 / .25 / .18` — ilk beş
+kopya tam görünür. Klonlar 1.3 → 4.7 arası, **3.4 saniye** ekranda kalıyor.
 
-Intro boyutları raydan değil **sahne yüksekliğinden** türetiliyor:
-deste %50, hero kartlar %62, gruplar %42. Pencere büyüdükçe kartlar da büyüyor.
-Final carousel kendi boyutuna geri dönüyor.
+### Debug label
 
-### Intro neden atlanabilir — artık sessiz değil
+Sağ üstte hangi beatte olduğu yazıyor: `STACK / EXPLODE / TRAIL / WALLS /
+GROUPS / WAVE / COLLAPSE / CAROUSEL`, intro bitince `BROWSE`.
+Kaldırmak için: `js/ArchiveGallery.js` içinde `archive-debug` div'ini sil.
 
-İki durumda intro çalışmaz ve **ikisi de artık ekranda yazıyor**
-(sol üstte `INTRO SKIPPED — <neden>`):
+### Intro atlanırsa nedeni ekranda yazar
 
-- **GSAP yok.** Bu yüzden GSAP artık CDN'den değil, `js/vendor/gsap.min.js`
-  üzerinden yerel olarak yükleniyor. CDN engellenirse diye tek nokta bırakılmadı.
-- **Sistemde "reduce motion" açık.** Bu durumda Replay butonu intro'yu yine de
-  oynatıyor (açık kullanıcı isteği olduğu için).
+- GSAP yok → bu yüzden artık `js/vendor/gsap.min.js` yerelden yükleniyor
+- Sistemde reduce-motion açık → Replay yine de oynatır
 
 ## 4. Etkileşim
 
