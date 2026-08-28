@@ -79,6 +79,9 @@
               '<div class="floor"></div><div class="haze"></div>' +
             '</div>' +
             '<div class="archive-rail"></div>' +
+            '<div class="archive-mob">' +
+              '<div class="m-title"></div><div class="m-id"></div><div class="m-dots"></div>' +
+            '</div>' +
             '<div class="archive-debug done"><span class="p">STACK</span><span class="t">0.0s</span></div>' +
             '<div class="archive-hint">DEALING\u2026</div>' +
             '<div class="archive-hud">' +
@@ -108,6 +111,9 @@
         this.stId    = this.root.querySelector('.st-id');
         this.stTitle = this.root.querySelector('.st-title');
         this.stN     = this.root.querySelector('.st-n');
+        this.mTitle  = this.root.querySelector('.m-title');
+        this.mId     = this.root.querySelector('.m-id');
+        this.mDots   = this.root.querySelector('.m-dots');
 
         this.cards.forEach(function (data, i) {
             var el = document.createElement('div');
@@ -147,16 +153,28 @@
         var h = this.root.clientHeight || 600;
         // 940, not 1024: the default 1000px window would otherwise fall into
         // the tablet tier and leave four cards sitting in the tray
-        var name = w < 620 ? 'mobile' : (w < 940 ? 'tablet' : 'desktop');
+        // A phone gets its own layout, not a shrunken desktop. The desktop
+        // path below is untouched.
+        this.isMobile = (w <= 700) || (h <= 430);
+        this.root.classList.toggle('is-mobile', this.isMobile);
+
+        var name = this.isMobile ? 'mobile' : (w < 940 ? 'tablet' : 'desktop');
         this.tierName = name;
         this.tier = Object.assign({}, TIERS[name]);
 
-        // keep the focused card inside the window whatever the window size is
-        var fit = Math.min(this.tier.cardW, (h - 130) / 1.5, w * 0.30);
-        this.tier.cardW = Math.max(96, Math.round(fit));
-        var k = this.tier.cardW / TIERS[name].cardW;
-        this.tier.spread = Math.round(this.tier.spread * k);
-        this.tier.depth  = Math.round(this.tier.depth * k);
+        if (this.isMobile) {
+            // the active card IS the layout: 70% of the width, capped so it
+            // never eats more than 58% of the height
+            this.tier.cardW = Math.max(120, Math.round(Math.min(w * .70, (h * .58) / 1.5)));
+            this.tier.visible = 2.6;
+        } else {
+            // keep the focused card inside the window whatever the window size is
+            var fit = Math.min(this.tier.cardW, (h - 130) / 1.5, w * 0.30);
+            this.tier.cardW = Math.max(96, Math.round(fit));
+            var k = this.tier.cardW / TIERS[name].cardW;
+            this.tier.spread = Math.round(this.tier.spread * k);
+            this.tier.depth  = Math.round(this.tier.depth * k);
+        }
 
         this.root.style.setProperty('--acw', this.tier.cardW + 'px');
         this.root.style.setProperty('--ach', Math.round(this.tier.cardW * 1.5) + 'px');
@@ -171,7 +189,32 @@
 
     /* ------------------------------------------------------- rail maths */
 
+    // Mobile browse state: one big card in the middle, a sliver of each
+    // neighbour showing at the edges, everything else parked off-screen.
+    ArchiveGallery.prototype.mobileRail = function (offset) {
+        var a = Math.abs(offset), d = sign(offset);
+        var W = this.root.clientWidth || 380;
+        var cw = this.tier.cardW;
+        if (a === 0) return { x:0, y:0, z:0, rx:0, ry:0, rz:0, s:1, o:1 };
+
+        var sideS = a === 1 ? .84 : .70;
+        var sideW = cw * sideS;
+        var peek  = a === 1 ? .22 : 0;                  // 22% of the neighbour shows
+        var x = W / 2 + sideW * (.5 - peek) + (a - 1) * sideW * .55;
+        return {
+            x:  d * x,
+            y:  0,
+            z:  -70 * a,
+            rx: 0,
+            ry: -d * (a === 1 ? 13 : 16),
+            rz: 0,
+            s:  sideS,
+            o:  a <= 1 ? 1 : (a <= 2 ? .32 : 0)
+        };
+    };
+
     ArchiveGallery.prototype.railFor = function (offset) {
+        if (this.isMobile) return this.mobileRail(offset);
         var T = this.tier;
         var a = Math.abs(offset), d = sign(offset);
         // spacing compresses outward, so the far cards read as a vanishing point
@@ -390,7 +433,8 @@
         // Fewer slots on a small screen: five per lane on a phone leaves the
         // cards about 55px wide, which is unreadable. Whatever does not fit
         // stays in the tray instead of being squeezed onto the table.
-        var per = this.tierName === 'mobile' ? 3 : (this.tierName === 'tablet' ? 4 : 5);
+        if (this.isMobile) return this.boardLayoutMobile(S);
+        var per = this.tierName === 'tablet' ? 4 : 5;
         var lanes = [
             { n: per, z:  200, frac: .46, tag: 'HAND' },
             { n: per, z:   10, frac: .40, tag: 'TABLE' },
@@ -428,6 +472,37 @@
             s: S.sAt(.46, 340),
             w: S.cw * S.sAt(.46, 340) * 1.5,
             h: S.cw * S.sAt(.46, 340) * .72
+        };
+        return slots;
+    };
+
+    // Portrait board: two columns sheared into a diagonal so the cards spread
+    // to the corners rather than sitting in one horizontal band.
+    ArchiveGallery.prototype.boardLayoutMobile = function (S) {
+        var slots = [];
+        var cardW = S.cw * .52, cardH = S.ch * .52;
+        var stepX = S.W * .30, stepY = S.H * .155;
+        var baseY = S.H * .17;
+        for (var r = 0; r < 3; r++) {
+            for (var c = 0; c < 2; c++) {
+                var z = 140 - r * 210;
+                var k = S.P / (S.P - z);
+                var s = (S.H * (.30 - r * .04)) / (S.ch * k);
+                slots.push({
+                    lane: r, col: c, tag: ['HAND', 'TABLE', 'DECK'][r],
+                    x: (c - .5) * stepX + (r - 1) * stepX * .42,
+                    y: baseY - r * stepY,
+                    cy: baseY - r * stepY - (S.ch * s) / 2,
+                    z: z, s: s, w: S.cw * s, h: S.ch * s,
+                    ry: -(c - .5) * 10
+                });
+            }
+        }
+        this.tray = {
+            x: 0, y: S.H * .40, z: 300,
+            s: S.sAt(.30, 300),
+            w: S.cw * S.sAt(.30, 300) * 1.4,
+            h: S.cw * S.sAt(.30, 300) * .7
         };
         return slots;
     };
@@ -533,7 +608,110 @@
         }, null, at);
     };
 
+    // Short intro for a phone: same story beats, 3.7s instead of 6.45s, two
+    // heroes instead of four, and it lands on the mobile centre-card rail.
+    ArchiveGallery.prototype.introMobile = function () {
+        var self = this, G = this.G, S = this.introSpace();
+        var N = this.items.length;
+        this.trailBudget = 10;
+
+        this.buildBoard();
+        var slots = this.slots, tray = this.tray;
+        var seat = [], dealt = [], held = [];
+        this.items.forEach(function (it, i) {
+            if (i < slots.length) { seat[i] = Object.assign({}, slots[i], { si: i }); dealt.push(it); }
+            else { seat[i] = null; held.push(it); }
+        });
+
+        this.setIntroStackState();
+        this.introT0 = Date.now();
+        var tl = G.timeline({ onComplete: function () { self.finishIntro(); } });
+        this.tl = tl;
+
+        /* 0.00-0.50  STACK */
+        this.beat(tl, 0, 'STACK');
+        this.items.forEach(function (it, i) {
+            tl.to(it.base, { o: 1, duration: .26, ease: 'power1.out' }, i * .005);
+        });
+        this.items.forEach(function (it, i) {
+            var j = jitter(it.index);
+            tl.to(it.base, {
+                x: tray.x + j.x * .08 + i * .9, y: tray.y - S.ch * tray.s * .5 - i * 1.2,
+                z: tray.z + i * 1.8, rx: 4, ry: j.ry * .1, rz: j.rz * .2, s: tray.s,
+                duration: .44, ease: 'power3.inOut'
+            }, .04 + i * (.05 / N));
+        });
+
+        /* 0.50-0.90  BOARD */
+        this.beat(tl, .5, 'BOARD');
+        tl.to(this.boardEl, { opacity: 1, duration: .28 }, .5);
+        tl.to(this.trayEl,  { opacity: 1, duration: .24 }, .52);
+        this.slotEls.forEach(function (el, i) {
+            tl.to(el, { opacity: 1,  duration: .16 }, .56 + i * .03);
+            tl.to(el, { opacity: .36, duration: .18 }, .74 + i * .03);
+        });
+
+        /* 0.90-2.00  DEAL — corner to corner, not one band */
+        this.beat(tl, .9, 'DEAL');
+        dealt.slice().sort(function (a, b) {
+            var A = seat[a.index], B = seat[b.index];
+            return (A.lane - B.lane) || (A.col - B.col);
+        }).forEach(function (it, n) {
+            var sl = seat[it.index];
+            var at = .9 + n * .14;
+            tl.to(it.base, {
+                x: (tray.x + sl.x) / 2, y: Math.min(tray.y, sl.cy) - S.H * .10,
+                z: (tray.z + sl.z) / 2 + 70, rx: 3, ry: sl.ry * 2.2, rz: sl.ry * .7,
+                s: sl.s * 1.12, duration: .16, ease: 'power2.out'
+            }, at);
+            tl.to(it.base, {
+                x: sl.x, y: sl.cy, z: sl.z, rx: 2, ry: sl.ry, rz: 0, s: sl.s, o: 1,
+                duration: .2, ease: 'power2.in'
+            }, at + .16);
+            tl.to(self.slotEls[sl.si], { opacity: 1,  duration: .08 }, at + .34);
+            tl.to(self.slotEls[sl.si], { opacity: .3, duration: .24 }, at + .42);
+        });
+
+        /* 1.90-2.60  TRAIL — two heroes only */
+        this.beat(tl, 1.9, 'TRAIL');
+        [dealt[0], dealt[dealt.length - 1]].filter(Boolean).forEach(function (it, n) {
+            var sx = n ? -1 : 1;
+            var at = 1.9 + n * .16;
+            var to = { x: sx * S.W * .24, y: -S.H * .16, z: 180,
+                       ry: -sx * 12, rz: sx * 2, s: S.sAt(.40, 180) };
+            var step = { x: -sx * S.gap * .8, y: S.gap * .40, z: -S.gap * .8 };
+            tl.call(function () { self.spawnRibbon(it, to, step, 4); }, null, at + .16);
+            tl.to(it.base, {
+                x: to.x, y: to.y, z: to.z, rx: 2, ry: to.ry, rz: to.rz, s: to.s,
+                duration: .38, ease: 'power3.out'
+            }, at);
+        });
+
+        /* 2.60-3.05  WAVE */
+        this.beat(tl, 2.6, 'WAVE');
+        dealt.forEach(function (it, n) {
+            var at = 2.6 + n * (.22 / Math.max(1, dealt.length));
+            tl.to(it.fx, { y: -40, z: 120, ry: 7, s: 1.06, duration: .14, ease: 'power2.out' }, at);
+            tl.to(it.fx, { y: 0, z: 0, ry: 0, s: 1, duration: .2, ease: 'power2.inOut' }, at + .14);
+        });
+
+        /* 3.05-3.70  COLLECT then straight onto the centre-card rail */
+        this.beat(tl, 3.05, 'COLLECT');
+        tl.call(function () { self.removeTrailClones(.26); }, null, 3.06);
+        tl.to(this.boardEl, { opacity: 0, duration: .3, ease: 'power2.in' }, 3.1);
+        this.beat(tl, 3.3, 'CAROUSEL');
+        this.items.slice().sort(function (a, b) {
+            return Math.abs(a.index - self.focus) - Math.abs(b.index - self.focus);
+        }).forEach(function (it, n) {
+            var r = self.railFor(it.index - self.focus);
+            tl.to(it.base, Object.assign({ duration: .44, ease: 'power3.out' }, r),
+                  3.15 + Math.min(n, 6) * .035);
+        });
+        tl.call(function () {}, null, 3.7);
+    };
+
     ArchiveGallery.prototype.intro = function () {
+        if (this.isMobile) return this.introMobile();
         var self = this, G = this.G, S = this.introSpace();
         var N = this.items.length;
         this.trailBudget = this.tierName === 'mobile' ? 12 : (this.tierName === 'tablet' ? 30 : 48);
@@ -729,7 +907,9 @@
         this.updateHud();
         this.startIdle();
         var self = this;
-        if (this.hint) this.hint.textContent = 'DRAG \u00b7 SCROLL \u00b7 ARROW KEYS \u00b7 CLICK TO OPEN';
+        if (this.hint) this.hint.textContent = this.isMobile
+            ? '\u2190  SWIPE TO EXPLORE  \u2192'
+            : 'DRAG \u00b7 SCROLL \u00b7 ARROW KEYS \u00b7 CLICK TO OPEN';
         setTimeout(function () { if (self.hint) self.hint.classList.add('gone'); }, 3500);
     };
 
@@ -778,7 +958,9 @@
             var d = Math.abs(it.index - self.focus);
             if (self.G) {
                 self.G.to(it.base, Object.assign({
-                    duration: .42, ease: 'power3.out', delay: Math.min(d, 6) * .012
+                    duration: self.isMobile ? .40 : .42,
+                    ease: 'power3.out',
+                    delay: self.isMobile ? Math.min(d, 2) * .02 : Math.min(d, 6) * .012
                 }, r));
             } else {
                 for (var k in r) it.base[k] = r[k];
@@ -793,6 +975,16 @@
         this.stId.textContent = d.data.id;
         this.stTitle.textContent = d.data.title;
         this.stN.textContent = String(this.focus + 1);
+
+        if (this.mTitle) {
+            this.mTitle.textContent = d.data.title;
+            this.mId.textContent = d.data.id;
+            if (this.mDots.childElementCount !== this.items.length) {
+                this.mDots.innerHTML = this.items.map(function () { return '<i></i>'; }).join('');
+            }
+            var kids = this.mDots.children, f = this.focus;
+            for (var q = 0; q < kids.length; q++) kids[q].classList.toggle('on', q === f);
+        }
         var showFocus = this.introDone;      // no caption mid-choreography
         this.items.forEach(function (it, i) {
             it.el.classList.toggle('is-focus', showFocus && i === d.index);
@@ -812,6 +1004,7 @@
 
     ArchiveGallery.prototype.hoverCard = function (it, on) {
         if (!this.interactive || this.detailOpen) return;
+        if (this.isMobile) return;                 // touch uses tap, not hover
         var self = this, G = this.G;
         it.el.classList.toggle('is-hover', on);
 
@@ -868,7 +1061,9 @@
                     try { self.root.setPointerCapture(id); } catch (err) {}
                 }
                 acc += dx;
-                var step = self.tier.spread * .62;
+                var step = self.isMobile
+                    ? (self.root.clientWidth || 380) * .26      // a real swipe, not a nudge
+                    : self.tier.spread * .62;
                 while (Math.abs(acc) >= step) {
                     self.setFocus(self.focus - sign(acc));
                     acc -= sign(acc) * step;

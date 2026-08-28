@@ -256,45 +256,57 @@ ayarlanır. Başka hiçbir yere dokunmak gerekmez.
 
 ---
 
-## 6. Responsive ve erişilebilirlik
+## 6. Mobil — ayrı layout, ayrı intro
 
-### Mobil
+Masaüstü kolu hiç değişmedi. Mobil, `isMobile` bayrağıyla (sahne ≤700px veya
+≤430px yükseklik) ayrı bir dala giriyor.
 
-Telefonda pencere **maximize açılıyor**. 90vw'lik bir pencerede kartlar 55px
-kalıyordu — okunmuyordu. Tam ekranda 100–115px oluyor.
+### Kartlar neden küçülüyordu
 
-Masa da ekrana göre küçülüyor: **şerit başına slot** mobilde 3, tablette 4,
-masaüstünde 5. Slota sığmayan kartlar **tepside bekliyor**, dağıtım sürerken
-tepsi görünür şekilde inceliyor, COLLECT'te hepsi birleşiyor. Bu kural kart
-sayısından bağımsız — 30 kart eklesen de çalışır.
+`measure()` içinde kart eni `min(230, (H-130)/1.5, W*0.30)` idi. Masaüstünde
+230 tavanı bağlıyordu, mobilde **`W*0.30`** bağlıyor ve kart 116px kalıyordu —
+ekranın %30'u. Mobil kolda bu hesap tamamen ayrıldı:
 
-| Cihaz | Sahne | Tier | Slot | Tepside | HAND kartı |
-|---|---|---|---|---|---|
-| Galaxy S | 356×730 | mobile | 12 | 8 | 100px |
-| iPhone 14 | 386×774 | mobile | 12 | 8 | 109px |
-| iPad dikey | 764×954 | tablet | 16 | 4 | 160px |
-| iPad yatay | 917×621 | tablet | 16 | 4 | 191px |
-| Masaüstü | 996×630 | desktop | 20 | 0 | 166px |
+```js
+cardW = min(W * .70, (H * .58) / 1.5)     // aktif kart = layout'un kendisi
+```
 
-Tier eşikleri **620 / 940** — 1024 olsaydı varsayılan 1000px pencere tablet
-sayılıp 4 kart boşuna tepside kalırdı.
+### Final state: merkez kart + kenar payı
 
-### Dokunmatik
+`mobileRail()` masaüstü ray matematiğinin yerine geçiyor:
 
-- Sahnede `touch-action: none` — sürükleme sayfayı kaydırmıyor, çift dokunuş
-  yakınlaştırma yapmıyor
-- Sürükleme/tıklama ayrımı `pointer` event'leriyle, fare ile aynı kod
-- HUD butonları küçük ekranda daha kalın (parmak hedefi), etiketler gizleniyor,
-  durum satırı taşmadan kısalıyor
-- Masa amblemi mobilde gizli — küçük sahnede kalabalık yapıyordu
-- Klon bütçesi: mobil 12, tablet 30, masaüstü 48
+| | Ölçü |
+|---|---|
+| Aktif kart | ekranın **%70'i** genişlik, **%52'si** yükseklik (iPhone 14: 270×405) |
+| Yan kart | %84 ölçek, **%22'si görünüyor** |
+| Aradaki boşluk | 8 px |
+| Uzaktakiler | ekran dışı, `opacity 0` |
+| Swipe eşiği | ekran genişliğinin %26'sı |
+| Geçiş | 400 ms, `power3.out` |
 
-### Erişilebilirlik
+### Mobil intro — 3.70 sn
 
-- **`prefers-reduced-motion: reduce`** → sinematik intro yok, kartlar doğrudan
-  yerine konur, iz ve idle kapalı, hover/tıklama çalışır
-- **GSAP yüklenmezse** aynı yola girer. İki durumda da neden sol üstte yazar,
-  Replay intro'yu yine de oynatır
+| Beat | Süre |
+|---|---|
+| STACK | 0.00 – 0.50 |
+| BOARD | 0.50 – 0.90 |
+| DEAL | 0.90 – 2.00 |
+| TRAIL | 1.90 – 2.60 |
+| WAVE | 2.60 – 3.05 |
+| COLLECT → CAROUSEL | 3.05 – 3.70 |
+
+Board portrait'e göre yeniden kuruldu: **3 satır × 2 sütun, çapraz kaydırılmış**
+(`boardLayoutMobile`), kartlar köşelere yayılıyor. 6 slot masada, 14 kart tepside.
+**2 hero × 4 klon = 8 klon** (masaüstü 28).
+
+### Dokunmatik ve cihaz
+
+- Hover `@media (hover: hover) and (pointer: fine)` ile sınırlı; mobilde `is-tap`
+- Kart başlığı **kartın altında** ayrı UI: `clamp(18px, 5vw, 24px)` + `FILE_0XX` + nokta sayfalama
+- Alt bar 54px, butonlar 46×44px (44px tap hedefi)
+- İpucu: `← SWIPE TO EXPLORE →`
+- `100dvh` (fallback `100vh`), `env(safe-area-inset-*)`, `overscroll-behavior: contain`
+- Mobilde daha az gölge, masa amblemi gizli
 
 ## 7. Ne doğrulandı
 

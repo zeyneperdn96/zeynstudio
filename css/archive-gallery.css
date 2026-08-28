@@ -161,13 +161,22 @@
         0 0 0 1px rgba(255,255,255,.16),
         0 0 34px rgba(120,170,255,.32);
 }
-.archive-card.is-hover .plate {
-    box-shadow:
-        0 30px 70px rgba(0,0,0,.72),
-        0 0 0 1px rgba(255,255,255,.30),
-        0 0 52px rgba(150,190,255,.5);
+@media (hover: hover) and (pointer: fine) {
+    .archive-card.is-hover .plate {
+        box-shadow:
+            0 30px 70px rgba(0,0,0,.72),
+            0 0 0 1px rgba(255,255,255,.30),
+            0 0 52px rgba(150,190,255,.5);
+    }
+    .archive-card.is-hover .sheen { opacity: 1; }
 }
-.archive-card.is-hover .sheen { opacity: 1; }
+/* touch equivalent: a tap selects and lifts, no sticky hover state */
+.archive-card.is-tap .plate {
+    box-shadow:
+        0 24px 56px rgba(0,0,0,.7),
+        0 0 0 1px rgba(255,255,255,.26),
+        0 0 44px rgba(150,190,255,.45);
+}
 
 /* caption rides under the focused card only */
 .archive-card .cap {
@@ -200,6 +209,61 @@
     box-shadow: 0 0 0 1px rgba(160,200,255,.10);
 }
 .archive-trail img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ---- mobile-only chrome: the title, id and pagination live under the card
+       instead of being buried inside it ---- */
+.archive-mob { display: none; }
+.archive-stage.is-mobile .archive-mob {
+    position: absolute; left: 0; right: 0; z-index: 7;
+    bottom: calc(58px + env(safe-area-inset-bottom, 0px));
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    padding: 0 16px; pointer-events: none; text-align: center;
+}
+.archive-mob .m-title {
+    font-family: Tahoma, 'Segoe UI', sans-serif; font-weight: 700;
+    font-size: clamp(18px, 5vw, 24px); line-height: 1.15; letter-spacing: .02em;
+    color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,.9);
+    max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.archive-mob .m-id {
+    font-family: 'Press Start 2P', 'Share Tech Mono', monospace; font-size: 9px;
+    letter-spacing: .12em; color: rgba(170,205,255,.85); text-shadow: 0 2px 6px #000;
+}
+.archive-mob .m-dots { display: flex; gap: 5px; margin-top: 3px; flex-wrap: wrap; justify-content: center; }
+.archive-mob .m-dots i {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(255,255,255,.28); transition: background .2s, transform .2s;
+}
+.archive-mob .m-dots i.on { background: #fff; transform: scale(1.5); }
+
+.archive-stage.is-mobile .archive-hint {
+    left: 50%; transform: translateX(-50%); text-align: center;
+    top: calc(8px + env(safe-area-inset-top, 0px));
+    font-size: 10px; letter-spacing: .22em; color: rgba(190,212,255,.62);
+}
+
+/* bottom bar: thumb-sized on a phone */
+.archive-stage.is-mobile .archive-hud {
+    min-height: 54px; padding: 6px 10px calc(6px + env(safe-area-inset-bottom, 0px));
+    gap: 10px;
+}
+.archive-stage.is-mobile .archive-hud .grp { flex: none; }
+.archive-stage.is-mobile .archive-hud .status {
+    flex: 1; min-width: 0; text-align: center; font-size: 12px; padding: 6px 8px;
+}
+.archive-stage.is-mobile .archive-hud .count { padding: 6px 8px; font-size: 12px; }
+.archive-stage.is-mobile .xpbtn {
+    min-width: 46px; min-height: 44px;          /* 44px tap target */
+    font-size: 15px; padding: 0 12px;
+    display: inline-flex; align-items: center; justify-content: center;
+}
+.archive-stage.is-mobile .archive-hud [data-act="replay"],
+.archive-stage.is-mobile .archive-hud [data-act="file"] { display: none; }
+/* the title lives under the card on mobile, so the in-card caption is noise */
+.archive-stage.is-mobile .archive-card .cap { display: none; }
+/* bottom bar reads as   <  FILE_020  >   */
+.archive-stage.is-mobile .archive-hud .st-title { display: none; }
+.archive-stage.is-mobile .archive-hud .st-id { font-size: 12px; letter-spacing: .06em; }
 
 /* ---- XP-flavoured chrome sitting on top of the scene ---- */
 .archive-hud {
@@ -304,6 +368,23 @@
     padding: 5px 9px; background: #ece9d8; border-top: 1px solid #b6b3a0;
     font: 11px Tahoma, 'Segoe UI', sans-serif; color: #3a3a3a;
     display: flex; justify-content: space-between; gap: 14px;
+}
+
+/* ---- mobile viewport: dvh so the address bar cannot crop the scene.
+       Scoped to the archive window so no other XP window is affected. ---- */
+@media (max-width: 768px) {
+    .window[data-window-id="archive"].maximized {
+        height: calc(100vh - 40px) !important;
+        height: calc(100dvh - 40px) !important;
+    }
+    .archive-stage { overflow: hidden; overscroll-behavior: contain; }
+    /* fewer expensive shadows on a phone */
+    .archive-card .plate { box-shadow: 0 10px 24px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.07); }
+    .archive-card.is-focus .plate {
+        box-shadow: 0 16px 36px rgba(0,0,0,.66), 0 0 0 1px rgba(255,255,255,.18),
+                    0 0 26px rgba(120,170,255,.3);
+    }
+    .archive-board-logo { display: none; }
 }
 
 /* ---- responsive ---- */
