@@ -165,7 +165,7 @@
         if (this.isMobile) {
             // the active card IS the layout: 70% of the width, capped so it
             // never eats more than 58% of the height
-            this.tier.cardW = Math.max(120, Math.round(Math.min(w * .70, (h * .58) / 1.5)));
+            this.tier.cardW = Math.max(120, Math.round(Math.min(w * .70, (h * .52) / 1.5)));
             this.tier.visible = 2.6;
         } else {
             // keep the focused card inside the window whatever the window size is
@@ -191,25 +191,32 @@
 
     // Mobile browse state: one big card in the middle, a sliver of each
     // neighbour showing at the edges, everything else parked off-screen.
+    // Continuous in `offset`, so a half-swiped card sits half way there. That
+    // is what lets the rail follow the finger instead of jumping at a
+    // threshold.
     ArchiveGallery.prototype.mobileRail = function (offset) {
-        var a = Math.abs(offset), d = sign(offset);
+        var d = offset < 0 ? -1 : 1;
+        var a = Math.abs(offset);
         var W = this.root.clientWidth || 380;
         var cw = this.tier.cardW;
-        if (a === 0) return { x:0, y:0, z:0, rx:0, ry:0, rz:0, s:1, o:1 };
 
-        var sideS = a === 1 ? .84 : .70;
-        var sideW = cw * sideS;
-        var peek  = a === 1 ? .22 : 0;                  // 22% of the neighbour shows
-        var x = W / 2 + sideW * (.5 - peek) + (a - 1) * sideW * .55;
+        var n1 = Math.min(a, 1);                 // 0..1  centre -> neighbour
+        var n2 = Math.max(0, Math.min(a - 1, 1));// 0..1  neighbour -> outer
+        var n3 = Math.max(0, Math.min(a - 2, 1));
+
+        var s = 1 - .16 * n1 - .14 * n2;         // 1 -> .84 -> .70
+        var unit = W / 2 + (cw * .84) * (.5 - .22);   // x when |offset| === 1
+        var x = unit * n1 + (cw * .84 * .55) * n2 + (cw * .70 * .5) * n3;
+
         return {
             x:  d * x,
             y:  0,
-            z:  -70 * a,
+            z:  -70 * n1 - 60 * n2,
             rx: 0,
-            ry: -d * (a === 1 ? 13 : 16),
+            ry: -d * (13 * n1 + 3 * n2),
             rz: 0,
-            s:  sideS,
-            o:  a <= 1 ? 1 : (a <= 2 ? .32 : 0)
+            s:  s,
+            o:  1 - .68 * n2 - .32 * n3
         };
     };
 
@@ -950,6 +957,7 @@
         var self = this;
         i = clamp(i, 0, this.items.length - 1);
         if (i === this.focus) return;
+        if (this.isMobile) { this.snapMobile(i - this.focus); return; }
         this.focus = i;
         this.loadNear();
 
@@ -965,6 +973,29 @@
             } else {
                 for (var k in r) it.base[k] = r[k];
             }
+        });
+        this.updateHud();
+    };
+
+    // Live drag: rewrite every base from a fractional offset. No tweens here --
+    // the finger is the clock.
+    ArchiveGallery.prototype.applyMobileDrag = function (frac) {
+        var self = this;
+        this.items.forEach(function (it) {
+            var r = self.mobileRail(it.index - self.focus + frac);
+            for (var k in r) it.base[k] = r[k];
+        });
+    };
+
+    ArchiveGallery.prototype.snapMobile = function (deltaIndex) {
+        var self = this;
+        var target = clamp(this.focus + deltaIndex, 0, this.items.length - 1);
+        this.focus = target;
+        this.loadNear();
+        this.items.forEach(function (it) {
+            var r = self.mobileRail(it.index - self.focus);
+            if (self.G) self.G.to(it.base, Object.assign({ duration: .34, ease: 'power3.out' }, r));
+            else for (var k in r) it.base[k] = r[k];
         });
         this.updateHud();
     };
@@ -1059,11 +1090,20 @@
                     self.dragMoved = true;
                     self.root.classList.add('dragging');
                     try { self.root.setPointerCapture(id); } catch (err) {}
+                    // a snap may still be running from the last swipe -- the
+                    // finger takes over, so stop it writing over us
+                    if (self.G) self.items.forEach(function (it) { self.G.killTweensOf(it.base); });
                 }
                 acc += dx;
-                var step = self.isMobile
-                    ? (self.root.clientWidth || 380) * .26      // a real swipe, not a nudge
-                    : self.tier.spread * .62;
+                if (self.isMobile) {
+                    // follow the finger: one card per ~72% of the card width
+                    var unit = Math.max(70, self.tier.cardW * .55);
+                    self.dragFrac = clamp(-acc / unit, -1.15, 1.15);
+                    self.vel = dx;
+                    self.applyMobileDrag(self.dragFrac);
+                    return;
+                }
+                var step = self.tier.spread * .62;
                 while (Math.abs(acc) >= step) {
                     self.setFocus(self.focus - sign(acc));
                     acc -= sign(acc) * step;
@@ -1084,6 +1124,17 @@
             pressed = false;
             if (!dragging) return;               // a plain click: leave it alone
             dragging = false;
+            if (self.isMobile) {
+                var f = self.dragFrac || 0;
+                // a quick flick counts even if the finger did not travel far
+                if (Math.abs(self.vel || 0) > 6) f += sign(self.vel) * -.35;
+                self.snapMobile(Math.round(clamp(f, -1, 1)));
+                acc = 0; self.dragFrac = 0; self.vel = 0;
+                self.root.classList.remove('dragging');
+                try { self.root.releasePointerCapture(id); } catch (err) {}
+                setTimeout(function () { self.dragMoved = false; }, 30);
+                return;
+            }
             self.root.classList.remove('dragging');
             try { self.root.releasePointerCapture(id); } catch (err) {}
             if (self.G) self.G.to(self.railFx, { ry: 0, duration: .5, ease: 'power2.out' });

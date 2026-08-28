@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Archive Gallery — test harness</title>
-<link rel="stylesheet" href="css/archive-gallery.css?v=13">
+<link rel="stylesheet" href="css/archive-gallery.css?v=14">
 <style>
   /* Dev-only page. Not linked from the site; it exists so the gallery can be
      opened directly instead of booting the desktop and finding the icon. */
@@ -28,6 +28,26 @@
   #devbar button:hover { border-color: #4a7fd4; }
   #devbar code { background: #f4f2e6; border: 1px solid #b9b6a2; padding: 1px 5px; }
   #stage { flex: 1; min-height: 0; position: relative; }
+
+  /* diagnostics: what the gallery actually sees on THIS device */
+  #diag{
+      position:fixed; left:0; right:0; bottom:0; z-index:9999;
+      max-height:52vh; overflow:auto;
+      background:#0b0d16; color:#cfe0ff; border-top:2px solid #3b6fd4;
+      font:12px/1.5 ui-monospace,Menlo,monospace; padding:10px 12px;
+      padding-bottom:calc(10px + env(safe-area-inset-bottom,0px));
+      display:none;
+  }
+  #diag.on{display:block}
+  #diag b{color:#fff}
+  #diag .err{color:#ff9c9c;white-space:pre-wrap;word-break:break-word}
+  #diag .row{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #1e2436;padding:2px 0}
+  #diag .row span:last-child{color:#fff;text-align:right}
+  #diagbtn{
+      position:fixed;right:8px;bottom:8px;z-index:10000;
+      background:#1d4ed8;color:#fff;border:none;border-radius:6px;
+      padding:10px 14px;font:600 12px/1 ui-monospace,monospace;
+  }
 </style>
 </head>
 <body>
@@ -42,19 +62,37 @@
   </div>
   <div class="archive-stage" id="stage"></div>
 </div>
+<button id="diagbtn">TANI</button>
+<div id="diag"></div>
 
+<script>
+// catch anything that throws before the modules even run
+window.__ERRS = [];
+window.addEventListener('error', function (e) {
+    window.__ERRS.push((e.message || 'error') + ' @ ' +
+        (e.filename || '?').split('/').pop() + ':' + (e.lineno || '?'));
+});
+window.addEventListener('unhandledrejection', function (e) {
+    window.__ERRS.push('promise: ' + (e.reason && e.reason.message ? e.reason.message : e.reason));
+});
+</script>
 <script src="js/vendor/gsap.min.js"></script>
-<script src="js/ArchiveData.js?v=13"></script>
-<script src="js/ArchiveGallery.js?v=13"></script>
+<script src="js/ArchiveData.js?v=14"></script>
+<script src="js/ArchiveGallery.js?v=14"></script>
 <script>
 (function () {
     var stage = document.getElementById('stage');
     var gallery = null;
 
     function mount() {
-        if (gallery) gallery.destroy();
-        gallery = new ArchiveGallery(stage, window.ARCHIVE_CARDS);
-        window.gallery = gallery;          // pokeable from the console
+        try {
+            if (gallery) gallery.destroy();
+            gallery = new ArchiveGallery(stage, window.ARCHIVE_CARDS);
+            window.gallery = gallery;      // pokeable from the console
+        } catch (err) {
+            window.__ERRS.push('mount: ' + (err && err.message ? err.message : err));
+            document.getElementById('diag').classList.add('on');
+        }
     }
 
     document.getElementById('dbg').addEventListener('change', function (e) {
@@ -71,6 +109,58 @@
         if (now - last >= 1000) { out.textContent = frames + ' fps'; frames = 0; last = now; }
         requestAnimationFrame(tick);
     })(performance.now());
+
+    // ---- diagnostics ----
+    var diag = document.getElementById('diag');
+    function row(k, v){ return '<div class="row"><span>' + k + '</span><span>' + v + '</span></div>'; }
+    function refreshDiag() {
+        var g = window.gallery, r = stage.getBoundingClientRect();
+        var cs = getComputedStyle(stage);
+        var html = '<b>ARCHIVE TANI</b>';
+        html += row('ekran (window)', window.innerWidth + ' x ' + window.innerHeight);
+        html += row('sahne (stage)', Math.round(r.width) + ' x ' + Math.round(r.height));
+        html += row('dpr', window.devicePixelRatio);
+        html += row('GSAP', window.gsap ? 'yuklendi ' + gsap.version : 'YOK');
+        html += row('reduce motion',
+            (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) ? 'ACIK' : 'kapali');
+        html += row('touch', ('ontouchstart' in window) ? 'var' : 'yok');
+        if (g) {
+            html += row('isMobile', g.isMobile ? 'EVET' : 'hayir');
+            html += row('tier', g.tierName);
+            html += row('kart eni (tier.cardW)', (g.tier && g.tier.cardW) + ' px');
+            html += row('--acw', cs.getPropertyValue('--acw').trim() || '(yok)');
+            html += row('is-mobile sinifi', stage.classList.contains('is-mobile') ? 'var' : 'YOK');
+            html += row('intro bitti', g.introDone ? 'evet' : 'hayir');
+            html += row('etkilesim', g.interactive ? 'acik' : 'kapali');
+            html += row('atlama sebebi', g.skipReason || '-');
+            html += row('odak', (g.focus + 1) + ' / ' + g.items.length);
+            html += row('yuklenen gorsel', g.items.filter(function (i) {
+                return i.img && i.img.complete && i.img.naturalWidth;
+            }).length + ' / ' + g.items.length);
+            var f = g.items[g.focus];
+            if (f) {
+                var fr = f.el.getBoundingClientRect();
+                html += row('odak karti ekranda', Math.round(fr.width) + ' x ' + Math.round(fr.height) + ' px');
+                html += row('  ekranin yuzdesi',
+                    Math.round(fr.width / r.width * 100) + '% genis, ' +
+                    Math.round(fr.height / r.height * 100) + '% yuksek');
+            }
+        } else {
+            html += row('galeri', 'OLUSTURULMADI');
+        }
+        if (window.__ERRS.length) {
+            html += '<div style="margin-top:8px"><b>HATALAR (' + window.__ERRS.length + ')</b></div>';
+            html += '<div class="err">' + window.__ERRS.join('\n') + '</div>';
+        } else {
+            html += row('js hatasi', 'yok');
+        }
+        diag.innerHTML = html;
+    }
+    document.getElementById('diagbtn').addEventListener('click', function () {
+        diag.classList.toggle('on');
+        if (diag.classList.contains('on')) refreshDiag();
+    });
+    setInterval(function () { if (diag.classList.contains('on')) refreshDiag(); }, 1000);
 
     if (!window.gsap) {
         stage.innerHTML = '<div style="color:#ff8080;font:13px Tahoma;padding:24px">' +
