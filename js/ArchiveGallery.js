@@ -76,7 +76,7 @@
             '</div>' +
             '<div class="archive-rail"></div>' +
             '<div class="archive-debug"><span class="p">STACK</span><span class="t">0.0s</span></div>' +
-            '<div class="archive-hint">DRAG &middot; SCROLL &middot; ARROW KEYS &middot; CLICK TO OPEN</div>' +
+            '<div class="archive-hint">DEALING\u2026</div>' +
             '<div class="archive-hud">' +
               '<div class="grp">' +
                 '<button class="xpbtn" data-nav="-1">&laquo; <span class="lbl">Back</span></button>' +
@@ -202,7 +202,7 @@
                 ' rotateZ(' + b.rz.toFixed(2) + 'deg)' +
                 ' scale(' + (b.s * f.s).toFixed(4) + ')';
             it.el.style.opacity = b.o;
-            it.el.style.zIndex = String(1000 + Math.round(b.z + f.z + d.z));
+            it.el.style.zIndex = String(Math.max(1, 1000 + Math.round(b.z + f.z + d.z)));
             it.el.style.pointerEvents = b.o > .35 ? 'auto' : 'none';
         }
         for (i = 0; i < this.trails.length; i++) {
@@ -493,7 +493,10 @@
         tl.call(function () {
             if (!self.dbgP) return;
             self.dbgP.textContent = name;
-            self.dbgT.textContent = at.toFixed(1) + 's';
+            // real elapsed time, not the designed position -- if the two ever
+            // disagree the label shows it straight away
+            var real = self.introT0 ? (Date.now() - self.introT0) / 1000 : at;
+            self.dbgT.textContent = real.toFixed(1) + 's / ' + at.toFixed(1) + 's';
         }, null, at);
     };
 
@@ -508,9 +511,25 @@
         var tray = this.tray;
 
         // every card gets a seat on the board, front lane first
-        var seat = this.items.map(function (it, i) { return slots[i % slots.length]; });
+        // If the set grows past the slot count, extra cards share a slot but
+        // sit a step in front of it instead of exactly on top.
+        var seat = this.items.map(function (it, i) {
+            var si = i % slots.length;
+            var base = slots[si];
+            var wrap = Math.floor(i / slots.length);
+            // carry the slot index, because a wrapped seat is a copy and
+            // indexOf() would not find it
+            if (!wrap) return Object.assign({}, base, { si: si });
+            return Object.assign({}, base, {
+                si: si,
+                x:  base.x + wrap * base.w * .18,
+                cy: base.cy - wrap * base.h * .10,
+                z:  base.z + wrap * 46
+            });
+        });
 
         this.setIntroStackState();
+        this.introT0 = Date.now();
         var tl = G.timeline({ onComplete: function () { self.finishIntro(); } });
         this.tl = tl;
 
@@ -536,7 +555,9 @@
         tl.to(this.boardEl, { opacity: 1, duration: .38, ease: 'power2.out' }, .65);
         tl.to(this.trayEl,  { opacity: 1, duration: .3 }, .68);
         this.slotEls.forEach(function (el, i) {
-            tl.to(el, { opacity: 1, duration: .22, ease: 'power1.out' }, .74 + i * .014);
+            // light up, then settle back so the seat flash below actually reads
+            tl.to(el, { opacity: 1,  duration: .18, ease: 'power1.out' }, .74 + i * .014);
+            tl.to(el, { opacity: .38, duration: .22, ease: 'power1.inOut' }, .94 + i * .014);
         });
         this.laneTags.forEach(function (el, i) {
             tl.to(el, { opacity: 1, duration: .25 }, .84 + i * .07);
@@ -570,9 +591,9 @@
                 duration: .24, ease: 'power2.in'
             }, at + .2);
             // the slot registers the card
-            tl.to(self.slotEls[slots.indexOf(sl)], {
-                opacity: .95, duration: .12, yoyo: true, repeat: 1
-            }, at + .42);
+            var slotEl = self.slotEls[sl.si];
+            tl.to(slotEl, { opacity: 1, duration: .1, ease: 'power2.out' }, at + .4);
+            tl.to(slotEl, { opacity: .3, duration: .3, ease: 'power2.out' }, at + .5);
         });
 
         /* ============ 2.60-3.50  TRAIL — heroes lift off the board ===== */
@@ -656,6 +677,7 @@
         this.updateHud();
         this.startIdle();
         var self = this;
+        if (this.hint) this.hint.textContent = 'DRAG \u00b7 SCROLL \u00b7 ARROW KEYS \u00b7 CLICK TO OPEN';
         setTimeout(function () { if (self.hint) self.hint.classList.add('gone'); }, 3500);
     };
 
@@ -719,8 +741,9 @@
         this.stId.textContent = d.data.id;
         this.stTitle.textContent = d.data.title;
         this.stN.textContent = String(this.focus + 1);
+        var showFocus = this.introDone;      // no caption mid-choreography
         this.items.forEach(function (it, i) {
-            it.el.classList.toggle('is-focus', i === d.index);
+            it.el.classList.toggle('is-focus', showFocus && i === d.index);
         });
         var back = this.root.querySelector('[data-nav="-1"]');
         var next = this.root.querySelector('[data-nav="1"]');
@@ -838,11 +861,17 @@
             if (bar && bar.classList.contains('inactive')) return;
             var ae = document.activeElement;
             if (ae && /^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName)) return;
-            if (e.key === 'ArrowLeft')  { self.setFocus(self.focus - 1); e.preventDefault(); }
-            else if (e.key === 'ArrowRight') { self.setFocus(self.focus + 1); e.preventDefault(); }
-            else if (e.key === 'Home')  { self.setFocus(0); }
-            else if (e.key === 'End')   { self.setFocus(self.items.length - 1); }
-            else if (e.key === 'Enter') { self.openDetail(self.focus); }
+            if (e.key === 'ArrowLeft')  {
+                e.preventDefault();
+                if (self.detailOpen) self.stepDetail(-1); else self.setFocus(self.focus - 1);
+            }
+            else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                if (self.detailOpen) self.stepDetail(1); else self.setFocus(self.focus + 1);
+            }
+            else if (e.key === 'Home')  { if (!self.detailOpen) self.setFocus(0); }
+            else if (e.key === 'End')   { if (!self.detailOpen) self.setFocus(self.items.length - 1); }
+            else if (e.key === 'Enter') { if (!self.detailOpen) self.openDetail(self.focus); }
             else if (e.key === 'Escape' && self.detailOpen) { self.closeDetail(); }
         };
         document.addEventListener('keydown', this._onKey);
@@ -873,6 +902,10 @@
         clearTimeout(this._rz);
         this._rz = setTimeout(function () {
             if (self.destroyed) return;
+            // Re-measuring mid-intro would resize the cards while the timeline
+            // still holds slot targets from the old geometry, so they would
+            // drift off their slots. Leave the intro alone; it is 6s long.
+            if (self.tl && self.tl.isActive && self.tl.isActive()) return;
             var prev = self.tierName;
             self.measure();
             if (self.introDone || self.reduced || !self.G) self.settleAll(prev !== self.tierName);
@@ -881,16 +914,33 @@
 
     /* ------------------------------------------------------------ detail */
 
+    // Swap the picture without closing, so the arrow keys the panel advertises
+    // actually browse.
+    ArchiveGallery.prototype.showDetailCard = function (i) {
+        var it = this.items[i];
+        if (!it) return;
+        this.detailIndex = i;
+        var img = this.detail.querySelector('img');
+        img.src = it.data.image;                 // the original PNG, untouched
+        this.detail.querySelector('.d-title').textContent = it.data.title;
+        this.detail.querySelector('.d-id').textContent = it.data.id;
+    };
+
+    ArchiveGallery.prototype.stepDetail = function (dir) {
+        if (!this.detailOpen) return;
+        var i = clamp(this.detailIndex + dir, 0, this.items.length - 1);
+        if (i === this.detailIndex) return;
+        this.showDetailCard(i);
+        this.focus = i;
+        this.updateHud();
+    };
+
     ArchiveGallery.prototype.openDetail = function (i) {
         var self = this, it = this.items[i];
         if (!it || this.detailOpen) return;
         this.detailOpen = true;
         this.stopIdle();
-
-        var img = this.detail.querySelector('img');
-        img.src = it.data.image;                 // the original PNG, untouched
-        this.detail.querySelector('.d-title').textContent = it.data.title;
-        this.detail.querySelector('.d-id').textContent = it.data.id;
+        this.showDetailCard(i);
 
         // the chosen card comes forward, the rest sink back
         this.items.forEach(function (o) {
@@ -912,6 +962,7 @@
         if (!this.detailOpen) return;
         var self = this;
         this.detailOpen = false;
+        this.detailIndex = null;
         this.detail.classList.remove('on');
         this.items.forEach(function (o) {
             if (self.G) self.G.to(o.fx, { z: 0, y: 0, s: 1, ry: 0, rx: 0, duration: .5, ease: 'power2.out' });
