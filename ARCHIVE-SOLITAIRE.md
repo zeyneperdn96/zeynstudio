@@ -104,7 +104,6 @@ duruyor: azalan sıra + WARM/COOL dönüşümü. Görüntü aynı, oyun oynanabi
 assets/projects/zeynep-archive/
 ├── full/          20 orijinal PNG  (~42 MB, git'e eklenmedi)
 ├── thumbs/        20 JPEG, 600px   (2.3 MB — oyunun yüklediği)
-├── icon.png       128×128 masaüstü ikonu (001'den kırpıldı)
 └── README.md      deste yapısı + notlar
 ```
 
@@ -164,7 +163,7 @@ Oyun sayfası `file://` üzerinden de çalışır (fetch/modül kullanmıyor).
 ## 8. Kalanlar
 
 - ⬜ `card-back.png` · `table-bg.png` · `slot-frame.png`
-- ⬜ Portfolyo kartı için gerçek ekran görüntüsü thumbnail (şu an 001'in kırpılmışı)
+- ⬜ Portfolyo kartı için gerçek ekran görüntüsü thumbnail (şu an 001'in preview'ı)
 - ⬜ Case study metni — bu dosya hammadde
 - ⬜ Ekran kaydı: dağıtım → birkaç hamle → `A` ile toplama → şelale. 20-30 sn yeter
 - ⬜ `full/` git'e eklenecek mi kararı (şu an sadece diskte)

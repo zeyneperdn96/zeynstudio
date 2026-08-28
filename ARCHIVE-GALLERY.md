@@ -29,6 +29,7 @@ büyütülüp küçültülünce `ResizeObserver` ile kendini yeniden ölçüyor.
 | `js/WindowTemplates.js` | `archive` şablonu (sadece eklendi). |
 | `js/WindowManager.js` | Pencere boyutu, `initializeArchiveWindow`, cleanup (sadece eklendi). |
 | `index.html` | GSAP CDN, css/js etiketleri, masaüstü ikonu (sadece eklendi). |
+| `assets/icons/icon-archive.svg` | Masaüstü ikonu. Sitenin ikon sistemiyle aynı dil: 32×32 viewBox, gradient, şeffaf. |
 
 Mevcut hiçbir pencere veya davranış değiştirilmedi.
 
