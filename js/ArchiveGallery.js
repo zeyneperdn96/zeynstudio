@@ -26,7 +26,7 @@
                    scaleStep: .09, minScale: .76, visible: 3.5, lift: 6,  tilt: 1, trails: 0, waveZ: 46 }
     };
 
-    var TRAIL_FADE = [.85, .68, .5, .34, .20, .12, .08, .05, .03];
+    var TRAIL_FADE = [.95, .82, .68, .52, .38, .25, .15, .10];
 
     function clamp(v, a, b) { return v < a ? a : (v > b ? b : v); }
     function sign(v) { return v < 0 ? -1 : (v > 0 ? 1 : 0); }
@@ -249,56 +249,6 @@
 
     /* ------------------------------------------------------------ trail */
 
-    // Temporary clones that streak diagonally behind a moving card.
-    ArchiveGallery.prototype.spawnTrail = function (it, count, dir) {
-        if (this.reduced || !this.allowTrails) return;
-        if (this.trails.length >= (this.trailBudget || 40)) return;
-        var n = count == null ? this.tier.trails : count;
-        if (n <= 0 || !it.loaded) return;
-        var self = this, b = it.base, f = it.fx, d = dir || -1;
-
-        for (var k = 1; k <= n; k++) {
-            var el = document.createElement('div');
-            el.className = 'archive-trail';
-            el.style.setProperty('--acw', it.el.style.getPropertyValue('--acw'));
-            el.style.setProperty('--ach', it.el.style.getPropertyValue('--ach'));
-            var img = it.img.cloneNode(false);     // cached, no new request
-            el.appendChild(img);
-            this.rail.appendChild(el);
-
-            var gap = 34 + k * 11;                 // 30-80px apart, widening
-            var state = {
-                x: b.x + f.x + d * gap * k * .55,
-                y: b.y + f.y + gap * k * .34,      // diagonal, not a straight line
-                z: b.z + f.z - k * 62,
-                ry: b.ry + d * k * 3.2,
-                rz: b.rz + d * k * .9,
-                s: (b.s * f.s) * (1 - k * .035),
-                o: TRAIL_FADE[k - 1] != null ? TRAIL_FADE[k - 1] : .06
-            };
-            var rec = { el: el, s: state };
-            this.trails.push(rec);
-
-            (function (rec) {
-                var kill = function () {
-                    var i = self.trails.indexOf(rec);
-                    if (i > -1) self.trails.splice(i, 1);
-                    if (rec.el.parentNode) rec.el.parentNode.removeChild(rec.el);
-                };
-                if (self.G) {
-                    self.G.to(rec.s, {
-                        x: b.x + f.x, y: b.y + f.y, z: b.z + f.z,
-                        ry: b.ry, rz: b.rz, s: b.s * f.s, o: 0,
-                        duration: .34 + k * .07, ease: 'power2.out',
-                        delay: k * .015, onComplete: kill
-                    });
-                } else {
-                    setTimeout(kill, 260);
-                }
-            })(rec);
-        }
-    };
-
     ArchiveGallery.prototype.clearTrails = function () {
         while (this.trails.length) {
             var t = this.trails.pop();
@@ -308,24 +258,25 @@
     };
 
     /* ====================================================================
-       INTRO — a 6.5s cinematic that runs entirely OUTSIDE the rail maths.
-       Nothing here calls railFor() until the last phase; until then the
-       cards are placed by formation, so it never reads as a carousel.
-       The rail is the final state and browse mode, untouched.
+       INTRO STATE  vs  BROWSE STATE
 
-           setupInitialStack()
-             -> stackArrival()        deck flies out of the depth
-             -> createCardTrails()    heroes leave diagonal ribbons
-             -> splitIntoGroups()     staircase formations at depth
-             -> cardWave()            domino roll, left to right
-             -> collapseGroups()      squeeze back toward centre
-             -> expandIntoCarousel()  fan out onto the rail
-             -> enableCarouselInteractions()
+       Two separate position systems. The intro never calls railFor(); it
+       places cards by formation. Only transitionRealCardsToCarousel(), the
+       last step, hands over to the rail -- which is the browse state and is
+       not touched by anything in here.
+
+           setIntroStackState()
+             -> stackArrival()
+             -> createVisibleTrails()          clones appear and STAY
+             -> splitCardsIntoThreeGroups()
+             -> runWaveAcrossGroups()
+             -> removeTrailClones()
+             -> transitionRealCardsToCarousel()
+             -> enableCarousel()
        ==================================================================== */
 
-    // Where the intro is allowed to put things, in rail-local coordinates.
-    // Send every card to its rail slot. This IS the final/browse state --
-    // resize, detail-close and the reduced-motion path all land here.
+    // Send every card to its rail slot. This IS the browse/final state --
+    // resize, detail-close and the no-animation path all land here.
     ArchiveGallery.prototype.settleAll = function (immediate) {
         var self = this;
         this.items.forEach(function (it) {
@@ -339,85 +290,90 @@
         this.updateHud();
     };
 
+    // Intro sizes are derived from the stage, not from the rail, so the deck
+    // really does fill about half the height whatever the window size is.
     ArchiveGallery.prototype.introSpace = function () {
         var W = this.root.clientWidth || 900;
         var H = this.root.clientHeight || 600;
-        var m = this.tierName === 'mobile' ? .58 : (this.tierName === 'tablet' ? .8 : 1);
+        var cardPx = (this.tier.cardW || 200) * 1.5;
+        var m = this.tierName === 'mobile' ? .6 : (this.tierName === 'tablet' ? .82 : 1);
+        var frac = function (f) { return (H * f) / cardPx; };
         return {
             W: W, H: H, m: m,
-            spanX: W * .30 * m,        // how far a formation reaches sideways
-            spanY: H * .13 * m,
-            hero:  this.tierName === 'mobile' ? 3 : (this.tierName === 'tablet' ? 5 : 7),
-            ribbon: this.tierName === 'mobile' ? 0 : (this.tierName === 'tablet' ? 5 : 8),
-            boost: 1.18                // intro cards run larger than rail cards
+            deck:  frac(.50),                 // arrival size: half the stage height
+            hero:  frac(.62),                 // heroes come in bigger still
+            group: frac(.42),
+            spanX: W * .30 * m,
+            spanY: H * .14 * m,
+            heroes:  this.tierName === 'mobile' ? 3 : (this.tierName === 'tablet' ? 4 : 5),
+            perTrail: this.tierName === 'mobile' ? 4 : (this.tierName === 'tablet' ? 6 : 7)
         };
     };
 
-    // A quadratic bezier, so ribbons bend instead of running dead straight.
-    function bez(a, b, c, t) {
-        var u = 1 - t;
-        return u * u * a + 2 * u * t * b + t * t * c;
-    }
+    function bez(a, b, c, t) { var u = 1 - t; return u * u * a + 2 * u * t * b + t * t * c; }
 
-    // ---- a persistent ribbon of copies laid along a curved path.
-    // This is the reference's cascade look: same-size cards stepping back
-    // in depth, not a motion blur.
-    ArchiveGallery.prototype.spawnRibbon = function (it, from, to, bend, n, life) {
-        if (this.reduced || !it.loaded || n <= 0) return;
-        var self = this, G = this.G;
-        var cx = (from.x + to.x) / 2 + bend.x;
-        var cy = (from.y + to.y) / 2 + bend.y;
-        var cz = (from.z + to.z) / 2 + bend.z;
-
+    /* ---- clones: created visible, and they STAY until removeTrailClones().
+       This is what makes 25-40 card images share the screen. ------------- */
+    ArchiveGallery.prototype.spawnRibbon = function (it, from, to, bend, n) {
+        if (!it.loaded || n <= 0) return;
         for (var k = 1; k <= n; k++) {
             if (this.trails.length >= this.trailBudget) break;
-            var t = 1 - k / (n + 1);                    // 1 = at the card, 0 = at the start
+            var t = 1 - k / (n + 1);                 // 1 = at the card, 0 = tail end
             var el = document.createElement('div');
             el.className = 'archive-trail';
             el.style.setProperty('--acw', it.el.style.getPropertyValue('--acw'));
             el.style.setProperty('--ach', it.el.style.getPropertyValue('--ach'));
             el.appendChild(it.img.cloneNode(false));
-            this.rail.appendChild(el);
 
-            var st = {
+            var cx = (from.x + to.x) / 2 + bend.x;
+            var cy = (from.y + to.y) / 2 + bend.y;
+            var cz = (from.z + to.z) / 2 + bend.z;
+            var rec = { el: el, s: {
                 x:  bez(from.x, cx, to.x, t),
                 y:  bez(from.y, cy, to.y, t),
-                z:  bez(from.z, cz, to.z, t) - (n - k) * 26,
-                ry: (to.ry || 0) * t + (from.ry || 0) * (1 - t) + (n - k) * 1.6,
-                rz: ((to.rz || 0) - (n - k) * .7),
-                s:  (to.s || 1) * (1 - (n - k) * .022),
-                o:  (TRAIL_FADE[k - 1] != null ? TRAIL_FADE[k - 1] : .05)
-            };
-            var rec = { el: el, s: st };
+                z:  bez(from.z, cz, to.z, t) - k * 58,
+                ry: (to.ry || 0) + k * 2.2,
+                rz: (to.rz || 0) - k * .8,
+                s:  (to.s || 1) * (1 - k * .045),
+                o:  TRAIL_FADE[k - 1] != null ? TRAIL_FADE[k - 1] : .10
+            }};
+            // write the transform before it is in the document, otherwise the
+            // clone paints once at the rail origin and visibly jumps
+            var st = rec.s;
+            el.style.transform =
+                'translate3d(' + st.x + 'px,' + st.y + 'px,' + st.z + 'px)' +
+                ' rotateY(' + st.ry + 'deg) rotateZ(' + st.rz + 'deg) scale(' + st.s + ')';
+            el.style.opacity = st.o;
+            this.rail.appendChild(el);
             this.trails.push(rec);
-
-            (function (rec, k) {
-                var kill = function () {
-                    var i = self.trails.indexOf(rec);
-                    if (i > -1) self.trails.splice(i, 1);
-                    if (rec.el.parentNode) rec.el.parentNode.removeChild(rec.el);
-                };
-                if (G) {
-                    G.to(rec.s, {
-                        o: 0, z: rec.s.z - 90, s: rec.s.s * .93,
-                        duration: (life || .75), ease: 'power2.in',
-                        delay: (n - k) * .028, onComplete: kill
-                    });
-                } else { setTimeout(kill, 400); }
-            })(rec, k);
         }
     };
 
-    ArchiveGallery.prototype.setupInitialStack = function () {
-        var G = this.G;
+    ArchiveGallery.prototype.removeTrailClones = function (dur) {
+        var self = this, G = this.G;
+        this.trails.slice().forEach(function (rec, i) {
+            var kill = function () {
+                var j = self.trails.indexOf(rec);
+                if (j > -1) self.trails.splice(j, 1);
+                if (rec.el.parentNode) rec.el.parentNode.removeChild(rec.el);
+            };
+            if (G) G.to(rec.s, { o: 0, z: rec.s.z - 160, s: rec.s.s * .88,
+                                 duration: dur || .45, ease: 'power2.in',
+                                 delay: (i % 8) * .012, onComplete: kill });
+            else kill();
+        });
+    };
+
+    ArchiveGallery.prototype.setIntroStackState = function () {
+        var G = this.G, S = this.introSpace();
         this.items.forEach(function (it) {
             var j = jitter(it.index);
-            // one deck at the vanishing point -- offsets are small but not zero,
-            // so you can tell there is more than one card back there
+            // one tight deck at the vanishing point -- offsets are tiny, so it
+            // really does read as a single card until it gets close
             G.set(it.base, {
-                x: j.x * .55, y: j.y * .55, z: -1200 + j.z * .8,
-                rx: 10, ry: j.ry * .7, rz: j.rz * .5,
-                s: .12, o: 0
+                x: j.x * .16, y: j.y * .16, z: -1200 + j.z * .10,
+                rx: 10, ry: j.ry * .22, rz: j.rz * .3,
+                s: S.deck * .11, o: 0
             });
             G.set(it.fx, { x: 0, y: 0, z: 0, rx: 0, ry: 0, s: 1 });
             G.set(it.idle, { y: 0, z: 0, ry: 0 });
@@ -426,143 +382,100 @@
 
     ArchiveGallery.prototype.intro = function () {
         var self = this, G = this.G, S = this.introSpace();
-        this.allowTrails = true;
-        this.trailBudget = this.tierName === 'mobile' ? 12 : (this.tierName === 'tablet' ? 34 : 68);
+        var N = this.items.length, mid = (N - 1) / 2;
+        this.trailBudget = this.tierName === 'mobile' ? 14 : (this.tierName === 'tablet' ? 30 : 44);
 
-        this.setupInitialStack();
+        this.setIntroStackState();
         var tl = G.timeline({ onComplete: function () { self.finishIntro(); } });
         this.tl = tl;
 
-        var N = this.items.length;
-        var mid = (N - 1) / 2;
-
-        /* ---- 0.00-0.80 the deck exists, far away, barely lit ---------- */
+        /* -- 0.00-0.80  the deck exists, far away ---------------------- */
         this.items.forEach(function (it, i) {
-            tl.to(it.base, { o: 1, duration: .55, ease: 'power1.out' }, i * .012);
+            tl.to(it.base, { o: 1, duration: .5, ease: 'power1.out' }, i * .01);
         });
 
-        /* ---- 0.80-1.60 it comes at the camera, still one body --------- */
-        var byDepth = this.items.slice().sort(function (a, b) {
-            return jitter(b.index).z - jitter(a.index).z;
-        });
-        byDepth.forEach(function (it, n) {
+        /* -- 0.80-1.70  stackArrival(): it comes at the camera and grows
+              to about half the stage height, still one body ------------ */
+        this.items.forEach(function (it, n) {
             var j = jitter(it.index);
             tl.to(it.base, {
-                x: j.x * .8, y: j.y * .8, z: -100 + j.z * .18,
-                rx: 6, ry: j.ry * .5, rz: j.rz * .4,
-                s: .65 * S.boost,
-                duration: .62, ease: 'power3.inOut'
-            }, .8 + n * (.18 / N));
+                x: j.x * .30, y: j.y * .30, z: -60 + j.z * .10,
+                rx: 5, ry: j.ry * .3, rz: j.rz * .4,
+                s: S.deck,
+                duration: .72, ease: 'power3.inOut'
+            }, .8 + n * (.16 / N));
         });
 
-        /* ---- 1.60-2.80 heroes break out, each dragging a ribbon ------- */
-        // Choreographed, not random: alternating diagonals fanning outward.
+        /* -- 1.70-2.90  createVisibleTrails(): heroes peel off, each one
+              laying a long diagonal ribbon that STAYS on screen -------- */
         var heroes = [];
-        for (var h = 0; h < S.hero; h++) {
-            heroes.push(this.items[Math.round((h + .5) * (N / S.hero)) % N]);
+        for (var h = 0; h < S.heroes; h++) {
+            heroes.push(this.items[Math.round((h + .5) * (N / S.heroes)) % N]);
         }
         heroes.forEach(function (it, n) {
-            var side = n % 2 ? 1 : -1;                        // alternate left / right
+            var side = n % 2 ? 1 : -1;
             var rank = Math.floor(n / 2);
-            var at = 1.6 + n * (.6 / Math.max(1, S.hero - 1));
-            var from = { x: it.base.x, y: it.base.y, z: -100, ry: 0, rz: 0, s: .65 * S.boost };
+            var at = 1.7 + n * (.5 / Math.max(1, S.heroes - 1));
+            var from = { x: 0, y: 0, z: -60, ry: 0, rz: 0, s: S.deck };
             var to = {
-                x: side * S.spanX * (.55 + rank * .42),
-                y: (n % 4 < 2 ? -1 : 1) * S.spanY * (.7 + rank * .3),
-                z: 40 + rank * 70,
-                ry: -side * (16 - rank * 4),
-                rz: side * 3,
-                s: (1.02 - rank * .05) * S.boost
+                x:  side * S.spanX * (.62 + rank * .40),
+                y:  (n % 4 < 2 ? -1 : 1) * S.spanY * (.55 + rank * .35),
+                z:  70 + rank * 60,
+                ry: -side * (15 - rank * 4),
+                rz: side * 2.5,
+                s:  S.hero * (1 - rank * .06)
             };
-            // bend perpendicular to travel so the ribbon curves
-            var bend = { x: -side * S.spanX * .28, y: -to.y * .55, z: -140 };
+            var bend = { x: -side * S.spanX * .30, y: -to.y * .6, z: -180 };
 
-            tl.call(function () {
-                self.spawnRibbon(it, from, to, bend, S.ribbon, .8);
-            }, null, at);
+            tl.call(function () { self.spawnRibbon(it, from, to, bend, S.perTrail); }, null, at);
             tl.to(it.base, {
                 x: to.x, y: to.y, z: to.z, rx: 3, ry: to.ry, rz: to.rz, s: to.s,
-                duration: .6, ease: 'power3.out'
+                duration: .7, ease: 'power3.out'
             }, at);
         });
 
-        /* ---- 2.80-3.80 everything settles into staircase groups ------- */
-        var G_N = this.tierName === 'mobile' ? 2 : (this.tierName === 'tablet' ? 3 : 4);
+        /* -- 2.90-3.90  splitCardsIntoThreeGroups(): three staircases,
+              each at a different depth --------------------------------- */
+        var G_N = this.tierName === 'mobile' ? 2 : 3;
         var per = Math.ceil(N / G_N);
-        var groupOf = [];
+        var pos = [];
         this.items.forEach(function (it, i) {
             var gi = Math.min(G_N - 1, Math.floor(i / per));
             var k = i - gi * per;
-            var gx = (gi - (G_N - 1) / 2) * S.spanX * 1.5;
-            var gy = (gi % 2 ? 1 : -1) * S.spanY * .55;
-            var gz = [-150, 70, -60, 150][gi % 4];
-            var pos = {
-                x: gx + k * 24 * S.m,
-                y: gy + k * 17 * S.m,
-                z: gz - k * 48,
+            var p = {
+                x: (gi - (G_N - 1) / 2) * S.spanX * 1.45 + k * 26 * S.m,
+                y: (gi % 2 ? 1 : -1) * S.spanY * .45 + k * 19 * S.m,
+                z: [-170, 90, -50][gi % 3] - k * 44,
                 rx: 3,
-                ry: -15 + k * 4.5,
-                rz: -2 + k * .9,
-                s: (.92 - k * .028) * S.boost,
+                ry: -16 + k * 4.2,
+                rz: -2 + k * .8,
+                s: S.group * (1 - k * .022),
                 o: 1
             };
-            groupOf.push(pos);
-            tl.to(it.base, Object.assign({ duration: .6, ease: 'power2.inOut' }, pos),
-                  2.8 + gi * .1 + k * .022);
+            pos.push(p);
+            tl.to(it.base, Object.assign({ duration: .62, ease: 'power2.inOut' }, p),
+                  2.9 + gi * .1 + k * .02);
         });
 
-        /* ---- 3.80-4.70 a domino wave rolls left to right -------------- */
-        var byX = this.items.slice().sort(function (a, b) {
-            return groupOf[a.index].x - groupOf[b.index].x;
-        });
-        byX.forEach(function (it, n) {
-            var at = 3.8 + n * (.55 / N);
-            tl.to(it.fx, {
-                y: -50, z: 140, ry: 8, s: 1.05,
-                duration: .26, ease: 'power2.out'
-            }, at);
-            tl.to(it.fx, {
-                y: 0, z: 0, ry: 0, s: 1,
-                duration: .34, ease: 'power2.inOut'
-            }, at + .26);
-            if (n % 3 === 0) {
-                tl.call(function () {
-                    var b = it.base;
-                    self.spawnRibbon(it,
-                        { x: b.x - 90, y: b.y + 40, z: b.z - 60, ry: b.ry, s: b.s },
-                        { x: b.x, y: b.y, z: b.z, ry: b.ry, rz: b.rz, s: b.s },
-                        { x: -30, y: -30, z: -50 },
-                        Math.min(4, S.ribbon), .5);
-                }, null, at + .05);
-            }
+        /* -- 3.90-4.90  runWaveAcrossGroups(): left to right ----------- */
+        this.items.slice().sort(function (a, b) { return pos[a.index].x - pos[b.index].x; })
+        .forEach(function (it, n) {
+            var at = 3.9 + n * (.5 / N);
+            tl.to(it.fx, { y: -55, z: 150, ry: 9, s: 1.06, duration: .26, ease: 'power2.out' }, at);
+            tl.to(it.fx, { y: 0, z: 0, ry: 0, s: 1, duration: .34, ease: 'power2.inOut' }, at + .26);
         });
 
-        /* ---- 4.70-5.50 the formation squeezes back toward centre ------ */
-        var byMid = this.items.slice().sort(function (a, b) {
-            return Math.abs(a.index - mid) - Math.abs(b.index - mid);
-        });
-        byMid.forEach(function (it, n) {
-            tl.to(it.base, {
-                x: (it.index - mid) * 7 * S.m,
-                y: (it.index - mid) * 4 * S.m,
-                z: 60 - n * 34,                      // front stays big, back sinks
-                rx: 4,
-                ry: -6 + (it.index - mid) * .8,
-                rz: (it.index - mid) * .3,
-                s: (1.06 - n * .016) * S.boost,
-                o: 1,
-                duration: .62, ease: 'power2.inOut'
-            }, 4.7 + n * .012);
-        });
+        /* -- 4.90-5.40  removeTrailClones() ---------------------------- */
+        tl.call(function () { self.removeTrailClones(.45); }, null, 4.9);
 
-        /* ---- 5.50-6.50 fan open onto the rail: centre first ----------- */
-        var byCentre = this.items.slice().sort(function (a, b) {
+        /* -- 5.40-6.60  transitionRealCardsToCarousel(): centre first,
+              then outward. THIS is the only place railFor() is used. --- */
+        this.items.slice().sort(function (a, b) {
             return Math.abs(a.index - self.focus) - Math.abs(b.index - self.focus);
-        });
-        byCentre.forEach(function (it, n) {
+        }).forEach(function (it, n) {
             var r = self.railFor(it.index - self.focus);
-            tl.to(it.base, Object.assign({ duration: .72, ease: 'power3.out' }, r),
-                  5.5 + n * .028);
+            tl.to(it.base, Object.assign({ duration: .74, ease: 'power3.out' }, r),
+                  5.4 + n * .026);
         });
     };
 
@@ -610,11 +523,10 @@
 
     /* -------------------------------------------------- navigation ---- */
 
-    ArchiveGallery.prototype.setFocus = function (i, silent) {
+    ArchiveGallery.prototype.setFocus = function (i) {
         var self = this;
         i = clamp(i, 0, this.items.length - 1);
         if (i === this.focus) return;
-        var dir = i > this.focus ? -1 : 1;
         this.focus = i;
         this.loadNear();
 
@@ -629,10 +541,6 @@
                 for (var k in r) it.base[k] = r[k];
             }
         });
-        if (!silent && !this.reduced) {
-            var near = this.items.filter(function (it) { return Math.abs(it.index - self.focus) <= 2; });
-            near.forEach(function (it) { self.spawnTrail(it, Math.min(2, self.tier.trails), dir); });
-        }
         this.updateHud();
     };
 
@@ -676,7 +584,6 @@
         var l = this.items[it.index - 1], r = this.items[it.index + 1];
         if (l) set(l.fx, { x: on ? -12 : 0 });
         if (r) set(r.fx, { x: on ? 12 : 0 });
-        if (on && !this.reduced) self.spawnTrail(it, Math.min(2, this.tier.trails), -1);
     };
 
     ArchiveGallery.prototype.bindEvents = function () {
@@ -710,7 +617,7 @@
                 acc += dx; startX = e.clientX;
                 var step = self.tier.spread * .62;
                 while (Math.abs(acc) >= step) {
-                    self.setFocus(self.focus - sign(acc), true);
+                    self.setFocus(self.focus - sign(acc));
                     acc -= sign(acc) * step;
                 }
                 // a little rotational give while the hand is down
@@ -850,14 +757,17 @@
     /* --------------------------------------------------------- lifecycle */
 
     ArchiveGallery.prototype.replay = function () {
-        if (!this.G || this.reduced) { this.settleAll(true); return; }
+        if (!this.G) { this.settleAll(true); return; }
         if (this.tl) this.tl.kill();
         this.stopIdle();
         this.clearTrails();
         this.closeDetail();
         this.interactive = false;
         this.introDone = false;
-        if (this.hint) this.hint.classList.remove('gone');
+        if (this.hint) {
+            this.hint.textContent = 'DRAG \u00b7 SCROLL \u00b7 ARROW KEYS \u00b7 CLICK TO OPEN';
+            this.hint.classList.remove('gone');
+        }
         this.items.forEach(function (it) { it.el.classList.remove('is-hover'); });
         this.intro();
     };
@@ -868,13 +778,20 @@
         this.startTicker();
         this.bindEvents();
 
-        if (!this.G || this.reduced) {
-            // no cinematics: place the gallery and let people use it
+        this.skipReason = !this.G ? 'GSAP NOT LOADED'
+                        : (this.reduced ? 'REDUCED MOTION IS ON' : null);
+        if (this.skipReason) {
+            // Never fail silently -- if the intro is skipped, say why, and
+            // leave Replay able to force it.
             this.settleAll(true);
             this.interactive = true;
             this.introDone = true;
-            if (this.hint) this.hint.classList.add('gone');
             this.updateHud();
+            if (this.hint) {
+                this.hint.textContent = 'INTRO SKIPPED \u2014 ' + this.skipReason +
+                                        (this.G ? '  \u00b7  PRESS REPLAY TO PLAY IT ANYWAY' : '');
+                this.hint.classList.remove('gone');
+            }
             return;
         }
         this.updateHud();

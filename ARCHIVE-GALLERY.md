@@ -58,53 +58,67 @@ kullanılmıyor.
 
 ---
 
-## 3. Intro koreografisi
+## 3. INTRO STATE vs BROWSE STATE
 
-Intro **ray matematiğinden tamamen bağımsız**. `railFor()` yalnızca son fazda
-çağrılıyor; ondan önce kartların yeri formasyonlarla belirleniyor, bu yüzden
-ilk saniyeden itibaren carousel gibi görünmüyor. Carousel final state.
+İki ayrı pozisyon sistemi. Intro `railFor()`'u **sadece son adımda** çağırıyor;
+ondan öncesi tamamen formasyon mantığı. Carousel = browse state, intro
+tarafından hiç kullanılmıyor.
 
 ```
-setupInitialStack()
-  -> stackArrival()        deste derinlikten geliyor
-  -> createCardTrails()    hero kartlar diyagonal şerit bırakıyor
-  -> splitIntoGroups()     derinlikte merdiven formasyonlar
-  -> cardWave()            soldan sağa domino
-  -> collapseGroups()      merkeze sıkışma
-  -> expandIntoCarousel()  yelpaze açılıp raya oturma
-  -> enableCarouselInteractions()
+setIntroStackState()
+  -> stackArrival()
+  -> createVisibleTrails()          klonlar görünür ve EKRANDA KALIR
+  -> splitCardsIntoThreeGroups()
+  -> runWaveAcrossGroups()
+  -> removeTrailClones()
+  -> transitionRealCardsToCarousel()   <- railFor() ilk ve tek kez burada
+  -> enableCarousel()
 ```
 
 | Faz | Süre (sn) | Ne oluyor |
 |---|---|---|
-| 0 | 0.00 – 0.78 | **Uzak deste.** `z:-1200, scale:.12, rotateX:10, opacity:0→1`. Deterministik jitter — arkada birden çok kart olduğu belli, ama her replay aynı. |
-| 1 | 0.80 – 1.59 | **Derinlikten geliş.** `z:-1200→-100`, `scale:.12→.65`, `power3.inOut`. Stagger penceresi 0.18 sn'ye sabit (kart sayısı artınca uzamasın diye). Deste kompakt kalıyor. |
-| 2 | 1.60 – 2.80 | **Hero kartlar + şeritler.** 7 kart desteden kopuyor, her biri arkasında **8 kopyalık kalıcı diyagonal şerit** bırakıyor. Şeritler quadratic bezier ile kıvrılıyor; yönler dönüşümlü (sol-alt→sağ-üst / sağ-alt→sol-üst), rastgele değil. |
-| 3 | 2.80 – 3.79 | **Gruplara ayrılma.** 4 grup, her biri farklı derinlikte (`z: -150 / +70 / -60 / +150`). Grup içi kartlar merdiven gibi: `x+24, y+17, z-48, rotateY+4.5` adımlarla. |
-| 4 | 3.80 – 4.92 | **Domino dalgası.** Ekran x'ine göre soldan sağa: `y:0→-50→0`, `z:0→+140→0`, `rotateY→8°`, `scale→1.05`. Her üçüncü kart kısa şerit bırakıyor. |
-| 5 | 4.70 – 5.55 | **Sıkışma.** Merkezden dışa doğru toplanma; öndeki büyük kalıyor, arkadakiler `z` ve `scale` düşürüyor. Dalgayla kasten örtüşüyor — duraklamasın, aksın diye. |
-| 6 | 5.50 – 6.75 | **Carousel'e açılma.** Ortadaki kart önce, sonra merkezden dışa 1-2-3-4-5 sırayla `railFor()` pozisyonlarına. Yelpaze açılışı. |
+| 0 | 0.00 – 0.69 | **Tek sıkışık deste.** `z:-1200`, `scale ≈ .05` (sahne yüksekliğinin %50'sinin 0.11'i), jitter %16'ya kısıldı — gerçekten tek kart gibi görünüyor. `opacity 0→1`. |
+| 1 | 0.80 – 1.67 | **stackArrival.** `z:-1200→-60`, deste **sahne yüksekliğinin ~%50'sine** kadar büyüyor. Hâlâ tek gövde. |
+| 2 | 1.70 – 2.90 | **createVisibleTrails.** 5 hero kart desteden kopuyor, her biri **7 kalıcı klon** bırakıyor. Klonlar sönmüyor — 4.90'a kadar ekranda kalıyor. |
+| 3 | 2.90 – 3.84 | **splitCardsIntoThreeGroups.** 3 grup, farklı `z` (`-170 / +90 / -50`), grup içi merdiven dizilim. |
+| 4 | 3.90 – 4.97 | **runWaveAcrossGroups.** Soldan sağa: `y-55, z+150, rotateY 9°, scale 1.06`. |
+| 5 | 4.90 – 5.35 | **removeTrailClones.** Bütün klonlar sönüp DOM'dan siliniyor. |
+| 6 | 5.40 – 6.63 | **transitionRealCardsToCarousel.** Ortadaki kart önce, sonra dışa doğru. |
 
-Toplam **6.75 sn**. Sonunda `finishIntro()` → `allowTrails = false`, interaksiyon
-açılıyor. Browse mode'da artık şerit üretilmiyor; sahne sakinleşiyor.
+**Toplam 6.63 sn.**
 
-### Şerit tekniği
+### Ekran yoğunluğu
 
-Şeritler geçici DOM klonları — ana PNG'ler asla çoğaltılmıyor.
+| | Gerçek kart | Klon | Toplam görüntü |
+|---|---|---|---|
+| Desktop | 20 | 35 (5 hero × 7) | **55** |
+| Tablet | 20 | 24 (4 × 6) | 44 |
+| Mobil | 20 | 12 (3 × 4) | 32 |
 
-- Kart başına 8 kopya (tablet 5, **mobil 0**)
-- Toplam bütçe: desktop 68, tablet 34, mobil 12 klon. Aşılırsa yeni klon üretilmiyor.
-- Opacity merdiveni `.85 / .68 / .5 / .34 / .20 / .12 / .08 / .05 / .03`
-- Yol düz değil: `bez()` ile quadratic bezier, hareket yönüne dik bükülme
-- Her kopya biraz daha geride (`z -26`), biraz daha küçük, biraz daha dönük
-- `pointer-events: none`, animasyon bitince DOM'dan siliniyor
-- `spawnRibbon()` yalnızca intro sırasında çalışıyor (`allowTrails` kapısı)
+Klonlar **1.70 – 4.90 arası, 3.2 saniye boyunca** ekranda duruyor. Bütçe:
+desktop 44, tablet 30, mobil 14 — aşılırsa yeni klon üretilmiyor.
 
-### Perspektif ve boyut
+Opacity merdiveni yükseltildi, arkadakiler gerçekten görünsün diye:
+`.95 / .82 / .68 / .52 / .38 / .25 / .15 / .10`
 
-`perspective` 1400 → **1050px** (mobilde 820). Z ekseni artık gözle görülür;
-kartlar gerçekten yaklaşıp uzaklaşıyor ve birbirinin arkasından geçiyor.
-Intro boyunca kartlar `boost: 1.18` ile ray boyutundan büyük çalışıyor.
+Klonlar DOM'a eklenmeden **önce** transform'ları yazılıyor; yoksa ilk karede
+ray merkezinde belirip sıçrıyorlardı.
+
+### Boyut
+
+Intro boyutları raydan değil **sahne yüksekliğinden** türetiliyor:
+deste %50, hero kartlar %62, gruplar %42. Pencere büyüdükçe kartlar da büyüyor.
+Final carousel kendi boyutuna geri dönüyor.
+
+### Intro neden atlanabilir — artık sessiz değil
+
+İki durumda intro çalışmaz ve **ikisi de artık ekranda yazıyor**
+(sol üstte `INTRO SKIPPED — <neden>`):
+
+- **GSAP yok.** Bu yüzden GSAP artık CDN'den değil, `js/vendor/gsap.min.js`
+  üzerinden yerel olarak yükleniyor. CDN engellenirse diye tek nokta bırakılmadı.
+- **Sistemde "reduce motion" açık.** Bu durumda Replay butonu intro'yu yine de
+  oynatıyor (açık kullanıcı isteği olduğu için).
 
 ## 4. Etkileşim
 
