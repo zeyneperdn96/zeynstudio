@@ -26,6 +26,10 @@
                    scaleStep: .09, minScale: .76, visible: 3.5, lift: 6,  tilt: 1 }
     };
 
+    // where the gallery's own art lives (the card PNGs come with their paths
+    // already resolved, this is only for board furniture)
+    var ASSET_DIR = window.ARCHIVE_DIR || 'assets/projects/zeynep-archive/';
+
     var TRAIL_FADE = [1, .92, .82, .70, .56, .42, .28, .18];
 
     function clamp(v, a, b) { return v < a ? a : (v > b ? b : v); }
@@ -440,6 +444,19 @@
         felt.style.transform = 'translate3d(0,' + (S.H * .18) + 'px,-120px) rotateX(' + BOARD_TILT + 'deg)';
         b.appendChild(felt);
 
+        // the ZEYN XP emblem, printed on the table like a card-room logo
+        var logo = document.createElement('div');
+        logo.className = 'archive-board-logo';
+        logo.style.backgroundImage = 'url(' + ASSET_DIR + 'board-logo.png)';
+        var lw = Math.min(S.W * .42, S.H * .95);
+        logo.style.width = lw + 'px';
+        logo.style.height = lw + 'px';
+        logo.style.marginLeft = (-lw / 2) + 'px';
+        logo.style.marginTop  = (-lw / 2) + 'px';
+        logo.style.transform = 'translate3d(0,' + (S.H * .27) + 'px,70px) rotateX(' + BOARD_TILT + 'deg)';
+        b.appendChild(logo);
+        this.logoEl = logo;
+
         // one outline per slot, lying flat exactly where its card lands
         this.slotEls = slots.map(function (sl) {
             var d = document.createElement('div');
@@ -565,6 +582,7 @@
         this.beat(tl, .65, 'BOARD');
         tl.to(this.boardEl, { opacity: 1, duration: .38, ease: 'power2.out' }, .65);
         tl.to(this.trayEl,  { opacity: 1, duration: .3 }, .68);
+        tl.to(this.logoEl,  { opacity: .55, duration: .5, ease: 'power2.out' }, .66);
         this.slotEls.forEach(function (el, i) {
             // light up, then settle back so the seat flash below actually reads
             tl.to(el, { opacity: 1,  duration: .18, ease: 'power1.out' }, .74 + i * .014);

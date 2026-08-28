@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Archive Gallery — test harness</title>
+<link rel="stylesheet" href="css/archive-gallery.css?v=10">
+<style>
+  /* Dev-only page. Not linked from the site; it exists so the gallery can be
+     opened directly instead of booting the desktop and finding the icon. */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #06070f; }
+  body { font-family: Tahoma, 'Segoe UI', sans-serif; }
+  #wrap { position: fixed; inset: 0; display: flex; flex-direction: column; }
+  #devbar {
+      flex: 0 0 auto; display: flex; align-items: center; gap: 10px;
+      padding: 6px 10px; font-size: 11px; color: #2b2b2b;
+      background: linear-gradient(180deg, #ece9d8, #e2ddc8);
+      border-bottom: 1px solid #a8a48f;
+  }
+  #devbar b { font-size: 11px; }
+  #devbar .sp { flex: 1; }
+  #devbar button, #devbar label {
+      font: 11px Tahoma, sans-serif; padding: 3px 10px;
+      background: linear-gradient(180deg, #fdfdfd, #eceade 46%, #dedbc8);
+      border: 1px solid #8f8f7a; border-radius: 3px; cursor: pointer;
+  }
+  #devbar button:hover { border-color: #4a7fd4; }
+  #devbar code { background: #f4f2e6; border: 1px solid #b9b6a2; padding: 1px 5px; }
+  #stage { flex: 1; min-height: 0; position: relative; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="devbar">
+    <b>Archive.exe</b> <span>— test sayfası</span>
+    <span class="sp"></span>
+    <label><input type="checkbox" id="dbg"> beat label</label>
+    <button id="again">yeniden oynat</button>
+    <button id="reload">sayfayı yenile</button>
+    <code id="fps">–</code>
+  </div>
+  <div class="archive-stage" id="stage"></div>
+</div>
+
+<script src="js/vendor/gsap.min.js"></script>
+<script src="js/ArchiveData.js?v=10"></script>
+<script src="js/ArchiveGallery.js?v=10"></script>
+<script>
+(function () {
+    var stage = document.getElementById('stage');
+    var gallery = null;
+
+    function mount() {
+        if (gallery) gallery.destroy();
+        gallery = new ArchiveGallery(stage, window.ARCHIVE_CARDS);
+        window.gallery = gallery;          // pokeable from the console
+    }
+
+    document.getElementById('dbg').addEventListener('change', function (e) {
+        window.ARCHIVE_DEBUG = e.target.checked;
+        mount();
+    });
+    document.getElementById('again').addEventListener('click', function () { mount(); });
+    document.getElementById('reload').addEventListener('click', function () { location.reload(); });
+
+    // a rough frame counter, to catch the intro dropping frames
+    var last = performance.now(), frames = 0, out = document.getElementById('fps');
+    (function tick(now) {
+        frames++;
+        if (now - last >= 1000) { out.textContent = frames + ' fps'; frames = 0; last = now; }
+        requestAnimationFrame(tick);
+    })(performance.now());
+
+    if (!window.gsap) {
+        stage.innerHTML = '<div style="color:#ff8080;font:13px Tahoma;padding:24px">' +
+                          'GSAP yüklenmedi — js/vendor/gsap.min.js kontrol et.</div>';
+        return;
+    }
+    mount();
+})();
+</script>
+</body>
+</html>

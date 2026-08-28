@@ -108,6 +108,17 @@ FAN da aynı çözücüyü kullanıyor (önceden %41 biniyordu).
 Dört pencere boyutunda (760×470'ten 2560×1300'e) ölçtüm: en dar adım/kart
 oranı her yerde **1.10**, yani hiçbir formasyonda binme yok.
 
+Masanın ortasına Zeynep'in **ZEYN XP — ARCHIVE BOARD** amblemi basılı; keçenin
+üstünde `rotateX(68°)` ile yatık duruyor, board ile birlikte açılıp kapanıyor
+(`opacity .55`, kart oyunu masalarındaki logo gibi). Aynı amblem masaüstü
+ikonu.
+
+| Dosya | Ne |
+|---|---|
+| `assets/projects/zeynep-archive/logo.png` | Orijinal, 1254×1254 RGBA — dokunulmadı |
+| `assets/projects/zeynep-archive/board-logo.png` | 800px, masaya basılan kopya |
+| `assets/icons/icon-archive.png` | 256px, masaüstü ikonu |
+
 Ayrıca **tepsi** (deck tray) var: masanın ön-alt ortasında, `z:+340`. Deste
 oraya yığılıyor, dağıtım oradan çıkıyor, COLLECT'te oraya dönüyor.
 

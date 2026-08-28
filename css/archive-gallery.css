@@ -69,6 +69,12 @@
     -webkit-mask-image: radial-gradient(ellipse 62% 74% at 50% 46%, #000 30%, transparent 92%);
             mask-image: radial-gradient(ellipse 62% 74% at 50% 46%, #000 30%, transparent 92%);
 }
+.archive-board-logo {
+    position: absolute; left: 0; top: 0;
+    background-size: contain; background-repeat: no-repeat; background-position: center;
+    opacity: 0;
+    filter: drop-shadow(0 0 22px rgba(90,180,255,.35));
+}
 .archive-slot {
     position: absolute; left: 0; top: 0;
     border: 2px solid rgba(120,200,255,.30);
