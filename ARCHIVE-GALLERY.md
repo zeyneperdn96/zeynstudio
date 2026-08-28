@@ -79,40 +79,50 @@ layout yeniden hesaplanmıyor.
 
 ### Ölçek — perspektife göre hesaplanıyor
 
-Önceki sürümdeki asıl hata buydu: ölçekler `perspective` büyütmesini hesaba
-katmıyordu, bu yüzden kartlar ya çok küçük ya çok büyük çıkıyordu.
-
 ```js
 sAt(f, z) = (H * f) / (ch * (P / (P - z)))   // P = 1050
 ```
 
-Yani "sahne yüksekliğinin %62'si olsun" dediğinde, kart `z:+150`'deyken
-perspektifin büyüttüğü kadarı düşülerek ölçek veriliyor.
+"Sahne yüksekliğinin %64'ü olsun" dendiğinde, kart `z:+220`'deyken perspektifin
+büyüttüğü kadarı düşülerek ölçek veriliyor. Sahne oranları: `halfW = W*.36`
+(±36vw), `halfH = H*.22` (±22vh).
 
-### Ölçülen kaplama
+### İzler — açık adım vektörü
 
-Formasyonların ekranı ne kadar doldurduğunu hesapladım (perspektif projeksiyonu
-+ 72×48 grid örnekleme):
+Klonlar artık ana kartın yolu üzerinden örneklenmiyor; her klon sabit bir
+**adım vektörü** kadar geriye gidiyor ve X, Y, Z **birlikte** değişiyor:
 
-| Beat | Genişlik | Kapladığı alan | En büyük kart |
-|---|---|---|---|
-| EXPLODE | %78–80 | %46–51 | %63 |
-| WALLS | %76–84 | %50–57 | %49 |
-| GROUPS | %86–93 | %51–56 | %62 |
-| COLLAPSE | %54–58 | %42–45 | %70 |
+```
+step = { x: -yön * gap,  y: gap * .44,  z: -gap * .92 }
+gap  = clamp(W * .075, 70, 120) px
+```
 
-Hedefler: genişlik %75–90, kaplama ≥%35, ön kart %55–70. Hepsi tutuyor —
-hem 1000×660 pencerede hem maximize'da.
+Bu yüzden deste gibi değil, uzun bir diyagonal çizgi gibi okunuyor. Hafif bir
+`k²` bükülme var, cetvelle çizilmiş gibi durmasın diye.
 
-### Klonlar
+**İki zıt yön:** hero 0-1 sol-alt → sağ-üst, hero 2-3 sağ-alt → sol-üst.
+Kesişme anında ekranda X biçiminde iki kart akışı oluşuyor.
 
-| | Gerçek | Klon | Toplam görüntü |
-|---|---|---|---|
-| Desktop | 20 | 28 (4 hero × 7) | **48** |
-| Mobil | 20 | 15 (3 × 5) | 35 |
+Opacity merdiveni: `1 / .92 / .82 / .70 / .56 / .42 / .28 / .18`
 
-Opacity merdiveni: `1 / .90 / .80 / .68 / .55 / .40 / .25 / .18` — ilk beş
-kopya tam görünür. Klonlar 1.3 → 4.7 arası, **3.4 saniye** ekranda kalıyor.
+### Ölçülen sonuç
+
+Perspektif projeksiyonu + 72×48 grid örnekleme ile hesaplandı:
+
+| Beat | Genişlik | Kaplama | En büyük kart | En küçük kart |
+|---|---|---|---|---|
+| EXPLODE | %80–85 | %46–56 | %65 | %24 |
+| TRAIL | %96–100 | %53–62 | %60 | %24 |
+| WALLS | %80–82 | %49–55 | %49 | %37 |
+| GROUPS | %81–89 | %48–53 | %62 | %27 |
+| COLLAPSE | %55–60 | %45–49 | %66 | %62 |
+
+Klon aralığı **75–120 px**, iz uzunluğu ekranın **%55–57**'si, TRAIL sırasında
+ekranda **48 kart görüntüsü**. Ön/arka ölçek farkı %65'e karşı %24 — kartların
+bir kısmı kameraya çok yakın, bir kısmı çok uzakta.
+
+Hedefler: genişlik ≥%75, kaplama ≥%35, ön kart %55–65, klon aralığı 70–110 px.
+Hepsi tutuyor, hem 1000×660 pencerede hem maximize'da.
 
 ### Debug label
 

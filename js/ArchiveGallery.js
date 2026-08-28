@@ -26,7 +26,7 @@
                    scaleStep: .09, minScale: .76, visible: 3.5, lift: 6,  tilt: 1, trails: 0, waveZ: 46 }
     };
 
-    var TRAIL_FADE = [1, .90, .80, .68, .55, .40, .25, .18];
+    var TRAIL_FADE = [1, .92, .82, .70, .56, .42, .28, .18];
 
     function clamp(v, a, b) { return v < a ? a : (v > b ? b : v); }
     function sign(v) { return v < 0 ? -1 : (v > 0 ? 1 : 0); }
@@ -309,8 +309,9 @@
         var m = this.tierName === 'mobile' ? .62 : (this.tierName === 'tablet' ? .84 : 1);
         return {
             W: W, H: H, cw: cw, ch: ch, m: m, P: P,
-            halfW: W * .40,
-            halfH: H * .30,
+            halfW: W * .36,                    // cards reach +/-36vw
+            halfH: H * .22,                    // and +/-22vh
+            gap: Math.max(70, Math.min(120, W * .075)),   // clone-to-clone step
             sAt: sAt,
             deck: sAt(.56, 100),
             heroes:   this.tierName === 'mobile' ? 3 : 4,
@@ -318,30 +319,28 @@
         };
     };
 
-    function bez(a, b, c, t) { var u = 1 - t; return u * u * a + 2 * u * t * b + t * t * c; }
-
     /* ---- ribbons: created opaque, and they stay until COLLAPSE -------- */
-    ArchiveGallery.prototype.spawnRibbon = function (it, from, to, bend, n) {
+    // anchor = where the card ends up, step = how far back each copy sits.
+    // An explicit step vector (rather than sampling the card's path) is what
+    // makes the ribbon read as a long diagonal instead of a tight deck.
+    ArchiveGallery.prototype.spawnRibbon = function (it, anchor, step, n) {
         if (!it.loaded || n <= 0) return;
         for (var k = 1; k <= n; k++) {
             if (this.trails.length >= this.trailBudget) break;
-            var t = 1 - k / (n + .6);
             var el = document.createElement('div');
             el.className = 'archive-trail';
             el.style.setProperty('--acw', it.el.style.getPropertyValue('--acw'));
             el.style.setProperty('--ach', it.el.style.getPropertyValue('--ach'));
             el.appendChild(it.img.cloneNode(false));
 
-            var cx = (from.x + to.x) / 2 + bend.x;
-            var cy = (from.y + to.y) / 2 + bend.y;
-            var cz = (from.z + to.z) / 2 + bend.z;
+            var curve = k * k * .045;            // slight bow, so it is not a ruler line
             var rec = { el: el, s: {
-                x:  bez(from.x, cx, to.x, t),
-                y:  bez(from.y, cy, to.y, t),
-                z:  bez(from.z, cz, to.z, t) - k * 40,
-                ry: (to.ry || 0) + k * 1.6,
-                rz: (to.rz || 0) - k * .6,
-                s:  (to.s || 1) * (1 - k * .028),
+                x:  anchor.x + step.x * k + step.y * curve,
+                y:  anchor.y + step.y * k - step.x * curve * .35,
+                z:  anchor.z + step.z * k,
+                ry: (anchor.ry || 0) + k * 2.2,
+                rz: (anchor.rz || 0) - k * .9,
+                s:  (anchor.s || 1) * (1 - k * .035),
                 o:  TRAIL_FADE[k - 1] != null ? TRAIL_FADE[k - 1] : .18
             }};
             var st = rec.s;
@@ -427,11 +426,11 @@
             var d = DIRS[i % 6];
             var ring = Math.floor(i / 6);                 // 0,1,2,3
             var j = jitter(it.index);
-            var depth = [200, -60, -300, -520][ring % 4];
-            var sc = S.sAt([.62, .46, .34, .26][ring % 4], depth);
+            var depth = [220, 0, -350, -640][ring % 4];
+            var sc = S.sAt([.64, .48, .34, .24][ring % 4], depth);
             var p = {
-                x: d[0] * S.halfW * (.46 + ring * .28) + j.x * 1.2,
-                y: d[1] * S.halfH * (.34 + ring * .16) + j.y,
+                x: d[0] * S.halfW * (.62 + ring * .13) + j.x * 1.2,
+                y: d[1] * S.halfH * (.62 + ring * .14) + j.y,
                 z: depth + j.z * .25,
                 rx: 2 + ring,
                 ry: -d[0] * (14 - ring * 3),
@@ -448,20 +447,26 @@
         this.beat(tl, 1.3, 'TRAIL');
         var heroes = [];
         for (var h = 0; h < S.heroes; h++) heroes.push(this.items[Math.round((h + .5) * (N / S.heroes)) % N]);
+        // Two travel directions, so at the crossover the screen carries an X of
+        // card flow: heroes 0-1 run bottom-left -> top-right, 2-3 the mirror.
         heroes.forEach(function (it, n) {
-            var sx = n % 2 ? 1 : -1;                     // one goes right, next goes left
-            var sy = n < 2 ? 1 : -1;
-            var at = 1.3 + n * .16;
-            var from = { x: -sx * S.halfW * .95, y: sy * S.halfH * .90, z: -420, ry: 0, rz: 0,
-                         s: S.sAt(.40, -420) };
-            var to   = { x:  sx * S.halfW * .72, y: -sy * S.halfH * .52, z: 180,
-                         ry: -sx * 12, rz: sx * 2, s: S.sAt(.58, 180) };
-            var bend = { x: -sx * S.halfW * .22, y: sy * S.halfH * .3, z: -150 };
-            tl.call(function () { self.spawnRibbon(it, from, to, bend, S.perTrail); }, null, at);
+            var sx = n < 2 ? 1 : -1;                    // +1 = heading right
+            var at = 1.3 + n * .15;
+            var to = {
+                x:  sx * S.halfW * .82,
+                y: -S.halfH * .70,
+                z:  220,
+                ry: -sx * 13, rz: sx * 2,
+                s:  S.sAt(.60, 220)
+            };
+            // the ribbon runs back down the way it came: X, Y and Z together
+            var step = { x: -sx * S.gap, y: S.gap * .44, z: -S.gap * .92 };
+            tl.call(function () { self.spawnRibbon(it, to, step, S.perTrail); }, null, at + .3);
             tl.fromTo(it.base,
-                { x: from.x, y: from.y, z: from.z, s: from.s, ry: 0, rz: 0, o: 1 },
+                { x: -sx * S.halfW * .95, y: S.halfH * 1.0, z: -420, ry: 0, rz: 0, o: 1,
+                  s: S.sAt(.34, -420) },
                 { x: to.x, y: to.y, z: to.z, rx: 2, ry: to.ry, rz: to.rz, s: to.s,
-                  duration: .62, ease: 'power3.out' }, at);
+                  duration: .66, ease: 'power3.out' }, at);
         });
 
         /* ============ 2.10-2.90  WALLS ============
@@ -475,7 +480,7 @@
             var k = i % Math.ceil(N / 2);
             var col = k % 3, row = Math.floor(k / 3);
             var p = {
-                x: wall * S.halfW * .34 + (col - 1) * stepX * .8 + wall * row * stepX * .34,
+                x: wall * S.halfW * .44 + (col - 1) * stepX * .8 + wall * row * stepX * .34,
                 y: (row - 1.5) * stepY - wall * col * stepY * .22,
                 z: -120 + row * 70 + col * 30,
                 rx: 2,
@@ -524,7 +529,7 @@
         /* ============ 4.70-5.40  COLLAPSE ============
            Back to one dense deck, big and close, while the clones go. */
         this.beat(tl, 4.7, 'COLLAPSE');
-        tl.call(function () { self.removeTrailClones(.4); }, null, 4.72);
+        tl.call(function () { self.removeTrailClones(.36); }, null, 4.72);
         this.items.forEach(function (it, i) {
             var j = jitter(it.index);
             tl.to(it.base, {
@@ -532,8 +537,8 @@
                 y: j.y * .8 + (i - N / 2) * S.H * .012,
                 z: 140 - i * 24,
                 rx: 4, ry: j.ry * .4, rz: j.rz * .4,
-                s: S.sAt(.70, 140 - i * 24) * (1 - i * .004), o: 1,
-                duration: .52, ease: 'power3.inOut'
+                s: S.sAt(.66, 140 - i * 24) * (1 - i * .003), o: 1,
+                duration: .44, ease: 'power3.inOut'
             }, 4.7 + i * .008);
         });
 
