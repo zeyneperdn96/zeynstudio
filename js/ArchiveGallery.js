@@ -145,7 +145,9 @@
     ArchiveGallery.prototype.measure = function () {
         var w = this.root.clientWidth || 900;
         var h = this.root.clientHeight || 600;
-        var name = w < 640 ? 'mobile' : (w < 1024 ? 'tablet' : 'desktop');
+        // 940, not 1024: the default 1000px window would otherwise fall into
+        // the tablet tier and leave four cards sitting in the tray
+        var name = w < 620 ? 'mobile' : (w < 940 ? 'tablet' : 'desktop');
         this.tierName = name;
         this.tier = Object.assign({}, TIERS[name]);
 
@@ -385,11 +387,15 @@
         // Five per lane, not seven: seven cards of a readable size cannot sit
         // side by side without overlapping, and the lane was silently
         // squeezing the step instead of the card.
+        // Fewer slots on a small screen: five per lane on a phone leaves the
+        // cards about 55px wide, which is unreadable. Whatever does not fit
+        // stays in the tray instead of being squeezed onto the table.
+        var per = this.tierName === 'mobile' ? 3 : (this.tierName === 'tablet' ? 4 : 5);
         var lanes = [
-            { n: 5, z:  200, frac: .46, tag: 'HAND' },
-            { n: 5, z:   10, frac: .40, tag: 'TABLE' },
-            { n: 5, z: -190, frac: .34, tag: 'STOCK' },
-            { n: 5, z: -400, frac: .28, tag: 'DECK' }
+            { n: per, z:  200, frac: .46, tag: 'HAND' },
+            { n: per, z:   10, frac: .40, tag: 'TABLE' },
+            { n: per, z: -190, frac: .34, tag: 'STOCK' },
+            { n: per, z: -400, frac: .28, tag: 'DECK' }
         ];
         var GAPR = 1.10;                       // step = 1.10 card widths -> a real gap
         var maxLaneW = S.W * .90;
@@ -530,7 +536,7 @@
     ArchiveGallery.prototype.intro = function () {
         var self = this, G = this.G, S = this.introSpace();
         var N = this.items.length;
-        this.trailBudget = this.tierName === 'mobile' ? 18 : (this.tierName === 'tablet' ? 34 : 48);
+        this.trailBudget = this.tierName === 'mobile' ? 12 : (this.tierName === 'tablet' ? 30 : 48);
         // dev readout: window.ARCHIVE_DEBUG = true before opening to show it
         if (this.dbg) this.dbg.classList.toggle('done', !window.ARCHIVE_DEBUG);
 
@@ -539,21 +545,17 @@
         var tray = this.tray;
 
         // every card gets a seat on the board, front lane first
-        // If the set grows past the slot count, extra cards share a slot but
-        // sit a step in front of it instead of exactly on top.
-        var seat = this.items.map(function (it, i) {
-            var si = i % slots.length;
-            var base = slots[si];
-            var wrap = Math.floor(i / slots.length);
-            // carry the slot index, because a wrapped seat is a copy and
-            // indexOf() would not find it
-            if (!wrap) return Object.assign({}, base, { si: si });
-            return Object.assign({}, base, {
-                si: si,
-                x:  base.x + wrap * base.w * .18,
-                cy: base.cy - wrap * base.h * .10,
-                z:  base.z + wrap * 46
-            });
+        // The table seats as many as it has slots; the rest stay in the tray
+        // and rejoin at COLLECT. Works for any number of cards.
+        var seat = [], dealt = [], held = [];
+        this.items.forEach(function (it, i) {
+            if (i < slots.length) {
+                seat[i] = Object.assign({}, slots[i], { si: i });
+                dealt.push(it);
+            } else {
+                seat[i] = null;
+                held.push(it);
+            }
         });
 
         this.setIntroStackState();
@@ -597,7 +599,7 @@
            Lane by lane, left to right; the next lane starts as the previous
            one finishes, so it never stalls. */
         this.beat(tl, 1.15, 'DEAL');
-        var order = this.items.slice().sort(function (a, b) {
+        var order = dealt.slice().sort(function (a, b) {
             var A = seat[a.index], B = seat[b.index];
             return (A.lane - B.lane) || (A.col - B.col);
         });
@@ -625,10 +627,21 @@
             tl.to(slotEl, { opacity: .3, duration: .3, ease: 'power2.out' }, at + .5);
         });
 
+        // the tray visibly settles as cards leave it
+        held.forEach(function (it, n) {
+            tl.to(it.base, {
+                x: tray.x + n * 1.4, y: tray.y - S.ch * tray.s * .5 - n * 1.9, z: tray.z + n * 2.4,
+                duration: .4, ease: 'power2.out'
+            }, 1.4 + n * .05);
+        });
+
         /* ============ 2.60-3.50  TRAIL — heroes lift off the board ===== */
         this.beat(tl, 2.6, 'TRAIL');
         var heroes = [];
-        for (var h = 0; h < S.heroes; h++) heroes.push(this.items[Math.round((h + .5) * (N / S.heroes)) % N]);
+        var hN = Math.max(1, dealt.length);
+        for (var h = 0; h < Math.min(S.heroes, hN); h++) {
+            heroes.push(dealt[Math.round((h + .5) * (hN / Math.min(S.heroes, hN))) % hN]);
+        }
         heroes.forEach(function (it, n) {
             var sx = n < 2 ? 1 : -1;
             var at = 2.6 + n * .13;
@@ -644,7 +657,7 @@
 
         /* ============ 3.50-4.20  FAN — the hand lane opens ============= */
         this.beat(tl, 3.5, 'FAN');
-        var hand = this.items.filter(function (it) { return seat[it.index].lane === 0; });
+        var hand = dealt.filter(function (it) { return seat[it.index] && seat[it.index].lane === 0; });
         // Same fit solver as the lanes: work out the spread the fan needs, and
         // if it will not fit, shrink the CARD rather than closing the gap.
         var fanN = Math.max(1, hand.length);
@@ -669,10 +682,10 @@
 
         /* ============ 4.20-4.95  WAVE — across the seated cards ======== */
         this.beat(tl, 4.2, 'WAVE');
-        this.items.slice().sort(function (a, b) {
-            return (seat[a.index].x + a.base.x * 0) - (seat[b.index].x + b.base.x * 0);
+        dealt.slice().sort(function (a, b) {
+            return seat[a.index].x - seat[b.index].x;
         }).forEach(function (it, n) {
-            var at = 4.2 + n * (.4 / N);
+            var at = 4.2 + n * (.4 / Math.max(1, dealt.length));
             tl.to(it.fx, { y: -70, z: 180, ry: 8, s: 1.08, duration: .2, ease: 'power2.out' }, at);
             tl.to(it.fx, { y: 0, z: 0, ry: 0, s: 1, duration: .28, ease: 'power2.inOut' }, at + .2);
         });

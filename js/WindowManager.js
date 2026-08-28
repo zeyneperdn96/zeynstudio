@@ -1238,6 +1238,13 @@ class WindowManager {
             return;
         }
 
+        // On a phone a 90vw window leaves the cards around 55px wide, so the
+        // gallery opens maximised there and gets the whole screen.
+        if (window.innerWidth <= 768) {
+            const wd = this.windows.get('archive');
+            if (wd && !wd.isMaximized) this.maximizeWindow('archive');
+        }
+
         // The stage needs its real size before the intro is choreographed.
         requestAnimationFrame(() => {
             const gallery = new ArchiveGallery(stage, cards);

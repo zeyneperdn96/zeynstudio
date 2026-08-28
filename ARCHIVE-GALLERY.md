@@ -253,21 +253,43 @@ ayarlanır. Başka hiçbir yere dokunmak gerekmez.
 
 ## 6. Responsive ve erişilebilirlik
 
-| | Kart eni | Derinlik | Görünen | İz sayısı |
-|---|---|---|---|---|
-| Desktop (≥1024) | 230 | 132 | 5.5 | 4 |
-| Tablet (640–1024) | 188 | 88 | 4.5 | 2 |
-| Mobil (<640) | 148 | 54 | 3.5 | **0** |
+### Mobil
 
-Kart eni ayrıca pencere yüksekliğine göre de kısılıyor, böylece küçük pencerede
-odak kartı taşmıyor.
+Telefonda pencere **maximize açılıyor**. 90vw'lik bir pencerede kartlar 55px
+kalıyordu — okunmuyordu. Tam ekranda 100–115px oluyor.
+
+Masa da ekrana göre küçülüyor: **şerit başına slot** mobilde 3, tablette 4,
+masaüstünde 5. Slota sığmayan kartlar **tepside bekliyor**, dağıtım sürerken
+tepsi görünür şekilde inceliyor, COLLECT'te hepsi birleşiyor. Bu kural kart
+sayısından bağımsız — 30 kart eklesen de çalışır.
+
+| Cihaz | Sahne | Tier | Slot | Tepside | HAND kartı |
+|---|---|---|---|---|---|
+| Galaxy S | 356×730 | mobile | 12 | 8 | 100px |
+| iPhone 14 | 386×774 | mobile | 12 | 8 | 109px |
+| iPad dikey | 764×954 | tablet | 16 | 4 | 160px |
+| iPad yatay | 917×621 | tablet | 16 | 4 | 191px |
+| Masaüstü | 996×630 | desktop | 20 | 0 | 166px |
+
+Tier eşikleri **620 / 940** — 1024 olsaydı varsayılan 1000px pencere tablet
+sayılıp 4 kart boşuna tepside kalırdı.
+
+### Dokunmatik
+
+- Sahnede `touch-action: none` — sürükleme sayfayı kaydırmıyor, çift dokunuş
+  yakınlaştırma yapmıyor
+- Sürükleme/tıklama ayrımı `pointer` event'leriyle, fare ile aynı kod
+- HUD butonları küçük ekranda daha kalın (parmak hedefi), etiketler gizleniyor,
+  durum satırı taşmadan kısalıyor
+- Masa amblemi mobilde gizli — küçük sahnede kalabalık yapıyordu
+- Klon bütçesi: mobil 12, tablet 30, masaüstü 48
+
+### Erişilebilirlik
 
 - **`prefers-reduced-motion: reduce`** → sinematik intro yok, kartlar doğrudan
-  yerine konur, iz ve idle kapalı, hover/tıklama çalışır.
-- **GSAP yüklenmezse** aynı yola girer: statik ama tam çalışan galeri.
-  CDN'e bağımlılık kırılgan bir yer, bilinçli olarak yumuşak düşüş yazıldı.
-
----
+  yerine konur, iz ve idle kapalı, hover/tıklama çalışır
+- **GSAP yüklenmezse** aynı yola girer. İki durumda da neden sol üstte yazar,
+  Replay intro'yu yine de oynatır
 
 ## 7. Ne doğrulandı
 
