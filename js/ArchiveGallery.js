@@ -368,6 +368,112 @@
         });
     };
 
+    /* ---------------------------------------------------------- the board
+       Three lanes of slots lying on a tilted surface, plus the deck tray
+       they are dealt from. boardLayout() is the single source of truth: the
+       same numbers draw the outline and tell a card where to land, so a card
+       can never sit off its slot. ------------------------------------- */
+
+    var BOARD_TILT = 68;                       // degrees the surface lies back
+
+    ArchiveGallery.prototype.boardLayout = function () {
+        var S = this.introSpace();
+        var lanes = [
+            { n: 7, z:  170, frac: .44, tag: 'HAND' },
+            { n: 7, z:  -70, frac: .38, tag: 'TABLE' },
+            { n: 6, z: -320, frac: .30, tag: 'STOCK' }
+        ];
+        var baseY = S.H * .17;                 // where the front lane's floor sits
+        var slots = [], self = this;
+        lanes.forEach(function (L, li) {
+            var s = S.sAt(L.frac, L.z);
+            var cardH = S.ch * s, cardW = S.cw * s;
+            var span = S.W * (li === 0 ? .74 : .80);
+            var step = Math.min(span / L.n, cardW * 1.18);
+            var y = baseY - li * (S.H * .105);
+            for (var c = 0; c < L.n; c++) {
+                slots.push({
+                    lane: li, col: c, tag: L.tag,
+                    x: (c - (L.n - 1) / 2) * step,
+                    y: y,                                   // the floor line
+                    cy: y - cardH / 2,                      // where the card centres
+                    z: L.z,
+                    s: s, w: cardW, h: cardH,
+                    ry: -(c - (L.n - 1) / 2) * 2.2
+                });
+            }
+        });
+        this.tray = {
+            x: 0, y: baseY + S.H * .13, z: 340,
+            s: S.sAt(.46, 340),
+            w: S.cw * S.sAt(.46, 340) * 1.5,
+            h: S.cw * S.sAt(.46, 340) * .72
+        };
+        return slots;
+    };
+
+    ArchiveGallery.prototype.buildBoard = function () {
+        if (this.boardEl) this.boardEl.remove();
+        var slots = this.slots = this.boardLayout();
+        var S = this.introSpace();
+        var b = document.createElement('div');
+        b.className = 'archive-board';
+
+        // felt: one flat plane under everything
+        var felt = document.createElement('div');
+        felt.className = 'archive-felt';
+        var fw = S.W * 1.5, fh = S.H * 1.9;
+        felt.style.width  = fw + 'px';
+        felt.style.height = fh + 'px';
+        felt.style.marginLeft = (-fw / 2) + 'px';
+        felt.style.marginTop  = (-fh / 2) + 'px';
+        felt.style.transform = 'translate3d(0,' + (S.H * .18) + 'px,-120px) rotateX(' + BOARD_TILT + 'deg)';
+        b.appendChild(felt);
+
+        // one outline per slot, lying flat exactly where its card lands
+        this.slotEls = slots.map(function (sl) {
+            var d = document.createElement('div');
+            d.className = 'archive-slot';
+            d.style.width  = (sl.w * 1.04) + 'px';
+            d.style.height = (sl.w * .66) + 'px';
+            d.style.marginLeft = (-sl.w * 1.04 / 2) + 'px';
+            d.style.marginTop  = (-sl.w * .66 / 2) + 'px';
+            d.style.transform = 'translate3d(' + sl.x + 'px,' + sl.y + 'px,' + sl.z + 'px) rotateX(' + BOARD_TILT + 'deg)';
+            d.innerHTML = '<i></i><i></i><i></i><i></i>';
+            b.appendChild(d);
+            return d;
+        });
+
+        // lane captions, like the labelled bays in the reference
+        this.laneTags = [];
+        [0, 1, 2].forEach(function (li) {
+            var first = slots.filter(function (s) { return s.lane === li; })[0];
+            if (!first) return;
+            var t = document.createElement('div');
+            t.className = 'archive-lane-tag';
+            t.textContent = first.tag;
+            t.style.transform = 'translate3d(' + (first.x - first.w * .9) + 'px,' +
+                                 (first.y - first.h - 14) + 'px,' + first.z + 'px)';
+            b.appendChild(t);
+            this.laneTags.push(t);
+        }, this);
+
+        // the deck tray the cards are dealt from
+        var tr = document.createElement('div');
+        tr.className = 'archive-tray';
+        tr.style.width  = this.tray.w + 'px';
+        tr.style.height = this.tray.h + 'px';
+        tr.style.marginLeft = (-this.tray.w / 2) + 'px';
+        tr.style.marginTop  = (-this.tray.h / 2) + 'px';
+        tr.style.transform = 'translate3d(' + this.tray.x + 'px,' + this.tray.y + 'px,' +
+                             this.tray.z + 'px) rotateX(' + BOARD_TILT + 'deg)';
+        b.appendChild(tr);
+        this.trayEl = tr;
+
+        this.rail.insertBefore(b, this.rail.firstChild);
+        this.boardEl = b;
+    };
+
     ArchiveGallery.prototype.setIntroStackState = function () {
         var G = this.G, S = this.introSpace();
         this.items.forEach(function (it) {
@@ -397,168 +503,154 @@
         this.trailBudget = this.tierName === 'mobile' ? 18 : (this.tierName === 'tablet' ? 34 : 48);
         if (this.dbg) this.dbg.classList.remove('done');
 
+        this.buildBoard();
+        var slots = this.slots;
+        var tray = this.tray;
+
+        // every card gets a seat on the board, front lane first
+        var seat = this.items.map(function (it, i) { return slots[i % slots.length]; });
+
         this.setIntroStackState();
         var tl = G.timeline({ onComplete: function () { self.finishIntro(); } });
         this.tl = tl;
 
-        /* ============ 0.00-0.80  STACK ============ */
+        /* ============ 0.00-0.65  STACK — the deck lands in the tray ==== */
         this.beat(tl, 0, 'STACK');
         this.items.forEach(function (it, i) {
-            tl.to(it.base, { o: 1, duration: .34, ease: 'power1.out' }, i * .008);
+            tl.to(it.base, { o: 1, duration: .3, ease: 'power1.out' }, i * .006);
         });
-        this.items.forEach(function (it, n) {
+        this.items.forEach(function (it, i) {
             var j = jitter(it.index);
             tl.to(it.base, {
-                x: j.x * .22, y: j.y * .22, z: 100 + j.z * .06,
-                rx: 5, ry: j.ry * .22, rz: j.rz * .3,
-                s: S.sAt(.56, 100),
-                duration: .74, ease: 'power3.inOut'
-            }, .06 + n * (.10 / N));
+                x: tray.x + j.x * .10 + i * 1.1,
+                y: tray.y - S.ch * tray.s * .5 - i * 1.6,     // stacked in the tray
+                z: tray.z + i * 2.2,
+                rx: 4, ry: j.ry * .12, rz: j.rz * .2,
+                s: tray.s,
+                duration: .6, ease: 'power3.inOut'
+            }, .05 + i * (.08 / N));
         });
 
-        /* ============ 0.80-1.60  EXPLODE ============
-           Six directions out of the centre, filling the frame. Depth is
-           deliberately uneven: some cards land near the camera, some far. */
-        this.beat(tl, .8, 'EXPLODE');
-        var DIRS = [[-1,-1],[-1,0],[-1,1],[1,-1],[1,0],[1,1]];
-        var burst = [];
-        this.items.forEach(function (it, i) {
-            var d = DIRS[i % 6];
-            var ring = Math.floor(i / 6);                 // 0,1,2,3
-            var j = jitter(it.index);
-            var depth = [220, 0, -350, -640][ring % 4];
-            var sc = S.sAt([.64, .48, .34, .24][ring % 4], depth);
-            var p = {
-                x: d[0] * S.halfW * (.62 + ring * .13) + j.x * 1.2,
-                y: d[1] * S.halfH * (.62 + ring * .14) + j.y,
-                z: depth + j.z * .25,
-                rx: 2 + ring,
-                ry: -d[0] * (14 - ring * 3),
-                rz: d[0] * 2.4,
-                s: sc, o: 1
-            };
-            burst.push(p);
-            tl.to(it.base, Object.assign({ duration: .62, ease: 'power3.out' }, p),
-                  .8 + i * (.30 / N));
+        /* ============ 0.65-1.15  BOARD — the table comes up ============ */
+        this.beat(tl, .65, 'BOARD');
+        tl.to(this.boardEl, { opacity: 1, duration: .38, ease: 'power2.out' }, .65);
+        tl.to(this.trayEl,  { opacity: 1, duration: .3 }, .68);
+        this.slotEls.forEach(function (el, i) {
+            tl.to(el, { opacity: 1, duration: .22, ease: 'power1.out' }, .74 + i * .014);
+        });
+        this.laneTags.forEach(function (el, i) {
+            tl.to(el, { opacity: 1, duration: .25 }, .84 + i * .07);
         });
 
-        /* ============ 1.30-2.40  TRAIL ============
-           Four heroes, long opaque ribbons on opposing diagonals. */
-        this.beat(tl, 1.3, 'TRAIL');
+        /* ============ 1.15-2.75  DEAL — one card at a time ==============
+           Draw from the tray, short arc over the table, seat in the slot.
+           Lane by lane, left to right; the next lane starts as the previous
+           one finishes, so it never stalls. */
+        this.beat(tl, 1.15, 'DEAL');
+        var order = this.items.slice().sort(function (a, b) {
+            var A = seat[a.index], B = seat[b.index];
+            return (A.lane - B.lane) || (A.col - B.col);
+        });
+        order.forEach(function (it, n) {
+            var sl = seat[it.index];
+            var at = 1.15 + n * .062;
+            // lift out of the tray and arc across the table
+            tl.to(it.base, {
+                x: (tray.x + sl.x) / 2,
+                y: Math.min(tray.y, sl.cy) - S.H * .13,      // the top of the arc
+                z: (tray.z + sl.z) / 2 + 90,
+                rx: 3, ry: sl.ry * 2.4, rz: sl.ry * .8,
+                s: sl.s * 1.14,
+                duration: .2, ease: 'power2.out'
+            }, at);
+            // and drop onto the slot
+            tl.to(it.base, {
+                x: sl.x, y: sl.cy, z: sl.z,
+                rx: 2, ry: sl.ry, rz: 0, s: sl.s, o: 1,
+                duration: .24, ease: 'power2.in'
+            }, at + .2);
+            // the slot registers the card
+            tl.to(self.slotEls[slots.indexOf(sl)], {
+                opacity: .95, duration: .12, yoyo: true, repeat: 1
+            }, at + .42);
+        });
+
+        /* ============ 2.60-3.50  TRAIL — heroes lift off the board ===== */
+        this.beat(tl, 2.6, 'TRAIL');
         var heroes = [];
         for (var h = 0; h < S.heroes; h++) heroes.push(this.items[Math.round((h + .5) * (N / S.heroes)) % N]);
-        // Two travel directions, so at the crossover the screen carries an X of
-        // card flow: heroes 0-1 run bottom-left -> top-right, 2-3 the mirror.
         heroes.forEach(function (it, n) {
-            var sx = n < 2 ? 1 : -1;                    // +1 = heading right
-            var at = 1.3 + n * .15;
-            var to = {
-                x:  sx * S.halfW * .82,
-                y: -S.halfH * .70,
-                z:  220,
-                ry: -sx * 13, rz: sx * 2,
-                s:  S.sAt(.60, 220)
-            };
-            // the ribbon runs back down the way it came: X, Y and Z together
+            var sx = n < 2 ? 1 : -1;
+            var at = 2.6 + n * .13;
+            var to = { x: sx * S.halfW * .80, y: -S.halfH * .78, z: 240,
+                       ry: -sx * 13, rz: sx * 2, s: S.sAt(.58, 240) };
             var step = { x: -sx * S.gap, y: S.gap * .44, z: -S.gap * .92 };
-            tl.call(function () { self.spawnRibbon(it, to, step, S.perTrail); }, null, at + .3);
-            tl.fromTo(it.base,
-                { x: -sx * S.halfW * .95, y: S.halfH * 1.0, z: -420, ry: 0, rz: 0, o: 1,
-                  s: S.sAt(.34, -420) },
-                { x: to.x, y: to.y, z: to.z, rx: 2, ry: to.ry, rz: to.rz, s: to.s,
-                  duration: .66, ease: 'power3.out' }, at);
+            tl.call(function () { self.spawnRibbon(it, to, step, S.perTrail); }, null, at + .26);
+            tl.to(it.base, {
+                x: to.x, y: to.y, z: to.z, rx: 2, ry: to.ry, rz: to.rz, s: to.s,
+                duration: .5, ease: 'power3.out'
+            }, at);
         });
 
-        /* ============ 2.10-2.90  WALLS ============
-           Two staircases running opposite diagonals, half the deck each.
-           Steps are sized off the card so every card stays ~60% visible. */
-        this.beat(tl, 2.1, 'WALLS');
-        var wS = S.sAt(.40, -20);
-        var stepX = S.cw * wS * .58, stepY = S.ch * wS * .30;
-        this.items.forEach(function (it, i) {
-            var wall = i < N / 2 ? -1 : 1;               // left wall / right wall
-            var k = i % Math.ceil(N / 2);
-            var col = k % 3, row = Math.floor(k / 3);
-            var p = {
-                x: wall * S.halfW * .44 + (col - 1) * stepX * .8 + wall * row * stepX * .34,
-                y: (row - 1.5) * stepY - wall * col * stepY * .22,
-                z: -120 + row * 70 + col * 30,
-                rx: 2,
-                ry: -wall * 13,
-                rz: wall * 1.6,
-                s: wS * (1 + row * .03), o: 1
-            };
-            tl.to(it.base, Object.assign({ duration: .5, ease: 'power2.inOut' }, p),
-                  2.1 + i * (.26 / N));
+        /* ============ 3.50-4.20  FAN — the hand lane opens ============= */
+        this.beat(tl, 3.5, 'FAN');
+        var hand = this.items.filter(function (it) { return seat[it.index].lane === 0; });
+        hand.forEach(function (it, n) {
+            var t = (n - (hand.length - 1) / 2) / Math.max(1, (hand.length - 1) / 2);
+            tl.to(it.base, {
+                x: t * S.halfW * .86,
+                y: S.H * .06 + Math.abs(t) * S.H * .07,       // an arc, not a line
+                z: 200 - Math.abs(t) * 150,
+                rx: 2, ry: -t * 22, rz: t * 5,
+                s: S.sAt(.52 - Math.abs(t) * .10, 200 - Math.abs(t) * 150),
+                duration: .5, ease: 'power3.out'
+            }, 3.5 + Math.abs(t) * .18 + n * .012);
         });
 
-        /* ============ 2.90-3.80  GROUPS ============
-           Three groups across 80% of the width; the middle one is closest. */
-        this.beat(tl, 2.9, 'GROUPS');
-        var GSPEC = [
-            { x: -S.halfW * .68, z: -100, s: S.sAt(.42, -100), ry:  12 },
-            { x: 0,              z:  150, s: S.sAt(.62,  150), ry:   0 },
-            { x:  S.halfW * .68, z:  -50, s: S.sAt(.44,  -50), ry: -12 }
-        ];
-        var per = Math.ceil(N / 3), gpos = [];
-        this.items.forEach(function (it, i) {
-            var gi = Math.min(2, Math.floor(i / per));
-            var k = i - gi * per;
-            var g = GSPEC[gi];
-            var p = {
-                x: g.x + (k - 2) * S.cw * g.s * .42,
-                y: (k - 2) * S.ch * g.s * .13,
-                z: g.z - k * 55,
-                rx: 3, ry: g.ry + k * 2.5, rz: (gi - 1) * 1.4,
-                s: g.s * (1 - k * .03), o: 1
-            };
-            gpos.push(p);
-            tl.to(it.base, Object.assign({ duration: .54, ease: 'power2.inOut' }, p),
-                  2.9 + gi * .09 + k * .022);
+        /* ============ 4.20-4.95  WAVE — across the seated cards ======== */
+        this.beat(tl, 4.2, 'WAVE');
+        this.items.slice().sort(function (a, b) {
+            return (seat[a.index].x + a.base.x * 0) - (seat[b.index].x + b.base.x * 0);
+        }).forEach(function (it, n) {
+            var at = 4.2 + n * (.4 / N);
+            tl.to(it.fx, { y: -70, z: 180, ry: 8, s: 1.08, duration: .2, ease: 'power2.out' }, at);
+            tl.to(it.fx, { y: 0, z: 0, ry: 0, s: 1, duration: .28, ease: 'power2.inOut' }, at + .2);
         });
 
-        /* ============ 3.80-4.70  WAVE ============ */
-        this.beat(tl, 3.8, 'WAVE');
-        this.items.slice().sort(function (a, b) { return gpos[a.index].x - gpos[b.index].x; })
-        .forEach(function (it, n) {
-            var at = 3.8 + n * (.45 / N);
-            tl.to(it.fx, { y: -70, z: 180, ry: 8, s: 1.08, duration: .22, ease: 'power2.out' }, at);
-            tl.to(it.fx, { y: 0, z: 0, ry: 0, s: 1, duration: .3, ease: 'power2.inOut' }, at + .22);
-        });
-
-        /* ============ 4.70-5.40  COLLAPSE ============
-           Back to one dense deck, big and close, while the clones go. */
-        this.beat(tl, 4.7, 'COLLAPSE');
-        tl.call(function () { self.removeTrailClones(.36); }, null, 4.72);
+        /* ============ 4.95-5.55  COLLECT — swept back to the tray ====== */
+        this.beat(tl, 4.95, 'COLLECT');
+        tl.call(function () { self.removeTrailClones(.34); }, null, 4.97);
         this.items.forEach(function (it, i) {
             var j = jitter(it.index);
             tl.to(it.base, {
-                x: j.x * .8 + (i - N / 2) * S.W * .016,
-                y: j.y * .8 + (i - N / 2) * S.H * .012,
-                z: 140 - i * 24,
+                x: j.x * .8 + (i - N / 2) * S.W * .015,
+                y: j.y * .8 + (i - N / 2) * S.H * .010,
+                z: 150 - i * 22,
                 rx: 4, ry: j.ry * .4, rz: j.rz * .4,
-                s: S.sAt(.66, 140 - i * 24) * (1 - i * .003), o: 1,
+                s: S.sAt(.62, 150 - i * 22) * (1 - i * .003), o: 1,
                 duration: .44, ease: 'power3.inOut'
-            }, 4.7 + i * .008);
+            }, 4.95 + i * .008);
         });
+        // the table dissolves as the cards leave it
+        tl.to(this.boardEl, { opacity: 0, duration: .45, ease: 'power2.in' }, 5.05);
 
-        /* ============ 5.40-6.20  CAROUSEL ============
-           The only place the rail is touched. */
-        this.beat(tl, 5.4, 'CAROUSEL');
+        /* ============ 5.55-6.45  CAROUSEL ============================== */
+        this.beat(tl, 5.55, 'CAROUSEL');
         this.items.slice().sort(function (a, b) {
             return Math.abs(a.index - self.focus) - Math.abs(b.index - self.focus);
         }).forEach(function (it, n) {
             var r = self.railFor(it.index - self.focus);
-            tl.to(it.base, Object.assign({ duration: .58, ease: 'power3.out' }, r),
-                  5.4 + n * .011);
+            tl.to(it.base, Object.assign({ duration: .6, ease: 'power3.out' }, r),
+                  5.55 + n * .012);
         });
-        tl.call(function () {}, null, 6.2);   // hold the timeline open to 6.2s
+        tl.call(function () {}, null, 6.45);
     };
 
     ArchiveGallery.prototype.finishIntro = function () {
         this.introDone = true;
         this.interactive = true;
         this.allowTrails = false;          // browse mode is quiet: no more ribbons
+        if (this.boardEl) { this.boardEl.remove(); this.boardEl = null; }
         if (this.dbg) { this.dbgP.textContent = 'BROWSE'; this.dbgT.textContent = 'intro done'; }
         this.clearTrails();
         this.updateHud();
@@ -838,6 +930,7 @@
         if (this.tl) this.tl.kill();
         this.stopIdle();
         this.clearTrails();
+        if (this.boardEl) { this.boardEl.remove(); this.boardEl = null; }
         this.closeDetail();
         this.interactive = false;
         this.introDone = false;

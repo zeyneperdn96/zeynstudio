@@ -44,6 +44,62 @@
     background: radial-gradient(ellipse 76% 74% at 50% 46%, transparent 44%, rgba(3,4,10,.86) 100%);
 }
 
+/* ---- the dealer board: felt, lane slots and the deck tray.
+       Lives inside the rail so it shares the cards' 3D space and parallaxes
+       with them. Slot positions are computed once and used for BOTH the
+       outline you see and the target a dealt card flies to. ---- */
+.archive-board {
+    position: absolute; left: 0; top: 0; width: 0; height: 0;
+    transform-style: preserve-3d; pointer-events: none;
+    opacity: 0;
+}
+.archive-felt {
+    position: absolute; left: 0; top: 0;
+    background:
+        radial-gradient(ellipse 60% 70% at 50% 40%, rgba(40,90,170,.30), transparent 72%),
+        linear-gradient(180deg, rgba(14,30,64,.55), rgba(6,12,30,.75));
+    box-shadow: 0 0 90px rgba(60,130,240,.18) inset;
+    border-radius: 10px;
+}
+.archive-felt::after {
+    content: ''; position: absolute; inset: 0; border-radius: 10px;
+    background-image:
+        repeating-linear-gradient(90deg, transparent 0 78px, rgba(96,170,255,.28) 78px 80px),
+        repeating-linear-gradient(0deg,  transparent 0 62px, rgba(70,235,200,.20) 62px 64px);
+    -webkit-mask-image: radial-gradient(ellipse 62% 74% at 50% 46%, #000 30%, transparent 92%);
+            mask-image: radial-gradient(ellipse 62% 74% at 50% 46%, #000 30%, transparent 92%);
+}
+.archive-slot {
+    position: absolute; left: 0; top: 0;
+    border: 2px solid rgba(120,200,255,.30);
+    border-radius: 5px;
+    background: rgba(70,140,240,.06);
+    box-shadow: 0 0 0 1px rgba(0,0,0,.35) inset;
+    opacity: 0;
+}
+.archive-slot i {
+    position: absolute; width: 9px; height: 9px;
+    border: 2px solid rgba(140,215,255,.55);
+}
+.archive-slot i:nth-child(1) { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+.archive-slot i:nth-child(2) { top: -2px; right: -2px; border-left: none; border-bottom: none; }
+.archive-slot i:nth-child(3) { bottom: -2px; left: -2px; border-right: none; border-top: none; }
+.archive-slot i:nth-child(4) { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+.archive-tray {
+    position: absolute; left: 0; top: 0;
+    border: 2px solid rgba(160,225,255,.45);
+    border-radius: 8px;
+    background: linear-gradient(180deg, rgba(80,160,255,.16), rgba(20,50,110,.30));
+    box-shadow: 0 0 26px rgba(90,180,255,.30), 0 0 0 1px rgba(0,0,0,.4) inset;
+    opacity: 0;
+}
+.archive-lane-tag {
+    position: absolute; left: 0; top: 0;
+    font: 700 9px/1 Tahoma, 'Segoe UI', sans-serif; letter-spacing: .22em;
+    color: rgba(150,215,255,.75); text-shadow: 0 1px 4px #000;
+    white-space: nowrap; opacity: 0;
+}
+
 /* ---- the rail holds every card in one 3D space ---- */
 .archive-rail {
     position: absolute;

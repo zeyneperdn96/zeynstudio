@@ -66,18 +66,43 @@ layout yeniden hesaplanmıyor.
 
 | Beat | Süre (sn) | Ne oluyor |
 |---|---|---|
-| **STACK** | 0.0 – 0.8 | Tek deste, `z:-1400 → +100`, `scale .1 → 1` (sahne yüksekliğinin %56'sı) |
-| **EXPLODE** | 0.8 – 1.6 | Altı yöne patlama. 4 halka, farklı derinlikte (`z: +200 / -60 / -300 / -520`) |
-| **TRAIL** | 1.3 – 2.4 | 4 hero, ters diyagonallerde 7'şer opak klon. Ekranın karşı köşesinden karşı köşesine |
-| **WALLS** | 2.1 – 2.9 | İki kart duvarı, zıt diyagonaller, 3 sütun × 4 satır merdiven |
-| **GROUPS** | 2.9 – 3.8 | Üç grup: sol `z-100 s.42`, **orta `z+150 s.62`**, sağ `z-50 s.44` |
-| **WAVE** | 3.8 – 4.7 | Soldan sağa domino: `y-70, z+180, rotateY 8°, scale 1.08` |
-| **COLLAPSE** | 4.7 – 5.4 | Her şey merkeze; yoğun ve büyük deste. Klonlar burada siliniyor |
-| **CAROUSEL** | 5.4 – 6.2 | Ortadan dışa yelpaze → ray pozisyonları |
+| **STACK** | 0.00 – 0.65 | Deste derinlikten gelip **tepsiye** yığılıyor, kartlar üst üste basamaklanıyor |
+| **BOARD** | 0.65 – 1.15 | Masa beliriyor: keçe, neon grid, tepsi, sonra slotlar soldan sağa tek tek yanıyor, şerit etiketleri geliyor |
+| **DEAL** | 1.15 – 2.75 | **20 kart tek tek dağıtılıyor.** Tepsiden çıkar → kısa yay çizer → slotuna oturur → slot bir kez parlar. Şerit şerit, soldan sağa |
+| **TRAIL** | 2.60 – 3.50 | 4 kart masadan **kalkıp** ters diyagonallerde 7'şer klonluk iz bırakıyor |
+| **FAN** | 3.50 – 4.20 | HAND şeridi yelpaze gibi açılıyor — kavisli hat, kenarlar geride ve küçük |
+| **WAVE** | 4.20 – 4.95 | Oturmuş kartların üzerinden soldan sağa dalga |
+| **COLLECT** | 4.95 – 5.55 | Kartlar tepsiye doğru toplanıyor, klonlar siliniyor, **masa çözülüyor** |
+| **CAROUSEL** | 5.55 – 6.45 | Ray pozisyonlarına açılma |
 
-**Toplam 6.2 sn.** Hiçbir formasyon 0.9 sn'den uzun sabit kalmıyor.
+**Toplam 6.45 sn.**
 
-### Ölçek — perspektife göre hesaplanıyor
+## 3b. Board / dealer sistemi
+
+Arka plan artık pasif dekor değil — **kartların nereye gideceğini belirleyen
+sistem**. `boardLayout()` tek doğruluk kaynağı: aynı sayılar hem slot
+çizgisini çiziyor hem de dağıtılan kartın hedefini veriyor, bu yüzden bir kart
+slotunun dışına oturamıyor.
+
+| Şerit | Slot | z | Kart yüksekliği |
+|---|---|---|---|
+| **HAND** | 7 | +170 | %44 |
+| **TABLE** | 7 | −70 | %38 |
+| **STOCK** | 6 | −320 | %30 |
+
+20 slot, 20 kart — birebir. Slotlar `rotateX(68°)` ile masaya yatık duruyor,
+kartlar slotun üstünde dik. Şerit genişlikleri sırayla ekranın %94 / %80 / %63'ü;
+kartlar birbirini örtüyor ama her kartın **%68–98'i görünür** kalıyor.
+
+Ayrıca **tepsi** (deck tray) var: masanın ön-alt ortasında, `z:+340`. Deste
+oraya yığılıyor, dağıtım oradan çıkıyor, COLLECT'te oraya dönüyor.
+
+Dağıtım hareketi iki tween: önce yayın tepesine (`y −13vh`, `z +90`, hafif
+fazla dönüş), sonra slota düşüş. Kart oturunca slot bir kez parlıyor.
+
+Masa intro bitince DOM'dan siliniyor — browse mode'da iz kalmıyor.
+
+### Ölçek — perspektife göre hesaplanıyor### Ölçek — perspektife göre hesaplanıyor
 
 ```js
 sAt(f, z) = (H * f) / (ch * (P / (P - z)))   // P = 1050
