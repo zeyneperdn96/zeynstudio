@@ -915,9 +915,10 @@
         this.introDone = true;
         this.interactive = true;
         this.allowTrails = false;          // browse mode is quiet: no more ribbons
-        this.labelIndex = this.focus;      // now a card is definitively active
-        this.writeLabels(this.labelIndex);
-        this.showLabel(true);              // title fades in only after the intro
+        this.activeIndex = this.labelIndex = this.focus;   // a card is definitively active
+        this.isTransitioning = false;
+        this.writeLabels(this.activeIndex);
+        this.showLabel(true);              // labels fade in only after the intro
         if (this.boardEl) { this.boardEl.remove(); this.boardEl = null; }
         if (this.dbg) { this.dbgP.textContent = 'BROWSE'; this.dbgT.textContent = 'intro done'; }
         this.clearTrails();
@@ -1017,10 +1018,13 @@
         // the first, both writing the same numbers. Token + overwrite makes the
         // newest swipe the only one that counts.
         var token = (this._snapToken = (this._snapToken || 0) + 1);
+        if (moved) this.isTransitioning = true;
         var land = function () {
+            // only the newest swipe is allowed to publish an index
             if (self.destroyed || token !== self._snapToken) return;
-            self.labelIndex = self.focus;          // the card has arrived
-            self.writeLabels(self.labelIndex);
+            self.isTransitioning = false;
+            self.activeIndex = self.labelIndex = self.focus;   // the card has landed
+            self.writeLabels(self.activeIndex);
             self.showLabel(true);
         };
 
@@ -1063,16 +1067,24 @@
 
     // Mobile only: hide the label while a card is in flight, show it once one
     // has landed. Desktop keeps it on permanently.
+    // One switch for every surface that names a card: the title block, the
+    // file id in the bottom bar and the counter. They fade and return together,
+    // so no frame can show one card's picture with another card's name.
     ArchiveGallery.prototype.showLabel = function (on) {
-        if (!this.mob || !this.isMobile) return;
-        this.mob.style.opacity = on ? '1' : '0';
+        if (!this.isMobile) return;
+        var v = on ? '1' : '0';
+        if (this.mob) this.mob.style.opacity = v;
+        var st = this.root.querySelector('.archive-hud .status');
+        var ct = this.root.querySelector('.archive-hud .count');
+        if (st) st.style.opacity = v;
+        if (ct) ct.style.opacity = v;
     };
 
     ArchiveGallery.prototype.updateHud = function () {
         // On mobile the labels follow the card that has ARRIVED (labelIndex),
         // not the one being swiped toward -- otherwise the old name sits under
         // the new picture for the length of the transition.
-        var li = (this.isMobile && this.labelIndex != null) ? this.labelIndex : this.focus;
+        var li = (this.isMobile && this.activeIndex != null) ? this.activeIndex : this.focus;
         this.writeLabels(li);
 
         var showFocus = this.introDone;      // no caption mid-choreography
@@ -1082,8 +1094,8 @@
         });
         var back = this.root.querySelector('[data-nav="-1"]');
         var next = this.root.querySelector('[data-nav="1"]');
-        if (back) back.disabled = this.focus === 0;
-        if (next) next.disabled = this.focus === this.items.length - 1;
+        if (back) back.disabled = li === 0;
+        if (next) next.disabled = li === this.items.length - 1;
     };
 
     /* ------------------------------------------------------ interaction */
@@ -1402,6 +1414,12 @@
             this.settleAll(true);
             this.interactive = true;
             this.introDone = true;
+            // finishIntro() never runs on this path, so publish the active card
+            // here or the mobile labels would stay faded out for good
+            this.activeIndex = this.labelIndex = this.focus;
+            this.isTransitioning = false;
+            this.writeLabels(this.activeIndex);
+            this.showLabel(true);
             this.updateHud();
             if (this.hint) {
                 this.hint.textContent = 'INTRO SKIPPED \u2014 ' + this.skipReason +

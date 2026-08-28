@@ -210,6 +210,10 @@
 }
 .archive-trail img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
+/* pull the whole card stage up: on a phone the rail's 46% left a band of empty
+   black above the cards. 38% lifts them ~62px without touching card size. */
+.archive-stage.is-mobile .archive-rail { top: 38%; }
+
 /* ---- mobile-only chrome: the title, id and pagination live under the card
        instead of being buried inside it ---- */
 .archive-mob { display: none; }
@@ -219,8 +223,10 @@
     display: flex; flex-direction: column; align-items: center; gap: 6px;
     padding: 0 16px; pointer-events: none; text-align: center;
     opacity: 0;                       /* JS raises it once a card has landed */
-    transition: opacity .2s ease;
+    transition: opacity .17s ease;
 }
+.archive-stage.is-mobile .archive-hud .status,
+.archive-stage.is-mobile .archive-hud .count { transition: opacity .17s ease; }
 .archive-mob .m-title {
     font-family: Tahoma, 'Segoe UI', sans-serif; font-weight: 700;
     font-size: clamp(18px, 5vw, 24px); line-height: 1.15; letter-spacing: .02em;
@@ -240,10 +246,12 @@
 
 .archive-stage.is-mobile .archive-hint {
     left: 50%; transform: translateX(-50%); text-align: center;
-    top: calc(12px + env(safe-area-inset-top, 0px));
-    font-size: 12px; font-weight: 700; letter-spacing: .10em;
-    color: rgba(214,230,255,.82); text-shadow: 0 2px 8px rgba(0,0,0,.95);
+    top: calc(30px + env(safe-area-inset-top, 0px));   /* sits just above the card */
+    font-size: 12px; font-weight: 600; letter-spacing: 1px;
+    color: rgba(214,230,255,.65); text-shadow: 0 2px 8px rgba(0,0,0,.9);
 }
+/* the hint is the only affordance on touch, so it stays put */
+.archive-stage.is-mobile .archive-hint.gone { opacity: 1; }
 
 /* bottom bar: thumb-sized on a phone */
 .archive-stage.is-mobile .archive-hud {
