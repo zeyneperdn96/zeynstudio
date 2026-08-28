@@ -203,7 +203,7 @@
                 ' scale(' + (b.s * f.s).toFixed(4) + ')';
             it.el.style.opacity = b.o;
             it.el.style.zIndex = String(Math.max(1, 1000 + Math.round(b.z + f.z + d.z)));
-            it.el.style.pointerEvents = b.o > .35 ? 'auto' : 'none';
+            it.el.style.pointerEvents = b.o > .12 ? 'auto' : 'none';
         }
         for (i = 0; i < this.trails.length; i++) {
             var t = this.trails[i], s = t.s;
@@ -747,7 +747,7 @@
             var d = Math.abs(it.index - self.focus);
             if (self.G) {
                 self.G.to(it.base, Object.assign({
-                    duration: .62, ease: 'power3.out', delay: Math.min(d, 6) * .022
+                    duration: .42, ease: 'power3.out', delay: Math.min(d, 6) * .012
                 }, r));
             } else {
                 for (var k in r) it.base[k] = r[k];
@@ -814,20 +814,29 @@
         });
 
         // --- drag / swipe along the rail
-        var dragging = false, startX = 0, acc = 0, id = null;
+        var pressed = false, dragging = false, lastX = 0, acc = 0, id = null, travel = 0;
         this.on(this.root, 'pointerdown', function (e) {
             if (!self.interactive || self.detailOpen) return;
             if (e.target.closest('.archive-hud') || e.target.closest('.archive-detail')) return;
-            dragging = true; self.dragMoved = false;
-            startX = e.clientX; acc = 0; id = e.pointerId;
-            self.root.classList.add('dragging');
-            try { self.root.setPointerCapture(id); } catch (err) {}
+            // Deliberately NOT capturing here. Pointer capture retargets the
+            // click that follows to the capture element, so the card's own
+            // click handler would never fire and clicking would do nothing.
+            pressed = true; dragging = false; self.dragMoved = false;
+            lastX = e.clientX; acc = 0; travel = 0; id = e.pointerId;
         });
         this.on(this.root, 'pointermove', function (e) {
-            if (dragging) {
-                var dx = e.clientX - startX;
-                if (Math.abs(dx) > 6) self.dragMoved = true;
-                acc += dx; startX = e.clientX;
+            if (pressed) {
+                var dx = e.clientX - lastX;
+                lastX = e.clientX;
+                travel += Math.abs(dx);          // total distance, not per-event jitter
+                if (!dragging) {
+                    if (travel < 11) return;     // still a click, not a drag
+                    dragging = true;
+                    self.dragMoved = true;
+                    self.root.classList.add('dragging');
+                    try { self.root.setPointerCapture(id); } catch (err) {}
+                }
+                acc += dx;
                 var step = self.tier.spread * .62;
                 while (Math.abs(acc) >= step) {
                     self.setFocus(self.focus - sign(acc));
@@ -845,9 +854,12 @@
             }
         });
         var endDrag = function () {
-            if (!dragging) return;
+            if (!pressed) return;
+            pressed = false;
+            if (!dragging) return;               // a plain click: leave it alone
             dragging = false;
             self.root.classList.remove('dragging');
+            try { self.root.releasePointerCapture(id); } catch (err) {}
             if (self.G) self.G.to(self.railFx, { ry: 0, duration: .5, ease: 'power2.out' });
             setTimeout(function () { self.dragMoved = false; }, 30);
         };
@@ -983,14 +995,14 @@
             var vars = sel
                 ? { z: 250, s: 1.12, y: -10, ry: -o.base.ry, rx: -o.base.rx }
                 : { z: -100, s: .96 };
-            if (self.G) self.G.to(o.fx, Object.assign({ duration: .6, ease: 'power3.out' }, vars));
+            if (self.G) self.G.to(o.fx, Object.assign({ duration: .45, ease: 'power3.out' }, vars));
             else Object.assign(o.fx, vars);
             if (!sel) {
                 if (self.G) self.G.to(o.base, { o: o.base.o * .45, duration: .5 });
                 else o.base.o *= .45;
             }
         });
-        setTimeout(function () { self.detail.classList.add('on'); }, self.reduced ? 0 : 260);
+        setTimeout(function () { self.detail.classList.add('on'); }, self.reduced ? 0 : 170);
     };
 
     ArchiveGallery.prototype.closeDetail = function () {
