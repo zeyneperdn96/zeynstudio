@@ -10,7 +10,7 @@
     height: 100%;
     overflow: hidden;
     background: #06070f;
-    perspective: 1400px;
+    perspective: 1050px;
     perspective-origin: 50% 46%;
     cursor: grab;
 }
@@ -221,10 +221,10 @@
 
 /* ---- responsive ---- */
 @media (max-width: 1024px) {
-    .archive-stage { perspective: 1150px; }
+    .archive-stage { perspective: 950px; }
 }
 @media (max-width: 640px) {
-    .archive-stage { perspective: 900px; perspective-origin: 50% 44%; }
+    .archive-stage { perspective: 820px; perspective-origin: 50% 44%; }
     .archive-hud .status { min-width: 0; flex: 1; }
     .archive-hud .lbl { display: none; }
     .archive-hint { font-size: 9px; }

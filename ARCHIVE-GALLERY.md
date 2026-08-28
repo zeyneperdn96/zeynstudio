@@ -58,21 +58,53 @@ kullanılmıyor.
 
 ---
 
-## 3. Koreografi
+## 3. Intro koreografisi
 
-| # | Aşama | Ne oluyor |
+Intro **ray matematiğinden tamamen bağımsız**. `railFor()` yalnızca son fazda
+çağrılıyor; ondan önce kartların yeri formasyonlarla belirleniyor, bu yüzden
+ilk saniyeden itibaren carousel gibi görünmüyor. Carousel final state.
+
+```
+setupInitialStack()
+  -> stackArrival()        deste derinlikten geliyor
+  -> createCardTrails()    hero kartlar diyagonal şerit bırakıyor
+  -> splitIntoGroups()     derinlikte merdiven formasyonlar
+  -> cardWave()            soldan sağa domino
+  -> collapseGroups()      merkeze sıkışma
+  -> expandIntoCarousel()  yelpaze açılıp raya oturma
+  -> enableCarouselInteractions()
+```
+
+| Faz | Süre (sn) | Ne oluyor |
 |---|---|---|
-| 1 | **Uzak deste** | `z:-1000, scale:.15, rotateX:8, opacity:0`. Her karta deterministik jitter (x/y/z/rotateY) — arkada birden çok kart olduğu hissediliyor, ama her açılışta aynı. |
-| 2 | **Derinlikten geliş** | 1.25 sn, `power3.out`, 0.045 sn stagger. Sıralama jitter'ın z'sine göre: **arkadaki kartlar daha geç** kalkıyor. |
-| 3 | **İz** | Geçici DOM klonları. 34→80px aralık, x/y/z birlikte kaydığı için yol diyagonal. Opacity `.8 / .55 / .3 / .12 / .06`. Ana kartın konumuna doğru kapanıp siliniyor. |
-| 4 | **Yelpaze** | Merkezden kenarlara, 0.045 sn stagger. Her kart önce **yerinin ötesine** taşıyor (`z+130`, `rotateY×1.7`, `scale×1.04`), sonra `power3.out` ile oturuyor — üst üste binme ve birbirinin arkasından geçme buradan geliyor. |
-| 5 | **Dalga** | Soldan sağa. `y:-35 · z:+100 · rotateY:7 · scale:1.04`, gidiş `.34` dönüş `.42`, `sine.inOut`, 0.042 sn kaydırma. |
-| 6 | **Gruplanma** | 4'erli gruplar sırayla: topla (her kart bir öncekinin arkasına basamaklanır) → beraber kay → aç → yerine otur. Gruplar 0.3 sn arayla, soldan sağa. |
-| 7 | **Final** | Kavisli ray. Odak `scale 1, z+40`. Kenarlar `scale .72–.93`, `z −40…−160`, `rotateY ±5–13`. Aralık dışa doğru sıkışıyor (`pow(a-1, .78)`) — kaçış noktası hissi. |
+| 0 | 0.00 – 0.78 | **Uzak deste.** `z:-1200, scale:.12, rotateX:10, opacity:0→1`. Deterministik jitter — arkada birden çok kart olduğu belli, ama her replay aynı. |
+| 1 | 0.80 – 1.59 | **Derinlikten geliş.** `z:-1200→-100`, `scale:.12→.65`, `power3.inOut`. Stagger penceresi 0.18 sn'ye sabit (kart sayısı artınca uzamasın diye). Deste kompakt kalıyor. |
+| 2 | 1.60 – 2.80 | **Hero kartlar + şeritler.** 7 kart desteden kopuyor, her biri arkasında **8 kopyalık kalıcı diyagonal şerit** bırakıyor. Şeritler quadratic bezier ile kıvrılıyor; yönler dönüşümlü (sol-alt→sağ-üst / sağ-alt→sol-üst), rastgele değil. |
+| 3 | 2.80 – 3.79 | **Gruplara ayrılma.** 4 grup, her biri farklı derinlikte (`z: -150 / +70 / -60 / +150`). Grup içi kartlar merdiven gibi: `x+24, y+17, z-48, rotateY+4.5` adımlarla. |
+| 4 | 3.80 – 4.92 | **Domino dalgası.** Ekran x'ine göre soldan sağa: `y:0→-50→0`, `z:0→+140→0`, `rotateY→8°`, `scale→1.05`. Her üçüncü kart kısa şerit bırakıyor. |
+| 5 | 4.70 – 5.55 | **Sıkışma.** Merkezden dışa doğru toplanma; öndeki büyük kalıyor, arkadakiler `z` ve `scale` düşürüyor. Dalgayla kasten örtüşüyor — duraklamasın, aksın diye. |
+| 6 | 5.50 – 6.75 | **Carousel'e açılma.** Ortadaki kart önce, sonra merkezden dışa 1-2-3-4-5 sırayla `railFor()` pozisyonlarına. Yelpaze açılışı. |
 
-Toplam ~6 sn. HUD'daki **Replay** ile tekrar izlenebiliyor.
+Toplam **6.75 sn**. Sonunda `finishIntro()` → `allowTrails = false`, interaksiyon
+açılıyor. Browse mode'da artık şerit üretilmiyor; sahne sakinleşiyor.
 
----
+### Şerit tekniği
+
+Şeritler geçici DOM klonları — ana PNG'ler asla çoğaltılmıyor.
+
+- Kart başına 8 kopya (tablet 5, **mobil 0**)
+- Toplam bütçe: desktop 68, tablet 34, mobil 12 klon. Aşılırsa yeni klon üretilmiyor.
+- Opacity merdiveni `.85 / .68 / .5 / .34 / .20 / .12 / .08 / .05 / .03`
+- Yol düz değil: `bez()` ile quadratic bezier, hareket yönüne dik bükülme
+- Her kopya biraz daha geride (`z -26`), biraz daha küçük, biraz daha dönük
+- `pointer-events: none`, animasyon bitince DOM'dan siliniyor
+- `spawnRibbon()` yalnızca intro sırasında çalışıyor (`allowTrails` kapısı)
+
+### Perspektif ve boyut
+
+`perspective` 1400 → **1050px** (mobilde 820). Z ekseni artık gözle görülür;
+kartlar gerçekten yaklaşıp uzaklaşıyor ve birbirinin arkasından geçiyor.
+Intro boyunca kartlar `boost: 1.18` ile ray boyutundan büyük çalışıyor.
 
 ## 4. Etkileşim
 
