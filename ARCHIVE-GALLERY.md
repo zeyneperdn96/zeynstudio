@@ -86,13 +86,27 @@ slotunun dışına oturamıyor.
 
 | Şerit | Slot | z | Kart yüksekliği |
 |---|---|---|---|
-| **HAND** | 7 | +170 | %44 |
-| **TABLE** | 7 | −70 | %38 |
-| **STOCK** | 6 | −320 | %30 |
+| **HAND** | 5 | +200 | %40–46 |
+| **TABLE** | 5 | +10 | %40 |
+| **STOCK** | 5 | −190 | %34 |
+| **DECK** | 5 | −400 | %28 |
 
-20 slot, 20 kart — birebir. Slotlar `rotateX(68°)` ile masaya yatık duruyor,
-kartlar slotun üstünde dik. Şerit genişlikleri sırayla ekranın %94 / %80 / %63'ü;
-kartlar birbirini örtüyor ama her kartın **%68–98'i görünür** kalıyor.
+4 şerit × 5 slot = 20 slot, 20 kart — birebir.
+
+**Üst üste binmeyi önleyen kural:** slot aralığı kart genişliğinin **1.10 katı**
+olarak sabit; şerit ekrana sığmazsa **kart küçülür, aralık asla daralmaz**.
+
+```js
+need = ((n-1) * 1.10 + 1) * cardW * k        // k = perspektif buyutmesi
+if (need > W * .90) s *= (W * .90) / need    // kart kucul, adim sabit
+```
+
+Önceki sürümde tam tersi oluyordu: şerit genişliği sabitti ve `span / n`
+kart genişliğinin altına düşünce kartlar %31'e kadar üst üste biniyordu.
+FAN da aynı çözücüyü kullanıyor (önceden %41 biniyordu).
+
+Dört pencere boyutunda (760×470'ten 2560×1300'e) ölçtüm: en dar adım/kart
+oranı her yerde **1.10**, yani hiçbir formasyonda binme yok.
 
 Ayrıca **tepsi** (deck tray) var: masanın ön-alt ortasında, `z:+340`. Deste
 oraya yığılıyor, dağıtım oradan çıkıyor, COLLECT'te oraya dönüyor.

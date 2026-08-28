@@ -378,19 +378,29 @@
 
     ArchiveGallery.prototype.boardLayout = function () {
         var S = this.introSpace();
+        // Five per lane, not seven: seven cards of a readable size cannot sit
+        // side by side without overlapping, and the lane was silently
+        // squeezing the step instead of the card.
         var lanes = [
-            { n: 7, z:  170, frac: .44, tag: 'HAND' },
-            { n: 7, z:  -70, frac: .38, tag: 'TABLE' },
-            { n: 6, z: -320, frac: .30, tag: 'STOCK' }
+            { n: 5, z:  200, frac: .46, tag: 'HAND' },
+            { n: 5, z:   10, frac: .40, tag: 'TABLE' },
+            { n: 5, z: -190, frac: .34, tag: 'STOCK' },
+            { n: 5, z: -400, frac: .28, tag: 'DECK' }
         ];
-        var baseY = S.H * .17;                 // where the front lane's floor sits
-        var slots = [], self = this;
+        var GAPR = 1.10;                       // step = 1.10 card widths -> a real gap
+        var maxLaneW = S.W * .90;
+        var baseY = S.H * .17;
+        var slots = [];
         lanes.forEach(function (L, li) {
+            var k = S.P / (S.P - L.z);         // perspective magnification at this depth
             var s = S.sAt(L.frac, L.z);
-            var cardH = S.ch * s, cardW = S.cw * s;
-            var span = S.W * (li === 0 ? .74 : .80);
-            var step = Math.min(span / L.n, cardW * 1.18);
-            var y = baseY - li * (S.H * .105);
+            var cardW = S.cw * s;
+            // if the lane would not fit on screen, shrink the CARD, never the gap
+            var needW = ((L.n - 1) * GAPR + 1) * cardW * k;
+            if (needW > maxLaneW) { s *= maxLaneW / needW; cardW = S.cw * s; }
+            var cardH = S.ch * s;
+            var step = cardW * GAPR;
+            var y = baseY - li * (S.H * .082);
             for (var c = 0; c < L.n; c++) {
                 slots.push({
                     lane: li, col: c, tag: L.tag,
@@ -446,7 +456,7 @@
 
         // lane captions, like the labelled bays in the reference
         this.laneTags = [];
-        [0, 1, 2].forEach(function (li) {
+        [0, 1, 2, 3].forEach(function (li) {
             var first = slots.filter(function (s) { return s.lane === li; })[0];
             if (!first) return;
             var t = document.createElement('div');
@@ -616,14 +626,24 @@
         /* ============ 3.50-4.20  FAN — the hand lane opens ============= */
         this.beat(tl, 3.5, 'FAN');
         var hand = this.items.filter(function (it) { return seat[it.index].lane === 0; });
+        // Same fit solver as the lanes: work out the spread the fan needs, and
+        // if it will not fit, shrink the CARD rather than closing the gap.
+        var fanN = Math.max(1, hand.length);
+        var fanK = S.P / (S.P - 200);
+        var fanFit = 1;
+        var fanCw = S.cw * S.sAt(.52, 200);
+        var fanNeed = ((fanN - 1) * 1.12 + 1) * fanCw * fanK;
+        var fanMax = S.W * .94;
+        if (fanNeed > fanMax) { fanFit = fanMax / fanNeed; fanCw *= fanFit; }
+        var fanSpread = (fanN - 1) / 2 * fanCw * 1.12;
         hand.forEach(function (it, n) {
             var t = (n - (hand.length - 1) / 2) / Math.max(1, (hand.length - 1) / 2);
             tl.to(it.base, {
-                x: t * S.halfW * .86,
+                x: t * fanSpread,
                 y: S.H * .06 + Math.abs(t) * S.H * .07,       // an arc, not a line
                 z: 200 - Math.abs(t) * 150,
                 rx: 2, ry: -t * 22, rz: t * 5,
-                s: S.sAt(.52 - Math.abs(t) * .10, 200 - Math.abs(t) * 150),
+                s: S.sAt(.52 - Math.abs(t) * .10, 200 - Math.abs(t) * 150) * fanFit,
                 duration: .5, ease: 'power3.out'
             }, 3.5 + Math.abs(t) * .18 + n * .012);
         });
