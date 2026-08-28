@@ -1141,82 +1141,110 @@
         });
 
         // --- drag / swipe along the rail
-        var pressed = false, dragging = false, lastX = 0, acc = 0, id = null, travel = 0;
-        this.on(this.root, 'pointerdown', function (e) {
-            if (!self.interactive || self.detailOpen) return;
-            if (e.target.closest('.archive-hud') || e.target.closest('.archive-detail')) return;
-            // Deliberately NOT capturing here. Pointer capture retargets the
-            // click that follows to the capture element, so the card's own
-            // click handler would never fire and clicking would do nothing.
-            pressed = true; dragging = false; self.dragMoved = false;
-            lastX = e.clientX; acc = 0; travel = 0; id = e.pointerId;
-        });
-        this.on(this.root, 'pointermove', function (e) {
-            if (pressed) {
-                var dx = e.clientX - lastX;
-                lastX = e.clientX;
-                travel += Math.abs(dx);          // total distance, not per-event jitter
-                if (!dragging) {
-                    if (travel < 11) return;     // still a click, not a drag
-                    dragging = true;
-                    self.dragMoved = true;
-                    self.root.classList.add('dragging');
-                    try { self.root.setPointerCapture(id); } catch (err) {}
-                    // a snap may still be running from the last swipe -- the
-                    // finger takes over, so stop it writing over us
-                    if (self.G) self.items.forEach(function (it) { self.G.killTweensOf(it.base); });
-                }
-                acc += dx;
-                if (self.isMobile) {
-                    // follow the finger: one card per ~72% of the card width
-                    var unit = Math.max(70, self.tier.cardW * .55);
-                    self.dragFrac = clamp(-acc / unit, -1.15, 1.15);
-                    self.vel = dx;
-                    if (Math.abs(self.dragFrac) > .12) self.showLabel(false);
-                    self.applyMobileDrag(self.dragFrac);
-                    return;
-                }
-                var step = self.tier.spread * .62;
-                while (Math.abs(acc) >= step) {
-                    self.setFocus(self.focus - sign(acc));
-                    acc -= sign(acc) * step;
-                }
-                // a little rotational give while the hand is down
-                if (self.G) self.G.to(self.railFx, { ry: clamp(acc / step * 3, -3, 3), duration: .2 });
-            } else if (self.interactive && !self.detailOpen) {
-                // --- ambient parallax: the room shifts, the cards do not follow
-                var b = self.root.getBoundingClientRect();
-                var px = (e.clientX - b.left) / b.width * 2 - 1;
-                var py = (e.clientY - b.top) / b.height * 2 - 1;
-                if (self.G) self.G.to(self.railFx, { ry: px * 2, rx: -py * 1, duration: .9, ease: 'power2.out' });
-                else { self.railFx.ry = px * 2; self.railFx.rx = -py; }
+        //
+        // Move and up are bound on the DOCUMENT for the life of a press, not on
+        // the stage. Bound to the stage, a finger that strays over the bottom
+        // bar mid-swipe stops delivering events and the gesture dies halfway --
+        // which is what made swiping feel unreliable. Pointer capture would fix
+        // that too, but capture retargets the click that follows and then
+        // tapping a card does nothing, so listeners it is.
+        var pressed = false, dragging = false, lastX = 0, acc = 0, travel = 0;
+        var vSamples = [];                       // {t, x} over the last ~90ms
+
+        var onMove = function (e) {
+            if (!pressed) return;
+            var dx = e.clientX - lastX;
+            lastX = e.clientX;
+            travel += Math.abs(dx);
+            if (!dragging) {
+                if (travel < 11) return;         // still a click, not a drag
+                dragging = true;
+                self.dragMoved = true;
+                self.root.classList.add('dragging');
+                // a snap may still be running from the last swipe -- the finger
+                // takes over, so stop it writing over us
+                if (self.G) self.items.forEach(function (it) { self.G.killTweensOf(it.base); });
             }
-        });
+            acc += dx;
+
+            if (self.isMobile) {
+                var unit = Math.max(70, self.tier.cardW * .55);
+                // clamp the ACCUMULATOR, not just the fraction. Clamping only
+                // the fraction let acc run past the limit, so reversing
+                // direction did nothing until the finger had undone the excess.
+                var lim = unit * 1.15;
+                acc = clamp(acc, -lim, lim);
+                self.dragFrac = -acc / unit;
+
+                var now = Date.now();
+                vSamples.push({ t: now, x: e.clientX });
+                while (vSamples.length > 1 && now - vSamples[0].t > 90) vSamples.shift();
+
+                if (Math.abs(self.dragFrac) > .12) self.showLabel(false);
+                self.applyMobileDrag(self.dragFrac);
+                return;
+            }
+
+            var step = self.tier.spread * .62;
+            while (Math.abs(acc) >= step) {
+                self.setFocus(self.focus - sign(acc));
+                acc -= sign(acc) * step;
+            }
+            if (self.G) self.G.to(self.railFx, { ry: clamp(acc / step * 3, -3, 3), duration: .2 });
+        };
+
         var endDrag = function () {
             if (!pressed) return;
             pressed = false;
+            document.removeEventListener('pointermove', onMove);
+            document.removeEventListener('pointerup', endDrag);
+            document.removeEventListener('pointercancel', endDrag);
             if (!dragging) return;               // a plain click: leave it alone
             dragging = false;
+            self.root.classList.remove('dragging');
+
             if (self.isMobile) {
+                // velocity over the last ~90ms, not one stray delta
+                var v = 0;
+                if (vSamples.length > 1) {
+                    var a0 = vSamples[0], a1 = vSamples[vSamples.length - 1];
+                    var dt = Math.max(16, a1.t - a0.t);
+                    v = (a1.x - a0.x) / dt * 100;      // px per 100ms
+                }
                 var f = self.dragFrac || 0;
-                // a quick flick counts even if the finger did not travel far
-                if (Math.abs(self.vel || 0) > 6) f += sign(self.vel) * -.35;
+                if (Math.abs(v) > 22) f += (v < 0 ? 1 : -1) * .38;   // flick
                 var step = Math.round(clamp(f, -1, 1));
                 if (step === 0) self.showLabel(true);
                 self.snapMobile(step);
-                acc = 0; self.dragFrac = 0; self.vel = 0;
-                self.root.classList.remove('dragging');
-                try { self.root.releasePointerCapture(id); } catch (err) {}
+                acc = 0; self.dragFrac = 0; vSamples = [];
                 setTimeout(function () { self.dragMoved = false; }, 30);
                 return;
             }
-            self.root.classList.remove('dragging');
-            try { self.root.releasePointerCapture(id); } catch (err) {}
             if (self.G) self.G.to(self.railFx, { ry: 0, duration: .5, ease: 'power2.out' });
             setTimeout(function () { self.dragMoved = false; }, 30);
         };
-        this.on(this.root, 'pointerup', endDrag);
-        this.on(this.root, 'pointercancel', endDrag);
+
+        this.on(this.root, 'pointerdown', function (e) {
+            if (!self.interactive || self.detailOpen) return;
+            if (e.target.closest('.archive-hud') || e.target.closest('.archive-detail')) return;
+            pressed = true; dragging = false; self.dragMoved = false;
+            lastX = e.clientX; acc = 0; travel = 0;
+            vSamples = [{ t: Date.now(), x: e.clientX }];
+            document.addEventListener('pointermove', onMove);
+            document.addEventListener('pointerup', endDrag);
+            document.addEventListener('pointercancel', endDrag);
+        });
+
+        // ambient parallax stays on the stage, and is mouse-only
+        this.on(this.root, 'pointermove', function (e) {
+            if (pressed || self.isMobile || !self.interactive || self.detailOpen) return;
+            var b = self.root.getBoundingClientRect();
+            var px = (e.clientX - b.left) / b.width * 2 - 1;
+            var py = (e.clientY - b.top) / b.height * 2 - 1;
+            if (self.G) self.G.to(self.railFx, { ry: px * 2, rx: -py * 1, duration: .9, ease: 'power2.out' });
+            else { self.railFx.ry = px * 2; self.railFx.rx = -py; }
+        });
+        this._docMove = onMove; this._docEnd = endDrag;
         this.on(this.root, 'pointerleave', function () {
             endDrag();
             if (self.G) self.G.to(self.railFx, { ry: 0, rx: 0, duration: .7, ease: 'power2.out' });
@@ -1466,6 +1494,11 @@
         if (this._ro) this._ro.disconnect();
         if (this._onWinResize) window.removeEventListener('resize', this._onWinResize);
         if (this._onKey) document.removeEventListener('keydown', this._onKey);
+        if (this._docMove) {
+            document.removeEventListener('pointermove', this._docMove);
+            document.removeEventListener('pointerup', this._docEnd);
+            document.removeEventListener('pointercancel', this._docEnd);
+        }
         this._binds.forEach(function (b) { b[0].removeEventListener(b[1], b[2], b[3]); });
         this._binds = [];
         clearTimeout(this._rz);
