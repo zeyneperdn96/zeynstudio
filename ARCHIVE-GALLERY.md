@@ -228,7 +228,12 @@ pencerede yazarken ok tuşları çalınmıyor. Input/textarea içindeyken de sus
 - **Kart oranı görselden geliyor.** Sette iki oran var (2:3 ve 3:4); kart
   yüksekliği `naturalHeight / naturalWidth` ile kart başına ayarlanıyor.
   Sabit orana zorlanmadığı için hiçbir görsel kırpılmıyor.
-- **Ray'de 600px kopyalar, detayda orijinal PNG.** 20 PNG toplam 42 MB;
+- **Üç çözünürlük katmanı.** `thumbs/` 600px JPEG (2.3 MB) ray için, `web/`
+  1400px JPEG (10 MB) detay için, `full/` orijinal PNG (42 MB) master olarak
+  duruyor. Sanat eserine dokunulmuyor, sadece teslim kopyaları.
+  `ArchiveData.js`'te `ARCHIVE_RAIL_SOURCE` ve `ARCHIVE_DETAIL_SOURCE` ile
+  istenirse orijinale çevrilir. Telefonda her karta dokunuşta 2 MB PNG inmesin diye.
+- **(eski not) Ray'de 600px kopyalar, detayda orijinal PNG.** 20 PNG toplam 42 MB;
   hepsini raya koymak pencere açılır açılmaz 42 MB indirmek demek. Sanata
   dokunulmuyor, sadece çözünürlük. Saf PNG istenirse `js/ArchiveData.js`:
 

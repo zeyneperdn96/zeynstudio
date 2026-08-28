@@ -998,7 +998,10 @@
         if (!it) return;
         this.detailIndex = i;
         var img = this.detail.querySelector('img');
-        img.src = it.data.image;                 // the original PNG, untouched
+        // 1400px delivery copy by default -- the original PNG is ~2 MB per card,
+        // which is a slow tap on a phone. Switch in ArchiveData.js to serve it.
+        var key = window.ARCHIVE_DETAIL_SOURCE || 'web';
+        img.src = it.data[key] || it.data.image;
         this.detail.querySelector('.d-title').textContent = it.data.title;
         this.detail.querySelector('.d-id').textContent = it.data.id;
         this.sizeDetail();

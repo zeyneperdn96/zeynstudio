@@ -13,10 +13,16 @@
 
 const ARCHIVE_DIR = 'assets/projects/zeynep-archive/';
 
-/* Which file the rail shows. The detail view ALWAYS opens the original PNG.
-   'preview' -- 600px copies, ~2.3 MB for the whole set (default)
-   'image'   -- the original PNGs, ~42 MB for the whole set               */
-const ARCHIVE_RAIL_SOURCE = 'preview';
+/* Which copy of the artwork each view loads. The art itself is never
+   altered -- these are delivery copies at different resolutions.
+
+   thumbs/  600px  JPEG   2.3 MB total   the rail
+   web/    1400px  JPEG    10 MB total   the detail view
+   full/          PNG      42 MB total   the untouched originals
+
+   Set either of these to 'image' to serve the originals instead.          */
+const ARCHIVE_RAIL_SOURCE   = 'preview';
+const ARCHIVE_DETAIL_SOURCE = 'web';
 
 const ARCHIVE_CARDS = [
     { id: 'FILE_001', title: 'ZEYNEP.EXE',    file: '001' },
@@ -44,10 +50,12 @@ const ARCHIVE_CARDS = [
         id: c.id,
         title: c.title,
         image:   ARCHIVE_DIR + 'full/file-'   + c.file + '.png',
+        web:     ARCHIVE_DIR + 'web/file-'    + c.file + '.jpg',
         preview: ARCHIVE_DIR + 'thumbs/file-' + c.file + '.jpg'
     };
 });
 
 window.ARCHIVE_DIR = ARCHIVE_DIR;
+window.ARCHIVE_DETAIL_SOURCE = ARCHIVE_DETAIL_SOURCE;
 window.ARCHIVE_CARDS = ARCHIVE_CARDS;
 window.ARCHIVE_RAIL_SOURCE = ARCHIVE_RAIL_SOURCE;
