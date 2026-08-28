@@ -271,6 +271,32 @@ ekranın %30'u. Mobil kolda bu hesap tamamen ayrıldı:
 cardW = min(W * .70, (H * .58) / 1.5)     // aktif kart = layout'un kendisi
 ```
 
+### Kart ölçüsü — yüzde değil, bütçe
+
+İlk sürümde `cardW = min(w * .70, (h * .52) / 1.5)` idi. Gerçek telefonda sahne
+**sadece 642 CSS px** yüksekliğinde (Chrome adres çubuğu + XP başlık + taskbar
+payı düşünce), o yüzden yükseklik terimi 223px'te bağlıyor, genişlik terimi
+288px'te. Sonuç: kart ekranın **%53'ü**, üstünde **154px ölü siyah alan**.
+
+`%52` tavanı "ne kadar yükseklik boşta kalır" tahminiydi ve yanlıştı. Artık
+gerçek bütçe:
+
+```js
+reserved = alt bar 58 + başlık bloğu 62 + ipucu 34 + pay 16   // = 170
+maxH     = h - reserved
+cardW    = min(w * .72, maxH / 1.5)
+railTop  = (ipucu, alt blok) bandının ortası — yüzde değil, piksel
+```
+
+Ekran kaydından ölçülen cihazda (411×642 CSS px):
+
+| | Önce | Sonra |
+|---|---|---|
+| Kart | 223 × 334 | **296 × 444** |
+| Ekranın genişliğinin | %53 | **%72** |
+| Sahne yüksekliğinin | %46 | **%69** |
+| Üstteki boşluk | 154 px | **22 px** |
+
 ### Final state: merkez kart + kenar payı
 
 `mobileRail()` masaüstü ray matematiğinin yerine geçiyor:
