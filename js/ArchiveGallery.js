@@ -261,7 +261,9 @@
                 ' rotateZ(' + b.rz.toFixed(2) + 'deg)' +
                 ' scale(' + (b.s * f.s).toFixed(4) + ')';
             it.el.style.opacity = b.o;
-            it.el.style.zIndex = String(Math.max(1, 1000 + Math.round(b.z + f.z + d.z)));
+            it.el.style.zIndex = String(it.zi != null
+                ? Math.max(1, it.zi)
+                : Math.max(1, 1000 + Math.round(b.z + f.z + d.z)));
             it.el.style.pointerEvents = b.o > .12 ? 'auto' : 'none';
         }
         for (i = 0; i < this.trails.length; i++) {
@@ -343,6 +345,7 @@
     ArchiveGallery.prototype.settleAll = function (immediate) {
         var self = this;
         this.items.forEach(function (it) {
+            if (!self.isMobile) it.zi = null;      // desktop keeps depth ordering
             var r = self.railFor(it.index - self.focus);
             if (immediate || !self.G) {
                 for (var k in r) it.base[k] = r[k];
@@ -595,6 +598,7 @@
     ArchiveGallery.prototype.setIntroStackState = function () {
         var G = this.G, S = this.introSpace();
         this.items.forEach(function (it) {
+            it.zi = null;                          // depth ordering during the intro
             var j = jitter(it.index);
             G.set(it.base, {
                 x: j.x * .12, y: j.y * .12, z: -1400 + j.z * .08,
@@ -987,9 +991,16 @@
     // the finger is the clock.
     ArchiveGallery.prototype.applyMobileDrag = function (frac) {
         var self = this;
+        var near = Math.round(this.focus - frac);        // the card closest to centre
         this.items.forEach(function (it) {
-            var r = self.mobileRail(it.index - self.focus + frac);
+            var off = it.index - self.focus + frac;
+            var r = self.mobileRail(off);
             for (var k in r) it.base[k] = r[k];
+            // Half way through a swipe both cards sit at the same depth, so a
+            // z-index derived from z ties and the paint order flips. Rank them
+            // by distance from centre instead.
+            it.zi = 1000 - Math.round(Math.abs(off) * 40);
+            it.el.classList.toggle('is-focus', it.index === near);
         });
     };
 
@@ -1002,20 +1013,26 @@
 
         if (moved) this.showLabel(false);          // nothing is named mid-flight
 
-        var done = false;
+        // Swipe twice quickly and the second snap would otherwise run on top of
+        // the first, both writing the same numbers. Token + overwrite makes the
+        // newest swipe the only one that counts.
+        var token = (this._snapToken = (this._snapToken || 0) + 1);
         var land = function () {
-            if (done || self.destroyed) return;
-            done = true;
+            if (self.destroyed || token !== self._snapToken) return;
             self.labelIndex = self.focus;          // the card has arrived
             self.writeLabels(self.labelIndex);
             self.showLabel(true);
         };
 
-        this.items.forEach(function (it, n) {
-            var r = self.mobileRail(it.index - self.focus);
+        this.items.forEach(function (it) {
+            var off = it.index - self.focus;
+            var r = self.mobileRail(off);
+            it.zi = 1000 - Math.round(Math.abs(off) * 40);   // never a tie
             if (self.G) {
-                var vars = Object.assign({ duration: .34, ease: 'power3.out' }, r);
-                if (it.index === self.focus) vars.onComplete = land;
+                var vars = Object.assign({
+                    duration: .34, ease: 'power3.out', overwrite: 'auto'
+                }, r);
+                if (off === 0) vars.onComplete = land;
                 self.G.to(it.base, vars);
             } else {
                 for (var k in r) it.base[k] = r[k];

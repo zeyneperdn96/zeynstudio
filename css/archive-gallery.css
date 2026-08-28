@@ -425,10 +425,13 @@
     .archive-board-logo { opacity: 0; }      /* keep the small stage uncluttered */
 }
 
-/* ---- 8. global toasts must clear the gallery's own bottom furniture ---- */
+/* ---- 8. On a phone there is no room to move a toast out of the way -- lifting
+       it just parked it over the card. While the gallery is open on mobile the
+       toasts are suppressed instead; everywhere else on the site they behave
+       exactly as before. ---- */
 @media (max-width: 768px) {
     body.archive-mobile-open .msn-notify-container {
-        bottom: calc(152px + env(safe-area-inset-bottom, 0px)) !important;
+        display: none !important;
     }
 }
 
