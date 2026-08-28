@@ -278,14 +278,15 @@
 .archive-detail .bar button:hover { background: linear-gradient(180deg, #f08a72 0%, #e05038 50%, #c03020 100%); }
 .archive-detail .body {
     padding: 10px; background: #ece9d8;
-    overflow: hidden; min-height: 0;          /* let the flex child actually shrink */
+    overflow: hidden; min-height: 0;
     display: flex; align-items: center; justify-content: center;
 }
+/* max-width / max-height are set in px by sizeDetail(): a percentage here
+   resolves against an auto-height parent, which is no constraint at all, so
+   the picture would open at its natural 1024x1536 and blow the panel apart. */
 .archive-detail img {
     display: block;
-    max-width: 100%; max-height: 100%;        /* bounded by the window, not the viewport */
     width: auto; height: auto;
-    object-fit: contain;
     border: 1px solid #808080; background: #000;
 }
 .archive-detail .meta {

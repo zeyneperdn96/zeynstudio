@@ -19,11 +19,11 @@
 
     var TIERS = {
         desktop: { cardW: 230, spread: 202, depth: 132, focusZ: 40, angle: 11, angleMax: 13,
-                   scaleStep: .07, minScale: .72, visible: 5.5, lift: 10, tilt: 2, trails: 4, waveZ: 100 },
+                   scaleStep: .07, minScale: .72, visible: 5.5, lift: 10, tilt: 2 },
         tablet:  { cardW: 188, spread: 168, depth: 88,  focusZ: 26, angle: 9,  angleMax: 11,
-                   scaleStep: .08, minScale: .74, visible: 4.5, lift: 8,  tilt: 2, trails: 2, waveZ: 70 },
+                   scaleStep: .08, minScale: .74, visible: 4.5, lift: 8,  tilt: 2 },
         mobile:  { cardW: 148, spread: 132, depth: 54,  focusZ: 16, angle: 7,  angleMax: 9,
-                   scaleStep: .09, minScale: .76, visible: 3.5, lift: 6,  tilt: 1, trails: 0, waveZ: 46 }
+                   scaleStep: .09, minScale: .76, visible: 3.5, lift: 6,  tilt: 1 }
     };
 
     var TRAIL_FADE = [1, .92, .82, .70, .56, .42, .28, .18];
@@ -75,7 +75,7 @@
               '<div class="floor"></div><div class="haze"></div>' +
             '</div>' +
             '<div class="archive-rail"></div>' +
-            '<div class="archive-debug"><span class="p">STACK</span><span class="t">0.0s</span></div>' +
+            '<div class="archive-debug done"><span class="p">STACK</span><span class="t">0.0s</span></div>' +
             '<div class="archive-hint">DEALING\u2026</div>' +
             '<div class="archive-hud">' +
               '<div class="grp">' +
@@ -270,15 +270,15 @@
        switched off until enableCarousel().
 
        Beats, all sized off the stage so the cards fill it:
-         0.00 STACK      one deck at the vanishing point
-         0.80 EXPLODE    bursts outward across the whole screen
-         1.30 TRAIL      heroes lay long, opaque diagonal ribbons
-         2.10 WALLS      two card walls running opposite diagonals
-         2.90 GROUPS     three big groups, three depths
-         3.80 WAVE       domino, left to right
-         4.70 COLLAPSE   everything slams back to a dense centre deck
-         5.40 CAROUSEL   fans out onto the rail
-         6.20 done
+         0.00 STACK      the deck arrives and piles into the dealer tray
+         0.65 BOARD      felt, slots lighting up left to right, lane captions
+         1.15 DEAL       twenty cards dealt one at a time onto their slots
+         2.60 TRAIL      four cards lift off, laying opaque diagonal ribbons
+         3.50 FAN        the HAND lane opens along an arc
+         4.20 WAVE       domino across the seated cards, left to right
+         4.95 COLLECT    swept back to the tray; clones cleared, board dissolves
+         5.55 CAROUSEL   fans out onto the rail
+         6.45 done
        ==================================================================== */
 
     ArchiveGallery.prototype.settleAll = function (immediate) {
@@ -514,7 +514,8 @@
         var self = this, G = this.G, S = this.introSpace();
         var N = this.items.length;
         this.trailBudget = this.tierName === 'mobile' ? 18 : (this.tierName === 'tablet' ? 34 : 48);
-        if (this.dbg) this.dbg.classList.remove('done');
+        // dev readout: window.ARCHIVE_DEBUG = true before opening to show it
+        if (this.dbg) this.dbg.classList.toggle('done', !window.ARCHIVE_DEBUG);
 
         this.buildBoard();
         var slots = this.slots;
@@ -928,6 +929,7 @@
             if (self.tl && self.tl.isActive && self.tl.isActive()) return;
             var prev = self.tierName;
             self.measure();
+            self.sizeDetail();
             if (self.introDone || self.reduced || !self.G) self.settleAll(prev !== self.tierName);
         }, 140);
     };
@@ -936,6 +938,18 @@
 
     // Swap the picture without closing, so the arrow keys the panel advertises
     // actually browse.
+    // Bound the picture to the stage in real pixels. With width/height auto the
+    // browser scales it proportionally inside that box, so the aspect ratio of
+    // the original PNG is preserved whatever its size.
+    ArchiveGallery.prototype.sizeDetail = function () {
+        var img = this.detail && this.detail.querySelector('img');
+        if (!img) return;
+        var w = this.root.clientWidth  || 900;
+        var h = this.root.clientHeight || 600;
+        img.style.maxWidth  = Math.max(120, Math.round(w - 96)) + 'px';
+        img.style.maxHeight = Math.max(120, Math.round(h - 176)) + 'px';
+    };
+
     ArchiveGallery.prototype.showDetailCard = function (i) {
         var it = this.items[i];
         if (!it) return;
@@ -944,6 +958,7 @@
         img.src = it.data.image;                 // the original PNG, untouched
         this.detail.querySelector('.d-title').textContent = it.data.title;
         this.detail.querySelector('.d-id').textContent = it.data.id;
+        this.sizeDetail();
     };
 
     ArchiveGallery.prototype.stepDetail = function (dir) {

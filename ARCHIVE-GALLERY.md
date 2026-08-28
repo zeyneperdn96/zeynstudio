@@ -165,9 +165,25 @@ Hepsi tutuyor, hem 1000×660 pencerede hem maximize'da.
 
 ### Debug label
 
-Sağ üstte hangi beatte olduğu yazıyor: `STACK / EXPLODE / TRAIL / WALLS /
-GROUPS / WAVE / COLLAPSE / CAROUSEL`, intro bitince `BROWSE`.
-Kaldırmak için: `js/ArchiveGallery.js` içinde `archive-debug` div'ini sil.
+Varsayılan **kapalı**. Açmak için konsola:
+
+```js
+window.ARCHIVE_DEBUG = true
+```
+
+sonra pencereyi kapatıp aç. Sağ üstte hangi beatte olduğu ve
+**gerçek geçen süre / tasarlanan süre** yazar — ikisi ayrışırsa hemen görünür.
+
+### Detay görünümü
+
+Görsel `sizeDetail()` ile **piksel cinsinden** sınırlanıyor
+(`maxWidth = sahne − 96`, `maxHeight = sahne − 176`), `width/height: auto`
+kaldığı için tarayıcı oranı koruyarak küçültüyor.
+
+Önceden CSS'te `max-height: 100%` vardı ama `.body`'nin kesin bir yüksekliği
+olmadığından yüzde hiçbir şeye bağlanmıyordu — görsel doğal boyutunda
+(1024×1536) açılıp paneli patlatıyordu. Bu yüzden ölçü koddan veriliyor;
+pencere boyutu değişince de yeniden hesaplanıyor.
 
 ### Intro atlanırsa nedeni ekranda yazar
 
