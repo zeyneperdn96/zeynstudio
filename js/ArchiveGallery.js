@@ -166,11 +166,20 @@
         this.tier = Object.assign({}, TIERS[name]);
 
         if (this.isMobile) {
-            // the active card IS the layout: 70% of the width, capped so it
-            // never eats more than 58% of the height
-            this.tier.cardW = Math.max(120, Math.round(Math.min(w * .70, (h * .52) / 1.5)));
+            // Budget the height instead of capping it at a flat percentage. On a
+            // real phone the browser bar, the XP title bar and the taskbar leave
+            // a short stage, and (h * .52) / 1.5 was binding well before the
+            // width did -- measured at 53% of the screen where 70% was intended.
+            var HUD_H = 58, TITLE_H = 62, HINT_H = 34, PAD = 16;
+            var maxH = Math.max(190, h - (HUD_H + TITLE_H + HINT_H + PAD));
+            this.tier.cardW = Math.max(120, Math.round(Math.min(w * .72, maxH / 1.5)));
             this.tier.visible = 2.6;
+            // and centre the card in the band that is actually left for it,
+            // rather than trusting a percentage that leaves dead space on top
+            var bandTop = HINT_H, bandBot = h - (HUD_H + TITLE_H);
+            this._railTop = Math.round((bandTop + bandBot) / 2);
         } else {
+            this._railTop = null;
             // keep the focused card inside the window whatever the window size is
             var fit = Math.min(this.tier.cardW, (h - 130) / 1.5, w * 0.30);
             this.tier.cardW = Math.max(96, Math.round(fit));
@@ -181,6 +190,7 @@
 
         this.root.style.setProperty('--acw', this.tier.cardW + 'px');
         this.root.style.setProperty('--ach', Math.round(this.tier.cardW * 1.5) + 'px');
+        if (this.rail) this.rail.style.top = this._railTop != null ? this._railTop + 'px' : '';
 
         var self = this;
         this.items.forEach(function (it) {
