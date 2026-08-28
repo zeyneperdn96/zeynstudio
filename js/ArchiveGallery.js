@@ -911,6 +911,17 @@
         tl.call(function () {}, null, 6.45);
     };
 
+    // Jump straight to browse mode -- used when someone touches the screen
+    // while the intro is still playing.
+    ArchiveGallery.prototype.skipIntro = function () {
+        if (this.introDone) return;
+        if (this.tl) this.tl.kill();
+        this.clearTrails();
+        if (this.boardEl) { this.boardEl.remove(); this.boardEl = null; }
+        this.settleAll(true);
+        this.finishIntro();
+    };
+
     ArchiveGallery.prototype.finishIntro = function () {
         this.introDone = true;
         this.interactive = true;
@@ -1225,8 +1236,11 @@
         };
 
         this.on(this.root, 'pointerdown', function (e) {
-            if (!self.interactive || self.detailOpen) return;
+            if (self.detailOpen) return;
             if (e.target.closest('.archive-hud') || e.target.closest('.archive-detail')) return;
+            // Touching during the intro used to do nothing for 3.7s, which reads
+            // as a dead screen. A touch now ends the intro and hands over.
+            if (!self.interactive) { self.skipIntro(); return; }
             pressed = true; dragging = false; self.dragMoved = false;
             lastX = e.clientX; acc = 0; travel = 0;
             vSamples = [{ t: Date.now(), x: e.clientX }];
@@ -1245,6 +1259,29 @@
             else { self.railFx.ry = px * 2; self.railFx.rx = -py; }
         });
         this._docMove = onMove; this._docEnd = endDrag;
+
+        // Fallback for anything without Pointer Events (old WebViews). Only
+        // wired when they are genuinely missing, so nothing is handled twice.
+        if (!window.PointerEvent) {
+            var t2p = function (te) {
+                var t = te.touches[0] || te.changedTouches[0] || {};
+                return { clientX: t.clientX, clientY: t.clientY, target: te.target,
+                         closest: null, preventDefault: function () { te.preventDefault(); } };
+            };
+            this.on(this.root, 'touchstart', function (te) {
+                if (self.detailOpen) return;
+                if (te.target.closest && (te.target.closest('.archive-hud') ||
+                                          te.target.closest('.archive-detail'))) return;
+                if (!self.interactive) { self.skipIntro(); return; }
+                var e = t2p(te);
+                pressed = true; dragging = false; self.dragMoved = false;
+                lastX = e.clientX; acc = 0; travel = 0;
+                vSamples = [{ t: Date.now(), x: e.clientX }];
+            }, { passive: true });
+            this.on(this.root, 'touchmove', function (te) { onMove(t2p(te)); }, { passive: true });
+            this.on(this.root, 'touchend', function () { endDrag(); });
+            this.on(this.root, 'touchcancel', function () { endDrag(); });
+        }
         this.on(this.root, 'pointerleave', function () {
             endDrag();
             if (self.G) self.G.to(self.railFx, { ry: 0, rx: 0, duration: .7, ease: 'power2.out' });
