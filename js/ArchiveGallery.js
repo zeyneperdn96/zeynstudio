@@ -66,6 +66,8 @@
 
         this.build();
         this.measure();
+        // lets global toasts (MSN) lift above the gallery's own bottom bar
+        if (this.isMobile) document.body.classList.add('archive-mobile-open');
         this.start();
     }
 
@@ -114,6 +116,7 @@
         this.mTitle  = this.root.querySelector('.m-title');
         this.mId     = this.root.querySelector('.m-id');
         this.mDots   = this.root.querySelector('.m-dots');
+        this.mob     = this.root.querySelector('.archive-mob');
 
         this.cards.forEach(function (data, i) {
             var el = document.createElement('div');
@@ -908,6 +911,9 @@
         this.introDone = true;
         this.interactive = true;
         this.allowTrails = false;          // browse mode is quiet: no more ribbons
+        this.labelIndex = this.focus;      // now a card is definitively active
+        this.writeLabels(this.labelIndex);
+        this.showLabel(true);              // title fades in only after the intro
         if (this.boardEl) { this.boardEl.remove(); this.boardEl = null; }
         if (this.dbg) { this.dbgP.textContent = 'BROWSE'; this.dbgT.textContent = 'intro done'; }
         this.clearTrails();
@@ -990,35 +996,72 @@
     ArchiveGallery.prototype.snapMobile = function (deltaIndex) {
         var self = this;
         var target = clamp(this.focus + deltaIndex, 0, this.items.length - 1);
+        var moved = target !== this.focus;
         this.focus = target;
         this.loadNear();
-        this.items.forEach(function (it) {
+
+        if (moved) this.showLabel(false);          // nothing is named mid-flight
+
+        var done = false;
+        var land = function () {
+            if (done || self.destroyed) return;
+            done = true;
+            self.labelIndex = self.focus;          // the card has arrived
+            self.writeLabels(self.labelIndex);
+            self.showLabel(true);
+        };
+
+        this.items.forEach(function (it, n) {
             var r = self.mobileRail(it.index - self.focus);
-            if (self.G) self.G.to(it.base, Object.assign({ duration: .34, ease: 'power3.out' }, r));
-            else for (var k in r) it.base[k] = r[k];
+            if (self.G) {
+                var vars = Object.assign({ duration: .34, ease: 'power3.out' }, r);
+                if (it.index === self.focus) vars.onComplete = land;
+                self.G.to(it.base, vars);
+            } else {
+                for (var k in r) it.base[k] = r[k];
+            }
         });
+        if (!this.G || !moved) land();
         this.updateHud();
     };
 
-    ArchiveGallery.prototype.updateHud = function () {
-        var d = this.items[this.focus];
+    // Every surface that names a card is written from ONE index, so the label
+    // and the picture can never disagree.
+    ArchiveGallery.prototype.writeLabels = function (i) {
+        var d = this.items[i];
         if (!d) return;
         this.stId.textContent = d.data.id;
         this.stTitle.textContent = d.data.title;
-        this.stN.textContent = String(this.focus + 1);
-
+        this.stN.textContent = String(i + 1);
         if (this.mTitle) {
             this.mTitle.textContent = d.data.title;
             this.mId.textContent = d.data.id;
             if (this.mDots.childElementCount !== this.items.length) {
                 this.mDots.innerHTML = this.items.map(function () { return '<i></i>'; }).join('');
             }
-            var kids = this.mDots.children, f = this.focus;
-            for (var q = 0; q < kids.length; q++) kids[q].classList.toggle('on', q === f);
+            var kids = this.mDots.children;
+            for (var q = 0; q < kids.length; q++) kids[q].classList.toggle('on', q === i);
         }
+    };
+
+    // Mobile only: hide the label while a card is in flight, show it once one
+    // has landed. Desktop keeps it on permanently.
+    ArchiveGallery.prototype.showLabel = function (on) {
+        if (!this.mob || !this.isMobile) return;
+        this.mob.style.opacity = on ? '1' : '0';
+    };
+
+    ArchiveGallery.prototype.updateHud = function () {
+        // On mobile the labels follow the card that has ARRIVED (labelIndex),
+        // not the one being swiped toward -- otherwise the old name sits under
+        // the new picture for the length of the transition.
+        var li = (this.isMobile && this.labelIndex != null) ? this.labelIndex : this.focus;
+        this.writeLabels(li);
+
         var showFocus = this.introDone;      // no caption mid-choreography
+        var f = this.focus;
         this.items.forEach(function (it, i) {
-            it.el.classList.toggle('is-focus', showFocus && i === d.index);
+            it.el.classList.toggle('is-focus', showFocus && i === f);
         });
         var back = this.root.querySelector('[data-nav="-1"]');
         var next = this.root.querySelector('[data-nav="1"]');
@@ -1100,6 +1143,7 @@
                     var unit = Math.max(70, self.tier.cardW * .55);
                     self.dragFrac = clamp(-acc / unit, -1.15, 1.15);
                     self.vel = dx;
+                    if (Math.abs(self.dragFrac) > .12) self.showLabel(false);
                     self.applyMobileDrag(self.dragFrac);
                     return;
                 }
@@ -1128,7 +1172,9 @@
                 var f = self.dragFrac || 0;
                 // a quick flick counts even if the finger did not travel far
                 if (Math.abs(self.vel || 0) > 6) f += sign(self.vel) * -.35;
-                self.snapMobile(Math.round(clamp(f, -1, 1)));
+                var step = Math.round(clamp(f, -1, 1));
+                if (step === 0) self.showLabel(true);
+                self.snapMobile(step);
                 acc = 0; self.dragFrac = 0; self.vel = 0;
                 self.root.classList.remove('dragging');
                 try { self.root.releasePointerCapture(id); } catch (err) {}
@@ -1235,8 +1281,13 @@
         if (!img) return;
         var w = this.root.clientWidth  || 900;
         var h = this.root.clientHeight || 600;
-        img.style.maxWidth  = Math.max(120, Math.round(w - 96)) + 'px';
-        img.style.maxHeight = Math.max(120, Math.round(h - 176)) + 'px';
+        if (this.isMobile) {
+            img.style.maxWidth  = Math.max(120, Math.round(w * .90 - 28)) + 'px';
+            img.style.maxHeight = Math.max(120, Math.round(h - 168)) + 'px';
+        } else {
+            img.style.maxWidth  = Math.max(120, Math.round(w - 96)) + 'px';
+            img.style.maxHeight = Math.max(120, Math.round(h - 176)) + 'px';
+        }
     };
 
     ArchiveGallery.prototype.showDetailCard = function (i) {
@@ -1364,6 +1415,7 @@
 
     ArchiveGallery.prototype.destroy = function () {
         this.destroyed = true;
+        document.body.classList.remove('archive-mobile-open');
         if (this.tl) this.tl.kill();
         this.stopIdle();
         this.clearTrails();

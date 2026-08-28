@@ -215,9 +215,11 @@
 .archive-mob { display: none; }
 .archive-stage.is-mobile .archive-mob {
     position: absolute; left: 0; right: 0; z-index: 7;
-    bottom: calc(58px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(62px + env(safe-area-inset-bottom, 0px));
     display: flex; flex-direction: column; align-items: center; gap: 6px;
     padding: 0 16px; pointer-events: none; text-align: center;
+    opacity: 0;                       /* JS raises it once a card has landed */
+    transition: opacity .2s ease;
 }
 .archive-mob .m-title {
     font-family: Tahoma, 'Segoe UI', sans-serif; font-weight: 700;
@@ -238,23 +240,28 @@
 
 .archive-stage.is-mobile .archive-hint {
     left: 50%; transform: translateX(-50%); text-align: center;
-    top: calc(8px + env(safe-area-inset-top, 0px));
-    font-size: 10px; letter-spacing: .22em; color: rgba(190,212,255,.62);
+    top: calc(12px + env(safe-area-inset-top, 0px));
+    font-size: 12px; font-weight: 700; letter-spacing: .10em;
+    color: rgba(214,230,255,.82); text-shadow: 0 2px 8px rgba(0,0,0,.95);
 }
 
 /* bottom bar: thumb-sized on a phone */
 .archive-stage.is-mobile .archive-hud {
-    min-height: 54px; padding: 6px 10px calc(6px + env(safe-area-inset-bottom, 0px));
-    gap: 10px;
+    min-height: 58px; padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px));
+    gap: 8px;
 }
 .archive-stage.is-mobile .archive-hud .grp { flex: none; }
 .archive-stage.is-mobile .archive-hud .status {
-    flex: 1; min-width: 0; text-align: center; font-size: 12px; padding: 6px 8px;
+    flex: 1; min-width: 0; text-align: center; font-size: 13px; font-weight: 700;
+    padding: 8px 8px; letter-spacing: .04em;
 }
-.archive-stage.is-mobile .archive-hud .count { padding: 6px 8px; font-size: 12px; }
+.archive-stage.is-mobile .archive-hud .count {
+    padding: 8px 10px; font-size: 13px; font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
 .archive-stage.is-mobile .xpbtn {
-    min-width: 46px; min-height: 44px;          /* 44px tap target */
-    font-size: 15px; padding: 0 12px;
+    min-width: 52px; min-height: 46px;          /* comfortably past the 44px floor */
+    font-size: 19px; line-height: 1; padding: 0 12px;
     display: inline-flex; align-items: center; justify-content: center;
 }
 .archive-stage.is-mobile .archive-hud [data-act="replay"],
@@ -391,6 +398,18 @@
 @media (max-width: 1024px) {
     .archive-stage { perspective: 950px; }
 }
+@media (max-width: 768px) {
+    .archive-detail { padding: 4vw 4vw calc(4vw + 58px); }
+    .archive-detail .frame { width: 92vw; max-width: 92vw; }
+    .archive-detail .bar { padding: 6px 6px 6px 10px; font-size: 13px; }
+    .archive-detail .bar button {
+        width: 44px; height: 44px;              /* real tap target */
+        font-size: 18px; border-radius: 4px;
+    }
+    .archive-detail .body { padding: 8px; }
+    .archive-detail .meta { padding: 8px 10px; font-size: 12px; }
+}
+
 @media (max-width: 640px) {
     .archive-stage { perspective: 820px; perspective-origin: 50% 44%; }
     .archive-hud { gap: 6px; padding: 5px 7px; font-size: 10px; }
@@ -404,6 +423,13 @@
     .archive-detail { padding: 12px 12px 44px; }
     .archive-detail .meta .d-hint { display: none; }
     .archive-board-logo { opacity: 0; }      /* keep the small stage uncluttered */
+}
+
+/* ---- 8. global toasts must clear the gallery's own bottom furniture ---- */
+@media (max-width: 768px) {
+    body.archive-mobile-open .msn-notify-container {
+        bottom: calc(152px + env(safe-area-inset-bottom, 0px)) !important;
+    }
 }
 
 /* ---- reduced motion: no cinematics, just a readable gallery ---- */
