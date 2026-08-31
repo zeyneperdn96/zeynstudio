@@ -216,10 +216,6 @@
 }
 .archive-trail img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-/* pull the whole card stage up: on a phone the rail's 46% left a band of empty
-   black above the cards. 38% lifts them ~62px without touching card size. */
-.archive-stage.is-mobile .archive-rail { top: 38%; }
-
 /* ---- mobile-only chrome: the title, id and pagination live under the card
        instead of being buried inside it ---- */
 .archive-mob { display: none; }

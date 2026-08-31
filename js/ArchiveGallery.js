@@ -257,10 +257,6 @@
         };
     };
 
-    ArchiveGallery.prototype.applyRail = function (it, target) {
-        var r = this.railFor(it.index - this.focus);
-        for (var k in r) target[k] = r[k];
-    };
 
     /* --------------------------------------------------------- compose */
 
