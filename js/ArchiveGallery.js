@@ -170,12 +170,18 @@
             // real phone the browser bar, the XP title bar and the taskbar leave
             // a short stage, and (h * .52) / 1.5 was binding well before the
             // width did -- measured at 53% of the screen where 70% was intended.
-            var HUD_H = 58, TITLE_H = 62, HINT_H = 34, PAD = 16;
+            // Measure the furniture instead of hardcoding it: the bottom bar and
+            // the title block both grow by env(safe-area-inset-bottom), so fixed
+            // numbers are wrong on any phone with a home indicator.
+            var hudEl = this.root.querySelector('.archive-hud');
+            var mobEl = this.root.querySelector('.archive-mob');
+            var HUD_H = (hudEl && hudEl.offsetHeight) || 58;
+            var TITLE_H = (mobEl && mobEl.offsetHeight) || 62;
+            var HINT_H = 34, PAD = 16;
             var maxH = Math.max(190, h - (HUD_H + TITLE_H + HINT_H + PAD));
             this.tier.cardW = Math.max(120, Math.round(Math.min(w * .72, maxH / 1.5)));
             this.tier.visible = 2.6;
-            // and centre the card in the band that is actually left for it,
-            // rather than trusting a percentage that leaves dead space on top
+            // centre the card in the band actually left for it
             var bandTop = HINT_H, bandBot = h - (HUD_H + TITLE_H);
             this._railTop = Math.round((bandTop + bandBot) / 2);
         } else {
