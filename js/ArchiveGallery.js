@@ -1019,9 +1019,13 @@
     // the finger is the clock.
     ArchiveGallery.prototype.applyMobileDrag = function (frac) {
         var self = this;
-        var near = Math.round(this.focus - frac);        // the card closest to centre
+        // frac > 0 means the finger is dragging toward the NEXT card, so the
+        // cards must slide the other way. This was `+ frac`, which slid them
+        // away from the finger and then jumped to the right card on release --
+        // the single biggest reason the gesture felt wrong.
+        var near = Math.round(this.focus + frac);       // the card closest to centre
         this.items.forEach(function (it) {
-            var off = it.index - self.focus + frac;
+            var off = it.index - self.focus - frac;
             var r = self.mobileRail(off);
             for (var k in r) it.base[k] = r[k];
             // Half way through a swipe both cards sit at the same depth, so a
@@ -1046,6 +1050,8 @@
         // newest swipe the only one that counts.
         var token = (this._snapToken = (this._snapToken || 0) + 1);
         if (moved) this.isTransitioning = true;
+        // shorter for a nudge, longer when it carries two cards
+        var dur = .2 + Math.min(2, Math.abs(deltaIndex)) * .07;
         var land = function () {
             // only the newest swipe is allowed to publish an index
             if (self.destroyed || token !== self._snapToken) return;
@@ -1061,7 +1067,7 @@
             it.zi = 1000 - Math.round(Math.abs(off) * 40);   // never a tie
             if (self.G) {
                 var vars = Object.assign({
-                    duration: .34, ease: 'power3.out', overwrite: 'auto'
+                    duration: dur, ease: 'power2.out', overwrite: 'auto'
                 }, r);
                 if (off === 0) vars.onComplete = land;
                 self.G.to(it.base, vars);
@@ -1195,19 +1201,26 @@
             acc += dx;
 
             if (self.isMobile) {
-                var unit = Math.max(70, self.tier.cardW * .55);
-                // clamp the ACCUMULATOR, not just the fraction. Clamping only
-                // the fraction let acc run past the limit, so reversing
-                // direction did nothing until the finger had undone the excess.
-                var lim = unit * 1.15;
-                acc = clamp(acc, -lim, lim);
-                self.dragFrac = -acc / unit;
+                // One finger pixel = one card pixel. The unit used to be 55% of
+                // the card width while a card actually travels 275px per step,
+                // so the rail ran 1.7x faster than the hand -- that is what made
+                // it feel slippery.
+                var unit = Math.max(60, Math.abs(self.mobileRail(1).x));
+                var raw = -acc / unit;
+
+                // resistance past the ends instead of a dead stop
+                var lo = -self.focus;
+                var hi = self.items.length - 1 - self.focus;
+                var f = raw;
+                if (f > hi) f = hi + (f - hi) * .32;
+                else if (f < lo) f = lo + (f - lo) * .32;
+                self.dragFrac = clamp(f, -1.9, 1.9);
 
                 var now = Date.now();
                 vSamples.push({ t: now, x: e.clientX });
                 while (vSamples.length > 1 && now - vSamples[0].t > 90) vSamples.shift();
 
-                if (Math.abs(self.dragFrac) > .12) self.showLabel(false);
+                if (Math.abs(self.dragFrac) > .10) self.showLabel(false);
                 self.applyMobileDrag(self.dragFrac);
                 return;
             }
@@ -1239,8 +1252,15 @@
                     v = (a1.x - a0.x) / dt * 100;      // px per 100ms
                 }
                 var f = self.dragFrac || 0;
-                if (Math.abs(v) > 22) f += (v < 0 ? 1 : -1) * .38;   // flick
-                var step = Math.round(clamp(f, -1, 1));
+                var dir = v < 0 ? 1 : -1;
+                // Tracking is 1:1 now, so committing needs a lower bar than half
+                // a card: a third of the way, or any real flick. A hard flick
+                // carries two cards, the way a physical deck would.
+                var step;
+                if (Math.abs(v) > 200)      step = dir * 2;    // a genuinely hard flick
+                else if (Math.abs(v) > 20)  step = dir * Math.max(1, Math.round(Math.abs(f)));
+                else                        step = Math.abs(f) > .32 ? (f > 0 ? 1 : -1) * Math.round(Math.abs(f) + .18) : 0;
+                step = clamp(step, -2, 2);
                 if (step === 0) self.showLabel(true);
                 self.snapMobile(step);
                 acc = 0; self.dragFrac = 0; vSamples = [];
