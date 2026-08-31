@@ -325,6 +325,21 @@ Board portrait'e göre yeniden kuruldu: **3 satır × 2 sütun, çapraz kaydır�
 (`boardLayoutMobile`), kartlar köşelere yayılıyor. 6 slot masada, 14 kart tepside.
 **2 hero × 4 klon = 8 klon** (masaüstü 28).
 
+### Kaydırma hissi
+
+İki hata birlikte hissi bozuyordu:
+
+1. **Yön ters.** `offset = index - focus + frac` — `frac` parmak sonraki karta
+   doğru kaydırdıkça büyüdüğü için kartlar parmağın ters yönüne gidiyor, sonra
+   bırakınca doğru karta zıplıyordu. Doğrusu `- frac`.
+2. **Birim yanlış.** Bir kartlık sürükleme "kart eninin %55'i" (162px) idi ama
+   kart yuvalar arası 275px yol gidiyor — ray elden 1.7 kat hızlıydı. Birim
+   artık `mobileRail(1).x`: **1 parmak pikseli = 1 kart pikseli.**
+
+Üstüne: uçlarda lastik direnç (0.32, bırakınca geri yaylanır), commit eşiği
+üçte bir kart ya da gerçek fiske, sert fiske (>200px/100ms) iki kart taşır,
+oturma mesafeye göre 270–340ms `power2.out`.
+
 ### Dokunmatik ve cihaz
 
 - Hover `@media (hover: hover) and (pointer: fine)` ile sınırlı; mobilde `is-tap`
