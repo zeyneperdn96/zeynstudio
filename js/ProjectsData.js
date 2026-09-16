@@ -254,6 +254,20 @@ const projectsData = [
         externalLink: 'pockety-case-study.html'
     },
     {
+        id: 30,
+        title: 'TwoFold',
+        category: 'ui-ux',
+        thumbnail: 'assets/projects/twofold/timeline.png',
+        thumbnailPos: 'top center',
+        thumbnailSize: 'cover',
+        thumbnailBg: '#f7f6f2',
+        description: 'Shared Travel Journal App',
+        featured: true,
+        year: '2026',
+        role: 'UI/UX Designer & Front-end Developer',
+        externalLink: 'twofold-case-study.html'
+    },
+    {
         id: 7,
         title: 'CoffeeForm',
         category: 'industrial',

@@ -2210,7 +2210,7 @@ const WindowTemplates = {
                 <div class="sb-toolbar-left">
                     <span class="sb-toolbar-title">Design System Architect</span>
                     <span class="sb-toolbar-sep"></span>
-                    <span class="sb-counter">Resolved: <span class="sb-counter-value">0/8</span></span>
+                    <span class="sb-counter">Resolved: <span class="sb-counter-value">0/9</span></span>
                 </div>
                 <div class="sb-toolbar-right">
                     <div class="sb-progress"><div class="sb-progress-fill"></div></div>

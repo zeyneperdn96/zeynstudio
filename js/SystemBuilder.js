@@ -41,7 +41,9 @@ class SystemBuilder {
             { a: 'ux',             b: 'ai',             project: 'Moodie',        windowId: null, link: 'moodie-case-study.html',
               tagline: 'Mobile Wellness & Mood Tracking App', category: 'UI/UX Design' },
             { a: 'ux',             b: 'systems',        project: 'Pockety',       windowId: null, link: 'pockety-case-study.html',
-              tagline: 'Smart Budget Companion App', category: 'UI/UX Design' }
+              tagline: 'Smart Budget Companion App', category: 'UI/UX Design' },
+            { a: 'research',       b: 'ux',             project: 'TwoFold',       windowId: null, link: 'twofold-case-study.html',
+              tagline: 'Shared Travel Journal App', category: 'UI/UX Design' }
         ];
 
         this._onPointerMove = this._handlePointerMove.bind(this);
@@ -153,6 +155,11 @@ class SystemBuilder {
             }
             slot.addEventListener('dblclick', () => this._clearSlot(i));
         });
+    }
+
+    _bindClear() {
+        const btn = this.windowEl.querySelector('.sb-clear-btn');
+        if (btn) btn.addEventListener('click', () => this.reset());
     }
 
     _clearSlot(index) {

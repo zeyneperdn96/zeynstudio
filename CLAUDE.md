@@ -4,6 +4,39 @@ Bu dosya, ZeynStudio XP projesinde yapılan tüm değişiklikleri kronolojik ola
 
 ---
 
+## 📅 16 Eylül 2026 - TwoFold Case Study Eklendi
+
+### ✈️ TwoFold — paylaşımlı seyahat günlüğü (UI/UX)
+- **Değişiklik**: Moodie/Pockety formatında İngilizce case study sayfası, My Work kartı ve SystemBuilder eşleşmesi
+- **Amaç**: TwoFold'u (React build + ilk prototip) portfolyonun UI/UX kategorisine eklemek
+- **Değiştirilen Dosyalar**:
+  - `twofold-case-study.html` - YENİ, Pockety şablonu, TwoFold paleti (krem #F7F6F2 + mint #5BBFAD, Nunito)
+  - `assets/projects/twofold/` - YENİ, 15 ekran (6 React build + 9 ilk prototip `proto-*`)
+  - `js/ProjectsData.js` - TwoFold kaydı (**id 30**, `ui-ux`, Pockety'nin hemen ardından)
+  - `js/SystemBuilder.js` - **Research + UX → TwoFold** eşleşmesi (9. kombinasyon) + eksik `_bindClear()` metodu
+  - `js/WindowTemplates.js` - SystemBuilder sayaç başlangıcı `0/8` → `0/9`
+
+#### ✨ Case study bölümleri:
+- ✅ Problem, Solution, Trip Lifecycle, Key Screens (React build), Where It Started (ilk prototip), UX Decisions, Design System, Final Thoughts
+- ✅ React ekranları çalışan build'den headless Chrome ile 390×844 @2x alındı
+- ✅ Prototip ekranları `us-and-where/index.html`'in **çevrimdışı İngilizce kopyasından** 412×915 @2x alındı; Supabase stub'landı, gerçek veritabanına 0 istek (prototip çevrimdışıyken demo veriyi buluta yazmaya çalışıyor — gerçek projeye karşı çalıştırma)
+- ✅ Demo verisi tutarlı: gezi 12 gün sonra, sadece gezi öncesi harcamalar (tek para birimi EUR), ziyaret edilmiş yer/anı yok
+
+#### 🐛 Düzeltme:
+- ✅ `SystemBuilder.exe` ilk commit'ten (`81e165e`) beri açılışta `this._bindClear is not a function` hatası veriyordu; metod eklendi, Reset butonu `reset()`'e bağlandı
+
+#### 🔧 Doğrulama:
+- ✅ Yerel sunucuda gerçek site: login → My Work → UI/UX = Moodie, Pockety, TwoFold; kart tıklanınca `twofold-case-study.html` açılıyor
+- ✅ SystemBuilder: Research + UX → TwoFold, sayaç 1/9, View Case Study doğru link, Reset slotları temizliyor; JS hatası yok
+- ✅ Case study: 15/15 görsel yükleniyor, 1280px ve 400px'te yatay taşma yok, sayfada Türkçe karakter yok
+
+#### ⚠️ Bilinçli olarak dokunulmadı:
+- `us-and-where/` prototip dosyası (Keşfet kart yığını CSS hatası ve swipe-sil arka planı sızması orada duruyor; sadece çekim kopyasında düzeltildi)
+- `twofold/` React kaynak kodu bu repoya eklenmedi (ayrı proje)
+- Önceden var olan 404: `https://demo.themesberg.com/windows-95-ui-kit/css/windows-95.min.css`
+
+---
+
 ## 📅 27 Ağustos 2026 - ARCHIVE GALLERY (Archive.exe) Eklendi
 
 ### 🎞️ ZEYNEP.EXE kart setinin 3B kart galerisi
