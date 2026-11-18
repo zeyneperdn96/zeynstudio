@@ -238,3 +238,19 @@ document.addEventListener('keydown', (e) => {
         }
     }
 });
+
+// Hidden Career Lab icon: appears after typing "lab" on the desktop or opening the site with ?lab=1; remembered in this browser.
+(function () {
+    var icon = document.getElementById('career-lab-icon');
+    if (!icon) return;
+    var show = function () { icon.style.display = ''; try { localStorage.setItem('careerLabIcon', '1'); } catch (e) {} };
+    try { if (localStorage.getItem('careerLabIcon') === '1') icon.style.display = ''; } catch (e) {}
+    if (new URLSearchParams(location.search).get('lab') === '1') show();
+    var buf = '';
+    document.addEventListener('keydown', function (e) {
+        if (e.target && /input|textarea/i.test(e.target.tagName)) return;
+        if (!e.key || e.key.length !== 1) return;
+        buf = (buf + e.key).slice(-3).toLowerCase();
+        if (buf === 'lab') show();
+    });
+})();

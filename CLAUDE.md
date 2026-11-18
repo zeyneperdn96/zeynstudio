@@ -4,6 +4,15 @@ Bu dosya, ZeynStudio XP projesinde yapılan tüm değişiklikleri kronolojik ola
 
 ---
 
+## 📅 18 Kasım 2026 - Gizli Career Lab ikonu
+
+- **Değişiklik**: Masaüstüne varsayılan olarak görünmeyen bir "Career Lab" ikonu eklendi; `https://jobs.zeynstudio.com` adresini yeni sekmede açar.
+- **Nasıl görünür**: Masaüstünde klavyeden `lab` yazınca veya siteyi `?lab=1` ile açınca; o tarayıcıda hatırlanır (`localStorage: careerLabIcon`).
+- **Dosyalar**: `index.html` (ikon, `display:none`; `main.js?v=2`), `js/main.js` (sondaki küçük blok).
+- **Not**: Gizlilik görseldir, güvenlik değildir; Career Lab'i koruyan şey kendi giriş/davet sistemidir. Bu kayıt yazıldığında `jobs.zeynstudio.com` henüz yayında değildi (ikon açılırsa boş adrese gider).
+
+---
+
 ## 📅 16 Eylül 2026 - TwoFold Case Study Eklendi
 
 ### ✈️ TwoFold — paylaşımlı seyahat günlüğü (UI/UX)
