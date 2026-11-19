@@ -4,6 +4,14 @@ Bu dosya, ZeynStudio XP projesinde yapılan tüm değişiklikleri kronolojik ola
 
 ---
 
+## 📅 19 Kasım 2026 - Career Lab Lite (gizli adres, şifreli)
+
+- **Değişiklik**: `/cl-70025f1034/` klasörü eklendi: tamamen tarayıcıda çalışan, e-posta + parolayla açılan ilan eşleştirme sayfası (CV yükle → eşleşen ilanlar ve bağlantıları).
+- **Bu klasör elle düzenlenmez**: `C:Userspcai-job-hunter` içindeki `node scripts/lite-publish.js build` komutu üretir (kaynak: `ai-job-hunter/lite/`). İlan verisi `data/jobs.enc` içinde AES-256-GCM ile şifrelidir; anahtarlar yalnızca o bilgisayarda durur.
+- **Not**: Siteden hiçbir yere bağlantı verilmez; arama motorlarına kapalıdır (noindex). Depo herkese açık olduğu için klasör adı gizli sayılmaz — koruma şifrelemedir.
+
+---
+
 ## 📅 18 Kasım 2026 - Gizli Career Lab ikonu
 
 - **Değişiklik**: Masaüstüne varsayılan olarak görünmeyen bir "Career Lab" ikonu eklendi; `https://jobs.zeynstudio.com` adresini yeni sekmede açar.

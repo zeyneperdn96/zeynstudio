@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="no-referrer">
+<title>Career Lab</title>
+<link rel="stylesheet" href="lab.css">
+</head>
+<body>
+<!-- GİRİŞ -->
+<div id="gate" class="gate">
+  <div class="xp-top"></div>
+  <main class="xp-stage">
+    <section class="xp-brand" aria-hidden="true">
+      <div class="xp-logo"><span></span><span></span><span></span><span></span></div>
+      <div class="xp-brand-name">Career Lab<small>ZeynStudio</small></div>
+      <p class="xp-brand-sub">Başlamak için oturum aç</p>
+    </section>
+    <div class="xp-divider" aria-hidden="true"></div>
+    <section class="xp-window" role="dialog" aria-labelledby="winTitle">
+      <header class="xp-title"><span id="winTitle">Career Lab — Oturum aç</span><span class="xp-title-btn" aria-hidden="true">×</span></header>
+      <form class="xp-body" id="loginForm" novalidate>
+        <p class="xp-msg" id="loginMsg" role="status" hidden></p>
+        <label>E-posta<input type="email" id="email" autocomplete="username" required></label>
+        <label>Parola<input type="password" id="password" autocomplete="current-password" required></label>
+        <div class="xp-actions"><button type="submit" class="xp-btn primary" id="loginBtn">Oturum aç</button></div>
+        <p class="xp-note">Bu sayfa yalnızca sana verilen e-posta ve parolayla açılır. İlan verisi şifrelidir; doğru bilgiler girilmeden çözülemez.</p>
+      </form>
+    </section>
+  </main>
+  <footer class="xp-bottom"><a href="/" rel="noopener">← zeynstudio.com</a><span>Özel erişim</span></footer>
+</div>
+
+<!-- UYGULAMA -->
+<div id="app" class="app" hidden>
+  <header class="top">
+    <div class="brand">Career Lab</div>
+    <div class="top-meta" id="dataMeta"></div>
+    <button class="btn" id="logout">Çıkış</button>
+  </header>
+  <main class="wrap">
+    <section class="card" id="cvCard">
+      <h1>CV'ni yükle, sana uyan ilanları gör</h1>
+      <p class="muted">CV'n <b>bu tarayıcının dışına çıkmaz</b>: dosya burada okunur, hiçbir sunucuya gönderilmez. Eşleştirme, CV'ndeki kelimelerle ilan metinlerinin örtüşmesine bakar; bir işe alınma tahmini değildir.</p>
+      <div class="drop" id="drop">
+        <input type="file" id="file" accept=".pdf,.docx,.txt" hidden>
+        <button class="btn primary" id="pick" type="button">CV seç (PDF, DOCX veya TXT)</button>
+        <span class="muted">ya da dosyayı buraya sürükle</span>
+      </div>
+      <details class="paste"><summary>CV metnini yapıştırmayı tercih ederim</summary>
+        <textarea id="pasteText" rows="6" placeholder="CV metnini buraya yapıştır…"></textarea>
+        <button class="btn" id="usePaste" type="button">Bu metni kullan</button>
+      </details>
+      <p class="status" id="cvStatus" role="status"></p>
+      <div class="prefs" id="prefs" hidden>
+        <label class="grow">Aradığın roller <span class="muted">(isteğe bağlı, virgülle ayır — unvanı bunlara benzeyen ilanlar öne çıkar)</span>
+          <input type="text" id="roles" placeholder="ör. frontend developer, yazılım geliştirici"></label>
+        <button class="btn" id="clearCv" type="button">CV'mi bu tarayıcıdan sil</button>
+      </div>
+    </section>
+
+    <section id="results" hidden>
+      <div class="filters">
+        <div class="chips" id="regionChips" role="group" aria-label="Konum">
+          <button class="chip on" data-r="tr">Türkiye</button>
+          <button class="chip on" data-r="emea">Avrupa / EMEA remote</button>
+          <button class="chip on" data-r="world">Dünya geneli remote</button>
+          <button class="chip" data-r="remote">Remote (bölge belirsiz)</button>
+        </div>
+        <input type="search" id="search" placeholder="Şirket veya unvan ara" aria-label="Ara">
+      </div>
+      <p class="muted" id="summary"></p>
+      <ol class="jobs" id="jobs"></ol>
+      <button class="btn" id="more" hidden>Daha fazla göster</button>
+      <p class="foot muted">Remote ilanlarda Türkiye'den çalışılıp çalışılamayacağı ilanda her zaman yazmaz; başvurmadan önce ilanı oku. Bağlantılar şirketlerin kendi ilan sayfalarına gider.</p>
+    </section>
+  </main>
+</div>
+<script type="module" src="lab.js"></script>
+</body>
+</html>
