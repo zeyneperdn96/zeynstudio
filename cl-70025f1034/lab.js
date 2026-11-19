@@ -42,7 +42,7 @@ $('#loginForm').addEventListener('submit', async (e) => {
   btn.disabled = true; btn.textContent = 'Açılıyor…'; msg.hidden = true;
   try {
     const ck = await unlock($('#email').value, $('#password').value);
-    if (!ck) throw new Error('E-posta veya parola hatalı.');
+    if (!ck) throw new Error('Kullanıcı adı veya parola hatalı.');
     sessionStorage.setItem('cl_k', toB64(ck)); $('#password').value = '';
     await enter(ck);
   } catch (err) { msg.textContent = err.message || 'Açılamadı.'; msg.className = 'xp-msg err'; msg.hidden = false; }
