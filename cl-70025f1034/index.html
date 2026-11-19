@@ -57,8 +57,34 @@
       <div class="prefs" id="prefs" hidden>
         <label class="grow">Aradığın roller <span class="muted">(isteğe bağlı, virgülle ayır — unvanı bunlara benzeyen ilanlar öne çıkar)</span>
           <input type="text" id="roles" placeholder="ör. frontend developer, yazılım geliştirici"></label>
+        <button class="btn" id="openStudio" type="button">CV'mi düzenle ve indir</button>
         <button class="btn" id="clearCv" type="button">CV'mi bu tarayıcıdan sil</button>
       </div>
+    </section>
+
+    <!-- CV ATÖLYESİ: düzenle → ATS analizi → PDF indir. Tamamı tarayıcıda; CV hiçbir yere gönderilmez. -->
+    <section id="studio" class="studio" hidden>
+      <div class="st-head">
+        <div class="st-titles">
+          <button class="btn ghost" id="stClose" type="button">← İlanlara dön</button>
+          <h1>CV Atölyesi</h1>
+          <p class="muted" id="stTarget"></p>
+        </div>
+        <div class="st-actions">
+          <label class="st-tpl">Şablon <select id="stTpl"></select></label>
+          <button class="btn" id="stCopy" type="button" title="Online başvuru formlarına yapıştırmak için düz metin">Metni kopyala</button>
+          <button class="btn primary" id="stPdf" type="button">PDF indir</button>
+        </div>
+      </div>
+      <p class="st-note muted">Değişikliklerin yalnızca bu tarayıcıda saklanır. Bu sayfada AI yoktur; ATS analizi kural tabanlıdır ve senin yerine içerik yazmaz. Yapmadığın bir işi veya bilmediğin bir beceriyi ekleme.</p>
+      <div class="st-grid">
+        <div class="st-edit" id="stEdit"></div>
+        <div class="st-side">
+          <div class="st-tabs" role="tablist"><button class="chip on" data-t="ats" role="tab">ATS analizi</button><button class="chip" data-t="preview" role="tab">Önizleme</button></div>
+          <div id="stPane"></div>
+        </div>
+      </div>
+      <iframe id="stPrint" title="Yazdırma" tabindex="-1" aria-hidden="true"></iframe>
     </section>
 
     <section id="results" hidden>
