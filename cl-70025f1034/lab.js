@@ -1,7 +1,7 @@
 // Career Lab Lite — tamamen tarayıcıda çalışır. Sunucu yoktur.
 //  • Giriş: e-posta + parola → PBKDF2 ile anahtar türetilir → şifreli ilan verisinin anahtarı açılır. Yanlış bilgiyle veri çözülemez.
 //  • CV: dosya tarayıcıda okunur; hiçbir yere gönderilmez. İstersen bu tarayıcıda saklanır (localStorage), istersen silinir.
-import { buildIndex, scoreCv } from './match.js';
+import { buildIndex, scoreCv, fold } from './match.js';
 import { parseCv, analyzeAts, renderCv, plainText, fileName, newSection, TEMPLATES, SECTION_KEYS } from './studio.js';
 
 const $ = (s) => document.querySelector(s);
@@ -9,7 +9,7 @@ const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '
 const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
 const toB64 = (u8) => btoa(String.fromCharCode(...u8));
 const enc = new TextEncoder();
-const REGION = { tr: 'Türkiye', emea: 'Avrupa / EMEA remote', world: 'Dünya geneli remote', remote: 'Remote (bölge belirsiz)' };
+const REGION = { tr: 'Türkiye', emea: 'Avrupa / EMEA remote', world: 'Dünya geneli remote', remote: 'Remote (bölge belirsiz)', visa: 'Yurt dışı · vize destekli' };
 const MODEL = { remote: 'Remote', hybrid: 'Hibrit', onsite: 'Ofis' };
 const state = { jobs: [], index: null, generated: null, cv: '', ranked: [], shown: 40 };
 
@@ -32,7 +32,7 @@ async function loadData(ckRaw) {
 }
 async function enter(ckRaw) {
   const data = await loadData(ckRaw);
-  state.jobs = data.jobs; state.generated = data.generated_at; state.index = buildIndex(data.jobs);
+  state.jobs = data.jobs; state.generated = data.generated_at; state.index = buildIndex(data.jobs); fillCountries();
   $('#gate').hidden = true; $('#app').hidden = false;
   $('#dataMeta').textContent = `${data.jobs.length} açık ilan · son güncelleme ${new Intl.DateTimeFormat('tr-TR', { dateStyle: 'medium' }).format(new Date(data.generated_at))}`;
   const saved = localStorage.getItem('cl_cv'); $('#roles').value = localStorage.getItem('cl_roles') || '';
@@ -111,14 +111,31 @@ function rank() {
   const roles = $('#roles').value.split(',').map((x) => x.trim()).filter(Boolean);
   state.ranked = scoreCv(state.index, state.cv, roles); state.shown = 40; render();
 }
+// Ülke, İstanbul yakası, vize etiketleri — ilan metnine dayanır, tahmin yok
+function geoTags(j) {
+  const t = [];
+  if (j.co && j.co !== 'Türkiye' && j.co !== 'Remote') t.push(`<span class="gt">🌍 ${esc(j.co)}</span>`);
+  if (j.r === 'tr' && fold(j.l).includes('istanbul')) t.push(j.s ? `<span class="gt">${j.s === 'anadolu' ? 'Anadolu yakası' : 'Avrupa yakası'}</span>` : '<span class="gt dim" title="İlanda ilçe/semt yazmıyor">Yaka belirtilmemiş</span>');
+  if (j.v === 'yes') t.push('<span class="gt ok" title="İlan metninde vize/relocation desteği geçiyor — şartları şirketle teyit et">✈ Vize/relocation destekli</span>');
+  if (j.v === 'no') t.push('<span class="gt no" title="İlan metninde sponsorluk/relocation yapılmadığı yazıyor">Vize desteği yok</span>');
+  return t.length ? `<div class="gtags">${t.join('')}</div>` : '';
+}
+function fillCountries() {
+  const n = new Map(); for (const j of state.jobs) { const c = j.co || '_none'; n.set(c, (n.get(c) || 0) + 1); }
+  const list = [...n.entries()].sort((a, b) => (b[0] === 'Türkiye') - (a[0] === 'Türkiye') || b[1] - a[1]);
+  $('#fCountry').innerHTML = '<option value="">Tüm ülkeler</option>' + list.map(([c, k]) => `<option value="${esc(c)}">${esc(c === '_none' ? 'Ülke belirtilmemiş' : c)} (${k})</option>`).join('');
+}
+
 function render() {
   const on = new Set([...document.querySelectorAll('#regionChips .chip.on')].map((c) => c.dataset.r));
   const q = $('#search').value.trim().toLowerCase();
-  const rows = state.ranked.filter((r) => { const j = state.jobs[r.i]; return on.has(j.r) && (!q || `${j.t} ${j.c}`.toLowerCase().includes(q)); });
+  const fc = $('#fCountry').value; const fs = $('#fSide').value;
+  const rows = state.ranked.filter((r) => { const j = state.jobs[r.i]; return on.has(j.r) && (!q || `${j.t} ${j.c}`.toLowerCase().includes(q))
+    && (!fc || (j.co || '_none') === fc) && (!fs || (j.r === 'tr' && fold(j.l).includes('istanbul') && (j.s || '_none') === fs)); });
   $('#results').hidden = false;
   $('#summary').textContent = rows.length ? `${rows.length} ilan CV’nle örtüşüyor (toplam ${state.jobs.length} ilan içinde). “Eşleşme” en iyi eşleşmeye göre gösterilir; işe alınma olasılığı değildir.` : 'Bu filtrelerle CV’nle örtüşen ilan bulunamadı. Konum filtrelerini açmayı veya “Aradığın roller” alanını doldurmayı dene.';
   $('#jobs').innerHTML = rows.slice(0, state.shown).map((r) => { const j = state.jobs[r.i];
-    return `<li class="job"><div><h2>${esc(j.t)}${r.role ? '<span class="tag">aradığın rol</span>' : ''}</h2><div class="co">${esc(j.c)} · ${esc(j.l || REGION[j.r])}${MODEL[j.m] ? ` · ${MODEL[j.m]}` : ''}${j.p ? ` · ${esc(j.p)}` : ''}</div></div>
+    return `<li class="job"><div><h2>${esc(j.t)}${r.role ? '<span class="tag">aradığın rol</span>' : ''}</h2><div class="co">${esc(j.c)} · ${esc(j.l || REGION[j.r])}${MODEL[j.m] ? ` · ${MODEL[j.m]}` : ''}${j.p ? ` · ${esc(j.p)}` : ''}</div>${geoTags(j)}</div>
       <div class="fit" title="CV’ndeki kelimelerin bu ilanla örtüşmesi — en iyi eşleşmeye göre"><b>${r.pct}</b><span class="muted"> / 100</span><div class="track"><div class="fill" style="width:${r.pct}%"></div></div></div>
       <div class="kw"><span class="lbl">Örtüşen:</span>${r.terms.map((t) => `<span>${esc(t)}</span>`).join('')}${r.shared > r.terms.length ? `<span class="lbl">+${r.shared - r.terms.length}</span>` : ''}</div>
       <div class="acts"><a class="go" href="${esc(j.u)}" target="_blank" rel="noopener noreferrer">İlana git ↗</a><button class="btn small" type="button" data-edit="${r.i}">Bu ilana göre CV'ni düzenle</button></div></li>`; }).join('');
@@ -127,6 +144,8 @@ function render() {
 $('#more').addEventListener('click', () => { state.shown += 40; render(); });
 $('#regionChips').addEventListener('click', (e) => { const c = e.target.closest('.chip'); if (!c) return; c.classList.toggle('on'); c.setAttribute('aria-pressed', c.classList.contains('on')); state.shown = 40; render(); });
 $('#search').addEventListener('input', () => { state.shown = 40; render(); });
+$('#fCountry').addEventListener('change', () => { state.shown = 40; render(); });
+$('#fSide').addEventListener('change', () => { state.shown = 40; render(); });
 
 /* ---------------- CV Atölyesi ---------------- */
 const st = { tab: 'ats', job: null, timer: null };
@@ -177,7 +196,8 @@ function stEditor() {
     const s = d.sections[Number(card.dataset.i)];
     card.querySelector('[data-s=title]').addEventListener('input', (e) => { s.title = e.target.value; changed(); });
     card.querySelector('[data-s=visible]').addEventListener('change', (e) => { s.visible = e.target.checked; changed(true); });
-    card.querySelector('[data-s=lines]').addEventListener('input', (e) => { s.lines = e.target.value.split('\n').map((l) => l.trim()).filter(Boolean).map((l) => l.replace(BUL, '• ')); changed(); });
+    card.querySelector('[data-s=lines]').addEventListener('input', (e) => { s.lines = e.target.value.split('\n').map((l) => l.trim()).filter(Boolean).map((l) => l.replace(BUL, '• '));
+      if (st.lastGoto && st.lastGoto.startsWith(`${card.dataset.i}:`)) { st.edited = st.edited || {}; st.edited[st.lastGoto] = true; } changed(); });
     card.querySelectorAll('[data-mv]').forEach((b) => b.addEventListener('click', () => { const i = Number(card.dataset.i); const j = i + Number(b.dataset.mv); [d.sections[i], d.sections[j]] = [d.sections[j], d.sections[i]]; changed(true); }));
     card.querySelector('[data-rm]').addEventListener('click', () => { if (s.lines.length && !confirmInline(card)) return; d.sections.splice(Number(card.dataset.i), 1); changed(true); });
   });
@@ -185,6 +205,8 @@ function stEditor() {
   $('#stReparse').addEventListener('click', (e) => { if (e.target.dataset.sure !== '1') { e.target.dataset.sure = '1'; e.target.textContent = 'Emin misin? Tekrar tıkla'; return; }
     const t = d.target; const tpl = d.template; state.doc = parseCv(state.cv); state.doc.target = t; state.doc.template = tpl; changed(true); });
 }
+// stEditor yeniden çizilince işaretler yeniden uygulanır
+const _stEditor = stEditor; stEditor = function stEditorMarked() { _stEditor(); stMark(); }; // eslint-disable-line no-func-assign
 // Dolu bölümü silmeden önce ikinci tıklamayı ister (tarayıcı onay penceresi kullanılmaz)
 function confirmInline(card) { const b = card.querySelector('[data-rm]'); if (b.dataset.sure === '1') return true; b.dataset.sure = '1'; b.textContent = 'Emin misin?'; setTimeout(() => { b.dataset.sure = ''; b.textContent = 'Sil'; }, 3000); return false; }
 
@@ -206,8 +228,42 @@ function stPane() {
       <h3>İlanda öne çıkan, CV’nde olmayan terimler (${a.missing.length})</h3><p class="muted st-small">Yalnızca gerçekten yaptıklarını, ilgili deneyim maddesine ilanın kullandığı kelimeyle ekle.</p><div class="kw">${a.missing.map((t) => `<span class="miss">${esc(t)}</span>`).join('') || '<span class="lbl">—</span>'}</div>
       ${a.skills_only.length ? `<p class="st-small">Yalnızca beceri/araç listesinde geçenler: <b>${esc(a.skills_only.join(', '))}</b> — bir deneyim maddesinde nerede kullandığını göster.</p>` : ''}
       ${a.title && !a.title.ok ? `<p class="st-warn">İlan unvanı <b>${esc(a.title.job_title)}</b>; başlık satırında/özette şu rol sözcükleri yok: ${esc(a.title.words.filter((w) => !a.title.hit.includes(w)).join(', '))}. Bu rolü gerçekten yapıyorsan unvan satırını buna göre düzenle.</p>` : ''}` : ''}
-    ${a.weak.length ? `<h3>Eylemle başlatılabilecek maddeler</h3><ul class="st-list">${a.weak.map((w) => `<li class="warn">⚠ ${esc(w)}</li>`).join('')}</ul>` : ''}
+    ${fixPanel(a)}
     <h3>Bölüm yapısı</h3><ul class="st-list">${li(a.structure)}</ul><h3>Okunabilirlik</h3><ul class="st-list">${li(a.readability)}</ul><h3>Biçim</h3><ul class="st-list">${li(a.formatting)}</ul>`;
+  el.querySelectorAll('[data-goto]').forEach((b) => b.addEventListener('click', () => { const [si, li2] = b.dataset.goto.split(':').map(Number); stGoto(si, li2, b.dataset.text); }));
+  stMark();
+}
+
+/* Düzeltilecek yerler: her satır bir kez, bütün sorunları etiketle. Bu oturumda düzenlenen “✓ Düzenlendi”, sorunu kalmayan “✓ Çözüldü”. */
+function fixPanel(a) {
+  const open = a.places || []; const key = (p) => `${p.si}:${p.li}`; const openK = new Set(open.map(key));
+  const shape = state.doc.sections.map((s) => s.lines.length).join(',');
+  if (st.shape !== shape) { st.shape = shape; st.seen = {}; st.edited = {}; } // satır eklenip silinince yerler kayar → işaretler sıfırlanır
+  for (const p of open) if (!st.seen[key(p)]) st.seen[key(p)] = { where: p.where, text: p.text };
+  const solved = Object.entries(st.seen).filter(([k]) => !openK.has(k)).map(([k, v]) => { const [si, li2] = k.split(':').map(Number); return { k, ...v, now: (state.doc.sections[si]?.lines[li2] || v.text).replace(/^• /, '') }; });
+  st.openSi = new Set(open.map((p) => p.si)); st.solvedSi = new Set(solved.map((x) => Number(x.k.split(':')[0])));
+  if (!open.length && !solved.length) return '';
+  const short = (t) => (t.length > 150 ? `${t.slice(0, 147)}…` : t);
+  const row = (p, done) => `<div class="fx${done ? ' done' : st.edited[key(p)] ? ' ed' : ''}" data-testid="${done ? 'lite-solved' : 'lite-place'}"><div class="fx-b"><div class="fx-w">${esc(p.where)}</div><div class="fx-t">${esc(short(done ? p.now : p.text))}</div>
+    <div class="fx-tags">${done ? '<span class="tg ok">✓ Çözüldü</span>' : `${p.tags.map((t) => `<span class="tg ${t.kind}">${esc(t.label)}</span>`).join('')}${st.edited[key(p)] ? '<span class="tg ok">✓ Düzenlendi — uyarı sürüyor</span>' : ''}`}</div></div>
+    ${done ? '' : `<button class="btn small" data-goto="${key(p)}" data-text="${esc(p.text)}">Düzenle</button>`}</div>`;
+  return `<h3>Düzeltilecek yerler (${open.length}${solved.length ? ` · ${solved.length} çözüldü` : ''})</h3><p class="muted st-small">Her satır bir kez gösterilir. “Düzenle” soldaki kutuda o satırı seçer. Tekrarı azaltmak için aynı şeyi farklı söyle veya gereksiz olanı çıkar.</p>
+    ${open.map((p) => row(p, false)).join('') || '<p class="muted st-small">Açık uyarı kalmadı.</p>'}
+    ${solved.length ? `<details open><summary class="muted st-small">Bu oturumda çözülenler (${solved.length})</summary>${solved.map((x) => row(x, true)).join('')}</details>` : ''}`;
+}
+/** Soldaki bölüm kutusunda ilgili satırı seçer, kaydırır ve vurgular. */
+function stGoto(si, li2, text) {
+  const ta = document.querySelector(`#stEdit .st-card[data-i="${si}"] textarea`); if (!ta) return;
+  const lines = ta.value.split('\n'); let start = 0; let idx = lines.findIndex((l) => l.replace(/^\s*(?:[-*•–·]|\d{1,2}[.)])\s+/, '').trim() === text);
+  if (idx < 0) idx = Math.min(li2, lines.length - 1);
+  for (let i = 0; i < idx; i++) start += lines[i].length + 1;
+  ta.scrollIntoView({ behavior: 'smooth', block: 'center' }); ta.classList.add('flash'); setTimeout(() => ta.classList.remove('flash'), 2400);
+  setTimeout(() => { ta.focus({ preventScroll: true }); ta.setSelectionRange(start, start + (lines[idx] || '').length); }, 350);
+  st.lastGoto = `${si}:${li2}`;
+}
+/** Bölüm kutularını işaretler: sarı = düzeltilecek satır var, yeşil = bu oturumda çözüldü. */
+function stMark() {
+  document.querySelectorAll('#stEdit .st-card[data-i]').forEach((c) => { const i = Number(c.dataset.i); c.classList.toggle('fx-open', !!st.openSi?.has(i)); c.classList.toggle('fx-ok', !st.openSi?.has(i) && !!st.solvedSi?.has(i)); });
 }
 document.querySelectorAll('.st-tabs .chip').forEach((c) => c.addEventListener('click', () => { st.tab = c.dataset.t; stPane(); }));
 $('#stTpl').addEventListener('change', (e) => { state.doc.template = e.target.value; changed(); });

@@ -129,3 +129,21 @@ body{font-family:"Segoe UI",Tahoma,system-ui,sans-serif;font-size:15px;line-heig
 .st-warn{font-size:13px;padding:8px 10px;border-radius:9px;background:#fff8d6;color:#3b2f00;margin-top:10px}
 #stPrint{position:fixed;width:0;height:0;border:0;visibility:hidden}
 @media (max-width:980px){.st-grid{grid-template-columns:1fr}.st-side{position:static;max-height:none}.st-bar{grid-template-columns:130px 1fr 32px}}
+
+/* ülke / yaka / vize etiketleri ve filtreler */
+.gtags{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
+.gt{font-size:12px;padding:1px 8px;border-radius:999px;border:1px solid var(--line);color:var(--ink2);background:var(--surface)}
+.gt.dim{opacity:.7}.gt.ok{border-color:var(--accent);background:var(--accent-soft);color:var(--ink)}.gt.no{border-color:#e3a39c;color:#8a2a20}
+@media (prefers-color-scheme:dark){.gt.no{color:#f4c7c2;border-color:#7a3a33}}
+#fCountry,#fSide{font:inherit;font-size:14px;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);max-width:220px}
+
+/* CV Atölyesi — düzeltilecek yerler */
+.fx{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;margin-top:6px;border:1px solid var(--line);border-left:4px solid #d99a1e;border-radius:9px}
+.fx.ed{border-left-color:var(--accent)}.fx.done{border-color:var(--accent);border-left-color:var(--accent);opacity:.85}
+.fx-b{flex:1;min-width:0}.fx-w{font-size:12px;color:var(--ink3);font-weight:600}.fx-t{font-size:13px;margin-top:2px}
+.fx-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.tg{font-size:11.5px;padding:1px 7px;border-radius:999px;background:var(--chip);color:var(--ink2)}
+.tg.stuff{background:#fff1d6;color:#6b4a00}.tg.weak,.tg.long{background:#e8eefc;color:#1f3b7a}.tg.ok{background:var(--accent-soft);color:var(--ink)}
+@media (prefers-color-scheme:dark){.tg.stuff{background:#3a2e12;color:#f0d08a}.tg.weak,.tg.long{background:#1d2a45;color:#b9cbf5}}
+.st-card.fx-open{border-left:4px solid #d99a1e}.st-card.fx-ok{border-left:4px solid var(--accent)}
+.st-card textarea.flash{box-shadow:0 0 0 3px var(--accent);transition:box-shadow .3s}

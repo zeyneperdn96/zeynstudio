@@ -144,7 +144,8 @@ export function analyzeAts(doc, job = null, jobWeights = null) {
     const ctxTok = new Set(tokens(vis.filter((s) => !['skills', 'tools', 'languages'].includes(s.key)).flatMap((s) => s.lines).join('\n')));
     // İlanın en ayırt edici terimleri: TF-IDF ağırlığı en yüksek 25 terim (unvan ağırlıklı); yoksa sıklık
     let terms = jobWeights ? [...jobWeights.entries()].sort((a, b) => b[1] - a[1]) : [...tokens(`${job.t} ${job.t} ${job.t} ${job.d || ''}`).reduce((m, t) => m.set(t, (m.get(t) || 0) + 1), new Map()).entries()].sort((a, b) => b[1] - a[1]);
-    terms = terms.filter(([t]) => t.length >= 3 && !/^\d/.test(t) && !NOISE.has(t)).slice(0, 25);
+    const companyTok = new Set(tokens(job.c || '')); // şirketin kendi adı anahtar kelime değildir
+    terms = terms.filter(([t]) => t.length >= 3 && !/^\d/.test(t) && !NOISE.has(t) && !companyTok.has(t)).slice(0, 25);
     const total = terms.reduce((s, [, w]) => s + w, 0) || 1; let got = 0;
     for (const [t, w] of terms) {
       if (cvTok.has(t)) { got += w; out.matched.push(t); if (!ctxTok.has(t)) out.skills_only.push(t); } else out.missing.push(t);
@@ -180,6 +181,7 @@ export function analyzeAts(doc, job = null, jobWeights = null) {
   let fm = 100; const F = out.formatting; const tplCols = doc.template === 'creative' ? 2 : 1;
   F.push({ ok: tplCols === 1, text: tplCols === 1 ? 'Tek sütunlu şablon — ATS için güvenli.' : 'İki sütunlu şablon: bazı ATS’ler sütunları karışık okuyabilir. Online başvuru formunda “ATS Minimal” seç.' }); if (tplCols > 1) fm -= 30;
   if (/[★☆✓✔➤►◆♦❖]/.test(text)) { F.push({ ok: false, text: 'Metinde özel simgeler var; bazı ATS’ler bozuk karakter olarak okur.' }); fm -= 15; } else F.push({ ok: true, text: 'Özel simge yok; metin gerçek metin olarak yazdırılır (görüntü değil).' });
+  out.places = fixPlaces(doc);
   // öneriler
   if (out.missing.length) out.suggestions.push(`İlanda öne çıkan ama CV’nde geçmeyen terimler: ${out.missing.slice(0, 12).join(', ')}. Bunlardan GERÇEKTEN yaptıklarını, ilgili deneyim maddesine ilanın kullandığı kelimeyle yaz. Yapmadığını ekleme.`);
   if (out.skills_only.length) out.suggestions.push(`Şunlar yalnızca beceri/araç listesinde geçiyor: ${out.skills_only.join(', ')}. Bir deneyim maddesinde nerede kullandığını göstermek daha güçlüdür.`);
@@ -190,6 +192,38 @@ export function analyzeAts(doc, job = null, jobWeights = null) {
   out.breakdown = parts.map(([label, value, weight]) => ({ label, value, weight }));
   out.label = job ? 'İlan–CV uyumluluk tahmini' : 'Genel ATS okunabilirlik tahmini (ilan seçilmedi)';
   out.pages = pages; out.words = words;
+  return out;
+}
+
+/**
+ * “Düzeltilecek yerler”: her satır bir kez; o satırdaki bütün sorunlar etiket olarak.
+ *  • Görevle başlayan madde · • 34 kelimeden uzun madde · • Aynı terimin CV boyunca 5+ kez tekrarı (beceri/araç/dil listeleri hariç)
+ * Yer = bölüm sırası (si) + satır sırası (li); arayüz “Düzenle” ile o satırı seçer.
+ */
+export function fixPlaces(doc) {
+  const LIST = new Set(['skills', 'tools', 'languages', 'interests']);
+  const rows = [];
+  doc.sections.forEach((s, si) => {
+    if (s.visible === false || LIST.has(s.key)) return;
+    let head = '';
+    s.lines.forEach((l, li) => {
+      if (isEntryHead(l)) { head = l.replace(RANGE, '').split(/\s+[|—–]\s+/)[0].replace(/[\s,|–—()-]+$/, '').trim(); return; }
+      rows.push({ si, li, text: l.replace(/^• /, ''), bullet: l.startsWith('• '), where: [s.title, head, `${li + 1}. satır`].filter(Boolean).join(' › ') });
+    });
+  });
+  // tekrar eden terimler (dolgu kelimeleri hariç)
+  const count = new Map();
+  for (const r of rows) for (const t of new Set(tokens(r.text))) if (t.length >= 4 && !NOISE.has(t) && !/^\d/.test(t)) count.set(t, (count.get(t) || 0) + tokens(r.text).filter((x) => x === t).length);
+  const rep = new Set([...count.entries()].filter(([, n]) => n >= 5).map(([t]) => t));
+  const out = [];
+  for (const r of rows) {
+    const tags = [];
+    if (r.bullet && WEAK.test(fold(r.text))) tags.push({ kind: 'weak', label: 'Görevle başlıyor' });
+    const w = r.text.split(/\s+/).length; if (r.bullet && w > 34) tags.push({ kind: 'long', label: `Uzun: ${w} kelime` });
+    const toks = tokens(r.text);
+    for (const t of new Set(toks)) if (rep.has(t)) { const k = toks.filter((x) => x === t).length; tags.push({ kind: 'stuff', label: `Tekrar: “${t}” (CV’de ${count.get(t)} kez)${k > 1 ? ` ×${k}` : ''}` }); }
+    if (tags.length) out.push({ ...r, tags });
+  }
   return out;
 }
 
