@@ -4,6 +4,22 @@ Bu dosya, ZeynStudio XP projesinde yapılan tüm değişiklikleri kronolojik ola
 
 ---
 
+## 📅 20 Kasım 2026 - Zeyn Cinema (AI film penceresi)
+
+- **Değişiklik**: Masaüstüne (sağ sütun, en üst) ve Başlat menüsüne **Zeyn Cinema** eklendi. Pencere: "Zeyn Cinema — AI Films & Creative Projects" — XP menü çubuğu, kategori sekmeleri, WMP9 tarzı HTML5 oynatıcı, pixel art sinema dekoru, film kartları, About the Creator ve Showreel diyalogları. "Explore the Process" ayrı bir **Movie Maker** penceresi açar (6 bölüm + storyboard + süreç görselleri).
+- **Yeni dosyalar**:
+  - `js/CinemaData.js` — **tek veri kaynağı** (filmler, kategoriler, showreel, about). Yeni film = bir kayıt + `assets/cinema/` dosyaları; adımlar dosyanın başında.
+  - `js/ZeynCinema.js` — uygulama (`ZeynCinema.mount`, `destroy`, `ZeynCinema.renderProcess`)
+  - `js/CinemaPixelArt.js` — özgün pixel sprite'lar koddan SVG olarak (kova, mısır, bilet, makara, klaket, NOW SHOWING, pixel font). Node'da da çalışır; `assets/icons/icon-cinema.svg` bundan üretildi.
+  - `css/zeyn-cinema.css` — düzen **pencere genişliğine** göre (container query), `prefers-reduced-motion` tüm animasyonları kapatır
+  - `assets/cinema/films|posters|frames/` — 6 film (H.264+AAC, uzun kenar 1280, faststart; kaynak 198 MB → 37 MB), poster + küçük kapak, film başına 6 storyboard karesi
+- **Değişen**: `index.html` (ikon, Başlat menüsü, css/js etiketleri; `WindowTemplates.js?v=3`, `WindowManager.js?v=2`), `js/WindowTemplates.js` (`cinema`, `cinemaProcess`), `js/WindowManager.js` (boyutlar, başlatma, kapanışta temizlik)
+- **Kurallar**: video asla kendiliğinden başlamaz; açılışta yalnızca poster (preload none). Sekme değiştirmek oynayan filmi durdurmaz. Film başlayınca masaüstü Media Player müziği durur. Fan yapımı filmlerde (Ghibli, Pokémon) açıklama notu var.
+- **Doğrulama**: Playwright + sistem Chrome ile 68 kontrol (oynatma/duraklatma/sarma/ses/sonraki/tam ekran, kategoriler, süreç penceresi, diyaloglar, pencere z-sırası, kapanış temizliği, reduced motion, 1366×768 / 1440×900 / 1920×1080 ve 390×844 mobil). Konsolda tek hata önceden bilinen themesberg CSS 404'ü.
+- **Açık**: `process` alanlarında The Idea / Creative Direction / AI Workflow / Challenges boş ("Notes coming soon."); Storytelling bitmiş filmdeki sahnelerden yazıldı. `showreel: null`. Film başlıkları/açıklamaları Zeynep onaylamalı.
+
+---
+
 ## 📅 19 Kasım 2026 - Career Lab Lite (gizli adres, şifreli)
 
 - **Değişiklik**: `/cl-70025f1034/` klasörü eklendi: tamamen tarayıcıda çalışan, e-posta + parolayla açılan ilan eşleştirme sayfası (CV yükle → eşleşen ilanlar ve bağlantıları).

@@ -98,7 +98,9 @@ class WindowManager {
             paint: { width: 750, height: 550 },
             cv: { width: 720, height: 560 },
             systembuilder: { width: 880, height: 520 },
-            archive: { width: 1000, height: 660 }
+            archive: { width: 1000, height: 660 },
+            cinema: { width: 1060, height: 720 },
+            cinemaProcess: { width: 920, height: 620 }
         };
 
         const customSize = windowSizes[windowId] || {};
@@ -181,6 +183,11 @@ class WindowManager {
         // Cleanup games
         if (windowId === 'archive' && windowData.archiveCleanup) {
             windowData.archiveCleanup();
+        }
+
+        // Cleanup Zeyn Cinema (stops the film, removes listeners)
+        if (windowId === 'cinema' && windowData.cinema) {
+            windowData.cinema.destroy();
         }
 
         if (windowId === 'games' && windowData.gamesCleanup) {
@@ -539,6 +546,24 @@ class WindowManager {
         // Archive.exe - 3D card gallery
         if (windowId === 'archive') {
             this.initializeArchiveWindow(windowEl);
+        }
+
+        // Zeyn Cinema - film viewer
+        if (windowId === 'cinema') {
+            const root = windowEl.querySelector('#zc-root');
+            if (root && window.ZeynCinema && window.CINEMA_DATA) {
+                this.windows.get('cinema').cinema = ZeynCinema.mount(root, this);
+            }
+        }
+
+        // Zeyn Cinema - Explore the Process window
+        if (windowId === 'cinemaProcess') {
+            const host = windowEl.querySelector('#zc-process');
+            if (host && window.ZeynCinema) {
+                const inst = ZeynCinema.instance;
+                const filmId = ZeynCinema.processFilmId || (inst && inst.film && inst.film.id);
+                ZeynCinema.renderProcess(host, filmId);
+            }
         }
 
         // Games window

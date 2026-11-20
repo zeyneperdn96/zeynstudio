@@ -39,6 +39,7 @@
     <link rel="stylesheet" href="css/icon-system.css" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="css/desktop-xp.css" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="css/archive-gallery.css?v=23" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="css/zeyn-cinema.css?v=1" media="print" onload="this.media='all'">
 </head>
 
 <body>
@@ -136,6 +137,12 @@
 
         <!-- Desktop Icons - Right Side -->
         <div class="desktop-icons desktop-icons-right">
+            <div class="desktop-icon featured" data-window="cinema">
+                <div class="icon-image">
+                    <img src="assets/icons/icon-cinema.svg?v=1" alt="Zeyn Cinema">
+                </div>
+                <span class="icon-label">Zeyn Cinema</span>
+            </div>
             <div class="desktop-icon" data-window="systembuilder">
                 <div class="icon-image">
                     <img src="assets/icons/icon-systembuilder.svg" alt="System Builder">
@@ -194,6 +201,14 @@
                         <div class="menu-item-text">
                             <div class="menu-item-title">My Projects</div>
                             <div class="menu-item-desc">View my work</div>
+                        </div>
+                    </div>
+
+                    <div class="start-menu-item" data-action="window" data-window="cinema">
+                        <img src="assets/icons/icon-cinema.svg?v=1" class="menu-item-icon" alt="">
+                        <div class="menu-item-text">
+                            <div class="menu-item-title">Zeyn Cinema</div>
+                            <div class="menu-item-desc">AI films</div>
                         </div>
                     </div>
 
@@ -321,10 +336,13 @@
     <script src="js/ArchiveData.js?v=23"></script>
     <script src="js/ArchiveGallery.js?v=23"></script>
     <script src="js/AiVisualsData.js"></script>
+    <script src="js/CinemaPixelArt.js?v=1"></script>
+    <script src="js/CinemaData.js?v=1"></script>
+    <script src="js/ZeynCinema.js?v=1"></script>
     <script src="js/SystemBuilder.js?v=2"></script>
-    <script src="js/WindowTemplates.js?v=2"></script>
+    <script src="js/WindowTemplates.js?v=3"></script>
     <script src="js/BootSequence.js?v=2"></script>
-    <script src="js/WindowManager.js"></script>
+    <script src="js/WindowManager.js?v=2"></script>
     <script src="js/StartMenu.js"></script>
     <script src="js/MediaPlayer.js"></script>
     <script src="js/Terminal.js"></script>
