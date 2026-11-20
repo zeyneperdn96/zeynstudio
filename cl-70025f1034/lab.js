@@ -1,7 +1,7 @@
 // Career Lab Lite — tamamen tarayıcıda çalışır. Sunucu yoktur.
 //  • Giriş: e-posta + parola → PBKDF2 ile anahtar türetilir → şifreli ilan verisinin anahtarı açılır. Yanlış bilgiyle veri çözülemez.
 //  • CV: dosya tarayıcıda okunur; hiçbir yere gönderilmez. İstersen bu tarayıcıda saklanır (localStorage), istersen silinir.
-import { buildIndex, scoreCv, fold } from './match.js';
+import { buildIndex, scoreCv, fold, tokens } from './match.js';
 import { parseCv, analyzeAts, renderCv, plainText, fileName, newSection, TEMPLATES, SECTION_KEYS } from './studio.js';
 
 const $ = (s) => document.querySelector(s);
@@ -87,9 +87,29 @@ function renderMine() {
         <div class="me-j"><a href="${esc(j.url)}" target="_blank" rel="noopener"><b>${esc(j.title)}</b></a><div class="muted">${esc(j.company)} · ${esc(j.location || '')}${j.tr ? ` · ${esc(j.tr)}` : ''}</div></div>
         <div class="me-tags">${j.linkedin ? '<span class="tag">LinkedIn</span>' : ''}${j.ai ? '<span class="tag">AI</span>' : ''}${ST[j.status] ? `<span class="tag on">${esc(ST[j.status])}</span>` : ''}</div></li>`).join('') || '<li class="muted">Bu filtrede ilan yok.</li>'}</ul>
       ${list.length > 120 ? `<p class="muted">İlk 120 gösteriliyor.</p>` : ''}</section>
+    ${(d.cvs || []).length ? `<section class="card me-cv" data-testid="me-cv"><h2>CV’mi özelleştir</h2>
+      <p class="muted">Kayıtlı CV’lerinden birini ve hedef ilanı seç; düzenleyici ATS kontrolüyle açılır. Düzenlemeler yalnızca bu tarayıcıda kalır. Burada AI yok; olmayan deneyim veya beceri ekleme.</p>
+      <div class="me-cv-row"><label>Hedef ilan<select id="meCvJob"><option value="">İlansız — genel ATS kontrolü</option>${d.jobs.filter((j) => j.d).sort((a, b) => (b.score || 0) - (a.score || 0)).map((j) => `<option value="${j.id}">${j.score ?? '—'} · ${esc(j.company)} — ${esc(j.title)}${j.linkedin ? ' (LinkedIn)' : ''}</option>`).join('')}</select></label>
+        <label>CV<select id="meCvSrc">${d.cvs.map((c) => `<option value="${esc(c.key)}">${esc(c.label)}</option>`).join('')}</select></label>
+        <button class="btn primary" id="meCvOpen" data-testid="me-cv-open">Düzenleyicide aç</button></div>
+      <p class="muted me-cv-hint" id="meCvHint"></p></section>` : ''}
     ${d.companies.length ? `<section class="card"><h2>Öne çıkan şirketler <span class="muted">(Opportunity Lab)</span></h2><div class="me-cos">${d.companies.slice(0, 18).map((c) => `<div class="me-co"><b>${esc(c.name)}</b><div class="muted">${esc([c.city, c.country].filter(Boolean).join(', '))}</div>
       <p>${esc((c.why || '').slice(0, 170))}</p><div>${(c.categories || []).map((x) => `<span class="tag">${esc(x)}</span>`).join('')}${c.website ? ` <a href="${esc(c.website)}" target="_blank" rel="noopener">site ↗</a>` : ''}</div></div>`).join('')}</div></section>` : ''}`;
   $('#meView').querySelectorAll('[data-mf]').forEach((b) => b.addEventListener('click', () => { MINE.filter = b.dataset.mf; renderMine(); }));
+  const src = $('#meCvSrc'); const jsel = $('#meCvJob'); const hint = $('#meCvHint');
+  if (src && jsel) {
+    // İlan seçilince, o ilana özel kayıtlı bir CV versiyonu varsa onu öner; yoksa genel CV
+    jsel.onchange = () => { const v = d.cvs.find((c) => c.job_id && String(c.job_id) === jsel.value); if (v) { src.value = v.key; hint.textContent = 'Bu ilan için dashboard’da kaydettiğin CV versiyonu seçildi.'; } else hint.textContent = jsel.value ? 'Bu ilan için kayıtlı versiyon yok; genel CV’lerden birini seç.' : ''; };
+    $('#meCvOpen').onclick = () => {
+      const c = d.cvs.find((x) => x.key === src.value); if (!c) return;
+      const j = d.jobs.find((x) => String(x.id) === jsel.value) || null;
+      state.cv = c.text;
+      // Aynı CV kaynağına dönülürse tarayıcıdaki düzenlemeler korunur; farklı kaynak seçilirse metin baştan okunur
+      if (!state.doc || state.doc.srcKey !== c.key) { state.doc = parseCv(c.text); state.doc.srcKey = c.key; }
+      st.fromMine = true;
+      openStudio(j ? { t: j.title, c: j.company, u: j.url, d: j.d || '', l: j.location, kw: j.kw || null } : null);
+    };
+  }
 }
 $('#loginForm').addEventListener('submit', async (e) => {
   e.preventDefault(); const msg = $('#loginMsg'); const btn = $('#loginBtn');
@@ -212,14 +232,18 @@ function ensureDoc() {
 function openStudio(jobIndex = null) {
   if (!state.cv) { status('Önce CV’ni yükle.', true); return; }
   const d = ensureDoc(); st.job = jobIndex;
-  const j = jobIndex === null ? null : state.jobs[jobIndex];
+  const j = jobIndex === null ? null : (typeof jobIndex === 'object' ? jobIndex : state.jobs[jobIndex]); // Benim alanım: ilan nesnesi doğrudan gelir
   d.target = j ? { t: j.t, c: j.c } : null; saveDoc();
+  $('#meView').hidden = true;
+  $('#stClose').textContent = st.fromMine ? '← Benim alanım' : '← İlanlara dön';
+  const steps = $('#stSteps'); steps.hidden = !st.fromMine;
+  if (st.fromMine) steps.innerHTML = [['CV seçildi', true], [j ? 'Hedef ilan' : 'Hedef ilan yok (genel kontrol)', !!j], ['Düzenle', false], ['ATS kontrol', false], ['PDF indir', false]].map(([l, ok], n) => `<span class="${ok ? 'ok' : ''}"><i>${ok ? '✓' : n + 1}</i>${esc(l)}</span>`).join('<b aria-hidden="true">›</b>');
   $('#cvCard').hidden = true; $('#results').hidden = true; $('#studio').hidden = false;
   $('#stTarget').innerHTML = j ? `Hedef ilan: <b>${esc(j.t)}</b> — ${esc(j.c)} · <a href="${esc(j.u)}" target="_blank" rel="noopener noreferrer">ilanı aç ↗</a>` : 'İlan seçilmedi: genel ATS okunabilirliği değerlendiriliyor. Bir ilana göre düzenlemek için listeden “Bu ilana göre CV’ni düzenle”yi seç.';
   $('#stTpl').innerHTML = Object.entries(TEMPLATES).map(([k, t]) => `<option value="${k}" ${d.template === k ? 'selected' : ''} title="${esc(t.desc)}">${esc(t.label)}</option>`).join('');
   stEditor(); stPane(); window.scrollTo(0, 0);
 }
-function closeStudio() { $('#studio').hidden = true; $('#cvCard').hidden = false; if (state.ranked.length) render(); }
+function closeStudio() { if (st.fromMine) { $('#studio').hidden = true; showView('me'); window.scrollTo(0, 0); return; } $('#studio').hidden = true; $('#cvCard').hidden = false; if (state.ranked.length) render(); }
 const changed = (redraw = false) => { saveDoc(); if (redraw) stEditor(); clearTimeout(st.timer); st.timer = setTimeout(stPane, 300); };
 
 function stEditor() {
@@ -272,8 +296,9 @@ function stPane() {
     fr.addEventListener('load', () => { const box = fr.parentElement; const sc = box.clientWidth / 820; fr.style.transform = `scale(${sc})`; const h = fr.contentDocument.documentElement.scrollHeight; fr.style.height = `${h}px`; box.style.height = `${h * sc}px`; });
     return;
   }
-  const j = st.job === null ? null : state.jobs[st.job];
-  const a = analyzeAts(d, j, j ? state.index.docs[st.job].w : null);
+  const ext = st.job !== null && typeof st.job === 'object'; // Benim alanım ilanı: Lite dizininde yok
+  const j = st.job === null ? null : ext ? st.job : state.jobs[st.job];
+  const a = analyzeAts(d, j, j ? (ext ? weightsFor(j) : state.index.docs[st.job].w) : null);
   const li = (arr) => arr.map((x) => `<li class="${x.ok ? 'ok' : 'warn'}">${x.ok ? '✔' : '⚠'} ${esc(x.text)}</li>`).join('');
   el.innerHTML = `<div class="st-score"><div class="big"><b>${a.score}</b><span>/100</span></div><div><b>${esc(a.label)}</b><p class="muted st-small">${esc(a.disclaimer)}</p></div></div>
     ${a.breakdown.map((b) => `<div class="st-bar"><span>${esc(b.label)} <span class="muted">%${b.weight}</span></span><div class="track"><div class="fill" style="width:${b.value}%"></div></div><span class="n">${b.value}</span></div>`).join('')}
@@ -321,8 +346,8 @@ function stMark() {
 document.querySelectorAll('.st-tabs .chip').forEach((c) => c.addEventListener('click', () => { st.tab = c.dataset.t; stPane(); }));
 $('#stTpl').addEventListener('change', (e) => { state.doc.template = e.target.value; changed(); });
 $('#stClose').addEventListener('click', closeStudio);
-$('#openStudio').addEventListener('click', () => openStudio(null));
-$('#jobs').addEventListener('click', (e) => { const b = e.target.closest('[data-edit]'); if (b) openStudio(Number(b.dataset.edit)); });
+$('#openStudio').addEventListener('click', () => { st.fromMine = false; openStudio(null); });
+$('#jobs').addEventListener('click', (e) => { const b = e.target.closest('[data-edit]'); if (b) { st.fromMine = false; openStudio(Number(b.dataset.edit)); } });
 $('#stCopy').addEventListener('click', async () => { const b = $('#stCopy'); try { await navigator.clipboard.writeText(plainText(state.doc)); b.textContent = 'Kopyalandı ✓'; } catch { b.textContent = 'Kopyalanamadı'; } setTimeout(() => { b.textContent = 'Metni kopyala'; }, 1800); });
 // PDF: CV gizli bir çerçevede açılır ve tarayıcının yazdırma penceresi gelir → “Hedef: PDF olarak kaydet”. Dosya hiçbir sunucuya gitmez.
 $('#stPdf').addEventListener('click', () => {
@@ -337,3 +362,20 @@ $('#stPdf').addEventListener('click', () => {
 /* ---------------- açılış: bu sekmede oturum varsa devam et ---------------- */
 const k = sessionStorage.getItem('cl_k');
 if (k) enter(b64(k)).catch(() => { sessionStorage.removeItem('cl_k'); });
+
+/** Dizinde olmayan bir ilan için TF-IDF ağırlıkları (Lite dizininin idf’iyle) — match.js ile aynı formül */
+function weightsFor(j) {
+  // Dashboard’un ilan analizinden gelen gerçek beceri gereksinimleri varsa yalnızca onlar + unvan sayılır (yan haklar, şirket tanıtımı sayılmaz)
+  if (j.kw && (j.kw.have.length || j.kw.gap.length)) {
+    const w = new Map();
+    for (const s of [...j.kw.have, ...j.kw.gap]) for (const t of tokens(s)) w.set(t, Math.max(w.get(t) || 0, j.kw.gap.includes(s) ? 3.5 : 3));
+    for (const t of tokens(j.t)) w.set(t, Math.max(w.get(t) || 0, 2));
+    return w;
+  }
+  const idf = state.index ? state.index.idf : new Map(); const N = state.index ? state.index.N : 1;
+  const tf = new Map(); for (const t of tokens(`${j.dep || ''} ${j.d || ''}`)) tf.set(t, (tf.get(t) || 0) + 1);
+  for (const t of tokens(j.t)) tf.set(t, (tf.get(t) || 0) + 3);
+  // Havuzda hiç geçmeyen kelimeler (yan haklar, şirkete özgü adlar…) sayılmaz; aksi halde “pet”, “friday” gibi gürültü en önemli terim olur
+  const w = new Map(); for (const [t, c] of tf) { const f = idf.get(t); if (f && f < Math.log(1 + N / 2)) w.set(t, (1 + Math.log(c)) * f); }
+  return w;
+}

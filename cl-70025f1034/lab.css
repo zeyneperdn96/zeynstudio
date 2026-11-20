@@ -159,3 +159,13 @@ body{font-family:"Segoe UI",Tahoma,system-ui,sans-serif;font-size:15px;line-heig
 .me-tags{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}.tag{font-size:11.5px;padding:1px 7px;border-radius:6px;border:1px solid var(--line);color:var(--ink2);white-space:nowrap}.tag.on{border-color:var(--accent);color:var(--accent)}
 .me-cos{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr))}.me-co{border:1px solid var(--line);border-radius:12px;padding:12px 14px}.me-co p{margin:6px 0;font-size:13px;color:var(--ink2)}.me-co a{color:var(--accent);font-size:13px}
 @media (max-width:700px){.top{flex-wrap:wrap}.view-tabs{order:3;width:100%}.view-tabs button{flex:1}.me-jobs li{flex-wrap:wrap}.me-tags{width:100%;justify-content:flex-start;padding-left:54px}}
+
+/* ---- Benim alanım: CV özelleştirme + düzenleyici adım çubuğu ---- */
+.me-cv-row{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) auto;gap:12px;align-items:end;margin-top:6px}
+.me-cv-row label{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em}
+.me-cv-row select{font:inherit;font-size:14px;text-transform:none;letter-spacing:0;font-weight:400;color:var(--ink);padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:var(--surface);min-width:0;width:100%}
+.me-cv-hint{margin:8px 0 0;font-size:13px;min-height:1.2em}
+.st-steps{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--ink3);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:12px}
+.st-steps span{display:inline-flex;align-items:center;gap:6px}.st-steps span i{font-style:normal;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--chip);border:1px solid var(--line);font-size:11.5px;font-weight:700;color:var(--ink2)}
+.st-steps span.ok{color:var(--ink)}.st-steps span.ok i{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}.st-steps>b{font-weight:400;opacity:.6}
+@media (max-width:860px){.me-cv-row{grid-template-columns:1fr}}
