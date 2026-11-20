@@ -22,6 +22,15 @@
     };
 
     const reducedMotion = () => window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Scroll ONLY `box` so that `el` sits near its top. (Element.scrollIntoView
+    // also scrolls every ancestor — the .window and the desktop — which pushed
+    // the window's title bar and close button off screen.)
+    const scrollWithin = (box, el, gap = 8) => {
+        if (!box || !el) return;
+        const top = box.scrollTop + el.getBoundingClientRect().top - box.getBoundingClientRect().top - gap;
+        box.scrollTo({ top: Math.max(0, top), behavior: reducedMotion() ? 'auto' : 'smooth' });
+    };
     const px = (name, scale, cls) => {
         const art = window.CinemaPixelArt;
         if (!art) return '';
@@ -379,7 +388,7 @@
                 menu.classList.add('is-open');
                 btn.setAttribute('aria-expanded', 'true');
                 const first = menu.querySelector('.zc-menu-pop button');
-                if (first && btn.matches(':focus-visible')) first.focus();
+                if (first && btn.matches(':focus-visible')) first.focus({ preventScroll: true });
             }
         }
         closeMenus() {
@@ -498,8 +507,9 @@
             this.pauseOtherAudio();
             const p = v.play();
             if (p && p.catch) p.catch(() => { /* blocked or interrupted — the big play button stays visible */ });
-            if (scrollIntoView && this.el.scroll.scrollTop > this.el.wmp.offsetTop) {
-                this.el.wmp.scrollIntoView({ block: 'start', behavior: reducedMotion() ? 'auto' : 'smooth' });
+            if (scrollIntoView) {
+                const box = this.el.scroll;
+                if (this.el.wmp.getBoundingClientRect().top < box.getBoundingClientRect().top) scrollWithin(box, this.el.wmp);
             }
         }
         toggle() { this.el.video.paused ? this.play() : this.el.video.pause(); }
@@ -782,7 +792,11 @@
         host.querySelectorAll('[data-pm-jump]').forEach(a => a.addEventListener('click', (e) => {
             e.preventDefault();
             const t = host.querySelector(`#zc-pm-${a.dataset.pmJump}`);
-            if (t) t.scrollIntoView({ block: 'start', behavior: reducedMotion() ? 'auto' : 'smooth' });
+            if (!t) return;
+            // desktop: the content column scrolls; narrow windows: the whole body scrolls
+            const content = host.querySelector('.zc-pm-content');
+            const box = content.scrollHeight > content.clientHeight + 1 ? content : host.querySelector('.zc-pm-body');
+            scrollWithin(box, t);
         }));
         const toCinema = (t) => {
             const wm = window.windowManager;
