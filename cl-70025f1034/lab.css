@@ -147,3 +147,15 @@ body{font-family:"Segoe UI",Tahoma,system-ui,sans-serif;font-size:15px;line-heig
 @media (prefers-color-scheme:dark){.tg.stuff{background:#3a2e12;color:#f0d08a}.tg.weak,.tg.long{background:#1d2a45;color:#b9cbf5}}
 .st-card.fx-open{border-left:4px solid #d99a1e}.st-card.fx-ok{border-left:4px solid var(--accent)}
 .st-card textarea.flash{box-shadow:0 0 0 3px var(--accent);transition:box-shadow .3s}
+
+/* ---- Benim alanım (yalnızca sahip hesap) ---- */
+.view-tabs{display:flex;gap:4px;background:var(--chip);padding:3px;border-radius:10px}.view-tabs button{font:inherit;font-size:13.5px;border:0;background:transparent;color:var(--ink2);padding:6px 12px;border-radius:8px;cursor:pointer}.view-tabs button.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.card h2{margin:0 0 10px;font-size:17px}.me-head h1{margin-bottom:4px}
+.me-acts{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(min(380px,100%),1fr))}.me-act{display:flex;gap:12px;border:1px solid var(--line);border-radius:12px;padding:12px 14px}.me-act p{margin:4px 0;font-size:13.5px}.me-n{flex:none;width:26px;height:26px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-weight:700;font-size:13px}
+.me-proj,.me-src{font-size:13px;color:var(--ink3);margin-top:4px}.me-proj a,.me-src a{color:var(--accent)}
+.me-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:8px}.me-row h2{margin:0}
+.me-jobs{list-style:none;margin:0;padding:0}.me-jobs li{display:flex;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}.me-jobs li:first-child{border-top:0}.me-j{flex:1;min-width:0}.me-j a{color:var(--ink);text-decoration:none}.me-j a:hover b{color:var(--accent)}.me-j .muted{font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.me-score{flex:none;width:42px;text-align:center;font-weight:700;font-variant-numeric:tabular-nums;border-radius:9px;padding:6px 0;background:var(--chip);color:var(--ink2)}.me-score.hi{background:var(--accent-soft);color:var(--accent)}
+.me-tags{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}.tag{font-size:11.5px;padding:1px 7px;border-radius:6px;border:1px solid var(--line);color:var(--ink2);white-space:nowrap}.tag.on{border-color:var(--accent);color:var(--accent)}
+.me-cos{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr))}.me-co{border:1px solid var(--line);border-radius:12px;padding:12px 14px}.me-co p{margin:6px 0;font-size:13px;color:var(--ink2)}.me-co a{color:var(--accent);font-size:13px}
+@media (max-width:700px){.top{flex-wrap:wrap}.view-tabs{order:3;width:100%}.view-tabs button{flex:1}.me-jobs li{flex-wrap:wrap}.me-tags{width:100%;justify-content:flex-start;padding-left:54px}}

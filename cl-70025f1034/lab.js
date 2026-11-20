@@ -19,9 +19,25 @@ async function unlock(email, password) {
   const base = await crypto.subtle.importKey('raw', enc.encode(`${password}\n${email.trim().toLowerCase()}`), 'PBKDF2', false, ['deriveKey']);
   for (const e of u.users) {
     const kek = await crypto.subtle.deriveKey({ name: 'PBKDF2', hash: 'SHA-256', salt: b64(e.salt), iterations: u.iterations }, base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
-    try { return new Uint8Array(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(e.iv) }, kek, b64(e.key))); } catch { /* bu kayıt bu kullanıcıya ait değil */ }
+    try { const ck = new Uint8Array(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(e.iv) }, kek, b64(e.key))); state.kek = { kek, salt: e.salt }; return ck; } catch { /* bu kayıt bu kullanıcıya ait değil */ }
   }
   return null;
+}
+/** Sahibe özel bölüm: anahtarı yalnızca sahip hesabın kek'iyle sarılıdır. Diğer hesaplar için sessizce hiçbir şey olmaz. */
+async function ownerKey() {
+  if (!state.kek) return null;
+  const r = await fetch('data/me.json', { cache: 'no-store' }); if (!r.ok) return null;
+  const m = await r.json();
+  for (const e of (m.entries || []).filter((x) => x.salt === state.kek.salt)) {
+    try { return new Uint8Array(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(e.iv) }, state.kek.kek, b64(e.key))); } catch { /* bu hesap sahip değil */ }
+  }
+  return null;
+}
+async function loadMine(okRaw) {
+  const buf = new Uint8Array(await (await fetch('data/me.enc', { cache: 'no-store' })).arrayBuffer());
+  const ok = await crypto.subtle.importKey('raw', okRaw, 'AES-GCM', false, ['decrypt']);
+  const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: buf.slice(0, 12) }, ok, buf.slice(12));
+  return JSON.parse(await new Response(new Blob([plain]).stream().pipeThrough(new DecompressionStream('gzip'))).text());
 }
 async function loadData(ckRaw) {
   const buf = new Uint8Array(await (await fetch('data/jobs.enc', { cache: 'no-store' })).arrayBuffer());
@@ -37,6 +53,43 @@ async function enter(ckRaw) {
   $('#dataMeta').textContent = `${data.jobs.length} açık ilan · son güncelleme ${new Intl.DateTimeFormat('tr-TR', { dateStyle: 'medium' }).format(new Date(data.generated_at))}`;
   const saved = localStorage.getItem('cl_cv'); $('#roles').value = localStorage.getItem('cl_roles') || '';
   if (saved) setCv(saved, 'Bu tarayıcıda kayıtlı CV’n kullanılıyor.');
+  try {
+    const okS = sessionStorage.getItem('cl_ok'); const ok = okS ? b64(okS) : await ownerKey();
+    if (ok) { state.mine = await loadMine(ok); sessionStorage.setItem('cl_ok', toB64(ok)); $('#viewTabs').hidden = false; }
+  } catch { sessionStorage.removeItem('cl_ok'); }
+}
+
+/* ---------------- Benim alanım (yalnızca sahip hesap) ---------------- */
+const MINE = { filter: 'all' };
+function showView(v) {
+  document.querySelectorAll('#viewTabs button').forEach((b) => { const on = b.dataset.v === v; b.classList.toggle('on', on); b.setAttribute('aria-selected', String(on)); });
+  const me = v === 'me';
+  $('#meView').hidden = !me; $('#cvCard').hidden = me; $('#results').hidden = me || !state.ranked.length; $('#studio').hidden = true;
+  if (me) renderMine();
+}
+document.querySelectorAll('#viewTabs button').forEach((b) => b.addEventListener('click', () => showView(b.dataset.v)));
+function renderMine() {
+  const d = state.mine; if (!d) return;
+  const df = (iso) => (iso ? new Intl.DateTimeFormat('tr-TR', { dateStyle: 'medium' }).format(new Date(iso)) : '');
+  const F = { all: ['Tümü', () => true], linkedin: ['LinkedIn’den eklenenler', (j) => j.linkedin], ai: ['AI ilanları', (j) => j.ai], high: ['Uyum 70+', (j) => (j.score || 0) >= 70], applied: ['Başvurduklarım', (j) => j.status !== 'New'] };
+  const list = d.jobs.filter(F[MINE.filter][1]);
+  const ST = { New: '', Shortlisted: 'Kısa liste', 'Ready to Apply': 'Başvuruya hazır', Applied: 'Başvurdum', Interview: 'Mülakat', Offer: 'Teklif', Rejected: 'Olumsuz', Archived: 'Arşiv' };
+  $('#meView').innerHTML = `<section class="card me-head"><h1>Benim alanım</h1>
+      <p class="muted">Yalnızca senin hesabınla açılır; bu adresteki diğer hesaplar göremez. Salt okunur kopya — düzenleme, başvuru ve mesajlar yerel dashboard’da. Güncelleme: <b>${esc(df(d.generated_at))}</b></p></section>
+    <section class="card"><h2>Bugün kime ulaşmalıyım?</h2>
+      ${d.today.length ? `<div class="me-acts">${d.today.map((a, i) => `<article class="me-act"><div class="me-n">${i + 1}</div><div><b>${esc(a.title)}</b>${a.lead ? `<p class="muted">${esc(a.lead)}</p>` : ''}
+        ${a.projects.length ? `<div class="me-proj">Gönder: ${a.projects.map((p) => `<a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.title.replace(/\s*\(.*?\)\s*/g, ' ').trim())}</a>`).join(' · ')}</div>` : ''}
+        ${a.sources.length ? `<div class="me-src">Kaynak: ${a.sources.slice(0, 2).map((s) => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a>`).join(' · ')}</div>` : ''}</div></article>`).join('')}</div>` : `<p class="muted">${esc(d.today_note || 'Bugün güçlü öneri yok.')}</p>`}
+    </section>
+    <section class="card"><div class="me-row"><h2>İlanlarım <span class="muted">(${list.length})</span></h2>
+      <div class="chips" role="tablist">${Object.entries(F).map(([k, [l]]) => `<button class="chip${MINE.filter === k ? ' on' : ''}" data-mf="${k}">${esc(l)}</button>`).join('')}</div></div>
+      <ul class="me-jobs">${list.slice(0, 120).map((j) => `<li><span class="me-score${(j.score || 0) >= 70 ? ' hi' : ''}" title="Uyum puanı — işe alınma olasılığı değildir">${j.score ?? '—'}</span>
+        <div class="me-j"><a href="${esc(j.url)}" target="_blank" rel="noopener"><b>${esc(j.title)}</b></a><div class="muted">${esc(j.company)} · ${esc(j.location || '')}${j.tr ? ` · ${esc(j.tr)}` : ''}</div></div>
+        <div class="me-tags">${j.linkedin ? '<span class="tag">LinkedIn</span>' : ''}${j.ai ? '<span class="tag">AI</span>' : ''}${ST[j.status] ? `<span class="tag on">${esc(ST[j.status])}</span>` : ''}</div></li>`).join('') || '<li class="muted">Bu filtrede ilan yok.</li>'}</ul>
+      ${list.length > 120 ? `<p class="muted">İlk 120 gösteriliyor.</p>` : ''}</section>
+    ${d.companies.length ? `<section class="card"><h2>Öne çıkan şirketler <span class="muted">(Opportunity Lab)</span></h2><div class="me-cos">${d.companies.slice(0, 18).map((c) => `<div class="me-co"><b>${esc(c.name)}</b><div class="muted">${esc([c.city, c.country].filter(Boolean).join(', '))}</div>
+      <p>${esc((c.why || '').slice(0, 170))}</p><div>${(c.categories || []).map((x) => `<span class="tag">${esc(x)}</span>`).join('')}${c.website ? ` <a href="${esc(c.website)}" target="_blank" rel="noopener">site ↗</a>` : ''}</div></div>`).join('')}</div></section>` : ''}`;
+  $('#meView').querySelectorAll('[data-mf]').forEach((b) => b.addEventListener('click', () => { MINE.filter = b.dataset.mf; renderMine(); }));
 }
 $('#loginForm').addEventListener('submit', async (e) => {
   e.preventDefault(); const msg = $('#loginMsg'); const btn = $('#loginBtn');
@@ -49,7 +102,7 @@ $('#loginForm').addEventListener('submit', async (e) => {
   } catch (err) { msg.textContent = err.message || 'Açılamadı.'; msg.className = 'xp-msg err'; msg.hidden = false; }
   finally { btn.disabled = false; btn.textContent = 'Oturum aç'; }
 });
-$('#logout').addEventListener('click', () => { sessionStorage.removeItem('cl_k'); location.reload(); });
+$('#logout').addEventListener('click', () => { sessionStorage.removeItem('cl_k'); sessionStorage.removeItem('cl_ok'); location.reload(); });
 
 /* ---------------- CV okuma (tarayıcıda) ---------------- */
 async function readPdf(buf) {

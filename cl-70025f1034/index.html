@@ -37,10 +37,12 @@
 <div id="app" class="app" hidden>
   <header class="top">
     <div class="brand">Career Lab</div>
+    <nav class="view-tabs" id="viewTabs" role="tablist" hidden><button class="on" data-v="jobs" role="tab" aria-selected="true">İlanlar</button><button data-v="me" role="tab" aria-selected="false" data-testid="tab-me">Benim alanım</button></nav>
     <div class="top-meta" id="dataMeta"></div>
     <button class="btn" id="logout">Çıkış</button>
   </header>
   <main class="wrap">
+    <div id="meView" hidden></div>
     <section class="card" id="cvCard">
       <h1>CV'ni yükle, sana uyan ilanları gör</h1>
       <p class="muted">CV'n <b>bu tarayıcının dışına çıkmaz</b>: dosya burada okunur, hiçbir sunucuya gönderilmez. Eşleştirme, CV'ndeki kelimelerle ilan metinlerinin örtüşmesine bakar; bir işe alınma tahmini değildir.</p>
